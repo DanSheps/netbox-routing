@@ -1,0 +1,70 @@
+{% extends 'generic/object.html' %}
+{% load humanize %}
+{% load helpers %}
+{% load plugins %}
+
+{% block content %}
+<div class="row">
+  <div class="col col-md-6">
+    <div class="card">
+      <h5 class="card-header">Static Route</h5>
+      <div class="card-body">
+        <table class="table table-hover attr-table">
+          <tr>
+            <th scope="row">VRF</th>
+            <td>
+              {% if object.vrf %}
+                <a href="{% url 'ipam:vrf' pk=object.vrf.pk %}">{{ object.vrf }}</a>
+              {% else %}
+                <span>Global</span>
+              {% endif %}
+            </td>
+          </tr>
+          <tr>
+            <th scope="row">Prefix</th>
+            <td>
+              {{ object.prefix }}
+            </td>
+          </tr>
+          <tr>
+            <th scope="row">Next Hop</th>
+            <td>
+              {{ object.next_hop }}
+            </td>
+          </tr>
+          <tr>
+            <th scope="row">Name</th>
+            <td>
+              {{ object.name|placeholder }}
+            </td>
+          </tr>
+          <tr>
+            <th scope="row">Metric</th>
+            <td>
+              {{ object.metric }}
+            </td>
+          </tr>
+          <tr>
+            <th scope="row">Permanent</th>
+            <td>
+              {{ object.permanent }}
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+      {% plugin_left_page object %}
+  </div>
+  <div class="col col-md-6">
+    {% include 'inc/panels/custom_fields.html' %}
+    {% include 'inc/panels/tags.html' %}
+    {% plugin_right_page object %}
+  </div>
+</div>
+<div class="row">
+    <div class="col col-md-12">
+        {% include 'inc/panel_table.html' with table=devices heading='Devices' %}
+        {% plugin_full_width_page object %}
+    </div>
+</div>
+{% endblock %}
