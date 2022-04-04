@@ -2,7 +2,7 @@ from setuptools import find_packages, setup
 
 setup(
     name='netbox-routing',
-    version='1.1.0',
+    version='0.0.1',
     description='NetBox Routing',
     long_description='Plugin for documentation of routing configuration and objects',
     url='https://github.com/dansheps/netbox-routing/',
