@@ -1,0 +1,17 @@
+from rest_framework import serializers
+
+from netbox.api import WritableNestedSerializer
+from netbox_routing.models import StaticRoute
+
+
+__all__ = (
+    'NestedStaticRouteSerializer'
+)
+
+
+class NestedStaticRouteSerializer(WritableNestedSerializer):
+    url = serializers.HyperlinkedIdentityField(view_name='plugins-api:netbox_routing-api:staticroute-detail')
+
+    class Meta:
+        model = StaticRoute
+        fields = ('url', 'id', 'prefix', 'next_hop', 'name', 'metric', 'permanent')

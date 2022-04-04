@@ -1,6 +1,5 @@
 from extras.plugins import PluginConfig
 
-
 try:
     from importlib.metadata import metadata
 except ModuleNotFoundError:
@@ -16,11 +15,11 @@ class NetboxRouting(PluginConfig):
     version = plugin.get('Version')
     author = plugin.get('Author')
     author_email = plugin.get('Author-email')
-    base_url = 'netbox-plugin-extensions'
-    min_version = '3.2'
+    base_url = 'routing'
+    min_version = '3.2.0b1'
     required_settings = []
     caching_config = {}
     default_settings = {}
 
 
-config = NetboxPluginExtensions
+config = NetboxRouting
