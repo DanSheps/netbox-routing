@@ -14,7 +14,7 @@ class NestedPrefixListSerializer(WritableNestedSerializer):
 
     class Meta:
         model = PrefixList
-        fields = ('url', 'id', 'name')
+        fields = ('url', 'id', 'display', 'name')
 
 
 class NestedPrefixListEntrySerializer(WritableNestedSerializer):
@@ -23,7 +23,7 @@ class NestedPrefixListEntrySerializer(WritableNestedSerializer):
 
     class Meta:
         model = PrefixListEntry
-        fields = ('url', 'id', 'prefix_list')
+        fields = ('url', 'id', 'display', 'prefix_list')
 
 
 class NestedRouteMapSerializer(WritableNestedSerializer):
@@ -31,7 +31,7 @@ class NestedRouteMapSerializer(WritableNestedSerializer):
 
     class Meta:
         model = RouteMap
-        fields = ('url', 'id', 'name')
+        fields = ('url', 'id', 'display', 'name')
 
 
 class NestedRouteMapEntrySerializer(WritableNestedSerializer):
@@ -40,4 +40,4 @@ class NestedRouteMapEntrySerializer(WritableNestedSerializer):
 
     class Meta:
         model = RouteMapEntry
-        fields = ('url', 'id', 'route_map')
+        fields = ('url', 'id', 'display', 'route_map')

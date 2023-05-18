@@ -33,25 +33,10 @@ class StaticRouteView(ObjectView):
     queryset = StaticRoute.objects.all()
     template_name = 'netbox_routing/staticroute.html'
 
-    def get_extra_context(self, request, instance):
-        devices = instance.devices.all()
 
-        devices_table = DeviceTable(
-            list(devices),
-            exclude=('tenant', 'device_role', 'serial', 'asset_tag', 'face', 'primary_ip', 'airflow', 'primary_ip4',
-            'primary_ip6', 'cluster', 'virtual_chassis', 'vc_position', 'vc_priority', 'comments', 'contacts', 'tags',
-            'created', 'last_updated',),
-            orderable=False
-        )
-
-        return {
-            'devices': devices_table,
-        }
-
-
-@register_model_view(StaticRoute, name='assignments')
+@register_model_view(StaticRoute, name='devices')
 class StaticRouteDevicesView(ObjectChildrenView):
-    # template_name = 'dcim//.html'
+    template_name = 'netbox_routing/staticroute_devices.html'
     queryset = StaticRoute.objects.all()
     child_model = Device
     table = DeviceTable

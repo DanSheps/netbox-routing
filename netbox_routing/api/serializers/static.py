@@ -18,4 +18,4 @@ class StaticRouteSerializer(NetBoxModelSerializer):
 
     class Meta:
         model = StaticRoute
-        fields = ('url', 'id', 'devices', 'vrf', 'prefix', 'next_hop', 'name', 'metric', 'permanent')
+        fields = ('url', 'id', 'display', 'devices', 'vrf', 'prefix', 'next_hop', 'name', 'metric', 'permanent')

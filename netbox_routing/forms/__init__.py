@@ -1,4 +1,5 @@
 from .filtersets import *
+from .bulk_edit import *
 from .objects import PrefixListForm, PrefixListEntryForm, RouteMapForm, RouteMapEntryForm
 from .static import StaticRouteForm
 
