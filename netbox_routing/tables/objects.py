@@ -1,4 +1,4 @@
-from netbox.tables import NetBoxTable
+from netbox.tables import NetBoxTable, columns
 from netbox_routing.models import PrefixList, PrefixListEntry, RouteMap, RouteMapEntry
 
 
@@ -10,6 +10,7 @@ class PrefixListTable(NetBoxTable):
 
 
 class PrefixListEntryTable(NetBoxTable):
+    type = columns.ChoiceFieldColumn()
     class Meta(NetBoxTable.Meta):
         model = PrefixListEntry
         fields = ('pk', 'id', 'prefix_list', 'sequence', 'type', 'prefix', 'le', 'ge')
@@ -24,6 +25,7 @@ class RouteMapTable(NetBoxTable):
 
 
 class RouteMapEntryTable(NetBoxTable):
+    type = columns.ChoiceFieldColumn()
     class Meta(NetBoxTable.Meta):
         model = RouteMapEntry
         fields = ('pk', 'id', 'route_map', 'sequence', 'type')

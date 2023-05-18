@@ -7,47 +7,43 @@
 <div class="row">
   <div class="col col-md-6">
     <div class="card">
-      <h5 class="card-header">Static Route</h5>
+      <h5 class="card-header">Prefix List Entry</h5>
       <div class="card-body">
         <table class="table table-hover attr-table">
           <tr>
-            <th scope="row">VRF</th>
+            <th scope="row">Prefix List</th>
             <td>
-              {% if object.vrf %}
-                <a href="{% url 'ipam:vrf' pk=object.vrf.pk %}">{{ object.vrf }}</a>
-              {% else %}
-                <span>Global</span>
-              {% endif %}
+              {{ object.prefix_list|linkify }}
+            </td>
+          </tr>
+          <tr>
+            <th scope="row">Sequence</th>
+            <td>
+              {{ object.sequence }}
+            </td>
+          </tr>
+          <tr>
+            <th scope="row">Type</th>
+            <td>
+              {% badge object.get_type_display bg_color=object.get_type_color %}
             </td>
           </tr>
           <tr>
             <th scope="row">Prefix</th>
             <td>
-              {{ object.prefix }}
+              {{ object.prefix|placeholder }}
             </td>
           </tr>
           <tr>
-            <th scope="row">Next Hop</th>
+            <th scope="row">GE</th>
             <td>
-              {{ object.next_hop }}
+              {{ object.ge }}
             </td>
           </tr>
           <tr>
-            <th scope="row">Name</th>
+            <th scope="row">LE</th>
             <td>
-              {{ object.name|placeholder }}
-            </td>
-          </tr>
-          <tr>
-            <th scope="row">Metric</th>
-            <td>
-              {{ object.metric }}
-            </td>
-          </tr>
-          <tr>
-            <th scope="row">Permanent</th>
-            <td>
-              {{ object.permanent }}
+              {{ object.le }}
             </td>
           </tr>
         </table>

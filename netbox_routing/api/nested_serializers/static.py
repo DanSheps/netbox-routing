@@ -14,4 +14,4 @@ class NestedStaticRouteSerializer(WritableNestedSerializer):
 
     class Meta:
         model = StaticRoute
-        fields = ('url', 'id', 'prefix', 'next_hop', 'name', 'metric', 'permanent')
+        fields = ('url', 'id', 'display', 'prefix', 'next_hop', 'name', 'metric', 'permanent')

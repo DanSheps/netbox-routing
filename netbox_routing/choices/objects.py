@@ -6,6 +6,6 @@ class PermitDenyChoices(ChoiceSet):
     DENY = 'deny'
 
     CHOICES = [
-        (PERMIT, 'Permit'),
-        (DENY, 'Deny')
+        (PERMIT, 'Permit', 'blue'),
+        (DENY, 'Deny', 'red')
     ]

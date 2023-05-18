@@ -7,47 +7,25 @@
 <div class="row">
   <div class="col col-md-6">
     <div class="card">
-      <h5 class="card-header">Static Route</h5>
+      <h5 class="card-header">Route Map Entry</h5>
       <div class="card-body">
         <table class="table table-hover attr-table">
           <tr>
-            <th scope="row">VRF</th>
+            <th scope="row">Route Map</th>
             <td>
-              {% if object.vrf %}
-                <a href="{% url 'ipam:vrf' pk=object.vrf.pk %}">{{ object.vrf }}</a>
-              {% else %}
-                <span>Global</span>
-              {% endif %}
+              {{ object.route_map|linkify }}
             </td>
           </tr>
           <tr>
-            <th scope="row">Prefix</th>
+            <th scope="row">Type</th>
             <td>
-              {{ object.prefix }}
+              {% badge object.get_type_display bg_color=object.get_type_color %}
             </td>
           </tr>
           <tr>
-            <th scope="row">Next Hop</th>
+            <th scope="row">Sequence</th>
             <td>
-              {{ object.next_hop }}
-            </td>
-          </tr>
-          <tr>
-            <th scope="row">Name</th>
-            <td>
-              {{ object.name|placeholder }}
-            </td>
-          </tr>
-          <tr>
-            <th scope="row">Metric</th>
-            <td>
-              {{ object.metric }}
-            </td>
-          </tr>
-          <tr>
-            <th scope="row">Permanent</th>
-            <td>
-              {{ object.permanent }}
+              {{ object.sequence }}
             </td>
           </tr>
         </table>

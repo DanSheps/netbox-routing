@@ -39,10 +39,24 @@ class StaticRoute(NetBoxModel):
     )
     permanent = models.BooleanField()
 
+    clone_fields = (
+        'vrf', 'metric', 'permanent'
+    )
+    prerequisite_models = (
+        'dcim.Device',
+        'ipam.VRF',
+    )
+
     class Meta:
-        constraints = [
-            CheckConstraint(check=Q(Q(metric__lte=255) & Q(metric__gte=0)), name='metric_gte_lte')
-        ]
+        ordering = ['vrf', 'prefix', 'metric']
+        constraints = (
+            CheckConstraint(check=Q(Q(metric__lte=255) & Q(metric__gte=0)), name='metric_gte_lte'),
+            models.UniqueConstraint(
+                'vrf', 'prefix', 'next_hop',
+                name='%(app_label)s_%(class)s_unique_vrf_prefix_nexthop',
+                violation_error_message="VRF, Prefix and Next Hop must be unique."
+            ),
+        )
 
     def __str__(self):
         if self.vrf is None:

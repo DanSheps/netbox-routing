@@ -4,7 +4,8 @@ from .static import StaticRouteListView, StaticRouteDevicesView, StaticRouteEdit
 from .objects import PrefixListView, PrefixListEditView, PrefixListListView, PrefixListDeleteView, RouteMapListView, \
     RouteMapView, RouteMapEditView, RouteMapDeleteView, PrefixListEntryListView, PrefixListEntryEditView, \
     PrefixListEntryDeleteView, PrefixListEntryView, RouteMapEntryListView, RouteMapEntryView, RouteMapEntryEditView, \
-    RouteMapEntryDeleteView
+    RouteMapEntryDeleteView, PrefixListEntriesView, RouteMapEntriesView, RouteMapEntryBulkEditView, \
+    RouteMapEntryBulkDeleteView, PrefixListEntryBulkDeleteView, PrefixListEntryBulkEditView
 
 __all__ = (
     'StaticRouteListView',
@@ -15,20 +16,26 @@ __all__ = (
 
     'PrefixListListView',
     'PrefixListView',
+    'PrefixListEntriesView',
     'PrefixListEditView',
     'PrefixListDeleteView',
     'PrefixListEntryListView',
     'PrefixListEntryView',
     'PrefixListEntryEditView',
     'PrefixListEntryDeleteView',
+    'PrefixListEntryBulkEditView',
+    'PrefixListEntryBulkDeleteView',
 
     'RouteMapListView',
     'RouteMapView',
+    'RouteMapEntriesView',
     'RouteMapEditView',
     'RouteMapDeleteView',
     'RouteMapEntryListView',
     'RouteMapEntryView',
     'RouteMapEntryEditView',
-    'RouteMapEntryDeleteView'
+    'RouteMapEntryDeleteView',
+    'RouteMapEntryBulkEditView',
+    'RouteMapEntryBulkDeleteView',
 
 )
