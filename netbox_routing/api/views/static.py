@@ -1,8 +1,8 @@
-from netbox.api.viewsets import ModelViewSet
+from netbox.api.viewsets import NetBoxModelViewSet
 from netbox_routing.api.serializers import StaticRouteSerializer
 from netbox_routing.models import StaticRoute
 
 
-class StaticRouteViewSet(ModelViewSet):
+class StaticRouteViewSet(NetBoxModelViewSet):
     queryset = StaticRoute.objects.all()
     serializer_class = StaticRouteSerializer

@@ -1,6 +1,7 @@
+from dcim.filtersets import DeviceFilterSet
 from dcim.models import Device
 from dcim.tables import DeviceTable
-from netbox.views.generic import ObjectListView, ObjectEditView, ObjectView, ObjectDeleteView
+from netbox.views.generic import ObjectListView, ObjectEditView, ObjectView, ObjectDeleteView, ObjectChildrenView
 from netbox_routing.filtersets.static import StaticRouteFilterSet
 from netbox_routing.forms import StaticRouteForm
 from netbox_routing.forms.filtersets.static import StaticRouteFilterSetForm
@@ -11,11 +12,15 @@ from netbox_routing.tables.static import StaticRouteTable
 __all__ = (
     'StaticRouteListView',
     'StaticRouteView',
+    'StaticRouteDevicesView',
     'StaticRouteEditView',
     'StaticRouteDeleteView',
 )
 
+from utilities.views import register_model_view, ViewTab
 
+
+@register_model_view(StaticRoute, name='list')
 class StaticRouteListView(ObjectListView):
     queryset = StaticRoute.objects.all()
     table = StaticRouteTable
@@ -23,6 +28,7 @@ class StaticRouteListView(ObjectListView):
     filterset_form = StaticRouteFilterSetForm
 
 
+@register_model_view(StaticRoute)
 class StaticRouteView(ObjectView):
     queryset = StaticRoute.objects.all()
     template_name = 'netbox_routing/staticroute.html'
@@ -43,10 +49,29 @@ class StaticRouteView(ObjectView):
         }
 
 
+@register_model_view(StaticRoute, name='assignments')
+class StaticRouteDevicesView(ObjectChildrenView):
+    # template_name = 'dcim//.html'
+    queryset = StaticRoute.objects.all()
+    child_model = Device
+    table = DeviceTable
+    filterset = DeviceFilterSet
+    actions = []
+    tab = ViewTab(
+        label='Assigned Devices',
+        badge=lambda obj: Device.objects.filter(static_routes=obj).count(),
+    )
+
+    def get_children(self, request, parent):
+        return self.child_model.objects.filter(static_routes=parent)
+
+
+@register_model_view(StaticRoute, name='edit')
 class StaticRouteEditView(ObjectEditView):
     queryset = StaticRoute.objects.all()
     form = StaticRouteForm
 
 
+@register_model_view(StaticRoute, name='delete')
 class StaticRouteDeleteView(ObjectDeleteView):
     pass

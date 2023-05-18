@@ -19,7 +19,7 @@ setup(
         'Programming Language :: Python :: 3',
     ],
     install_requires=[
-        'importlib',
+        'django-polymorphic',
     ],
     packages=find_packages(),
     include_package_data=True,
