@@ -1,9 +1,6 @@
 from extras.plugins import PluginConfig
+from importlib.metadata import metadata
 
-try:
-    from importlib.metadata import metadata
-except ModuleNotFoundError:
-    from importlib_metadata import metadata
 
 plugin = metadata('netbox_routing')
 

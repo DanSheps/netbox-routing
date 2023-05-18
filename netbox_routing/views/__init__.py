@@ -1,4 +1,5 @@
-from .static import StaticRouteListView, StaticRouteEditView, StaticRouteView, StaticRouteDeleteView
+from .static import StaticRouteListView, StaticRouteDevicesView, StaticRouteEditView, StaticRouteView, \
+    StaticRouteDeleteView
 
 from .objects import PrefixListView, PrefixListEditView, PrefixListListView, PrefixListDeleteView, RouteMapListView, \
     RouteMapView, RouteMapEditView, RouteMapDeleteView, PrefixListEntryListView, PrefixListEntryEditView, \
@@ -8,6 +9,7 @@ from .objects import PrefixListView, PrefixListEditView, PrefixListListView, Pre
 __all__ = (
     'StaticRouteListView',
     'StaticRouteView',
+    'StaticRouteDevicesView',
     'StaticRouteEditView',
     'StaticRouteDeleteView',
 
