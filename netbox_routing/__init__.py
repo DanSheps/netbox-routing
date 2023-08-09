@@ -13,7 +13,7 @@ class NetboxRouting(PluginConfig):
     author = plugin.get('Author')
     author_email = plugin.get('Author-email')
     base_url = 'routing'
-    min_version = '3.2.0b1'
+    min_version = '3.5.0'
     required_settings = []
     caching_config = {}
     default_settings = {}
