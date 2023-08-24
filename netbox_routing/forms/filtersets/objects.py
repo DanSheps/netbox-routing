@@ -2,17 +2,17 @@ from netbox.forms import NetBoxModelFilterSetForm
 from netbox_routing.models import PrefixList, PrefixListEntry, RouteMap, RouteMapEntry
 
 
-class PrefixListFilterSetForm(NetBoxModelFilterSetForm):
+class PrefixListFilterForm(NetBoxModelFilterSetForm):
     model = PrefixList
 
 
-class PrefixListEntryFilterSetForm(NetBoxModelFilterSetForm):
+class PrefixListEntryFilterForm(NetBoxModelFilterSetForm):
     model = PrefixListEntry
 
 
-class RouteMapFilterSetForm(NetBoxModelFilterSetForm):
+class RouteMapFilterForm(NetBoxModelFilterSetForm):
     model = RouteMap
 
 
-class RouteMapEntryFilterSetForm(NetBoxModelFilterSetForm):
+class RouteMapEntryFilterForm(NetBoxModelFilterSetForm):
     model = RouteMapEntry

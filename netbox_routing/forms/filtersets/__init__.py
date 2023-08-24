@@ -1,11 +1,20 @@
-from .static import StaticRouteFilterSetForm
-from .objects import PrefixListFilterSetForm, PrefixListEntryFilterSetForm, RouteMapFilterSetForm,\
-    RouteMapEntryFilterSetForm
+from .static import StaticRouteFilterForm
+from .objects import PrefixListFilterForm, PrefixListEntryFilterForm, RouteMapFilterForm,\
+    RouteMapEntryFilterForm
+from .ospf import OSPFAreaFilterForm, OSPFInstanceFilterForm, OSPFInterfaceFilterForm
 
 __all__ = (
-    'StaticRouteFilterSetForm',
-    'PrefixListFilterSetForm',
-    'PrefixListEntryFilterSetForm',
-    'RouteMapFilterSetForm',
-    'RouteMapEntryFilterSetForm'
+    # Static
+    'StaticRouteFilterForm',
+
+    # OSPF
+    'OSPFAreaFilterForm',
+    'OSPFInstanceFilterForm',
+    'OSPFInterfaceFilterForm',
+
+    # Routing Objects
+    'PrefixListFilterForm',
+    'PrefixListEntryFilterForm',
+    'RouteMapFilterForm',
+    'RouteMapEntryFilterForm'
 )

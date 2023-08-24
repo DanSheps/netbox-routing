@@ -1,0 +1,80 @@
+{% extends 'generic/object.html' %}
+{% load humanize %}
+{% load helpers %}
+{% load plugins %}
+
+{% block content %}
+<div class="row">
+  <div class="col col-md-6">
+    <div class="card">
+      <h5 class="card-header"></h5>
+      <div class="card-body">
+        <table class="table table-hover attr-table">
+          <tr>
+            <th scope="row">Instance</th>
+            <td>
+              {{ object.instance|linkify }}
+            </td>
+          </tr>
+          <tr>
+            <th scope="row">Area</th>
+            <td>
+              {{ object.area|linkify }}
+            </td>
+          </tr>
+          <tr>
+            <th scope="row">Interface</th>
+            <td>
+              {{ object.interface|linkify }}
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+    <div class="card">
+      <h5 class="card-header">Attributes</h5>
+      <div class="card-body">
+        <table class="table table-hover attr-table">
+          <tr>
+            <th scope="row">BFD</th>
+            <td>
+              {{ object.bfd|placeholder }}
+            </td>
+          </tr>
+          <tr>
+            <th scope="row">Priority</th>
+            <td>
+              {{ object.priority|placeholder }}
+            </td>
+          </tr>
+          <tr>
+            <th scope="row">Authentication Type</th>
+            <td>
+              {{ object.authentication|placeholder }}
+            </td>
+          </tr>
+          <tr>
+            <th scope="row">Passphrase (or keyring)</th>
+            <td>
+              {{ object.passphrase|placeholder }}
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+      {% plugin_left_page object %}
+  </div>
+  <div class="col col-md-6">
+    {% include 'inc/panels/related_objects.html' %}
+    {% include 'inc/panels/custom_fields.html' %}
+    {% include 'inc/panels/comments.html' %}
+    {% include 'inc/panels/tags.html' %}
+    {% plugin_right_page object %}
+  </div>
+</div>
+<div class="row">
+    <div class="col col-md-12">
+        {% plugin_full_width_page object %}
+    </div>
+</div>
+{% endblock %}

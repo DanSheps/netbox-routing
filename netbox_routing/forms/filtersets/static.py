@@ -5,7 +5,7 @@ from utilities.forms.fields import DynamicModelMultipleChoiceField, TagFilterFie
 from django.utils.translation import gettext as _
 
 
-class StaticRouteFilterSetForm(NetBoxModelFilterSetForm):
+class StaticRouteFilterForm(NetBoxModelFilterSetForm):
     model = StaticRoute
     fieldsets = (
         (None, ('q', 'filter_id', 'tag', 'vrf')),

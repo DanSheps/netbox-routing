@@ -1,5 +1,7 @@
 from .static import StaticRouteFilterSet
 from .objects import PrefixListFilterSet, PrefixListEntryFilterSet, RouteMapFilterSet, RouteMapEntryFilterSet
+from .ospf import *
+
 
 __all__ = (
     'StaticRouteFilterSet',
@@ -7,5 +9,9 @@ __all__ = (
     'PrefixListFilterSet',
     'PrefixListEntryFilterSet',
     'RouteMapFilterSet',
-    'RouteMapEntryFilterSet'
+    'RouteMapEntryFilterSet',
+
+    'OSPFInstanceFilterSet',
+    'OSPFAreaFilterSet',
+    'OSPFInterfaceFilterSet',
 )

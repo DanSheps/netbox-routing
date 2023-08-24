@@ -3,7 +3,8 @@ from django.urls import path
 from netbox.views.generic import ObjectChangeLogView
 
 from . import views
-from .models import StaticRoute, PrefixList, PrefixListEntry, RouteMap, RouteMapEntry
+from .models import StaticRoute, PrefixList, PrefixListEntry, RouteMap, RouteMapEntry, OSPFInstance, OSPFArea, \
+    OSPFInterface
 
 urlpatterns = [
     path('routes/static/', views.StaticRouteListView.as_view(), name='staticroute_list'),
@@ -14,6 +15,32 @@ urlpatterns = [
     path('routes/static/<int:pk>/devices/', views.StaticRouteDevicesView.as_view(), name='staticroute_devices'),
     path('routes/static/<int:pk>/delete/', views.StaticRouteDeleteView.as_view(), name='staticroute_delete'),
     path('routes/static/<int:pk>/changelog/', ObjectChangeLogView.as_view(), name='staticroute_changelog', kwargs={'model': StaticRoute}),
+
+    path('ospf/instance/', views.OSPFInstanceListView.as_view(), name='ospfinstance_list'),
+    path('ospf/instance/add/', views.OSPFInstanceEditView.as_view(), name='ospfinstance_add'),
+    path('ospf/instance/import/', views.OSPFInstanceListView.as_view(), name='ospfinstance_import'),
+    path('ospf/instance/<int:pk>/', views.OSPFInstanceView.as_view(), name='ospfinstance'),
+    path('ospf/instance/<int:pk>/edit/', views.OSPFInstanceEditView.as_view(), name='ospfinstance_edit'),
+    path('ospf/instance/<int:pk>/interfaces/', views.OSPFInstanceInterfacesView.as_view(), name='ospfinstance_interfaces'),
+    path('ospf/instance/<int:pk>/delete/', views.OSPFInstanceDeleteView.as_view(), name='ospfinstance_delete'),
+    path('ospf/instance/<int:pk>/changelog/', ObjectChangeLogView.as_view(), name='ospfinstance_changelog', kwargs={'model': OSPFInstance}),
+
+    path('ospf/area/', views.OSPFAreaListView.as_view(), name='ospfarea_list'),
+    path('ospf/area/add/', views.OSPFAreaEditView.as_view(), name='ospfarea_add'),
+    path('ospf/area/import/', views.OSPFAreaListView.as_view(), name='ospfarea_import'),
+    path('ospf/area/<int:pk>/', views.OSPFAreaView.as_view(), name='ospfarea'),
+    path('ospf/area/<int:pk>/edit/', views.OSPFAreaEditView.as_view(), name='ospfarea_edit'),
+    path('ospf/area/<int:pk>/interfaces/', views.OSPFAreaInterfacesView.as_view(), name='ospfarea_interfaces'),
+    path('ospf/area/<int:pk>/delete/', views.OSPFAreaDeleteView.as_view(), name='ospfarea_delete'),
+    path('ospf/area/<int:pk>/changelog/', ObjectChangeLogView.as_view(), name='ospfarea_changelog', kwargs={'model': OSPFArea}),
+
+    path('ospf/interface/', views.OSPFInterfaceListView.as_view(), name='ospfinterface_list'),
+    path('ospf/interface/add/', views.OSPFInterfaceEditView.as_view(), name='ospfinterface_add'),
+    path('ospf/interface/import/', views.OSPFInterfaceListView.as_view(), name='ospfinterface_import'),
+    path('ospf/interface/<int:pk>/', views.OSPFInterfaceView.as_view(), name='ospfinterface'),
+    path('ospf/interface/<int:pk>/edit/', views.OSPFInterfaceEditView.as_view(), name='ospfinterface_edit'),
+    path('ospf/interface/<int:pk>/delete/', views.OSPFInterfaceDeleteView.as_view(), name='ospfinterface_delete'),
+    path('ospf/interface/<int:pk>/changelog/', ObjectChangeLogView.as_view(), name='ospfinterface_changelog', kwargs={'model': OSPFInterface}),
 
     path('prefix-list/', views.PrefixListListView.as_view(), name='prefixlist_list'),
     path('prefix-list/add/', views.PrefixListEditView.as_view(), name='prefixlist_add'),
