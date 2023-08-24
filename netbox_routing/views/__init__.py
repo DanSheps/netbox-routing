@@ -8,7 +8,6 @@ from .objects import PrefixListView, PrefixListEditView, PrefixListListView, Pre
     RouteMapEntryBulkDeleteView, PrefixListEntryBulkDeleteView, PrefixListEntryBulkEditView
 
 from .ospf import *
-
 from .core import *
 
 __all__ = (
