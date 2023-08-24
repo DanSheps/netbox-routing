@@ -3,8 +3,8 @@ from netbox.views.generic import ObjectListView, ObjectView, ObjectEditView, Obj
     BulkDeleteView, BulkEditView
 from netbox_routing.filtersets import PrefixListFilterSet, PrefixListEntryFilterSet, RouteMapEntryFilterSet, \
     RouteMapFilterSet
-from netbox_routing.forms import PrefixListFilterSetForm, PrefixListForm, PrefixListEntryFilterSetForm, \
-    PrefixListEntryForm, RouteMapEntryForm, RouteMapEntryFilterSetForm, RouteMapForm, RouteMapFilterSetForm, \
+from netbox_routing.forms import PrefixListFilterForm, PrefixListForm, PrefixListEntryFilterForm, \
+    PrefixListEntryForm, RouteMapEntryForm, RouteMapEntryFilterForm, RouteMapForm, RouteMapFilterForm, \
     PrefixListEntryBulkEditForm, RouteMapEntryBulkEditForm
 from netbox_routing.models import PrefixList, PrefixListEntry, RouteMapEntry, RouteMap
 from netbox_routing.tables.objects import PrefixListTable, PrefixListEntryTable, RouteMapEntryTable, RouteMapTable
@@ -19,7 +19,7 @@ class PrefixListListView(ObjectListView):
     queryset = PrefixList.objects.all()
     table = PrefixListTable
     filterset = PrefixListFilterSet
-    filterset_form = PrefixListFilterSetForm
+    filterset_form = PrefixListFilterForm
 
 
 @register_model_view(PrefixList)
@@ -74,7 +74,7 @@ class PrefixListEntryListView(ObjectListView):
     queryset = PrefixListEntry.objects.all()
     table = PrefixListEntryTable
     filterset = PrefixListEntryFilterSet
-    filterset_form = PrefixListEntryFilterSetForm
+    filterset_form = PrefixListEntryFilterForm
 
 
 class PrefixListEntryView(ObjectView):
@@ -111,7 +111,7 @@ class RouteMapListView(ObjectListView):
     queryset = RouteMap.objects.all()
     table = RouteMapTable
     filterset = RouteMapFilterSet
-    filterset_form = RouteMapFilterSetForm
+    filterset_form = RouteMapFilterForm
 
 
 class RouteMapView(ObjectView):
@@ -165,7 +165,7 @@ class RouteMapEntryListView(ObjectListView):
     queryset = RouteMapEntry.objects.all()
     table = RouteMapEntryTable
     filterset = RouteMapEntryFilterSet
-    filterset_form = RouteMapEntryFilterSetForm
+    filterset_form = RouteMapEntryFilterForm
 
 
 class RouteMapEntryView(ObjectView):
