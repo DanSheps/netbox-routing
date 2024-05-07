@@ -9,8 +9,6 @@ __all__ = (
     'BFDChoices',
 )
 
-)
-
 
 class BGPSettingChoices(ChoiceSet):
     SUMMARY = 'auto_summary'
