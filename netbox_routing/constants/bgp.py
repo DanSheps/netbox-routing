@@ -7,15 +7,12 @@ BGPSETTING_ASSIGNMENT_MODELS = Q(
 
 BGPAF_ASSIGNMENT_MODELS = Q(
     Q(app_label='netbox_routing', model='bgprouter') |
-    Q(app_label='netbox_routing', model='bgpscope') |
-    Q(app_label='netbox_routing', model='bgpneighbor') |
-    Q(app_label='ipam', model='VRF')
+    Q(app_label='netbox_routing', model='bgpscope')
 )
 
 BGPPEER_ASSIGNMENT_MODELS = Q(
     Q(app_label='netbox_routing', model='bgprouter') |
-    Q(app_label='netbox_routing', model='bgpscope') |
-    Q(app_label='netbox_routing', model='bgpaddressfamily')
+    Q(app_label='netbox_routing', model='bgpscope')
 )
 
 BGPPEERAF_ASSIGNMENT_MODELS = Q(

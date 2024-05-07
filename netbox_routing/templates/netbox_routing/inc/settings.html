@@ -1,0 +1,15 @@
+    <div class="card">
+      <h5 class="card-header">Settings</h5>
+      <div class="card-body">
+        <table class="table table-hover attr-table">
+          {% for setting in object.settings.all %}
+            <tr>
+              <th scope="row">{{ setting.get_key_display }}</th>
+              <td>
+                {{ setting.value }}
+              </td>
+            </tr>
+          {% endfor %}
+        </table>
+      </div>
+    </div>

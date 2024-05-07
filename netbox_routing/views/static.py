@@ -59,4 +59,4 @@ class StaticRouteEditView(ObjectEditView):
 
 @register_model_view(StaticRoute, name='delete')
 class StaticRouteDeleteView(ObjectDeleteView):
-    pass
+    queryset = StaticRoute.objects.all()
