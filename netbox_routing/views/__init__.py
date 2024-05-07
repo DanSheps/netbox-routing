@@ -43,7 +43,6 @@ __all__ = (
     'BGPRouterView',
     'BGPRouterEditView',
 
-
     # Routing Objects
     'PrefixListListView',
     'PrefixListView',

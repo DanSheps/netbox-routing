@@ -9,6 +9,8 @@ __all__ = (
     'BFDChoices',
 )
 
+)
+
 
 class BGPSettingChoices(ChoiceSet):
     SUMMARY = 'auto_summary'
@@ -69,6 +71,7 @@ class BGPSettingChoices(ChoiceSet):
         KEEPALIVE: 'integer',
         HOLD: 'integer',
     }
+
 
 
 class BGPAdditionalPathSelectChoices(ChoiceSet):

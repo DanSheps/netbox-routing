@@ -29,9 +29,10 @@ __all__ = (
     'NestedBGPAddressFamilySerializer',
     'NestedBGPSettingSerializer',
 
+    # Nested Serializers
     'NestedPrefixListSerializer',
     'NestedPrefixListEntrySerializer',
     'NestedRouteMapSerializer',
     'NestedRouteMapEntrySerializer',
-
+    'NestedStaticRouteSerializer'
 )
