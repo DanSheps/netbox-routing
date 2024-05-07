@@ -71,7 +71,6 @@ class BGPSettingChoices(ChoiceSet):
     }
 
 
-
 class BGPAdditionalPathSelectChoices(ChoiceSet):
     ALL = 'all'
     BACKUP = 'backup'
