@@ -4,7 +4,7 @@ from netbox.views.generic import ObjectChangeLogView
 
 from . import views
 from .models import StaticRoute, PrefixList, PrefixListEntry, RouteMap, RouteMapEntry, OSPFInstance, OSPFArea, \
-    OSPFInterface
+    OSPFInterface, BGPRouter, BGPScope, BGPAddressFamily
 
 urlpatterns = [
     path('routes/static/', views.StaticRouteListView.as_view(), name='staticroute_list'),
@@ -42,14 +42,35 @@ urlpatterns = [
     path('ospf/interface/<int:pk>/delete/', views.OSPFInterfaceDeleteView.as_view(), name='ospfinterface_delete'),
     path('ospf/interface/<int:pk>/changelog/', ObjectChangeLogView.as_view(), name='ospfinterface_changelog', kwargs={'model': OSPFInterface}),
 
+    path('bgp/router/', views.BGPRouterListView.as_view(), name='bgprouter_list'),
+    path('bgp/router/add/', views.BGPRouterEditView.as_view(), name='bgprouter_add'),
+    path('bgp/router/<int:pk>/', views.BGPRouterView.as_view(), name='bgprouter'),
+    path('bgp/router/<int:pk>/edit', views.BGPRouterEditView.as_view(), name='bgprouter_edit'),
+    path('bgp/router/<int:pk>/delete', views.BGPRouterEditView.as_view(), name='bgprouter_delete'),
+    path('bgp/<int:pk>/changelog/', ObjectChangeLogView.as_view(), name='bgprouter_changelog', kwargs={'model': BGPRouter}),
+
+    path('bgp/scope/', views.BGPScopeListView.as_view(), name='bgpscope_list'),
+    path('bgp/scope/add/', views.BGPScopeEditView.as_view(), name='bgpscope_add'),
+    path('bgp/scope/<int:pk>/', views.BGPScopeView.as_view(), name='bgpscope'),
+    path('bgp/scope/<int:pk>/edit', views.BGPScopeEditView.as_view(), name='bgpscope_edit'),
+    path('bgp/scope/<int:pk>/delete', views.BGPScopeEditView.as_view(), name='bgpscope_delete'),
+    path('bgp/<int:pk>/changelog/', ObjectChangeLogView.as_view(), name='bgpscope_changelog', kwargs={'model': BGPScope}),
+
+    path('bgp/address_family/', views.BGPAddressFamilyListView.as_view(), name='bgpaddressfamily_list'),
+    path('bgp/address_family/add/', views.BGPAddressFamilyEditView.as_view(), name='bgpaddressfamily_add'),
+    path('bgp/address_family/<int:pk>/', views.BGPAddressFamilyView.as_view(), name='bgpaddressfamily'),
+    path('bgp/address_family/<int:pk>/edit', views.BGPAddressFamilyEditView.as_view(), name='bgpaddressfamily_edit'),
+    path('bgp/address_family/<int:pk>/delete', views.BGPAddressFamilyEditView.as_view(), name='bgpaddressfamily_delete'),
+    path('bgp/<int:pk>/changelog/', ObjectChangeLogView.as_view(), name='bgpaddressfamily_changelog', kwargs={'model': BGPAddressFamily}),
+
     path('prefix-list/', views.PrefixListListView.as_view(), name='prefixlist_list'),
     path('prefix-list/add/', views.PrefixListEditView.as_view(), name='prefixlist_add'),
     path('prefix-list/import/', views.PrefixListListView.as_view(), name='prefixlist_import'),
     path('prefix-list/<int:pk>/', views.PrefixListView.as_view(), name='prefixlist'),
-    path('prefix-list/<int:pk>/edit/', views.PrefixListView.as_view(), name='prefixlist_edit'),
+    path('prefix-list/<int:pk>/edit/', views.PrefixListEditView.as_view(), name='prefixlist_edit'),
     path('prefix-list/<int:pk>/entries/', views.PrefixListEntriesView.as_view(), name='prefixlist_entries'),
     path('prefix-list/<int:pk>/delete/', views.PrefixListView.as_view(), name='prefixlist_delete'),
-    path('prefix-list/<int:pk>/changelog/', views.PrefixListView.as_view(), name='prefixlist_changelog', kwargs={'model': PrefixList}),
+    path('prefix-list/<int:pk>/changelog/', ObjectChangeLogView.as_view(), name='prefixlist_changelog', kwargs={'model': PrefixList}),
 
     path('prefix-list-entry/', views.PrefixListEntryListView.as_view(), name='prefixlistentry_list'),
     path('prefix-list-entry/add/', views.PrefixListEntryEditView.as_view(), name='prefixlistentry_add'),
@@ -66,9 +87,9 @@ urlpatterns = [
     path('route-map/import/', views.RouteMapListView.as_view(), name='routemap_import'),
     path('route-map/<int:pk>/', views.RouteMapView.as_view(), name='routemap'),
     path('route-map/<int:pk>/entries/', views.RouteMapEntriesView.as_view(), name='routemap_entries'),
-    path('route-map/<int:pk>/edit/', views.RouteMapView.as_view(), name='routemap_edit'),
+    path('route-map/<int:pk>/edit/', views.RouteMapEditView.as_view(), name='routemap_edit'),
     path('route-map/<int:pk>/delete/', views.RouteMapView.as_view(), name='routemap_delete'),
-    path('route-map/<int:pk>/changelog/', views.RouteMapView.as_view(), name='routemap_changelog', kwargs={'model': RouteMap}),
+    path('route-map/<int:pk>/changelog/', ObjectChangeLogView.as_view(), name='routemap_changelog', kwargs={'model': RouteMap}),
 
     path('route-map-entry/', views.RouteMapEntryListView.as_view(), name='routemapentry_list'),
     path('route-map-entry/add/', views.RouteMapEntryEditView.as_view(), name='routemapentry_add'),

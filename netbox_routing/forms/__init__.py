@@ -3,6 +3,7 @@ from .bulk_edit import *
 from .bulk_import import *
 from .objects import PrefixListForm, PrefixListEntryForm, RouteMapForm, RouteMapEntryForm
 from .ospf import OSPFAreaForm, OSPFInstanceForm, OSPFInterfaceForm
+from .bgp import BGPRouterForm, BGPScopeForm, BGPAddressFamilyForm
 from .static import StaticRouteForm
 
 __all__ = (
@@ -20,6 +21,14 @@ __all__ = (
     'OSPFInterfaceForm',
     'OSPFInterfaceFilterForm',
     'OSPFInterfaceBulkEditForm',
+
+    'BGPRouterForm',
+    'BGPScopeForm',
+    'BGPAddressFamilyForm',
+    'BGPRouterFilterForm',
+    'BGPScopeFilterForm',
+    'BGPAddressFamilyFilterForm',
+    'BGPSettingFilterForm',
 
     # Objects
     'PrefixListForm',

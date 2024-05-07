@@ -1,4 +1,5 @@
 from django.db.models.functions import Lower
+from django.utils.translation import gettext_lazy as _
 from django.urls import reverse
 
 from django.db import models
@@ -56,6 +57,18 @@ class RouteMapEntry(PermitDenyChoiceMixin, NetBoxModel):
     )
     type = models.CharField(max_length=6, choices=PermitDenyChoices)
     sequence = models.PositiveSmallIntegerField()
+    match = models.JSONField(
+        blank=True,
+        null=True,
+        verbose_name=_('Set parameters'),
+        help_text=_("JSON blob of options to match ")
+    )
+    set = models.JSONField(
+        blank=True,
+        null=True,
+        verbose_name=_('Set parameters'),
+        help_text=_("JSON blob of options to set ")
+    )
 
     clone_fields = (
         'route_map', 'type',

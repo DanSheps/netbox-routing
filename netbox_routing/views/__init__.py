@@ -8,6 +8,7 @@ from .objects import PrefixListView, PrefixListEditView, PrefixListListView, Pre
     RouteMapEntryBulkDeleteView, PrefixListEntryBulkDeleteView, PrefixListEntryBulkEditView
 
 from .ospf import *
+from .bgp import *
 from .core import *
 
 __all__ = (
@@ -38,6 +39,9 @@ __all__ = (
     'OSPFInterfaceView',
     'OSPFInterfaceEditView',
     'OSPFInterfaceDeleteView',
+
+    'BGPRouterView',
+    'BGPRouterEditView',
 
 
     # Routing Objects
