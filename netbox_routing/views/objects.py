@@ -35,7 +35,13 @@ class PrefixListEntriesView(ObjectChildrenView):
     child_model = PrefixListEntry
     table = PrefixListEntryTable
     filterset = PrefixListEntryFilterSet
-    actions = ['add', 'edit', 'delete', 'bulk_edit', 'bulk_delete']
+    actions = {
+        'add': {'add'},
+        'edit': {'change'},
+        'delete': {'delete'},
+        'bulk_edit': {'change'},
+        'bulk_delete': {'delete'}
+    }
     tab = ViewTab(
         label='Entries',
         badge=lambda obj: PrefixListEntry.objects.filter(prefix_list=obj).count(),
@@ -126,7 +132,13 @@ class RouteMapEntriesView(ObjectChildrenView):
     child_model = RouteMapEntry
     table = RouteMapEntryTable
     filterset = RouteMapEntryFilterSet
-    actions = ['add', 'edit', 'delete', 'bulk_edit', 'bulk_delete']
+    actions = {
+        'add': {'add'},
+        'edit': {'change'},
+        'delete': {'delete'},
+        'bulk_edit': {'change'},
+        'bulk_delete': {'delete'}
+    }
     tab = ViewTab(
         label='Entries',
         badge=lambda obj: RouteMapEntry.objects.filter(route_map=obj).count(),
