@@ -54,7 +54,6 @@ class OSPFInstanceInterfacesView(ObjectChildrenView):
     child_model = OSPFInterface
     table = OSPFInterfaceTable
     filterset = OSPFInterfaceFilterSet
-    actions = []
     tab = ViewTab(
         label='Interfaces',
         badge=lambda obj: OSPFInterface.objects.filter(instance=obj).count(),
@@ -105,7 +104,6 @@ class OSPFAreaInterfacesView(ObjectChildrenView):
     child_model = OSPFInterface
     table = OSPFInterfaceTable
     filterset = OSPFInterfaceFilterSet
-    actions = []
     tab = ViewTab(
         label='Interfaces',
         badge=lambda obj: OSPFInterface.objects.filter(area=obj).count(),
