@@ -1,8 +1,8 @@
 from rest_framework import serializers
 
-from dcim.api.nested_serializers import NestedInterfaceSerializer, NestedDeviceSerializer
+from dcim.api.serializers_.device_components import InterfaceSerializer
+from dcim.api.serializers_.devices import DeviceSerializer
 from netbox.api.serializers import NetBoxModelSerializer
-from netbox_routing.api.nested_serializers.ospf import NestedOSPFInstanceSerializer, NestedOSPFAreaSerializer
 from netbox_routing.models import OSPFInstance, OSPFArea, OSPFInterface
 
 
@@ -15,7 +15,7 @@ __all__ = (
 
 class OSPFInstanceSerializer(NetBoxModelSerializer):
     url = serializers.HyperlinkedIdentityField(view_name='plugins-api:netbox_routing-api:ospfinstance-detail')
-    device = NestedDeviceSerializer()
+    device = DeviceSerializer(nested=True)
 
     class Meta:
         model = OSPFInstance
@@ -32,9 +32,9 @@ class OSPFAreaSerializer(NetBoxModelSerializer):
 
 class OSPFInterfaceSerializer(NetBoxModelSerializer):
     url = serializers.HyperlinkedIdentityField(view_name='plugins-api:netbox_routing-api:ospfarea-detail')
-    instance = NestedOSPFInstanceSerializer()
-    area = NestedOSPFAreaSerializer()
-    interface = NestedInterfaceSerializer()
+    instance = OSPFInstanceSerializer(nested=True)
+    area = OSPFAreaSerializer(nested=True)
+    interface = InterfaceSerializer(nested=True)
 
     class Meta:
         model = OSPFInterface

@@ -1,6 +1,5 @@
 from rest_framework import serializers
 
-from netbox_routing.api.nested_serializers import NestedPrefixListSerializer, NestedRouteMapSerializer
 from netbox.api.serializers import NetBoxModelSerializer
 from netbox_routing.models import PrefixList, PrefixListEntry, RouteMap, RouteMapEntry
 
@@ -20,7 +19,7 @@ class PrefixListSerializer(NetBoxModelSerializer):
 
 class PrefixListEntrySerializer(NetBoxModelSerializer):
     url = serializers.HyperlinkedIdentityField(view_name='plugins-api:netbox_routing-api:prefixlistentry-detail')
-    prefix_list = NestedPrefixListSerializer()
+    prefix_list = PrefixListSerializer(nested=True)
 
     class Meta:
         model = PrefixListEntry
@@ -37,7 +36,7 @@ class RouteMapSerializer(NetBoxModelSerializer):
 
 class RouteMapEntrySerializer(NetBoxModelSerializer):
     url = serializers.HyperlinkedIdentityField(view_name='plugins-api:netbox_routing-api:prefixlistentry-detail')
-    route_map = NestedRouteMapSerializer()
+    route_map = RouteMapSerializer(nested=True)
 
 
     class Meta:

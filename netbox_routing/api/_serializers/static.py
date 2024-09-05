@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
-from dcim.api.nested_serializers import NestedDeviceSerializer
-from ipam.api.nested_serializers import NestedVRFSerializer
+from dcim.api.serializers_.devices import DeviceSerializer
+from ipam.api.serializers_.vrfs import VRFSerializer
 from netbox.api.serializers import NetBoxModelSerializer
 from netbox_routing.models import StaticRoute
 
@@ -13,8 +13,8 @@ __all__ = (
 
 class StaticRouteSerializer(NetBoxModelSerializer):
     url = serializers.HyperlinkedIdentityField(view_name='plugins-api:netbox_routing-api:staticroute-detail')
-    devices = NestedDeviceSerializer(many=True)
-    vrf = NestedVRFSerializer()
+    devices = DeviceSerializer(many=True, nested=True)
+    vrf = VRFSerializer(nested=True)
 
     class Meta:
         model = StaticRoute
