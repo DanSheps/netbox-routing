@@ -30,9 +30,10 @@ A plugin for tracking all kinds of routing information
 
 ## Compatibility Matrix
 
-|       | Netbox 3.2.x | 
-|-------|--------------|
-| 1.0.0 | X            |
+|       | Netbox 3.2.x   | NetBox 4.1.x   | 
+|-------|----------------|----------------|
+| 0.1.x | Compatible     | Not Compatible |
+| 0.2.x | Not Compatible | Compatible     |
 
 ## Installation
 
