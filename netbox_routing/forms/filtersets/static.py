@@ -4,11 +4,13 @@ from netbox_routing.models import StaticRoute
 from utilities.forms.fields import DynamicModelMultipleChoiceField, TagFilterField
 from django.utils.translation import gettext as _
 
+from utilities.forms.rendering import FieldSet
+
 
 class StaticRouteFilterForm(NetBoxModelFilterSetForm):
     model = StaticRoute
     fieldsets = (
-        (None, ('q', 'filter_id', 'tag', 'vrf')),
+        FieldSet('q', 'filter_id', 'tag', 'vrf'),
     )
     vrf = DynamicModelMultipleChoiceField(
         queryset=VRF.objects.all(),
