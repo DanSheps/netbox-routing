@@ -19,6 +19,8 @@ __all__ = (
     'BGPSettingForm',
 )
 
+from utilities.forms.rendering import FieldSet
+
 
 class BGPSettingMixin:
     def __init__(self, *args, **kwargs):
@@ -162,11 +164,9 @@ class BGPRouterForm(BGPSettingMixin, NetBoxModelForm):
     )
 
 
-    fieldsets = [
-        (_('Router'), (
-            'device', 'asn',
-        )),
-    ]
+    fieldsets = (
+        FieldSet('device', 'asn', name=_('Router')),
+    )
 
     class Meta:
         model = BGPRouter
@@ -191,11 +191,9 @@ class BGPScopeForm(BGPSettingMixin, NetBoxModelForm):
     )
 
 
-    fieldsets = [
-        (_('Scope'), (
-            'router', 'vrf',
-        )),
-    ]
+    fieldsets = (
+        FieldSet('router', 'vrf', name=_('Scope')),
+    )
 
     class Meta:
         model = BGPScope
@@ -219,11 +217,9 @@ class BGPAddressFamilyForm(BGPSettingMixin, NetBoxModelForm):
     )
 
 
-    fieldsets = [
-        (_('Address Family'), (
-            'scope', 'address_family',
-        )),
-    ]
+    fieldsets = (
+        FieldSet('scope', 'address_family', name=_('Address Family')),
+    )
 
     class Meta:
         model = BGPAddressFamily
@@ -245,11 +241,9 @@ class BGPSettingForm(NetBoxModelForm):
     )
 
 
-    fieldsets = [
-        (_('Settings'), (
-            'key', 'value',
-        )),
-    ]
+    fieldsets = (
+        FieldSet('key', 'value', name=_('Settings')),
+    )
 
     class Meta:
         model = BGPSetting

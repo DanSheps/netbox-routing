@@ -16,6 +16,8 @@ __all__ = (
     'OSPFInterfaceFilterForm',
 )
 
+from utilities.forms.rendering import FieldSet
+
 
 class OSPFInstanceFilterForm(NetBoxModelFilterSetForm):
     device = DynamicModelMultipleChoiceField(
@@ -26,7 +28,7 @@ class OSPFInstanceFilterForm(NetBoxModelFilterSetForm):
     )
     model = OSPFInstance
     fieldsets = (
-        (None, ('q', 'filter_id', 'tag', 'device')),
+        FieldSet('q', 'filter_id', 'tag', 'device'),
     )
     tag = TagFilterField(model)
 
@@ -34,7 +36,7 @@ class OSPFInstanceFilterForm(NetBoxModelFilterSetForm):
 class OSPFAreaFilterForm(NetBoxModelFilterSetForm):
     model = OSPFArea
     fieldsets = (
-        (None, ('q', 'filter_id', 'tag', )),
+        FieldSet('q', 'filter_id', 'tag'),
     )
     tag = TagFilterField(model)
 
@@ -42,10 +44,10 @@ class OSPFAreaFilterForm(NetBoxModelFilterSetForm):
 class OSPFInterfaceFilterForm(NetBoxModelFilterSetForm):
     model = OSPFInterface
     fieldsets = (
-        (None, ('q', 'filter_id', 'tag', )),
-        ('OSPF', ('instance', 'area')),
-        ('Device', ('interface', )),
-        ('Attributes', ('priority', 'bfd', 'authentication')),
+        FieldSet('q', 'filter_id', 'tag'),
+        FieldSet('instance', 'area', name=_('OSPF')),
+        FieldSet('interface', name=_('Device')),
+        FieldSet('priority', 'bfd', 'authentication', name=_('Attributes'))
     )
     instance = DynamicModelMultipleChoiceField(
         queryset=OSPFInstance.objects.all(),

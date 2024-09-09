@@ -11,6 +11,8 @@ __all__ = (
     'RouteMapEntryBulkEditForm'
 )
 
+from utilities.forms.rendering import FieldSet
+
 
 class PrefixListEntryBulkEditForm(NetBoxModelBulkEditForm):
     prefix_list = DynamicModelChoiceField(
@@ -22,7 +24,7 @@ class PrefixListEntryBulkEditForm(NetBoxModelBulkEditForm):
 
     model = PrefixListEntry
     fieldsets = (
-        (None, ('prefix_list', )),
+       FieldSet('prefix_list'),
     )
     nullable_fields = ()
 
@@ -37,6 +39,6 @@ class RouteMapEntryBulkEditForm(NetBoxModelBulkEditForm):
 
     model = RouteMapEntry
     fieldsets = (
-        (None, ('route_map', )),
+       FieldSet('route_map'),
     )
     nullable_fields = ()

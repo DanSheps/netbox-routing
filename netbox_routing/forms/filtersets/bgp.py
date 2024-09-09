@@ -16,6 +16,8 @@ __all__ = (
     'BGPSettingFilterForm',
 )
 
+from utilities.forms.rendering import FieldSet
+
 
 class BGPRouterFilterForm(NetBoxModelFilterSetForm):
     device_id = DynamicModelMultipleChoiceField(
@@ -32,7 +34,7 @@ class BGPRouterFilterForm(NetBoxModelFilterSetForm):
     )
     model = BGPRouter
     fieldsets = (
-        (None, ('q', 'filter_id', 'tag', 'device_id', 'asn_id')),
+       FieldSet('q', 'filter_id', 'tag', 'device_id', 'asn_id'),
     )
     tag = TagFilterField(model)
 
@@ -52,7 +54,7 @@ class BGPScopeFilterForm(NetBoxModelFilterSetForm):
     )
     model = BGPScope
     fieldsets = (
-        (None, ('q', 'filter_id', 'tag', 'router_id', 'vrf_id')),
+       FieldSet('q', 'filter_id', 'tag', 'router_id', 'vrf_id'),
     )
     tag = TagFilterField(model)
 
@@ -71,7 +73,7 @@ class BGPAddressFamilyFilterForm(NetBoxModelFilterSetForm):
     )
     model = BGPAddressFamily
     fieldsets = (
-        (None, ('q', 'filter_id', 'tag', 'scope_id', 'address_family')),
+       FieldSet('q', 'filter_id', 'tag', 'scope_id', 'address_family'),
     )
     tag = TagFilterField(model)
 
@@ -79,6 +81,6 @@ class BGPAddressFamilyFilterForm(NetBoxModelFilterSetForm):
 class BGPSettingFilterForm(NetBoxModelFilterSetForm):
     model = BGPSetting
     fieldsets = (
-        (None, ('q', 'filter_id', 'tag', )),
+       FieldSet('q', 'filter_id', 'tag'),
     )
     tag = TagFilterField(model)
