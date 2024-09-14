@@ -3,7 +3,7 @@ from django.db.models import CheckConstraint, Q
 from django.urls import reverse
 
 from ipam.fields import IPNetworkField
-from netbox.models import NetBoxModel
+from netbox.models import PrimaryModel
 from netbox_routing.fields.ip import IPAddressField
 
 
@@ -12,7 +12,7 @@ __all__ = (
 )
 
 
-class StaticRoute(NetBoxModel):
+class StaticRoute(PrimaryModel):
     devices = models.ManyToManyField(
         to='dcim.Device',
         related_name='static_routes'

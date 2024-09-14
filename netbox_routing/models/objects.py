@@ -7,7 +7,7 @@ from django.db.models import F, Q, CheckConstraint
 from django.core.exceptions import ValidationError
 
 from ipam.fields import IPNetworkField
-from netbox.models import NetBoxModel
+from netbox.models import PrimaryModel
 from netbox_routing.choices.objects import PermitDenyChoices
 
 
@@ -24,7 +24,7 @@ class PermitDenyChoiceMixin:
         return PermitDenyChoices.colors.get(self.type)
 
 
-class RouteMap(NetBoxModel):
+class RouteMap(PrimaryModel):
     name = models.CharField(
         max_length=255
     )
@@ -48,7 +48,7 @@ class RouteMap(NetBoxModel):
     def get_absolute_url(self):
         return reverse('plugins:netbox_routing:routemap', args=[self.pk])
 
-class RouteMapEntry(PermitDenyChoiceMixin, NetBoxModel):
+class RouteMapEntry(PermitDenyChoiceMixin, PrimaryModel):
     route_map = models.ForeignKey(
         to="netbox_routing.RouteMap",
         on_delete=models.PROTECT,
@@ -94,7 +94,7 @@ class RouteMapEntry(PermitDenyChoiceMixin, NetBoxModel):
         return reverse('plugins:netbox_routing:routemapentry', args=[self.pk])
 
 
-class PrefixList(NetBoxModel):
+class PrefixList(PrimaryModel):
     name = models.CharField(
         max_length=255
     )
@@ -119,7 +119,7 @@ class PrefixList(NetBoxModel):
         return reverse('plugins:netbox_routing:prefixlist', args=[self.pk])
 
 
-class PrefixListEntry(PermitDenyChoiceMixin, NetBoxModel):
+class PrefixListEntry(PermitDenyChoiceMixin, PrimaryModel):
     prefix_list = models.ForeignKey(
         to="netbox_routing.PrefixList",
         on_delete=models.PROTECT,

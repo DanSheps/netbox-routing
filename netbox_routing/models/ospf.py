@@ -2,7 +2,7 @@ from django.db import models
 from django.urls import reverse
 from django.utils.translation import gettext as _
 
-from netbox.models import NetBoxModel
+from netbox.models import PrimaryModel
 
 from netbox_routing import choices
 from netbox_routing.fields.ip import IPAddressField
@@ -15,7 +15,7 @@ __all__ = (
 )
 
 
-class OSPFInstance(NetBoxModel):
+class OSPFInstance(PrimaryModel):
     name = models.CharField(max_length=100)
     router_id = IPAddressField(verbose_name=_('Router ID'))
     process_id = models.IntegerField(verbose_name=_('Process ID'))
@@ -42,7 +42,7 @@ class OSPFInstance(NetBoxModel):
         return reverse('plugins:netbox_routing:ospfinstance', args=[self.pk])
 
 
-class OSPFArea(NetBoxModel):
+class OSPFArea(PrimaryModel):
     area_id = models.CharField(max_length=100, verbose_name='Area ID')
 
     prerequisite_models = ()
@@ -57,7 +57,7 @@ class OSPFArea(NetBoxModel):
         return reverse('plugins:netbox_routing:ospfarea', args=[self.pk])
 
 
-class OSPFInterface(NetBoxModel):
+class OSPFInterface(PrimaryModel):
     instance = models.ForeignKey(
         to='netbox_routing.OSPFInstance',
         related_name='interfaces',
