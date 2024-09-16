@@ -35,9 +35,11 @@ class StaticRoute(PrimaryModel):
         help_text='Optional name for this static route'
     )
     metric = models.PositiveSmallIntegerField(
-        verbose_name='Metric'
+        verbose_name='Metric',
+        blank=True,
+        default=1,
     )
-    permanent = models.BooleanField()
+    permanent = models.BooleanField(default=False, blank=True, null=True,)
 
     clone_fields = (
         'vrf', 'metric', 'permanent'
