@@ -1,5 +1,4 @@
-from .static import StaticRouteListView, StaticRouteDevicesView, StaticRouteEditView, StaticRouteView, \
-    StaticRouteDeleteView
+from .static import *
 
 from .objects import PrefixListView, PrefixListEditView, PrefixListListView, PrefixListDeleteView, RouteMapListView, \
     RouteMapView, RouteMapEditView, RouteMapDeleteView, PrefixListEntryListView, PrefixListEntryEditView, \
@@ -20,7 +19,9 @@ __all__ = (
     'StaticRouteView',
     'StaticRouteDevicesView',
     'StaticRouteEditView',
+    'StaticRouteBulkEditView',
     'StaticRouteDeleteView',
+    'StaticRouteBulkDeleteView',
 
     # OSPF
     'OSPFInstanceListView',
