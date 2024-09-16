@@ -26,7 +26,9 @@ __all__ = (
     'OSPFInterfaceListView',
     'OSPFInterfaceView',
     'OSPFInterfaceEditView',
+    'OSPFInterfaceBulkEditView',
     'OSPFInterfaceDeleteView',
+    'OSPFInterfaceBulkDeleteView',
 )
 
 
@@ -70,9 +72,24 @@ class OSPFInstanceEditView(ObjectEditView):
     form = OSPFInstanceForm
 
 
+@register_model_view(OSPFInstance, name='bulk_edit')
+class OSPFInstanceBulkEditView(ObjectEditView):
+    queryset = OSPFInstance.objects.all()
+    form = OSPFInstanceForm
+    filterset = OSPFInstanceFilterSet
+    table = OSPFInterfaceTable
+
+
 @register_model_view(OSPFInstance, name='delete')
 class OSPFInstanceDeleteView(ObjectDeleteView):
     queryset = OSPFInstance.objects.all()
+
+
+@register_model_view(OSPFInstance, name='bulk_delete')
+class OSPFInstanceBulkDeleteView(ObjectDeleteView):
+    queryset = OSPFInstance.objects.all()
+    filterset = OSPFInstanceFilterSet
+    table = OSPFInterfaceTable
 
 
 class OSPFInstanceBulkImportView(BulkImportView):
