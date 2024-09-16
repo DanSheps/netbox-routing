@@ -3,7 +3,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.utils.translation import gettext as _
 
-from netbox.models import NetBoxModel, NestedGroupModel
+from netbox.models import PrimaryModel
 from netbox_routing import choices
 from netbox_routing.choices.bgp import BGPSettingChoices, BGPAddressFamilyChoices, BFDChoices
 from netbox_routing.constants.bgp import BGPSETTING_ASSIGNMENT_MODELS, BGPAF_ASSIGNMENT_MODELS, \
@@ -11,7 +11,7 @@ from netbox_routing.constants.bgp import BGPSETTING_ASSIGNMENT_MODELS, BGPAF_ASS
 from netbox_routing.fields.ip import IPAddressField
 
 
-class BGPSetting(NetBoxModel):
+class BGPSetting(PrimaryModel):
     assigned_object_type = models.ForeignKey(
         to=ContentType,
         limit_choices_to=BGPSETTING_ASSIGNMENT_MODELS,
@@ -44,7 +44,7 @@ class BGPSetting(NetBoxModel):
         return reverse('plugins:netbox_routing:bgpsetting', args=[self.pk])
 
 
-class BGPRouter(NetBoxModel):
+class BGPRouter(PrimaryModel):
     device = models.ForeignKey(
         to='dcim.Device',
         on_delete=models.PROTECT,
@@ -76,7 +76,7 @@ class BGPRouter(NetBoxModel):
         return reverse('plugins:netbox_routing:bgprouter', args=[self.pk])
 
 
-class BGPScope(NetBoxModel):
+class BGPScope(PrimaryModel):
     router = models.ForeignKey(
         to=BGPRouter,
         on_delete=models.PROTECT,
@@ -111,7 +111,7 @@ class BGPScope(NetBoxModel):
         return reverse('plugins:netbox_routing:bgpscope', args=[self.pk])
 
 
-class BGPAddressFamily(NetBoxModel):
+class BGPAddressFamily(PrimaryModel):
     scope = models.ForeignKey(
         to=BGPScope,
         on_delete=models.PROTECT,
@@ -142,7 +142,7 @@ class BGPAddressFamily(NetBoxModel):
         return reverse('plugins:netbox_routing:bgpaddressfamily', args=[self.pk])
 
 
-class BGPSessionTemplate(NetBoxModel):
+class BGPSessionTemplate(PrimaryModel):
     name = models.CharField(
         verbose_name='Name',
         max_length=255
@@ -183,7 +183,7 @@ class BGPSessionTemplate(NetBoxModel):
     )
 
 
-class BGPPoliyTemplate(NetBoxModel):
+class BGPPoliyTemplate(PrimaryModel):
     name = models.CharField(
         verbose_name='Name',
         max_length=255
@@ -229,7 +229,7 @@ class BGPPoliyTemplate(NetBoxModel):
     )
 
 
-class BGPPeerTemplate(NetBoxModel):
+class BGPPeerTemplate(PrimaryModel):
     name = models.CharField(
         verbose_name='Name',
         max_length=255
@@ -247,7 +247,7 @@ class BGPPeerTemplate(NetBoxModel):
     )
 
 
-class BGPPeer(NetBoxModel):
+class BGPPeer(PrimaryModel):
     assigned_object_type = models.ForeignKey(
         to=ContentType,
         limit_choices_to=BGPPEER_ASSIGNMENT_MODELS,
@@ -292,7 +292,7 @@ class BGPPeer(NetBoxModel):
     )
 
 
-class BGPPeerAddressFamily(NetBoxModel):
+class BGPPeerAddressFamily(PrimaryModel):
     assigned_object_type = models.ForeignKey(
         to=ContentType,
         limit_choices_to=BGPPEERAF_ASSIGNMENT_MODELS,
