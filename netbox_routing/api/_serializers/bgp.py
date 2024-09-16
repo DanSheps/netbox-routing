@@ -27,8 +27,10 @@ class BGPSettingSerializer(NetBoxModelSerializer):
     class Meta:
         model = BGPSetting
         fields = (
-            'url', 'id', 'display', 'assigned_object_type', 'assigned_object_id', 'assigned_object', 'key', 'value'
+            'url', 'id', 'display', 'assigned_object_type', 'assigned_object_id', 'assigned_object', 'key', 'value',
+            'description', 'comments',
         )
+        brief_fields = ('url', 'id', 'display', 'assigned_object', 'key', )
 
     @extend_schema_field(serializers.JSONField(allow_null=True))
     def get_assigned_object(self, obj):
@@ -49,7 +51,8 @@ class BGPRouterSerializer(NetBoxModelSerializer):
 
     class Meta:
         model = BGPRouter
-        fields = ('url', 'id', 'display', 'device', 'asn', 'settings')
+        fields = ('url', 'id', 'display', 'device', 'asn', 'settings', 'description', 'comments',)
+        fields = ('url', 'id', 'display', 'device', 'asn', )
 
 
 class BGPScopeSerializer(NetBoxModelSerializer):
@@ -62,7 +65,8 @@ class BGPScopeSerializer(NetBoxModelSerializer):
 
     class Meta:
         model = BGPScope
-        fields = ('url', 'id', 'display', 'router', 'vrf', 'settings')
+        fields = ('url', 'id', 'display', 'router', 'vrf', 'settings', 'description', 'comments',)
+        brief_fields = ('url', 'id', 'display', 'router', 'vrf', )
 
 
 class BGPAddressFamilySerializer(NetBoxModelSerializer):
@@ -73,4 +77,5 @@ class BGPAddressFamilySerializer(NetBoxModelSerializer):
 
     class Meta:
         model = BGPAddressFamily
-        fields = ('url', 'id', 'display', 'scope', 'address_family', 'settings')
+        fields = ('url', 'id', 'display', 'scope', 'address_family', 'settings', 'description', 'comments',)
+        brief_fields = ('url', 'id', 'display', 'scope', 'address_family', )
