@@ -14,7 +14,8 @@ class PrefixListSerializer(NetBoxModelSerializer):
 
     class Meta:
         model = PrefixList
-        fields = ('url', 'id', 'display', 'name')
+        fields = ('url', 'id', 'display', 'name', 'description', 'comments',)
+        brief_fields = ('url', 'id', 'display', 'name', )
 
 
 class PrefixListEntrySerializer(NetBoxModelSerializer):
@@ -23,7 +24,10 @@ class PrefixListEntrySerializer(NetBoxModelSerializer):
 
     class Meta:
         model = PrefixListEntry
-        fields = ('url', 'id', 'display', 'prefix_list', 'sequence', 'type', 'prefix', 'le', 'ge')
+        fields = (
+            'url', 'id', 'display', 'prefix_list', 'sequence', 'type', 'prefix', 'le', 'ge', 'description', 'comments',
+        )
+        brief_fields = ('url', 'id', 'display', 'prefix_list', 'sequence', 'type', 'prefix', 'le', 'ge')
 
 
 class RouteMapSerializer(NetBoxModelSerializer):
@@ -31,7 +35,8 @@ class RouteMapSerializer(NetBoxModelSerializer):
 
     class Meta:
         model = RouteMap
-        fields = ('url', 'id', 'display', 'name')
+        fields = ('url', 'id', 'display', 'name', 'description', 'comments',)
+        brief_fields = ('url', 'id', 'display', 'name')
 
 
 class RouteMapEntrySerializer(NetBoxModelSerializer):
@@ -41,4 +46,5 @@ class RouteMapEntrySerializer(NetBoxModelSerializer):
 
     class Meta:
         model = RouteMapEntry
-        fields = ('url', 'id', 'display', 'route_map', 'sequence', 'type')
+        fields = ('url', 'id', 'display', 'route_map', 'sequence', 'type', 'description', 'comments',)
+        brief_fields = ('url', 'id', 'display', 'route_map', 'sequence', 'type')
