@@ -15,8 +15,8 @@ __all__ = (
 
 class StaticRouteSerializer(NetBoxModelSerializer):
     url = serializers.HyperlinkedIdentityField(view_name='plugins-api:netbox_routing-api:staticroute-detail')
-    devices = DeviceSerializer(many=True, nested=True, required=False)
-    vrf = VRFSerializer(nested=True, required=False)
+    devices = DeviceSerializer(many=True, nested=True, required=False, allow_null=True)
+    vrf = VRFSerializer(nested=True, required=False, allow_null=True)
     next_hop = IPAddressField()
 
     class Meta:
