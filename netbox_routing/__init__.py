@@ -7,8 +7,8 @@ plugin = metadata('netbox_routing')
 
 class NetboxRouting(PluginConfig):
     name = plugin.get('Name').replace('-', '_')
-    verbose_name = plugin.get('Summary')
-    description = plugin.get('Description')
+    verbose_name = plugin.get('Name').replace('-', ' ').title()
+    description = plugin.get('Summary')
     version = plugin.get('Version')
     author = plugin.get('Author')
     author_email = plugin.get('Author-email')
@@ -17,6 +17,7 @@ class NetboxRouting(PluginConfig):
     required_settings = []
     caching_config = {}
     default_settings = {}
+    graphql_schema = 'graphql.schema.schema'
 
 
 config = NetboxRouting
