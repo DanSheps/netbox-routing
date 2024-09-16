@@ -16,7 +16,7 @@ class StaticRouteTestCase(TestCase):
     def test_staticroute(self):
         form = StaticRouteForm(data={
             'name': 'Route 1',
-            'device': Device.objects.first().pk,
+            'devices': [Device.objects.first().pk],
             'vrf': None,
             'prefix': '0.0.0.0/0',
             'next_hop': '10.10.10.1',
