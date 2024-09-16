@@ -17,7 +17,7 @@ class StaticRouteForm(NetBoxModelForm):
 
     class Meta:
         model = StaticRoute
-        fields = ('devices', 'vrf', 'prefix', 'next_hop', 'name', 'metric', 'permanent')
+        fields = ('devices', 'vrf', 'prefix', 'next_hop', 'name', 'metric', 'permanent', 'description', 'comments', )
 
     def __init__(self, data=None, instance=None, *args, **kwargs):
         super().__init__(data=data, instance=instance, *args, **kwargs)
