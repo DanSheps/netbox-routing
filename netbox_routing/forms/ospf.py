@@ -26,14 +26,14 @@ class OSPFInstanceForm(NetBoxModelForm):
 
     class Meta:
         model = OSPFInstance
-        fields = ('name', 'router_id', 'process_id', 'device')
+        fields = ('name', 'router_id', 'process_id', 'device', 'description', 'comments', )
 
 
 class OSPFAreaForm(NetBoxModelForm):
 
     class Meta:
         model = OSPFArea
-        fields = ('area_id', )
+        fields = ('area_id', 'description', 'comments',  )
 
 
 class OSPFInterfaceForm(NetBoxModelForm):
@@ -71,7 +71,10 @@ class OSPFInterfaceForm(NetBoxModelForm):
 
     class Meta:
         model = OSPFInterface
-        fields = ('device', 'instance', 'area', 'interface', 'priority', 'bfd', 'authentication', 'passphrase')
+        fields = (
+            'device', 'instance', 'area', 'interface', 'priority', 'bfd', 'authentication', 'passphrase', 'description',
+            'comments',
+        )
 
         widgets = {
             'bfd': forms.Select(choices=BOOLEAN_WITH_BLANK_CHOICES),
