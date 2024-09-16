@@ -24,14 +24,14 @@ class OSPFInstanceImportForm(NetBoxModelImportForm):
 
     class Meta:
         model = OSPFInstance
-        fields = ('name', 'router_id', 'process_id', 'device', 'tags')
+        fields = ('name', 'router_id', 'process_id', 'device', 'description', 'comments', 'tags',)
 
 
 class OSPFAreaImportForm(NetBoxModelImportForm):
 
     class Meta:
         model = OSPFArea
-        fields = ('area_id', 'tags')
+        fields = ('area_id', 'description', 'comments', 'tags',)
 
 
 class OSPFInterfaceImportForm(NetBoxModelImportForm):
@@ -56,4 +56,4 @@ class OSPFInterfaceImportForm(NetBoxModelImportForm):
 
     class Meta:
         model = OSPFInterface
-        fields = ('instance', 'area', 'interface', 'tags')
+        fields = ('instance', 'area', 'interface', 'description', 'comments', 'tags',)
