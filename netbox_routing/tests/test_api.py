@@ -52,7 +52,7 @@ class StaticRouteTest(IPAddressFieldMixin , APIViewTestCases.APIViewTestCase):
                 'devices': [device.pk],
                 'vrf': vrf.pk,
                 'prefix': '0.0.0.0/0',
-                'next_hop': '10.10.10.1',
+                'next_hop': '10.10.10.2',
                 'metric': 1,
                 'permanent': True
             },
