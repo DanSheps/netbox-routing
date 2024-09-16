@@ -57,7 +57,7 @@ jobs:
         cp -f netbox-routing/.github/configuration.testing.py netbox/netbox/netbox/configuration_testing.py
 
     - name: Run tests
-      run: coverage run --source="netbox-routing/netbox_routing" netbox/netbox/manage.py test netbox-routing/netbox-routing --parallel
+      run: coverage run --source="netbox-routing/netbox_routing" netbox/netbox/manage.py test netbox-routing/netbox_routing --parallel
 
     - name: Show coverage report
       run: coverage report --skip-covered --omit '*/migrations/*,*/tests/*'
