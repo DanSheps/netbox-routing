@@ -7,7 +7,7 @@ jobs:
 jobs:
 
   build:
-    name: Build Distribution
+    name: Build Distribution for PyPI
     runs-on: ubuntu-latest
     environment: release
     steps:
