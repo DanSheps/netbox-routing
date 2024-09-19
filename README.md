@@ -25,8 +25,8 @@ A plugin for tracking all kinds of routing information
 
 # Requirements
 
-* Netbox 3.2+
-* Python 3.8+
+* Netbox 4.1+
+* Python 3.10+
 
 ## Compatibility Matrix
 
