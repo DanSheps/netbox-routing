@@ -19,8 +19,8 @@ class OSPFInstanceSerializer(NetBoxModelSerializer):
 
     class Meta:
         model = OSPFInstance
-        fields = ('url', 'id', 'display', 'name', 'router_id', 'process_id', 'device', 'description', 'comments',)
-        brief_fields = ('url', 'id', 'display', 'name', 'router_id', 'process_id', 'device')
+        fields = ('url', 'id', 'display', 'name', 'router_id', 'process_id', 'device', 'description', 'comments', )
+        brief_fields = ('url', 'id', 'display', 'name', 'router_id', 'process_id', 'device', )
 
 
 class OSPFAreaSerializer(NetBoxModelSerializer):
@@ -29,7 +29,7 @@ class OSPFAreaSerializer(NetBoxModelSerializer):
     class Meta:
         model = OSPFArea
         fields = ('url', 'id', 'display', 'area_id', 'description', 'comments',)
-        brief_fields = ('url', 'id', 'display', 'area_id')
+        brief_fields = ('url', 'id', 'display', 'area_id',)
 
 
 class OSPFInterfaceSerializer(NetBoxModelSerializer):
