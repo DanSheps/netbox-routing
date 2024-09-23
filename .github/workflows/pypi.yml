@@ -4,7 +4,6 @@ on:
     types: released
 
 jobs:
-jobs:
 
   build:
     name: Build Distribution for PyPI
