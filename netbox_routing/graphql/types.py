@@ -62,7 +62,6 @@ class OSPFAreaType(NetBoxObjectType):
 )
 class OSPFInterfaceType(NetBoxObjectType):
 
-    device: Annotated["DeviceType", strawberry.lazy('dcim.graphql.types')]
     instance: Annotated["OSPFInstanceType", strawberry.lazy('netbox_routing.graphql.types')]
     area: Annotated["OSPFAreaType", strawberry.lazy('netbox_routing.graphql.types')]
     interface: Annotated["InterfaceType", strawberry.lazy('dcim.graphql.types')]

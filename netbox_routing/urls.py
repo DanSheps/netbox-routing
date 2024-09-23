@@ -20,6 +20,8 @@ urlpatterns = [
 
     path('ospf/instance/', views.OSPFInstanceListView.as_view(), name='ospfinstance_list'),
     path('ospf/instance/add/', views.OSPFInstanceEditView.as_view(), name='ospfinstance_add'),
+    path('ospf/instance/edit/', views.OSPFInstanceBulkEditView.as_view(), name='ospfinstance_bulk_edit'),
+    path('ospf/instance/delete/', views.OSPFInstanceBulkDeleteView.as_view(), name='ospfinstance_bulk_delete'),
     path('ospf/instance/import/', views.OSPFInstanceListView.as_view(), name='ospfinstance_import'),
     path('ospf/instance/<int:pk>/', views.OSPFInstanceView.as_view(), name='ospfinstance'),
     path('ospf/instance/<int:pk>/edit/', views.OSPFInstanceEditView.as_view(), name='ospfinstance_edit'),
@@ -29,6 +31,8 @@ urlpatterns = [
 
     path('ospf/area/', views.OSPFAreaListView.as_view(), name='ospfarea_list'),
     path('ospf/area/add/', views.OSPFAreaEditView.as_view(), name='ospfarea_add'),
+    path('ospf/area/edit/', views.OSPFAreaBulkEditView.as_view(), name='ospfarea_bulk_edit'),
+    path('ospf/area/delete/', views.OSPFAreaBulkDeleteView.as_view(), name='ospfarea_bulk_delete'),
     path('ospf/area/import/', views.OSPFAreaListView.as_view(), name='ospfarea_import'),
     path('ospf/area/<int:pk>/', views.OSPFAreaView.as_view(), name='ospfarea'),
     path('ospf/area/<int:pk>/edit/', views.OSPFAreaEditView.as_view(), name='ospfarea_edit'),

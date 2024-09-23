@@ -25,8 +25,6 @@ class IPAddressField(models.Field):
             raise ValidationError(e)
 
     def get_prep_value(self, value):
-        if not value:
-            return None
         if isinstance(value, list):
             return [str(self.to_python(v)) for v in value]
         return str(self.to_python(value))

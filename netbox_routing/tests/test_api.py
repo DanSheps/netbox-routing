@@ -78,11 +78,12 @@ class StaticRouteTest(IPAddressFieldMixin , APIViewTestCases.APIViewTestCase):
         ]
 
 
-class OSPFInstanceTest(IPAddressFieldMixin , APIViewTestCases.APIViewTestCase):
+class OSPFInstanceTest(IPAddressFieldMixin, APIViewTestCases.APIViewTestCase):
     model = OSPFInstance
     view_namespace = 'plugins-api:netbox_routing'
     brief_fields = ['device', 'display', 'id', 'name', 'process_id', 'router_id', 'url', ]
 
+    user_permissions = ('dcim.view_device', )
 
     bulk_update_data = {
         'description': "A test description"
@@ -115,7 +116,6 @@ class OSPFAreaTest(IPAddressFieldMixin , APIViewTestCases.APIViewTestCase):
     view_namespace = 'plugins-api:netbox_routing'
     brief_fields = ['area_id', 'display', 'id', 'url', ]
 
-
     bulk_update_data = {
         'description': "A test description"
     }
@@ -140,8 +140,11 @@ class OSPFAreaTest(IPAddressFieldMixin , APIViewTestCases.APIViewTestCase):
 class OSPFInterfaceTest(IPAddressFieldMixin, APIViewTestCases.APIViewTestCase):
     model = OSPFInterface
     view_namespace = 'plugins-api:netbox_routing'
-    brief_fields = ['device', 'display', 'id', 'name', 'process_id', 'router_id', 'url', ]
+    brief_fields = ['area', 'display', 'id', 'instance', 'interface', 'url', ]
 
+    user_permissions = (
+        'netbox_routing.view_ospfinstance', 'netbox_routing.view_ospfarea', 'dcim.view_device', 'dcim.view_interface',
+    )
 
     bulk_update_data = {
         'description': "A test description"
@@ -163,20 +166,19 @@ class OSPFInterfaceTest(IPAddressFieldMixin, APIViewTestCases.APIViewTestCase):
         Interface.objects.bulk_create(interfaces)
 
         data = (
-            cls.model(device=device, instance=instance, area=area, interface=interfaces[0], ),
-            cls.model(device=device, instance=instance, area=area, interface=interfaces[1], ),
-            cls.model(device=device, instance=instance, area=area, interface=interfaces[2], ),
+            cls.model(instance=instance, area=area, interface=interfaces[0], ),
+            cls.model(instance=instance, area=area, interface=interfaces[1], ),
+            cls.model(instance=instance, area=area, interface=interfaces[2], ),
         )
         cls.model.objects.bulk_create(data)
 
         cls.create_data = [
             {
-                'device': device.pk,
                 'instance': instance.pk,
                 'area': area.pk,
                 'interface': interfaces[3].pk,
                 'priority': 2,
-                'authentication': 'passphrase',
+                'authentication': 'message-digest',
                 'passphrase': 'test-password',
                 'bfd': True,
             },
