@@ -1,3 +1,5 @@
+import netaddr
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.urls import reverse
 from django.utils.translation import gettext as _
@@ -55,6 +57,17 @@ class OSPFArea(PrimaryModel):
 
     def get_absolute_url(self):
         return reverse('plugins:netbox_routing:ospfarea', args=[self.pk])
+
+    def clean(self):
+        super().clean()
+        area_id = self.area_id
+        try:
+            int(area_id)
+        except ValueError:
+            try:
+                str(netaddr.IPAddress(area_id))
+            except netaddr.core.AddrFormatError:
+                raise ValidationError({'area_id': ['This field must be an integer or a valid net address']})
 
 
 class OSPFInterface(PrimaryModel):

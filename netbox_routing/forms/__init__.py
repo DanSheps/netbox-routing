@@ -13,14 +13,19 @@ __all__ = (
 
     # OSPF
     'OSPFAreaForm',
+    'OSPFAreaBulkEditForm',
+    'OSPFAreaImportForm',
     'OSPFAreaFilterForm',
 
     'OSPFInstanceForm',
+    'OSPFInstanceBulkEditForm',
     'OSPFInstanceFilterForm',
+    'OSPFInstanceImportForm',
 
     'OSPFInterfaceForm',
     'OSPFInterfaceFilterForm',
     'OSPFInterfaceBulkEditForm',
+    'OSPFInterfaceImportForm',
 
     'BGPRouterForm',
     'BGPScopeForm',

@@ -1,10 +1,11 @@
 from django import forms
+from django.core.exceptions import ValidationError
 from django.utils.translation import gettext as _
 
 from dcim.models import Interface, Device
 from netbox.forms import NetBoxModelForm
 from utilities.forms import BOOLEAN_WITH_BLANK_CHOICES
-from utilities.forms.fields import DynamicModelChoiceField, DynamicModelMultipleChoiceField
+from utilities.forms.fields import DynamicModelChoiceField, DynamicModelMultipleChoiceField, CommentField
 
 from netbox_routing.models import OSPFArea, OSPFInstance, OSPFInterface
 
@@ -23,6 +24,7 @@ class OSPFInstanceForm(NetBoxModelForm):
         selector=True,
         label=_('Device'),
     )
+    comments = CommentField()
 
     class Meta:
         model = OSPFInstance
@@ -30,16 +32,17 @@ class OSPFInstanceForm(NetBoxModelForm):
 
 
 class OSPFAreaForm(NetBoxModelForm):
+    comments = CommentField()
 
     class Meta:
         model = OSPFArea
-        fields = ('area_id', 'description', 'comments',  )
+        fields = ('area_id', 'description', 'comments', )
 
 
 class OSPFInterfaceForm(NetBoxModelForm):
     device = DynamicModelChoiceField(
         queryset=Device.objects.all(),
-        required=True,
+        required=False,
         selector=True,
         label=_('Device'),
     )
@@ -67,6 +70,7 @@ class OSPFInterfaceForm(NetBoxModelForm):
             'device_id': '$device',
         }
     )
+    comments = CommentField()
 
 
     class Meta:
@@ -84,3 +88,14 @@ class OSPFInterfaceForm(NetBoxModelForm):
         super().__init__(*args, **kwargs)
         if self.instance.pk:
             self.initial['device'] = self.instance.interface.device.pk
+
+    def clean(self):
+        super().clean()
+        if self.cleaned_data.get('instance') and self.cleaned_data.get('interface'):
+            if self.cleaned_data.get('instance').device != self.cleaned_data.get('interface').device:
+                raise ValidationError(
+                    {
+                        'instance': _('OSPF Instance Device and Interface Device must match'),
+                        'interface': _('OSPF Instance Device and Interface Device must match')
+                    }
+                )

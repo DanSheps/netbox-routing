@@ -3,7 +3,7 @@ from django.core.exceptions import ValidationError
 from django.db.models import Q
 from django.utils.translation import gettext as _
 
-from dcim.models import Device
+from dcim.models import Device, Interface
 from utilities.filters import MultiValueCharFilter
 
 from netbox.filtersets import NetBoxModelFilterSet
@@ -83,6 +83,50 @@ class OSPFAreaFilterSet(NetBoxModelFilterSet):
 
 
 class OSPFInterfaceFilterSet(NetBoxModelFilterSet):
+    instance_id = django_filters.ModelMultipleChoiceFilter(
+        field_name='instance',
+        queryset=OSPFInstance.objects.all(),
+        label='Instance (ID)',
+    )
+    instance = django_filters.ModelMultipleChoiceFilter(
+        field_name='instance__name',
+        queryset=OSPFInstance.objects.all(),
+        to_field_name='name',
+        label='Instance',
+    )
+    area_id = django_filters.ModelMultipleChoiceFilter(
+        field_name='area',
+        queryset=OSPFArea.objects.all(),
+        label='Area (ID)',
+    )
+    area = django_filters.ModelMultipleChoiceFilter(
+        field_name='area__area_id',
+        queryset=OSPFArea.objects.all(),
+        to_field_name='area_id',
+        label='Area',
+    )
+    device_id = django_filters.ModelMultipleChoiceFilter(
+        field_name='interface__device',
+        queryset=Device.objects.all(),
+        label='Device (ID)',
+    )
+    device = django_filters.ModelMultipleChoiceFilter(
+        field_name='interface__device__name',
+        queryset=Device.objects.all(),
+        to_field_name='name',
+        label='Device',
+    )
+    interface_id = django_filters.ModelMultipleChoiceFilter(
+        field_name='interface',
+        queryset=Interface.objects.all(),
+        label='Area (ID)',
+    )
+    interface = django_filters.ModelMultipleChoiceFilter(
+        field_name='interface__name',
+        queryset=Interface.objects.all(),
+        to_field_name='name',
+        label='Area',
+    )
 
     class Meta:
         model = OSPFInterface

@@ -1,18 +1,60 @@
 from django import forms
 from django.utils.translation import gettext as _
 
+from dcim.models import Device
 from netbox.forms import NetBoxModelBulkEditForm
 from utilities.forms import BOOLEAN_WITH_BLANK_CHOICES, add_blank_choice
-from utilities.forms.fields import DynamicModelChoiceField
+from utilities.forms.fields import DynamicModelChoiceField, CommentField
 
 from netbox_routing import choices
 from netbox_routing.models import OSPFArea, OSPFInstance, OSPFInterface
 
 __all__ = (
     'OSPFInterfaceBulkEditForm',
+    'OSPFInstanceBulkEditForm',
+    'OSPFAreaBulkEditForm',
 )
 
 from utilities.forms.rendering import FieldSet
+
+
+class OSPFInstanceBulkEditForm(NetBoxModelBulkEditForm):
+    device = DynamicModelChoiceField(
+        queryset=Device.objects.all(),
+        label=_('Device'),
+        required=False,
+        selector=True
+    )
+
+    description = forms.CharField(
+        label=_('Description'),
+        max_length=200,
+        required=False
+    )
+    comments = CommentField()
+
+    model = OSPFInstance
+    fieldsets = (
+        FieldSet('device', name='OSPF'),
+        FieldSet('description', ),
+    )
+    nullable_fields = ()
+
+
+class OSPFAreaBulkEditForm(NetBoxModelBulkEditForm):
+
+    description = forms.CharField(
+        label=_('Description'),
+        max_length=200,
+        required=False
+    )
+    comments = CommentField()
+
+    model = OSPFArea
+    fieldsets = (
+        FieldSet('description'),
+    )
+    nullable_fields = ()
 
 
 class OSPFInterfaceBulkEditForm(NetBoxModelBulkEditForm):
@@ -37,9 +79,17 @@ class OSPFInterfaceBulkEditForm(NetBoxModelBulkEditForm):
     )
     passphrase = forms.CharField(label=_('Passphrase'), required=False)
 
+    description = forms.CharField(
+        label=_('Description'),
+        max_length=200,
+        required=False
+    )
+    comments = CommentField()
+
     model = OSPFInterface
     fieldsets = (
         FieldSet('instance', 'area', name='OSPF'),
         FieldSet('priority', 'bfd', 'authentication', 'passphrase', name='Attributes'),
+        FieldSet('description'),
     )
     nullable_fields = ()

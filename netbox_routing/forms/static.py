@@ -2,7 +2,7 @@ from dcim.models import Device
 from ipam.models import VRF
 from netbox.forms import NetBoxModelForm
 from netbox_routing.models import StaticRoute
-from utilities.forms.fields import DynamicModelChoiceField, DynamicModelMultipleChoiceField
+from utilities.forms.fields import DynamicModelChoiceField, DynamicModelMultipleChoiceField, CommentField
 
 
 class StaticRouteForm(NetBoxModelForm):
@@ -14,6 +14,7 @@ class StaticRouteForm(NetBoxModelForm):
         required=False,
         label='VRF'
     )
+    comments = CommentField()
 
     class Meta:
         model = StaticRoute
