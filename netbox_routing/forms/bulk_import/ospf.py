@@ -56,4 +56,4 @@ class OSPFInterfaceImportForm(NetBoxModelImportForm):
 
     class Meta:
         model = OSPFInterface
-        fields = ('instance', 'area', 'interface', 'description', 'comments', 'tags',)
+        fields = ('instance', 'area', 'interface', 'passive', 'description', 'comments', 'tags',)
