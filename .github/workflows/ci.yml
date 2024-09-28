@@ -41,7 +41,7 @@ jobs:
       - name: Echo concurrency group
         run: echo "::info ci-${{ github.event_name }}-${{ github.ref }}-${{ github.actor }}"
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
       - name: Check out NetBox
