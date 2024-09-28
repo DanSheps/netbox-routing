@@ -24,7 +24,23 @@ class OSPFQuery:
     ospf_interface_list: List[OSPFInterfaceType] = strawberry_django.field()
 
 
+@strawberry.type(name="Query")
+class EIGRPQuery:
+    eigrp_router: EIGRPRouterType = strawberry_django.field()
+    eigrp_router_list: List[EIGRPRouterType] = strawberry_django.field()
+
+    eigrp_address_family: EIGRPAddressFamilyType = strawberry_django.field()
+    eigrp_address_family_list: List[EIGRPAddressFamilyType] = strawberry_django.field()
+
+    eigrp_network: EIGRPNetworkType = strawberry_django.field()
+    eigrp_network_list: List[EIGRPNetworkType] = strawberry_django.field()
+
+    eigrp_interface: EIGRPInterfaceType = strawberry_django.field()
+    eigrp_interface_list: List[EIGRPInterfaceType] = strawberry_django.field()
+
+
 schema = [
     StaticRouteQuery,
-    OSPFQuery
+    OSPFQuery,
+    EIGRPQuery,
 ]
