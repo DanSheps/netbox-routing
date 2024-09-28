@@ -38,33 +38,34 @@ jobs:
           - 5432:5432
 
     steps:
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v4
-      with:
-        python-version: ${{ matrix.python-version }}
+      - name: Echo concurrency group
+        run: echo "::info ci-${{ github.event_name }}-${{ github.ref }}-${{ github.actor }}"
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Check out NetBox
+        uses: actions/checkout@v4
+        with:
+          repository: netbox-community/netbox
+          ref: master
+          path: netbox
 
-    - name: Check out NetBox
-      uses: actions/checkout@v4
-      with:
-        repository: netbox-community/netbox
-        ref: master
-        path: netbox
+      - name: Check out repo
+        uses: actions/checkout@v4
+        with:
+          path: netbox-routing
 
-    - name: Check out repo
-      uses: actions/checkout@v4
-      with:
-        path: netbox-routing
+      - name: Install dependencies & set up configuration
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r netbox/requirements.txt
+          pip install pycodestyle coverage tblib
+          pip install -e netbox-routing
+          cp -f netbox-routing/.github/configuration.testing.py netbox/netbox/netbox/configuration_testing.py
 
-    - name: Install dependencies & set up configuration
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r netbox/requirements.txt
-        pip install pycodestyle coverage tblib
-        pip install -e netbox-routing
-        cp -f netbox-routing/.github/configuration.testing.py netbox/netbox/netbox/configuration_testing.py
+      - name: Run tests
+        run: coverage run --source="netbox-routing/netbox_routing" netbox/netbox/manage.py test netbox-routing/netbox_routing --parallel
 
-    - name: Run tests
-      run: coverage run --source="netbox-routing/netbox_routing" netbox/netbox/manage.py test netbox-routing/netbox_routing --parallel
-
-    - name: Show coverage report
-      run: coverage report --skip-covered --omit '*/migrations/*,*/tests/*'
+      - name: Show coverage report
+        run: coverage report --skip-covered --omit '*/migrations/*,*/tests/*'
