@@ -4,6 +4,7 @@ from django.db.models import Q
 from django.utils.translation import gettext as _
 
 from dcim.models import Device, Interface
+from ipam.models import VRF
 from utilities.filters import MultiValueCharFilter
 
 from netbox.filtersets import NetBoxModelFilterSet
@@ -30,6 +31,17 @@ class OSPFInstanceFilterSet(NetBoxModelFilterSet):
         to_field_name='name',
         label='Device',
     )
+    vrf_id = django_filters.ModelMultipleChoiceFilter(
+        field_name='vrf',
+        queryset=VRF.objects.all(),
+        label='VRF (ID)',
+    )
+    vrf = django_filters.ModelMultipleChoiceFilter(
+        field_name='vrf__name',
+        queryset=VRF.objects.all(),
+        to_field_name='name',
+        label='VRF',
+    )
 
     router_id = MultiValueCharFilter(
         method='filter_rid',
@@ -38,7 +50,7 @@ class OSPFInstanceFilterSet(NetBoxModelFilterSet):
 
     class Meta:
         model = OSPFInstance
-        fields = ('device_id', 'device', 'name', 'device', 'router_id', 'process_id')
+        fields = ('device_id', 'device', 'name', 'vrf_id', 'vrf', 'router_id', 'process_id')
 
     def search(self, queryset, name, value):
         if not value.strip():
@@ -93,6 +105,17 @@ class OSPFInterfaceFilterSet(NetBoxModelFilterSet):
         queryset=OSPFInstance.objects.all(),
         to_field_name='name',
         label='Instance',
+    )
+    vrf_id = django_filters.ModelMultipleChoiceFilter(
+        field_name='instance__vrf',
+        queryset=VRF.objects.all(),
+        label='VRF (ID)',
+    )
+    vrf = django_filters.ModelMultipleChoiceFilter(
+        field_name='instance__vrf__name',
+        queryset=VRF.objects.all(),
+        to_field_name='name',
+        label='VRF',
     )
     area_id = django_filters.ModelMultipleChoiceFilter(
         field_name='area',

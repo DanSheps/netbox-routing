@@ -2,6 +2,7 @@ from django import forms
 from django.utils.translation import gettext as _
 
 from dcim.models import Device
+from ipam.models import VRF
 from netbox.forms import NetBoxModelBulkEditForm
 from utilities.forms import BOOLEAN_WITH_BLANK_CHOICES, add_blank_choice
 from utilities.forms.fields import DynamicModelChoiceField, CommentField
@@ -25,6 +26,12 @@ class OSPFInstanceBulkEditForm(NetBoxModelBulkEditForm):
         required=False,
         selector=True
     )
+    vrf = DynamicModelChoiceField(
+        queryset=VRF.objects.all(),
+        label=_('VRF'),
+        required=False,
+        selector=True
+    )
 
     description = forms.CharField(
         label=_('Description'),
@@ -35,10 +42,10 @@ class OSPFInstanceBulkEditForm(NetBoxModelBulkEditForm):
 
     model = OSPFInstance
     fieldsets = (
-        FieldSet('device', name='OSPF'),
+        FieldSet('device', 'vrf', name='OSPF'),
         FieldSet('description', ),
     )
-    nullable_fields = ()
+    nullable_fields = ('vrf', 'description', )
 
 
 class OSPFAreaBulkEditForm(NetBoxModelBulkEditForm):

@@ -2,6 +2,7 @@ from django import forms
 from django.utils.translation import gettext as _
 
 from dcim.models import Interface, Device
+from ipam.models import VRF
 from netbox.forms import NetBoxModelFilterSetForm
 from netbox_routing.choices import AuthenticationChoices
 from utilities.forms import BOOLEAN_WITH_BLANK_CHOICES, add_blank_choice
@@ -26,6 +27,12 @@ class OSPFInstanceFilterForm(NetBoxModelFilterSetForm):
         selector=True,
         label=_('Device'),
     )
+    vrf = DynamicModelMultipleChoiceField(
+        queryset=VRF.objects.all(),
+        required=False,
+        selector=True,
+        label=_('VRF'),
+    )
     model = OSPFInstance
     fieldsets = (
         FieldSet('q', 'filter_id', 'tag', 'device'),
@@ -49,19 +56,31 @@ class OSPFInterfaceFilterForm(NetBoxModelFilterSetForm):
         FieldSet('interface', name=_('Device')),
         FieldSet('priority', 'bfd', 'authentication', name=_('Attributes'))
     )
-    instance = DynamicModelMultipleChoiceField(
+    device_id = DynamicModelMultipleChoiceField(
+        queryset=Device.objects.all(),
+        required=False,
+        selector=True,
+        label=_('Device'),
+    )
+    vrf_id = DynamicModelMultipleChoiceField(
+        queryset=VRF.objects.all(),
+        required=False,
+        selector=True,
+        label=_('VRF'),
+    )
+    instance_id = DynamicModelMultipleChoiceField(
         queryset=OSPFInstance.objects.all(),
         required=False,
         selector=True,
         label=_('Instance'),
     )
-    area = DynamicModelMultipleChoiceField(
+    area_id = DynamicModelMultipleChoiceField(
         queryset=OSPFArea.objects.all(),
         required=False,
         selector=True,
         label=_('Area'),
     )
-    interface = DynamicModelMultipleChoiceField(
+    interface_id = DynamicModelMultipleChoiceField(
         queryset=Interface.objects.all(),
         required=False,
         selector=True,

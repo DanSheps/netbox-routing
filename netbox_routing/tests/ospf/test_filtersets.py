@@ -21,6 +21,13 @@ class OSPFInstanceTestCase(TestCase):
 
     @classmethod
     def setUpTestData(cls):
+        vrfs = (
+            VRF(name='VRF 1'),
+            VRF(name='VRF 2'),
+            VRF(name='VRF 3'),
+        )
+        VRF.objects.bulk_create(vrfs)
+
         devices = [
             create_test_device(name='Device 1'),
             create_test_device(name='Device 2'),
@@ -29,10 +36,10 @@ class OSPFInstanceTestCase(TestCase):
         ]
 
         data = (
-            OSPFInstance(name='Instance 1', device=devices[0], router_id='0.0.0.0', process_id=0),
-            OSPFInstance(name='Instance 2', device=devices[1], router_id='1.1.1.1', process_id=1),
-            OSPFInstance(name='Instance 3', device=devices[2], router_id='2.2.2.2', process_id=2),
-            OSPFInstance(name='Instance 3', device=devices[3], router_id='3.3.3.3', process_id=3),
+            OSPFInstance(name='Instance 1', device=devices[0], router_id='0.0.0.0', process_id=0, vrf=vrfs[0]),
+            OSPFInstance(name='Instance 2', device=devices[1], router_id='1.1.1.1', process_id=1, vrf=vrfs[1]),
+            OSPFInstance(name='Instance 3', device=devices[2], router_id='2.2.2.2', process_id=2, vrf=None),
+            OSPFInstance(name='Instance 3', device=devices[3], router_id='3.3.3.3', process_id=3, vrf=vrfs[2]),
         )
 
         OSPFInstance.objects.bulk_create(data)
@@ -43,6 +50,15 @@ class OSPFInstanceTestCase(TestCase):
 
     def test_name(self):
         params = {'name': ['Instance 1', 'Instance 2']}
+        self.assertEqual(self.filterset(params, self.queryset).qs.count(), 2)
+
+    def test_vrf(self):
+        data = VRF.objects.all()[0:2]
+
+        params = {'vrf_id': [data[0].pk, data[1].pk]}
+        self.assertEqual(self.filterset(params, self.queryset).qs.count(), 2)
+
+        params = {'vrf': [data[0].name, data[1].name]}
         self.assertEqual(self.filterset(params, self.queryset).qs.count(), 2)
 
     def test_device(self):
@@ -95,6 +111,13 @@ class OSPFInterfaceTestCase(TestCase):
 
     @classmethod
     def setUpTestData(cls):
+        vrfs = (
+            VRF(name='VRF 1'),
+            VRF(name='VRF 2'),
+            VRF(name='VRF 3'),
+        )
+        VRF.objects.bulk_create(vrfs)
+
         devices = (
             create_test_device(name='Device 1'),
             create_test_device(name='Device 2'),
@@ -118,10 +141,10 @@ class OSPFInterfaceTestCase(TestCase):
         OSPFArea.objects.bulk_create(areas)
 
         instances = (
-            OSPFInstance(name='Instance 0', device=devices[0], router_id='0.0.0.0', process_id=0),
-            OSPFInstance(name='Instance 1', device=devices[1], router_id='1.1.1.1', process_id=1),
-            OSPFInstance(name='Instance 2', device=devices[2], router_id='2.2.2.2', process_id=2),
-            OSPFInstance(name='Instance 3', device=devices[3], router_id='3.3.3.3', process_id=3),
+            OSPFInstance(name='Instance 0', device=devices[0], router_id='0.0.0.0', process_id=0, vrf=vrfs[0]),
+            OSPFInstance(name='Instance 1', device=devices[1], router_id='1.1.1.1', process_id=1, vrf=vrfs[1]),
+            OSPFInstance(name='Instance 2', device=devices[2], router_id='2.2.2.2', process_id=2, vrf=None),
+            OSPFInstance(name='Instance 3', device=devices[3], router_id='3.3.3.3', process_id=3, vrf=vrfs[2]),
         )
         OSPFInstance.objects.bulk_create(instances)
 
@@ -156,6 +179,15 @@ class OSPFInterfaceTestCase(TestCase):
         self.assertEqual(self.filterset(params, self.queryset).qs.count(), 2)
 
         params = {'area': [data[0].area_id, data[1].area_id]}
+        self.assertEqual(self.filterset(params, self.queryset).qs.count(), 2)
+
+    def test_vrfs(self):
+        data = VRF.objects.all()[0:2]
+
+        params = {'vrf_id': [data[0].pk, data[1].pk]}
+        self.assertEqual(self.filterset(params, self.queryset).qs.count(), 2)
+
+        params = {'vrf': [data[0].name, data[1].name]}
         self.assertEqual(self.filterset(params, self.queryset).qs.count(), 2)
 
     def test_devices(self):

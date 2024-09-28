@@ -3,6 +3,7 @@ from django.core.exceptions import ValidationError
 from django.utils.translation import gettext as _
 
 from dcim.models import Interface, Device
+from ipam.models import VRF
 from netbox.forms import NetBoxModelForm
 from utilities.forms import BOOLEAN_WITH_BLANK_CHOICES
 from utilities.forms.fields import DynamicModelChoiceField, DynamicModelMultipleChoiceField, CommentField
@@ -24,11 +25,17 @@ class OSPFInstanceForm(NetBoxModelForm):
         selector=True,
         label=_('Device'),
     )
+    vrf = DynamicModelChoiceField(
+        queryset=VRF.objects.all(),
+        required=False,
+        selector=True,
+        label=_('VRF'),
+    )
     comments = CommentField()
 
     class Meta:
         model = OSPFInstance
-        fields = ('name', 'router_id', 'process_id', 'device', 'description', 'comments', )
+        fields = ('name', 'router_id', 'process_id', 'device', 'vrf', 'description', 'comments', )
 
 
 class OSPFAreaForm(NetBoxModelForm):

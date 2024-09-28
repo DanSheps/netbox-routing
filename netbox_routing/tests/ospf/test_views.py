@@ -30,24 +30,27 @@ class OSPFInstanceTestCase(
 
     @classmethod
     def setUpTestData(cls):
+        vrf = VRF.objects.create(name='Test')
         devices = [create_test_device(name='Device 1'), create_test_device(name='Device 2')]
 
-        routes = (
-            cls.model(name="Instance 0", device=devices[0], router_id='0.0.0.0', process_id='0'),
-            cls.model(name="Instance 1", device=devices[0], router_id='1.1.1.1', process_id='1'),
-            cls.model(name="Instance 2", device=devices[0], router_id='2.2.2.2', process_id='2'),
+        instances = (
+            cls.model(name="Instance 0", device=devices[0], router_id='0.0.0.0', process_id='0', vrf=None),
+            cls.model(name="Instance 1", device=devices[0], router_id='1.1.1.1', process_id='1', vrf=None),
+            cls.model(name="Instance 2", device=devices[0], router_id='2.2.2.2', process_id='2', vrf=vrf),
         )
-        cls.model.objects.bulk_create(routes)
+        cls.model.objects.bulk_create(instances)
 
         cls.form_data = {
             'name': 'Instance X',
             'device': devices[1].pk,
             'router_id': '4.4.4.4',
             'process_id': 4,
+            'vrf': vrf.pk,
         }
 
         cls.bulk_edit_data = {
-            'description': 'A test Instance description'
+            'description': 'A test Instance description',
+            'vrf': vrf.pk
         }
 
     def _get_base_url(self):

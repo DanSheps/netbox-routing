@@ -1,4 +1,5 @@
 from dcim.models import Interface
+from ipam.models import VRF
 from utilities.testing import APIViewTestCases, create_test_device
 
 from netbox_routing.models import OSPFInstance, OSPFArea, OSPFInterface
@@ -14,7 +15,7 @@ __all__ = (
 class OSPFInstanceTestCase(IPAddressFieldMixin, APIViewTestCases.APIViewTestCase):
     model = OSPFInstance
     view_namespace = 'plugins-api:netbox_routing'
-    brief_fields = ['device', 'display', 'id', 'name', 'process_id', 'router_id', 'url', ]
+    brief_fields = ['device', 'display', 'id', 'name', 'process_id', 'router_id', 'url', 'vrf', ]
 
     user_permissions = ('dcim.view_device', )
 
@@ -24,13 +25,13 @@ class OSPFInstanceTestCase(IPAddressFieldMixin, APIViewTestCases.APIViewTestCase
 
     @classmethod
     def setUpTestData(cls):
-
+        vrf = VRF.objects.create(name='Test VRF')
         device = create_test_device(name='Test Device')
 
         data = (
-            cls.model(name='Instance 1', device=device, router_id='1.1.1.1', process_id=1),
-            cls.model(name='Instance 2', device=device, router_id='2.2.2.2', process_id=2),
-            cls.model(name='Instance 3', device=device, router_id='3.3.3.3', process_id=3),
+            cls.model(name='Instance 1', device=device, router_id='1.1.1.1', process_id=1, vrf=None),
+            cls.model(name='Instance 2', device=device, router_id='2.2.2.2', process_id=2, vrf=vrf),
+            cls.model(name='Instance 3', device=device, router_id='3.3.3.3', process_id=3, vrf=None),
         )
         cls.model.objects.bulk_create(data)
 
@@ -39,7 +40,8 @@ class OSPFInstanceTestCase(IPAddressFieldMixin, APIViewTestCases.APIViewTestCase
                 'name': 'Instance X',
                 'device': device.pk,
                 'router_id': '4.4.4.4',
-                'process_id': 4
+                'process_id': 4,
+                'vrf': vrf.pk,
             },
         ]
 

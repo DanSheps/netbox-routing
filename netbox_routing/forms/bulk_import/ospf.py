@@ -1,6 +1,7 @@
 from django.utils.translation import gettext as _
 
-from dcim.models import Interface
+from dcim.models import Interface, Device
+from ipam.models import VRF
 from netbox.forms import NetBoxModelImportForm
 from utilities.forms.fields import CSVModelChoiceField
 
@@ -16,15 +17,21 @@ __all__ = (
 
 class OSPFInstanceImportForm(NetBoxModelImportForm):
     device = CSVModelChoiceField(
-        queryset=Interface.objects.all(),
-        required=False,
+        queryset=Device.objects.all(),
+        required=True,
         to_field_name='name',
         help_text=_('Name of device')
+    )
+    vrf = CSVModelChoiceField(
+        queryset=VRF.objects.all(),
+        required=False,
+        to_field_name='name',
+        help_text=_('Name of VRF')
     )
 
     class Meta:
         model = OSPFInstance
-        fields = ('name', 'router_id', 'process_id', 'device', 'description', 'comments', 'tags',)
+        fields = ('name', 'router_id', 'process_id', 'device', 'vrf', 'description', 'comments', 'tags',)
 
 
 class OSPFAreaImportForm(NetBoxModelImportForm):

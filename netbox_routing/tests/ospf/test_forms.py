@@ -1,6 +1,7 @@
 from django.test import TestCase
 
 from dcim.models import Device, Interface
+from ipam.models import VRF
 from utilities.testing import create_test_device
 
 from netbox_routing.forms import *
@@ -17,6 +18,7 @@ class OSPFInstanceTestCase(TestCase):
 
     @classmethod
     def setUpTestData(cls):
+        vrf = VRF.objects.create(name='Test VRF')
         device = create_test_device(name='Device 1')
 
     def test_instance(self):
@@ -25,6 +27,19 @@ class OSPFInstanceTestCase(TestCase):
             'process_id': '0',
             'router_id': '10.10.10.1',
             'device': Device.objects.first().pk,
+        })
+        if not form.is_valid():
+            print(form.errors)
+        self.assertTrue(form.is_valid())
+        self.assertTrue(form.save())
+
+    def test_instance_with_vrf(self):
+        form = OSPFInstanceForm(data={
+            'name': 'Instance 2',
+            'process_id': '1',
+            'router_id': '20.20.20.1',
+            'device': Device.objects.first().pk,
+            'vrf': VRF.objects.first().pk,
         })
         if not form.is_valid():
             print(form.errors)
