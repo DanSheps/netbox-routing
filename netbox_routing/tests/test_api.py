@@ -140,7 +140,7 @@ class OSPFAreaTest(IPAddressFieldMixin , APIViewTestCases.APIViewTestCase):
 class OSPFInterfaceTest(IPAddressFieldMixin, APIViewTestCases.APIViewTestCase):
     model = OSPFInterface
     view_namespace = 'plugins-api:netbox_routing'
-    brief_fields = ['area', 'display', 'id', 'instance', 'interface', 'url', ]
+    brief_fields = ['area', 'display', 'id', 'instance', 'interface', 'passive', 'url', ]
 
     user_permissions = (
         'netbox_routing.view_ospfinstance', 'netbox_routing.view_ospfarea', 'dcim.view_device', 'dcim.view_interface',
