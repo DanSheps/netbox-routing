@@ -4,6 +4,13 @@ on: [push, pull_request]
 permissions:
   contents: read
 
+concurrency:
+  group: ci-${{ github.event_name }}-${{ github.ref }}-${{ github.actor }}
+  cancel-in-progress: true
+
+env:
+  GROUP: ci-${{ github.event_name }}-${{ github.ref }}-${{ github.actor }}
+
 jobs:
   build:
     runs-on: ubuntu-latest
