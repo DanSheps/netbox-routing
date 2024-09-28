@@ -92,6 +92,7 @@ class OSPFInterface(PrimaryModel):
         blank=False,
         null=False
     )
+    passive = models.BooleanField(verbose_name='Passive', blank=True, null=True)
     priority = models.IntegerField(blank=True, null=True)
     bfd = models.BooleanField(blank=True, null=True, verbose_name='BFD')
     authentication = models.CharField(

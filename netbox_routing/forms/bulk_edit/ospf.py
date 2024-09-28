@@ -70,6 +70,7 @@ class OSPFInterfaceBulkEditForm(NetBoxModelBulkEditForm):
         required=False,
         selector=True
     )
+    passive = forms.ChoiceField(label=_('Passive'), choices=BOOLEAN_WITH_BLANK_CHOICES, required=False)
     priority = forms.IntegerField(label=_('Priority'), required=False)
     bfd = forms.ChoiceField(label=_('BFD'), choices=BOOLEAN_WITH_BLANK_CHOICES, required=False)
     authentication = forms.ChoiceField(
@@ -89,7 +90,7 @@ class OSPFInterfaceBulkEditForm(NetBoxModelBulkEditForm):
     model = OSPFInterface
     fieldsets = (
         FieldSet('instance', 'area', name='OSPF'),
-        FieldSet('priority', 'bfd', 'authentication', 'passphrase', name='Attributes'),
+        FieldSet('passive', 'priority', 'bfd', 'authentication', 'passphrase', name='Attributes'),
         FieldSet('description'),
     )
     nullable_fields = ()

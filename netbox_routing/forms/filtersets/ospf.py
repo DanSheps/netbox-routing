@@ -67,6 +67,13 @@ class OSPFInterfaceFilterForm(NetBoxModelFilterSetForm):
         selector=True,
         label=_('Interface'),
     )
+    passive = forms.NullBooleanField(
+        required=False,
+        label='Passive Interface',
+        widget=forms.Select(
+            choices=BOOLEAN_WITH_BLANK_CHOICES
+        )
+    )
     bfd = forms.NullBooleanField(
         required=False,
         label='BFD Enabled',

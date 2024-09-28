@@ -130,7 +130,7 @@ class OSPFInterfaceFilterSet(NetBoxModelFilterSet):
 
     class Meta:
         model = OSPFInterface
-        fields = ('instance', 'area', 'interface', 'bfd', 'priority', 'authentication', 'passphrase')
+        fields = ('instance', 'area', 'interface', 'passive', 'bfd', 'priority', 'authentication', 'passphrase')
 
     def search(self, queryset, name, value):
         if not value.strip():
