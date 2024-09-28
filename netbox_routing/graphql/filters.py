@@ -1,17 +1,17 @@
-from typing import Annotated
-
-import strawberry
 import strawberry_django
+from netbox.graphql.filter_mixins import autotype_decorator, BaseFilterMixin
 
 from netbox_routing import filtersets, models
-
-from netbox.graphql.filter_mixins import autotype_decorator, BaseFilterMixin
 
 __all__ = (
     'StaticRouteFilter',
     'OSPFInstanceFilter',
     'OSPFAreaFilter',
     'OSPFInterfaceFilter',
+    'EIGRPRouterFilter',
+    'EIGRPAddressFamilyFilter',
+    'EIGRPNetworkFilter',
+    'EIGRPInterfaceFilter',
 )
 
 
@@ -37,4 +37,28 @@ class OSPFAreaFilter(BaseFilterMixin):
 @strawberry_django.filter(models.OSPFInterface, lookups=True)
 @autotype_decorator(filtersets.OSPFInterfaceFilterSet)
 class OSPFInterfaceFilter(BaseFilterMixin):
+    pass
+
+
+@strawberry_django.filter(models.EIGRPRouter, lookups=True)
+@autotype_decorator(filtersets.EIGRPRouterFilterSet)
+class EIGRPRouterFilter(BaseFilterMixin):
+    rid: str
+
+
+@strawberry_django.filter(models.EIGRPAddressFamily, lookups=True)
+@autotype_decorator(filtersets.EIGRPAddressFamilyFilterSet)
+class EIGRPAddressFamilyFilter(BaseFilterMixin):
+    rid: str
+
+
+@strawberry_django.filter(models.EIGRPNetwork, lookups=True)
+@autotype_decorator(filtersets.EIGRPNetworkFilterSet)
+class EIGRPNetworkFilter(BaseFilterMixin):
+    pass
+
+
+@strawberry_django.filter(models.EIGRPInterface, lookups=True)
+@autotype_decorator(filtersets.EIGRPInterfaceFilterSet)
+class EIGRPInterfaceFilter(BaseFilterMixin):
     pass

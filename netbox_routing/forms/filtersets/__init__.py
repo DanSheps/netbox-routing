@@ -3,6 +3,7 @@ from .bgp import BGPRouterFilterForm, BGPScopeFilterForm, BGPAddressFamilyFilter
 from .ospf import OSPFAreaFilterForm, OSPFInstanceFilterForm, OSPFInterfaceFilterForm
 from .objects import PrefixListFilterForm, PrefixListEntryFilterForm, RouteMapFilterForm,\
     RouteMapEntryFilterForm
+from .eigrp import *
 
 __all__ = (
     # Static
@@ -13,6 +14,12 @@ __all__ = (
     'BGPScopeFilterForm',
     'BGPAddressFamilyFilterForm',
     'BGPSettingFilterForm',
+
+    # EIGRP
+    'EIGRPRouterFilterForm',
+    'EIGRPAddressFamilyFilterForm',
+    'EIGRPNetworkFilterForm',
+    'EIGRPInterfaceFilterForm',
 
     # OSPF
     'OSPFAreaFilterForm',

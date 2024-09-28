@@ -1,10 +1,12 @@
-from django.urls import path
+from django.urls import path, include
 
 from netbox.views.generic import ObjectChangeLogView
+from utilities.urls import get_model_urls
 
 from . import views
 from .models import StaticRoute, PrefixList, PrefixListEntry, RouteMap, RouteMapEntry, OSPFInstance, OSPFArea, \
     OSPFInterface, BGPRouter, BGPScope, BGPAddressFamily
+
 
 urlpatterns = [
     path('routes/static/', views.StaticRouteListView.as_view(), name='staticroute_list'),
@@ -49,6 +51,32 @@ urlpatterns = [
     path('ospf/interface/<int:pk>/edit/', views.OSPFInterfaceEditView.as_view(), name='ospfinterface_edit'),
     path('ospf/interface/<int:pk>/delete/', views.OSPFInterfaceDeleteView.as_view(), name='ospfinterface_delete'),
     path('ospf/interface/<int:pk>/changelog/', ObjectChangeLogView.as_view(), name='ospfinterface_changelog', kwargs={'model': OSPFInterface}),
+
+    path('eigrp/router/', views.EIGRPRouterListView.as_view(), name='eigrprouter_list'),
+    path('eigrp/router/add/', views.EIGRPRouterEditView.as_view(), name='eigrprouter_add'),
+    path('eigrp/router/edit/', views.EIGRPRouterBulkEditView.as_view(), name='eigrprouter_bulk_edit'),
+    path('eigrp/router/delete/', views.EIGRPRouterBulkDeleteView.as_view(), name='eigrprouter_bulk_delete'),
+    path('eigrp/router/import/', views.EIGRPRouterImportView.as_view(), name='eigrprouter_import'),
+    path('eigrp/router/<int:pk>/', include(get_model_urls('netbox_routing', 'eigrprouter'))),
+
+    path('eigrp/address-family/', views.EIGRPAddressFamilyListView.as_view(), name='eigrpaddressfamily_list'),
+    path('eigrp/address-family/add/', views.EIGRPAddressFamilyEditView.as_view(), name='eigrpaddressfamily_add'),
+    path('eigrp/address-family/edit/', views.EIGRPAddressFamilyBulkEditView.as_view(), name='eigrpaddressfamily_bulk_edit'),
+    path('eigrp/address-family/delete/', views.EIGRPAddressFamilyBulkDeleteView.as_view(), name='eigrpaddressfamily_bulk_delete'),
+    path('eigrp/address-family/<int:pk>/', include(get_model_urls('netbox_routing', 'eigrpaddressfamily'))),
+
+    path('eigrp/network/', views.EIGRPNetworkListView.as_view(), name='eigrpnetwork_list'),
+    path('eigrp/network/add/', views.EIGRPNetworkEditView.as_view(), name='eigrpnetwork_add'),
+    path('eigrp/network/edit/', views.EIGRPNetworkBulkEditView.as_view(), name='eigrpnetwork_bulk_edit'),
+    path('eigrp/network/delete/', views.EIGRPNetworkBulkDeleteView.as_view(), name='eigrpnetwork_bulk_delete'),
+    path('eigrp/network/<int:pk>/', include(get_model_urls('netbox_routing', 'eigrpnetwork'))),
+
+    path('eigrp/interface/', views.EIGRPInterfaceListView.as_view(), name='eigrpinterface_list'),
+    path('eigrp/interface/add/', views.EIGRPInterfaceEditView.as_view(), name='eigrpinterface_add'),
+    path('eigrp/interface/import/', views.EIGRPInterfaceListView.as_view(), name='eigrpinterface_import'),
+    path('eigrp/interface/edit/', views.EIGRPInterfaceBulkEditView.as_view(), name='eigrpinterface_bulk_edit'),
+    path('eigrp/interface/delete/', views.EIGRPInterfaceBulkDeleteView.as_view(), name='eigrpinterface_bulk_delete'),
+    path('eigrp/interface/<int:pk>/', include(get_model_urls('netbox_routing', 'eigrpinterface'))),
 
     path('bgp/router/', views.BGPRouterListView.as_view(), name='bgprouter_list'),
     path('bgp/router/add/', views.BGPRouterEditView.as_view(), name='bgprouter_add'),

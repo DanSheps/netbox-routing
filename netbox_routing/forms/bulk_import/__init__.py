@@ -1,4 +1,5 @@
 from .ospf import *
+from .eigrp import *
 
 
 __all__ = (
@@ -6,5 +7,11 @@ __all__ = (
     'OSPFInstanceImportForm',
     'OSPFAreaImportForm',
     'OSPFInterfaceImportForm',
+
+    # EIGRP
+    'EIGRPRouterImportForm',
+    'EIGRPAddressFamilyImportForm',
+    'EIGRPNetworkImportForm',
+    'EIGRPInterfaceImportForm',
 )
 

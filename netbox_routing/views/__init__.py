@@ -7,6 +7,7 @@ from .objects import PrefixListView, PrefixListEditView, PrefixListListView, Pre
     RouteMapEntryBulkDeleteView, PrefixListEntryBulkDeleteView, PrefixListEntryBulkEditView
 
 from .ospf import *
+from .eigrp import *
 from .bgp import *
 from .core import *
 
@@ -40,6 +41,38 @@ __all__ = (
     'OSPFInterfaceView',
     'OSPFInterfaceEditView',
     'OSPFInterfaceDeleteView',
+
+    # EIGRP
+    'EIGRPRouterListView',
+    'EIGRPRouterView',
+    'EIGRPRouterInterfacesView',
+    'EIGRPRouterEditView',
+    'EIGRPRouterImportView',
+    'EIGRPRouterBulkEditView',
+    'EIGRPRouterDeleteView',
+    'EIGRPRouterBulkDeleteView',
+
+    'EIGRPAddressFamilyListView',
+    'EIGRPAddressFamilyView',
+    'EIGRPAddressFamilyInterfacesView',
+    'EIGRPAddressFamilyEditView',
+    'EIGRPAddressFamilyBulkEditView',
+    'EIGRPAddressFamilyDeleteView',
+    'EIGRPAddressFamilyBulkDeleteView',
+
+    'EIGRPNetworkListView',
+    'EIGRPNetworkView',
+    'EIGRPNetworkEditView',
+    'EIGRPNetworkBulkEditView',
+    'EIGRPNetworkDeleteView',
+    'EIGRPNetworkBulkDeleteView',
+
+    'EIGRPInterfaceListView',
+    'EIGRPInterfaceView',
+    'EIGRPInterfaceEditView',
+    'EIGRPInterfaceBulkEditView',
+    'EIGRPInterfaceDeleteView',
+    'EIGRPInterfaceBulkDeleteView',
 
     'BGPRouterView',
     'BGPRouterEditView',

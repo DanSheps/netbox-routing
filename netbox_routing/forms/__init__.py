@@ -5,8 +5,10 @@ from .objects import PrefixListForm, PrefixListEntryForm, RouteMapForm, RouteMap
 from .ospf import OSPFAreaForm, OSPFInstanceForm, OSPFInterfaceForm
 from .bgp import BGPRouterForm, BGPScopeForm, BGPAddressFamilyForm
 from .static import StaticRouteForm
+from .eigrp import *
 
 __all__ = (
+    
     # Static Routes
     'StaticRouteForm',
     'StaticRouteFilterForm',
@@ -27,6 +29,28 @@ __all__ = (
     'OSPFInterfaceBulkEditForm',
     'OSPFInterfaceImportForm',
 
+    # EIGRP
+    'EIGRPRouterForm',
+    'EIGRPRouterBulkEditForm',
+    'EIGRPRouterFilterForm',
+    'EIGRPRouterImportForm',
+
+    'EIGRPAddressFamilyForm',
+    'EIGRPAddressFamilyBulkEditForm',
+    'EIGRPAddressFamilyFilterForm',
+    'EIGRPAddressFamilyImportForm',
+
+    'EIGRPNetworkForm',
+    'EIGRPNetworkBulkEditForm',
+    'EIGRPNetworkFilterForm',
+    'EIGRPNetworkImportForm',
+
+    'EIGRPInterfaceForm',
+    'EIGRPInterfaceBulkEditForm',
+    'EIGRPInterfaceFilterForm',
+    'EIGRPInterfaceImportForm',
+
+    # BGP
     'BGPRouterForm',
     'BGPScopeForm',
     'BGPAddressFamilyForm',
