@@ -47,6 +47,7 @@ class OSPFInstanceType(NetBoxObjectType):
 
     name: str
     device: Annotated["DeviceType", strawberry.lazy('dcim.graphql.types')]
+    vrf: Annotated["VRFType", strawberry.lazy('ipam.graphql.types')] | None
     router_id: str
     process_id: str
 

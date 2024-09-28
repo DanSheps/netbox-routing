@@ -28,6 +28,14 @@ class OSPFInstance(PrimaryModel):
         blank=False,
         null=False
     )
+    vrf = models.ForeignKey(
+        verbose_name=_('VRF'),
+        to='ipam.VRF',
+        related_name='ospf_instances',
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True
+    )
 
     clone_fields = ('device',)
     prerequisite_models = (

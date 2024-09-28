@@ -15,8 +15,8 @@ __all__ = (
 class OSPFInstanceTable(NetBoxTable):
     class Meta(NetBoxTable.Meta):
         model = OSPFInstance
-        fields = ('pk', 'id', 'name', 'router_id', 'process_id', 'device')
-        default_columns = ('pk', 'id', 'name', 'router_id', 'process_id', 'device')
+        fields = ('pk', 'id', 'name', 'router_id', 'process_id', 'device', 'vrf', )
+        default_columns = ('pk', 'id', 'name', 'router_id', 'process_id', 'device', )
 
 
 class OSPFAreaTable(NetBoxTable):
