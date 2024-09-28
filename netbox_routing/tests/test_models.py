@@ -1,10 +1,16 @@
-from django.core.exceptions import ValidationError
-from django.test import TestCase
+from netbox_routing.tests.eigrp.test_models import *
+from netbox_routing.tests.ospf.test_models import *
+from netbox_routing.tests.static.test_models import *
 
-from utilities.testing import create_test_device
+__all__ = (
+    'StaticRouteTestCase',
 
-from netbox_routing.models import *
+    'OSPFInstanceTestCase',
+    'OSPFAreaTestCase',
+    'OSPFInterfaceTestCase',
 
-
-class StaticRouteTest(TestCase):
-        pass
+    'EIGRPRouterTestCase',
+    'EIGRPAddressFamilyTestCase',
+    'EIGRPNetworkTestCase',
+    'EIGRPInterfaceTestCase',
+)
