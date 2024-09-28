@@ -18,7 +18,7 @@ __all__ = (
     'EIGRPRouterFilterSet',
     'EIGRPAddressFamilyFilterSet',
     'EIGRPNetworkFilterSet',
-    'EIGRPInterfaceFilterSet'
+    'EIGRPInterfaceFilterSet',
 
     'PrefixListFilterSet',
     'PrefixListEntryFilterSet',
