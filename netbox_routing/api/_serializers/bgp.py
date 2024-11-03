@@ -52,7 +52,7 @@ class BGPRouterSerializer(NetBoxModelSerializer):
     class Meta:
         model = BGPRouter
         fields = ('url', 'id', 'display', 'device', 'asn', 'settings', 'description', 'comments',)
-        fields = ('url', 'id', 'display', 'device', 'asn', )
+        brief_fields = ('url', 'id', 'display', 'device', 'asn', )
 
 
 class BGPScopeSerializer(NetBoxModelSerializer):
