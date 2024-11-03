@@ -14,9 +14,9 @@ __all__ = (
 menu = PluginMenu(
     label='Netbox Routing',
     groups=(
-        # ('Routing Objects', OBJECT_MENU),
+        ('Routing Objects', OBJECT_MENU),
         ('Static', STATIC_MENU),
-        # ('BGP', BGP_MENU),
+        ('BGP', BGP_MENU),
         ('OSPF', OSPF_MENU),
         ('EIGRP', eigrp),
     ),

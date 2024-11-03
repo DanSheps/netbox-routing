@@ -1,5 +1,5 @@
 from .static import StaticRouteFilterForm
-from .bgp import BGPRouterFilterForm, BGPScopeFilterForm, BGPAddressFamilyFilterForm, BGPSettingFilterForm
+from .bgp import *
 from .ospf import OSPFAreaFilterForm, OSPFInstanceFilterForm, OSPFInterfaceFilterForm
 from .objects import PrefixListFilterForm, PrefixListEntryFilterForm, RouteMapFilterForm,\
     RouteMapEntryFilterForm
@@ -12,7 +12,12 @@ __all__ = (
     # BGP
     'BGPRouterFilterForm',
     'BGPScopeFilterForm',
+    'BGPSessionTemplateFilterForm',
+    'BGPPolicyTemplateFilterForm',
+    'BGPPeerTemplateFilterForm',
     'BGPAddressFamilyFilterForm',
+    'BGPPeerFilterForm',
+    'BGPPeerAddressFamilyFilterForm',
     'BGPSettingFilterForm',
 
     # EIGRP

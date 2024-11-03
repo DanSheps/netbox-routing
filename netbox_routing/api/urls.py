@@ -1,14 +1,16 @@
 from netbox.api.routers import NetBoxRouter
-from .views import StaticRouteViewSet, PrefixListViewSet, RouteMapViewSet, PrefixListEntryViewSet, \
-    RouteMapEntryViewSet, OSPFInstanceViewSet, OSPFAreaViewSet, OSPFInterfaceViewSet, BGPRouterViewSet, \
-    BGPScopeViewSet, BGPAddressFamilyViewSet, BGPSettingViewSet, EIGRPRouterViewSet, EIGRPAddressFamilyViewSet, \
-    EIGRPNetworkViewSet, EIGRPInterfaceViewSet
+from .views import *
 
 router = NetBoxRouter()
 router.register('staticroute', StaticRouteViewSet)
 router.register('bgp-router', BGPRouterViewSet)
 router.register('bgp-scope', BGPScopeViewSet)
+router.register('bgp-session-template', BGPSessionTemplateViewSet)
+router.register('bgp-policy-template', BGPPolicyTemplateViewSet)
+router.register('bgp-peertemplate', BGPPeerTemplateViewSet)
 router.register('bgp-addressfamily', BGPAddressFamilyViewSet)
+router.register('bgp-peer', BGPPeerViewSet)
+router.register('bgp-peeraddressfamily', BGPPeerAddressFamilyViewSet)
 router.register('bgp-setting', BGPSettingViewSet)
 router.register('ospf-instance', OSPFInstanceViewSet)
 router.register('ospf-area', OSPFAreaViewSet)

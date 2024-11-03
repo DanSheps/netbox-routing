@@ -53,7 +53,6 @@ class OSPFInstanceView(ObjectView):
 
 @register_model_view(OSPFInstance, name='interfaces')
 class OSPFInstanceInterfacesView(ObjectChildrenView):
-    template_name = 'netbox_routing/object_children.html'
     queryset = OSPFInstance.objects.all()
     child_model = OSPFInterface
     table = OSPFInterfaceTable
@@ -118,7 +117,6 @@ class OSPFAreaView(ObjectView):
 
 @register_model_view(OSPFArea, name='interfaces')
 class OSPFAreaInterfacesView(ObjectChildrenView):
-    template_name = 'netbox_routing/object_children.html'
     queryset = OSPFArea.objects.all()
     child_model = OSPFInterface
     table = OSPFInterfaceTable

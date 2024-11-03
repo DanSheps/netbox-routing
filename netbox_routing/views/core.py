@@ -9,7 +9,6 @@ from netbox_routing.tables.static import StaticRouteTable
 
 @register_model_view(Device, name='staticroutes', path='static_routes')
 class DeviceStaticRoutesView(generic.ObjectChildrenView):
-    template_name = 'generic/object_children.html'
     queryset = Device.objects.all()
     child_model = StaticRoute
     table = StaticRouteTable

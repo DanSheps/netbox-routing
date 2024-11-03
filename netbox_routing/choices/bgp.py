@@ -6,6 +6,7 @@ __all__ = (
     'BGPAddressFamilyChoices',
     'BGPBestPathASPathChoices',
     'BGPSettingChoices',
+    'BGPPolicySettingChoices',
     'BFDChoices',
 )
 
@@ -70,6 +71,19 @@ class BGPSettingChoices(ChoiceSet):
         HOLD: 'integer',
     }
 
+
+class BGPPolicySettingChoices(ChoiceSet):
+    RID = 'router_id'
+    SUMMARY = 'auto_summary'
+
+    CHOICES = [
+        (RID, 'Router ID'),
+        (SUMMARY, 'Auto summary'),
+    ]
+    FIELD_TYPES = {
+        RID: 'ipaddr',
+        SUMMARY: 'boolean',
+    }
 
 class BGPAdditionalPathSelectChoices(ChoiceSet):
     ALL = 'all'

@@ -4,6 +4,10 @@ from django.utils.translation import gettext_lazy as _
 from netbox.tables import NetBoxTable
 from netbox_routing.models import StaticRoute
 
+__all__ = (
+    'StaticRouteTable',
+)
+
 
 class StaticRouteTable(NetBoxTable):
     devices = tables.ManyToManyColumn(

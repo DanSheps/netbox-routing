@@ -30,11 +30,11 @@ class PrefixListView(ObjectView):
 
 @register_model_view(PrefixList, name='entries')
 class PrefixListEntriesView(ObjectChildrenView):
-    template_name = 'netbox_routing/objecttable.html'
     queryset = PrefixList.objects.all()
     child_model = PrefixListEntry
     table = PrefixListEntryTable
     filterset = PrefixListEntryFilterSet
+    template_name = 'netbox_routing/routing_policy_object_children.html'
     actions = {
         'add': {'add'},
         'edit': {'change'},
@@ -127,11 +127,11 @@ class RouteMapView(ObjectView):
 
 @register_model_view(RouteMap, name='entries')
 class RouteMapEntriesView(ObjectChildrenView):
-    template_name = 'netbox_routing/objecttable.html'
     queryset = RouteMap.objects.all()
     child_model = RouteMapEntry
     table = RouteMapEntryTable
     filterset = RouteMapEntryFilterSet
+    template_name = 'netbox_routing/routing_policy_object_children.html'
     actions = {
         'add': {'add'},
         'edit': {'change'},

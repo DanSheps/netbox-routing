@@ -17,7 +17,5 @@ BGPPEER_ASSIGNMENT_MODELS = Q(
 
 BGPPEERAF_ASSIGNMENT_MODELS = Q(
     Q(app_label='netbox_routing', model='bgppeer') |
-    Q(app_label='netbox_routing', model='bgppeergroup') |
-    Q(app_label='netbox_routing', model='bgptemplatepeer') |
-    Q(app_label='netbox_routing', model='bgptemplatepeerpolicy')
+    Q(app_label='netbox_routing', model='bgptemplatepeer')
 )

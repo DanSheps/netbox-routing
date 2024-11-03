@@ -1,7 +1,7 @@
 from .static import StaticRoute
 from .ospf import OSPFArea, OSPFInstance, OSPFInterface
 from .objects import PrefixList, PrefixListEntry, RouteMap, RouteMapEntry
-from .bgp import BGPRouter, BGPScope, BGPAddressFamily, BGPSetting
+from .bgp import *
 from .eigrp import *
 
 __all__ = (
@@ -25,5 +25,10 @@ __all__ = (
     'BGPRouter',
     'BGPScope',
     'BGPAddressFamily',
+    'BGPSessionTemplate',
+    'BGPPolicyTemplate',
+    'BGPPeerTemplate',
+    'BGPPeer',
+    'BGPPeerAddressFamily',
     'BGPSetting'
 )

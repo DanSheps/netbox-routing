@@ -5,6 +5,15 @@ from netbox.tables import NetBoxTable, columns
 from netbox_routing.models import PrefixList, PrefixListEntry, RouteMap, RouteMapEntry
 
 
+__all__ = (
+    'PrefixListTable',
+    'PrefixListEntryTable',
+    'RouteMapTable',
+    'RouteMapEntryTable',
+
+)
+
+
 class PrefixListTable(NetBoxTable):
     class Meta(NetBoxTable.Meta):
         model = PrefixList

@@ -40,7 +40,6 @@ class StaticRouteView(ObjectView):
 
 @register_model_view(StaticRoute, name='devices')
 class StaticRouteDevicesView(ObjectChildrenView):
-    template_name = 'netbox_routing/staticroute_devices.html'
     queryset = StaticRoute.objects.all()
     child_model = Device
     table = DeviceTable

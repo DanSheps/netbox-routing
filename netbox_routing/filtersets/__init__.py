@@ -10,6 +10,13 @@ __all__ = (
 
     'BGPSettingFilterSet',
     'BGPRouterFilterSet',
+    'BGPScopeFilterSet',
+    'BGPSessionTemplateFilterSet',
+    'BGPPolicyTemplateFilterSet',
+    'BGPPeerTemplateFilterSet',
+    'BGPAddressFamilyFilterSet',
+    'BGPPeerFilterSet',
+    'BGPPeerAddressFamilyFilterSet',
 
     'OSPFInstanceFilterSet',
     'OSPFAreaFilterSet',

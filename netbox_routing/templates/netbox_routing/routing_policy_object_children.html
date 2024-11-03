@@ -1,0 +1,12 @@
+{% extends 'generic/object_children.html' %}
+{% load buttons %}
+
+{% block bulk_controls %}
+                <div class="btn-group" role="group">
+                    {# Bulk edit buttons #}
+                    {% block add_controls %}
+                        {% add_button child_model %}
+                    {% endblock add_controls %}
+                </div>
+                {{ block.super }}
+{% endblock %}

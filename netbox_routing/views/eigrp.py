@@ -159,7 +159,6 @@ class EIGRPAddressFamilyView(ObjectView):
 
 @register_model_view(EIGRPAddressFamily, name='interfaces')
 class EIGRPAddressFamilyInterfacesView(ObjectChildrenView):
-    #template_name = 'netbox_routing/object_children.html'
     queryset = EIGRPAddressFamily.objects.all()
     child_model = EIGRPInterface
     table = EIGRPInterfaceTable
@@ -172,7 +171,6 @@ class EIGRPAddressFamilyInterfacesView(ObjectChildrenView):
 
 @register_model_view(EIGRPAddressFamily, name='networks')
 class EIGRPAddressFamilyNetworksView(ObjectChildrenView):
-    #template_name = 'netbox_routing/object_children.html'
     queryset = EIGRPAddressFamily.objects.all()
     child_model = EIGRPNetwork
     table = EIGRPNetworkTable

@@ -80,24 +80,35 @@ urlpatterns = [
 
     path('bgp/router/', views.BGPRouterListView.as_view(), name='bgprouter_list'),
     path('bgp/router/add/', views.BGPRouterEditView.as_view(), name='bgprouter_add'),
-    path('bgp/router/<int:pk>/', views.BGPRouterView.as_view(), name='bgprouter'),
-    path('bgp/router/<int:pk>/edit', views.BGPRouterEditView.as_view(), name='bgprouter_edit'),
-    path('bgp/router/<int:pk>/delete', views.BGPRouterEditView.as_view(), name='bgprouter_delete'),
-    path('bgp/<int:pk>/changelog/', ObjectChangeLogView.as_view(), name='bgprouter_changelog', kwargs={'model': BGPRouter}),
+    path('bgp/router/<int:pk>/', include(get_model_urls('netbox_routing', 'bgprouter'))),
 
     path('bgp/scope/', views.BGPScopeListView.as_view(), name='bgpscope_list'),
     path('bgp/scope/add/', views.BGPScopeEditView.as_view(), name='bgpscope_add'),
-    path('bgp/scope/<int:pk>/', views.BGPScopeView.as_view(), name='bgpscope'),
-    path('bgp/scope/<int:pk>/edit', views.BGPScopeEditView.as_view(), name='bgpscope_edit'),
-    path('bgp/scope/<int:pk>/delete', views.BGPScopeEditView.as_view(), name='bgpscope_delete'),
-    path('bgp/<int:pk>/changelog/', ObjectChangeLogView.as_view(), name='bgpscope_changelog', kwargs={'model': BGPScope}),
+    path('bgp/scope/<int:pk>/', include(get_model_urls('netbox_routing', 'bgpscope'))),
 
-    path('bgp/address_family/', views.BGPAddressFamilyListView.as_view(), name='bgpaddressfamily_list'),
-    path('bgp/address_family/add/', views.BGPAddressFamilyEditView.as_view(), name='bgpaddressfamily_add'),
-    path('bgp/address_family/<int:pk>/', views.BGPAddressFamilyView.as_view(), name='bgpaddressfamily'),
-    path('bgp/address_family/<int:pk>/edit', views.BGPAddressFamilyEditView.as_view(), name='bgpaddressfamily_edit'),
-    path('bgp/address_family/<int:pk>/delete', views.BGPAddressFamilyEditView.as_view(), name='bgpaddressfamily_delete'),
-    path('bgp/<int:pk>/changelog/', ObjectChangeLogView.as_view(), name='bgpaddressfamily_changelog', kwargs={'model': BGPAddressFamily}),
+    path('bgp/templates/session/', views.BGPSessionTemplateListView.as_view(), name='bgpsessiontemplate_list'),
+    path('bgp/templates/session/add/', views.BGPSessionTemplateEditView.as_view(), name='bgpsessiontemplate_add'),
+    path('bgp/templates/session/<int:pk>/', include(get_model_urls('netbox_routing', 'bgpsessiontemplate'))),
+
+    path('bgp/templates/policy/', views.BGPPolicyTemplateListView.as_view(), name='bgppolicytemplate_list'),
+    path('bgp/templates/policy/add/', views.BGPPolicyTemplateEditView.as_view(), name='bgppolicytemplate_add'),
+    path('bgp/templates/policy/<int:pk>/', include(get_model_urls('netbox_routing', 'bgppolicytemplate'))),
+
+    path('bgp/templates/peer/', views.BGPPeerTemplateListView.as_view(), name='bgppeertemplate_list'),
+    path('bgp/templates/peer/add/', views.BGPPeerTemplateEditView.as_view(), name='bgppeertemplate_add'),
+    path('bgp/templates/peer/<int:pk>/', include(get_model_urls('netbox_routing', 'bgppeertemplate'))),
+
+    path('bgp/address-family/', views.BGPAddressFamilyListView.as_view(), name='bgpaddressfamily_list'),
+    path('bgp/address-family/add/', views.BGPAddressFamilyEditView.as_view(), name='bgpaddressfamily_add'),
+    path('bgp/address-family/<int:pk>/', include(get_model_urls('netbox_routing', 'bgpaddressfamily'))),
+
+    path('bgp/peer/', views.BGPPeerListView.as_view(), name='bgppeer_list'),
+    path('bgp/peer/add/', views.BGPPeerEditView.as_view(), name='bgppeer_add'),
+    path('bgp/peer/<int:pk>/', include(get_model_urls('netbox_routing', 'bgppeer'))),
+
+    path('bgp/peer-address-family/', views.BGPPeerAddressFamilyListView.as_view(), name='bgppeeraddressfamily_list'),
+    path('bgp/peer-address-family/add/', views.BGPPeerAddressFamilyEditView.as_view(), name='bgppeeraddressfamily_add'),
+    path('bgp/peer-address-family/<int:pk>/', include(get_model_urls('netbox_routing', 'bgppeeraddressfamily'))),
 
     path('prefix-list/', views.PrefixListListView.as_view(), name='prefixlist_list'),
     path('prefix-list/add/', views.PrefixListEditView.as_view(), name='prefixlist_add'),
