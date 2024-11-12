@@ -8,6 +8,7 @@ from ipam.models import VRF
 from utilities.filters import MultiValueCharFilter
 
 from netbox.filtersets import NetBoxModelFilterSet
+from netbox_routing.choices.ospf import OSPFAreaTypeChoices
 from netbox_routing.models import OSPFArea, OSPFInstance, OSPFInterface
 
 
@@ -75,9 +76,14 @@ class OSPFAreaFilterSet(NetBoxModelFilterSet):
         label=_('Area ID'),
     )
 
+    area_type = django_filters.MultipleChoiceFilter(
+        choices=OSPFAreaTypeChoices,
+        label=_('Area Type'),
+    )
+
     class Meta:
         model = OSPFArea
-        fields = ('area_id', )
+        fields = ('area_id', 'area_type')
 
     def search(self, queryset, name, value):
         if not value.strip():

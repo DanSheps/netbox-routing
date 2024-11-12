@@ -32,8 +32,8 @@ class OSPFAreaSerializer(NetBoxModelSerializer):
 
     class Meta:
         model = OSPFArea
-        fields = ('url', 'id', 'display', 'area_id', 'description', 'comments',)
-        brief_fields = ('url', 'id', 'display', 'area_id',)
+        fields = ('url', 'id', 'display', 'area_id', 'area_type', 'description', 'comments',)
+        brief_fields = ('url', 'id', 'display', 'area_id', 'area_type')
 
 
 class OSPFInterfaceSerializer(NetBoxModelSerializer):
