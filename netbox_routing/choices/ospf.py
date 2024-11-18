@@ -7,6 +7,7 @@ class OSPFAreaTypeChoices(ChoiceSet):
     STUB = 'stub'
     TSA = 'tsa'
     NSSA = 'nssa'
+    TNSSA = 'tnssa'
 
     CHOICES = [
         (STANDARD, 'Standard Area'),
@@ -14,4 +15,5 @@ class OSPFAreaTypeChoices(ChoiceSet):
         (STUB, 'Stub Area'),
         (TSA, 'Totally Stubby Area'),
         (NSSA, 'Not-So-Stubby Area'),
+        (TNSSA, 'Totally Not-So-Stubby Area'),
     ]
