@@ -8,6 +8,7 @@ from utilities.forms import BOOLEAN_WITH_BLANK_CHOICES, add_blank_choice
 from utilities.forms.fields import DynamicModelChoiceField, CommentField
 
 from netbox_routing import choices
+from netbox_routing.choices.ospf import OSPFAreaTypeChoices
 from netbox_routing.models import OSPFArea, OSPFInstance, OSPFInterface
 
 __all__ = (
@@ -49,7 +50,7 @@ class OSPFInstanceBulkEditForm(NetBoxModelBulkEditForm):
 
 
 class OSPFAreaBulkEditForm(NetBoxModelBulkEditForm):
-
+    area_type = forms.ChoiceField(label=_('Area Type'), choices=OSPFAreaTypeChoices, required=False)
     description = forms.CharField(
         label=_('Description'),
         max_length=200,

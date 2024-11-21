@@ -49,7 +49,7 @@ class OSPFInstanceTestCase(IPAddressFieldMixin, APIViewTestCases.APIViewTestCase
 class OSPFAreaTestCase(IPAddressFieldMixin , APIViewTestCases.APIViewTestCase):
     model = OSPFArea
     view_namespace = 'plugins-api:netbox_routing'
-    brief_fields = ['area_id', 'display', 'id', 'url', ]
+    brief_fields = ['area_id', 'area_type', 'display', 'id', 'url', ]
 
     bulk_update_data = {
         'description': "A test description"
@@ -59,15 +59,16 @@ class OSPFAreaTestCase(IPAddressFieldMixin , APIViewTestCases.APIViewTestCase):
     def setUpTestData(cls):
 
         data = (
-            cls.model(area_id='1'),
-            cls.model(area_id='2'),
-            cls.model(area_id='3'),
+            cls.model(area_id='1', area_type='stub'),
+            cls.model(area_id='2', area_type='stub'),
+            cls.model(area_id='3', area_type='stub'),
         )
         cls.model.objects.bulk_create(data)
 
         cls.create_data = [
             {
                 'area_id': '4',
+                'area_type': 'stub',
             },
         ]
 

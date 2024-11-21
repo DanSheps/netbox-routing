@@ -56,6 +56,7 @@ class OSPFAreaTestCase(TestCase):
     def test_valid_area_id_with_ip(self):
         form = OSPFAreaForm(data={
             'area_id': '0.0.0.0',
+            'area_type': 'standard',
         })
         self.assertTrue(form.is_valid())
         self.assertTrue(form.save())
@@ -63,6 +64,7 @@ class OSPFAreaTestCase(TestCase):
     def test_valid_area_id_with_integer(self):
         form = OSPFAreaForm(data={
             'area_id': '0',
+            'area_type': 'standard',
         })
         self.assertTrue(form.is_valid())
         self.assertTrue(form.save())
@@ -70,6 +72,7 @@ class OSPFAreaTestCase(TestCase):
     def test_invalid_area(self):
         form = OSPFAreaForm(data={
             'area_id': 'a.a.a.a',
+            'area_type': 'standard',
         })
         self.assertFalse(form.is_valid())
         with self.assertRaises(ValueError):

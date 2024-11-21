@@ -60,6 +60,7 @@ class OSPFInstanceType(NetBoxObjectType):
 class OSPFAreaType(NetBoxObjectType):
 
     area_id: str
+    area_type: str
 
 
 @strawberry_django.type(
