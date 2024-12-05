@@ -48,6 +48,12 @@ class OSPFInstance(PrimaryModel):
 
     def __str__(self):
         return f'{self.name} ({self.router_id})'
+    
+    def get_areas(self):
+        instance_areas = OSPFArea.objects.filter(interfaces__instance=self).distinct("area_id")
+        return sorted(instance_areas.iterator(), key=lambda area: netaddr.ip.IPAddress(
+            int(area.area_id) if area.area_id.isdigit() else area.area_id)
+        )
 
     def get_absolute_url(self):
         return reverse('plugins:netbox_routing:ospfinstance', args=[self.pk])

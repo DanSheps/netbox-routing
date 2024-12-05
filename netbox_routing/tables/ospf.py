@@ -35,6 +35,11 @@ class OSPFInterfaceTable(NetBoxTable):
         verbose_name=_('Area'),
         linkify=True
     )
+    device = tables.Column(
+        verbose_name=_('Device'),
+        accessor='interface.device.name',
+        linkify=False
+    )
     interface = tables.Column(
         verbose_name=_('Interface'),
         linkify=True
@@ -45,4 +50,4 @@ class OSPFInterfaceTable(NetBoxTable):
         fields = (
             'pk', 'id', 'instance', 'area', 'interface', 'passive', 'priority', 'bfd', 'authentication', 'passphrase'
         )
-        default_columns = ('pk', 'id', 'instance', 'area', 'interface', 'passive')
+        default_columns = ('pk', 'id', 'instance', 'area', 'device', 'interface', 'passive')
