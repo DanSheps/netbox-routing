@@ -1,5 +1,4 @@
 import netaddr
-import ipaddress
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.urls import reverse
@@ -52,7 +51,7 @@ class OSPFInstance(PrimaryModel):
     
     def get_areas(self):
         instance_areas = OSPFArea.objects.filter(interfaces__instance=self).distinct("area_id")
-        return sorted(instance_areas.iterator(), key=lambda area: ipaddress.IPv4Address(
+        return sorted(instance_areas.iterator(), key=lambda area: netaddr.ip.IPAddress(
             int(area.area_id) if area.area_id.isdigit() else area.area_id)
         )
 
