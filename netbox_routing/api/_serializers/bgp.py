@@ -38,7 +38,7 @@ class BGPSettingSerializer(NetBoxModelSerializer):
         model = BGPSetting
         fields = (
             'url', 'id', 'display', 'assigned_object_type', 'assigned_object_id', 'assigned_object', 'key', 'value',
-            'tenant', 'description', 'comments',
+            'description', 'comments',
         )
         brief_fields = ('url', 'id', 'display', 'assigned_object', 'key', )
 

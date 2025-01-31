@@ -1,15 +1,11 @@
+from .bgp import *
+from .communities import *
+from .core import *
+from .eigrp import *
+from .objects import *
+from .ospf import *
 from .static import *
 
-from .objects import PrefixListView, PrefixListEditView, PrefixListListView, PrefixListDeleteView, RouteMapListView, \
-    RouteMapView, RouteMapEditView, RouteMapDeleteView, PrefixListEntryListView, PrefixListEntryEditView, \
-    PrefixListEntryDeleteView, PrefixListEntryView, RouteMapEntryListView, RouteMapEntryView, RouteMapEntryEditView, \
-    RouteMapEntryDeleteView, PrefixListEntriesView, RouteMapEntriesView, RouteMapEntryBulkEditView, \
-    RouteMapEntryBulkDeleteView, PrefixListEntryBulkDeleteView, PrefixListEntryBulkEditView
-
-from .ospf import *
-from .eigrp import *
-from .bgp import *
-from .core import *
 
 __all__ = (
     # Core View Extensions
@@ -47,7 +43,7 @@ __all__ = (
     'EIGRPRouterView',
     'EIGRPRouterInterfacesView',
     'EIGRPRouterEditView',
-    'EIGRPRouterImportView',
+    'EIGRPRouterBulkImportView',
     'EIGRPRouterBulkEditView',
     'EIGRPRouterDeleteView',
     'EIGRPRouterBulkDeleteView',
@@ -101,5 +97,23 @@ __all__ = (
     'RouteMapEntryDeleteView',
     'RouteMapEntryBulkEditView',
     'RouteMapEntryBulkDeleteView',
+
+    # Community List
+    'CommunityListListView',
+    'CommunityListView',
+    'CommunityListEditView',
+    'CommunityListDeleteView',
+    'CommunityListBulkImportView',
+    'CommunityListBulkEditView',
+    'CommunityListBulkDeleteView',
+
+    # Community
+    'CommunityListView',
+    'CommunityView',
+    'CommunityEditView',
+    'CommunityDeleteView',
+    'CommunityBulkImportView',
+    'CommunityBulkEditView',
+    'CommunityBulkDeleteView',
 
 )

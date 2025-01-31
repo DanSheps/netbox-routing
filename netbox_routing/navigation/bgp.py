@@ -13,7 +13,7 @@ router = PluginMenuItem(
     permissions=['netbox_routing.view_bgprouter'],
     buttons=(
         PluginMenuButton('plugins:netbox_routing:bgprouter_add', 'Add', 'mdi mdi-plus', ButtonColorChoices.GREEN),
-        #PluginMenuButton('plugins:netbox_routing:bgprouter_import', 'Import', 'mdi mdi-upload', ButtonColorChoices.CYAN),
+        PluginMenuButton('plugins:netbox_routing:bgprouter_bulk_import', 'Import', 'mdi mdi-upload', ButtonColorChoices.CYAN),
     )
 )
 
@@ -24,7 +24,7 @@ scope = PluginMenuItem(
     permissions=['netbox_routing.view_bgpscope'],
     buttons=(
         PluginMenuButton('plugins:netbox_routing:bgpscope_add', 'Add', 'mdi mdi-plus', ButtonColorChoices.GREEN),
-        #PluginMenuButton('plugins:netbox_routing:bgpscope_import', 'Import', 'mdi mdi-upload', ButtonColorChoices.CYAN),
+        PluginMenuButton('plugins:netbox_routing:bgpscope_bulk_import', 'Import', 'mdi mdi-upload', ButtonColorChoices.CYAN),
     )
 )
 
@@ -35,7 +35,7 @@ session_template = PluginMenuItem(
     permissions=['netbox_routing.view_bgpsessiontemplate'],
     buttons=(
         PluginMenuButton('plugins:netbox_routing:bgpsessiontemplate_add', 'Add', 'mdi mdi-plus', ButtonColorChoices.GREEN),
-        #PluginMenuButton('plugins:netbox_routing:bgpscope_import', 'Import', 'mdi mdi-upload', ButtonColorChoices.CYAN),
+        PluginMenuButton('plugins:netbox_routing:bgpsessiontemplate_bulk_import', 'Import', 'mdi mdi-upload', ButtonColorChoices.CYAN),
     )
 )
 
@@ -46,7 +46,7 @@ policy_template = PluginMenuItem(
     permissions=['netbox_routing.view_bgppolicytemplate'],
     buttons=(
         PluginMenuButton('plugins:netbox_routing:bgppolicytemplate_add', 'Add', 'mdi mdi-plus', ButtonColorChoices.GREEN),
-        #PluginMenuButton('plugins:netbox_routing:bgpscope_import', 'Import', 'mdi mdi-upload', ButtonColorChoices.CYAN),
+        PluginMenuButton('plugins:netbox_routing:bgppolicytemplate_bulk_import', 'Import', 'mdi mdi-upload', ButtonColorChoices.CYAN),
     )
 )
 
@@ -57,7 +57,7 @@ peer_template = PluginMenuItem(
     permissions=['netbox_routing.view_bgppeertemplate'],
     buttons=(
         PluginMenuButton('plugins:netbox_routing:bgppeertemplate_add', 'Add', 'mdi mdi-plus', ButtonColorChoices.GREEN),
-        #PluginMenuButton('plugins:netbox_routing:bgpscope_import', 'Import', 'mdi mdi-upload', ButtonColorChoices.CYAN),
+        PluginMenuButton('plugins:netbox_routing:bgppeertemplate_bulk_import', 'Import', 'mdi mdi-upload', ButtonColorChoices.CYAN),
     )
 )
 
@@ -68,7 +68,7 @@ address_family = PluginMenuItem(
     permissions=['netbox_routing.view_bgpaddressfamily'],
     buttons=(
         PluginMenuButton('plugins:netbox_routing:bgpaddressfamily_add', 'Add', 'mdi mdi-plus', ButtonColorChoices.GREEN),
-        #PluginMenuButton('plugins:netbox_routing:bgpaddressfamily_import', 'Import', 'mdi mdi-upload', ButtonColorChoices.CYAN),
+        PluginMenuButton('plugins:netbox_routing:bgpaddressfamily_bulk_import', 'Import', 'mdi mdi-upload', ButtonColorChoices.CYAN),
     )
 )
 
@@ -79,7 +79,7 @@ peer = PluginMenuItem(
     permissions=['netbox_routing.view_bgppeer'],
     buttons=(
         PluginMenuButton('plugins:netbox_routing:bgppeer_add', 'Add', 'mdi mdi-plus', ButtonColorChoices.GREEN),
-        #PluginMenuButton('plugins:netbox_routing:bgpscope_import', 'Import', 'mdi mdi-upload', ButtonColorChoices.CYAN),
+        PluginMenuButton('plugins:netbox_routing:bgppeer_bulk_import', 'Import', 'mdi mdi-upload', ButtonColorChoices.CYAN),
     )
 )
 
@@ -90,7 +90,7 @@ peer_af = PluginMenuItem(
     permissions=['netbox_routing.view_bgppeeraddressfamily'],
     buttons=(
         PluginMenuButton('plugins:netbox_routing:bgppeeraddressfamily_add', 'Add', 'mdi mdi-plus', ButtonColorChoices.GREEN),
-        #PluginMenuButton('plugins:netbox_routing:bgpscope_import', 'Import', 'mdi mdi-upload', ButtonColorChoices.CYAN),
+        PluginMenuButton('plugins:netbox_routing:bgppeeraddressfamily_bulk_import', 'Import', 'mdi mdi-upload', ButtonColorChoices.CYAN),
     )
 )
 

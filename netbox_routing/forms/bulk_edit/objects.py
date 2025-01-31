@@ -1,17 +1,16 @@
-
 from django.utils.translation import gettext as _
 
 from netbox.forms import NetBoxModelBulkEditForm
-from netbox_routing.models import PrefixList, PrefixListEntry, RouteMapEntry, RouteMap
 from utilities.forms.fields import DynamicModelChoiceField
+from utilities.forms.rendering import FieldSet
+
+from netbox_routing.models import PrefixList, PrefixListEntry, RouteMapEntry, RouteMap
 
 
 __all__ = (
     'PrefixListEntryBulkEditForm',
     'RouteMapEntryBulkEditForm'
 )
-
-from utilities.forms.rendering import FieldSet
 
 
 class PrefixListEntryBulkEditForm(NetBoxModelBulkEditForm):

@@ -7,7 +7,6 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('contenttypes', '0002_remove_content_type_name'),
         ('netbox_routing', '0015_bgp_tenant'),
     ]
 
@@ -25,6 +24,28 @@ class Migration(migrations.Migration):
                 on_delete=django.db.models.deletion.PROTECT,
                 related_name='peer_afs',
                 to='netbox_routing.bgppolicytemplate',
+            ),
+        ),
+        migrations.RemoveField(
+            model_name='bgppeer',
+            name='peer_policy',
+        ),
+        migrations.AddField(
+            model_name='bgppeer',
+            name='peer_session',
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.PROTECT,
+                related_name='peers',
+                to='netbox_routing.bgpsessiontemplate',
+            ),
+        ),
+        migrations.AddField(
+            model_name='bgppolicytemplate',
+            name='parents',
+            field=models.ManyToManyField(
+                related_name='children', to='netbox_routing.bgppolicytemplate'
             ),
         ),
         migrations.AlterField(

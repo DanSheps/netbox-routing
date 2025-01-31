@@ -10,7 +10,6 @@ __all__ = (
     'PrefixListEntryTable',
     'RouteMapTable',
     'RouteMapEntryTable',
-
 )
 
 
@@ -27,6 +26,7 @@ class PrefixListEntryTable(NetBoxTable):
         linkify=True
     )
     type = columns.ChoiceFieldColumn()
+
     class Meta(NetBoxTable.Meta):
         model = PrefixListEntry
         fields = ('pk', 'id', 'prefix_list', 'sequence', 'type', 'prefix', 'le', 'ge')
@@ -46,6 +46,7 @@ class RouteMapEntryTable(NetBoxTable):
         linkify=True
     )
     type = columns.ChoiceFieldColumn()
+
     class Meta(NetBoxTable.Meta):
         model = RouteMapEntry
         fields = ('pk', 'id', 'route_map', 'sequence', 'type')

@@ -14,7 +14,7 @@ routers = PluginMenuItem(
     buttons=(
         PluginMenuButton('plugins:netbox_routing:eigrprouter_add', 'Add', 'mdi mdi-plus', ButtonColorChoices.GREEN),
         PluginMenuButton(
-            'plugins:netbox_routing:eigrprouter_import',
+            'plugins:netbox_routing:eigrprouter_bulk_import',
             'Import',
             'mdi mdi-upload',
             ButtonColorChoices.CYAN
@@ -27,6 +27,12 @@ address_families = PluginMenuItem(
     permissions=['netbox_routing.view_eigrpaddressfamily'],
     buttons=(
         PluginMenuButton('plugins:netbox_routing:eigrpaddressfamily_add', 'Add', 'mdi mdi-plus', ButtonColorChoices.GREEN),
+        PluginMenuButton(
+            'plugins:netbox_routing:eigrpaddressfamily_bulk_import',
+            'Import',
+            'mdi mdi-upload',
+            ButtonColorChoices.CYAN
+        ),
     )
 )
 networks = PluginMenuItem(
@@ -35,6 +41,12 @@ networks = PluginMenuItem(
     permissions=['netbox_routing.view_eigrpnetwork'],
     buttons=(
         PluginMenuButton('plugins:netbox_routing:eigrpnetwork_add', 'Add', 'mdi mdi-plus', ButtonColorChoices.GREEN),
+        PluginMenuButton(
+            'plugins:netbox_routing:eigrpnetwork_bulk_import',
+            'Import',
+            'mdi mdi-upload',
+            ButtonColorChoices.CYAN
+        ),
     )
 )
 interfaces = PluginMenuItem(
@@ -43,6 +55,12 @@ interfaces = PluginMenuItem(
     permissions=['netbox_routing.view_eigrpinterface'],
     buttons=(
         PluginMenuButton('plugins:netbox_routing:eigrpinterface_add', 'Add', 'mdi mdi-plus', ButtonColorChoices.GREEN),
+        PluginMenuButton(
+            'plugins:netbox_routing:eigrpinterface_bulk_import',
+            'Import',
+            'mdi mdi-upload',
+            ButtonColorChoices.CYAN
+        ),
     )
 )
 

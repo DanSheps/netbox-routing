@@ -1,7 +1,7 @@
 from .filtersets import *
 from .bulk_edit import *
 from .bulk_import import *
-from .objects import PrefixListForm, PrefixListEntryForm, RouteMapForm, RouteMapEntryForm
+from .model_objects.objects import PrefixListForm, PrefixListEntryForm, RouteMapForm, RouteMapEntryForm
 from .ospf import OSPFAreaForm, OSPFInstanceForm, OSPFInterfaceForm
 from .bgp import *
 from .static import StaticRouteForm
@@ -51,16 +51,6 @@ __all__ = (
     'EIGRPInterfaceImportForm',
 
     # BGP
-    'BGPRouterForm',
-    'BGPScopeForm',
-    'BGPSessionTemplateForm',
-    'BGPPolicyTemplateForm',
-    'BGPPeerTemplateForm',
-    'BGPAddressFamilyForm',
-    'BGPPeerForm',
-    'BGPPeerAddressFamilyForm',
-    'BGPSettingForm',
-
     'BGPRouterFilterForm',
     'BGPScopeFilterForm',
     'BGPSessionTemplateFilterForm',
@@ -72,10 +62,6 @@ __all__ = (
     'BGPSettingFilterForm',
 
     # Objects
-    'PrefixListForm',
-    'PrefixListEntryForm',
-    'RouteMapForm',
-    'RouteMapEntryForm',
     'PrefixListFilterForm',
     'PrefixListEntryFilterForm',
     'RouteMapFilterForm',

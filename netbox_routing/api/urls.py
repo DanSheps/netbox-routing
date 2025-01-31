@@ -23,4 +23,6 @@ router.register('prefix-list', PrefixListViewSet)
 router.register('prefix-list-entry', PrefixListEntryViewSet)
 router.register('route-map', RouteMapViewSet)
 router.register('route-map-entry', RouteMapEntryViewSet)
+router.register('community', CommunityListViewSet)
+router.register('community-list', CommunityViewSet)
 urlpatterns = router.urls

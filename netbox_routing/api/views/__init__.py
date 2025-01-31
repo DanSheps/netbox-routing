@@ -1,6 +1,7 @@
 from .static import StaticRouteViewSet
 from .ospf import OSPFInstanceViewSet, OSPFAreaViewSet, OSPFInterfaceViewSet
 from .bgp import *
+from .communities import *
 from .objects import PrefixListViewSet, PrefixListEntryViewSet, RouteMapViewSet, RouteMapEntryViewSet
 from .eigrp import *
 
@@ -30,4 +31,7 @@ __all__ = (
     'PrefixListEntryViewSet',
     'RouteMapViewSet',
     'RouteMapEntryViewSet',
+
+    'CommunityListViewSet',
+    'CommunityViewSet',
 )

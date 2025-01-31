@@ -8,7 +8,6 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('netbox_routing', '0014_bgppeers'),
-        ('tenancy', '0015_contactassignment_rename_content_type'),
     ]
 
     operations = [

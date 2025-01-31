@@ -1,4 +1,5 @@
 from .static import StaticRouteFilterSet
+from .communities import *
 from .objects import PrefixListFilterSet, PrefixListEntryFilterSet, RouteMapFilterSet, RouteMapEntryFilterSet
 from .ospf import *
 from .bgp import *
@@ -31,4 +32,7 @@ __all__ = (
     'PrefixListEntryFilterSet',
     'RouteMapFilterSet',
     'RouteMapEntryFilterSet',
+
+    'CommunityListFilterSet',
+    'CommunityFilterSet',
 )

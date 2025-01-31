@@ -9,8 +9,6 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('extras', '0121_customfield_related_object_filter'),
-        ('ipam', '0070_vlangroup_vlan_id_ranges'),
         ('netbox_routing', '0013_remove_bgp_peer'),
     ]
 

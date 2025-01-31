@@ -4,8 +4,12 @@ from django.db.models import Q
 from django.utils.translation import gettext as _
 
 from netbox.filtersets import NetBoxModelFilterSet
+from utilities.filters import MultiValueCharFilter, MultiValueNumberFilter
+
 from dcim.models import Device
 from ipam.models import ASN, VRF, IPAddress
+from tenancy.models import Tenant
+
 from netbox_routing.choices.bgp import BGPSettingChoices, BGPAddressFamilyChoices
 from netbox_routing.models.bgp import *
 
@@ -21,9 +25,6 @@ __all__ = (
     'BGPPeerAddressFamilyFilterSet',
     'BGPSettingFilterSet',
 )
-
-from tenancy.models import Tenant
-from utilities.filters import MultiValueCharFilter, MultiValueNumberFilter
 
 
 class BGPRouterFilterSet(NetBoxModelFilterSet):

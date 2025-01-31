@@ -3,6 +3,7 @@ from .ospf import OSPFArea, OSPFInstance, OSPFInterface
 from .objects import PrefixList, PrefixListEntry, RouteMap, RouteMapEntry
 from .bgp import *
 from .eigrp import *
+from .communities import *
 
 __all__ = (
     'StaticRoute',
@@ -30,5 +31,8 @@ __all__ = (
     'BGPPeerTemplate',
     'BGPPeer',
     'BGPPeerAddressFamily',
-    'BGPSetting'
+    'BGPSetting',
+
+    'CommunityList',
+    'Community',
 )

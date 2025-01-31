@@ -12,7 +12,7 @@ static = PluginMenuItem(
     buttons=(
         PluginMenuButton('plugins:netbox_routing:staticroute_add', 'Add', 'mdi mdi-plus', ButtonColorChoices.GREEN),
         PluginMenuButton(
-            'plugins:netbox_routing:staticroute_import',
+            'plugins:netbox_routing:staticroute_bulk_import',
             'Import',
             'mdi mdi-upload',
             ButtonColorChoices.CYAN

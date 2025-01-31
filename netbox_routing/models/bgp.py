@@ -344,7 +344,7 @@ class BGPPolicyTemplate(PrimaryModel):
         verbose_name = 'BGP Policy Template'
 
     clone_fields = (
-        'name', 'router', 'peer_session', 'enabled', 'prefixlist_out', 'prefixlist_in', 'routemap_out', 'routemap_in'
+        'name', 'router', 'parents', 'enabled', 'prefixlist_out', 'prefixlist_in', 'routemap_out', 'routemap_in'
     )
     prerequisite_models = (
         'netbox_routing.BGPRouter',
