@@ -41,6 +41,8 @@ class StaticRoute(PrimaryModel):
     )
     permanent = models.BooleanField(default=False, blank=True, null=True,)
 
+    tag = models.IntegerField(default=False, blank=True, null=True,)
+
     clone_fields = (
         'vrf', 'metric', 'permanent'
     )
@@ -48,6 +50,7 @@ class StaticRoute(PrimaryModel):
         'dcim.Device',
         'ipam.VRF',
     )
+
 
     class Meta:
         ordering = ['vrf', 'prefix', 'metric']
