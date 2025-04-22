@@ -8,6 +8,8 @@ from netbox_routing.fields.ip import IPAddressField
 
 from dcim.models.device_components import Interface
 
+from django.core.exceptions import ValidationError
+
 __all__ = (
     'StaticRoute'
 )
@@ -87,3 +89,10 @@ class StaticRoute(PrimaryModel):
 
     def get_absolute_url(self):
         return reverse('plugins:netbox_routing:staticroute', args=[self.pk])
+
+    def clean(self):
+        super().clean()
+        if not self.interface_next_hop and not self.next_hop:
+            raise ValidationError({
+                "next_hop" : "A route requires set either an IP next hop or an Interface next hop."
+            })
