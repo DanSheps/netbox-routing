@@ -6,6 +6,7 @@ from ipam.fields import IPNetworkField
 from netbox.models import PrimaryModel
 from netbox_routing.fields.ip import IPAddressField
 
+from dcim.models.device_components import Interface
 
 __all__ = (
     'StaticRoute'
@@ -26,7 +27,18 @@ class StaticRoute(PrimaryModel):
         verbose_name='VRF'
     )
     prefix = IPNetworkField(help_text='IPv4 or IPv6 network with mask')
-    next_hop = IPAddressField()
+    next_hop = IPAddressField(
+        verbose_name='Next Hop',
+        help_text='IPv4 or IPv6 address of the next hop router',
+        blank=True,
+        null=True
+    )
+    interface_next_hop = models.CharField(
+        verbose_name='Interface Next Hop',
+        help_text='Forwarding interface, for routes without IP address as next hop',
+        blank=True,
+        null=True
+    )
     name = models.CharField(
         max_length=50,
         verbose_name='Name',
