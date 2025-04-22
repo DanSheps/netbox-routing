@@ -83,9 +83,10 @@ class StaticRoute(PrimaryModel):
         )
 
     def __str__(self):
-        if self.vrf is None:
-            return f'{self.prefix} NH {self.next_hop}'
-        return f'{self.prefix} VRF {self.vrf} NH {self.next_hop}'
+        next_hop = ('VRF' if self.vrf else '')
+        next_hop += (str(self.next_hop) if self.next_hop else '')
+        next_hop += (' via ' + self.interface_next_hop if self.interface_next_hop else '')
+        return f'{self.prefix} next-hop {next_hop}'
 
     def get_absolute_url(self):
         return reverse('plugins:netbox_routing:staticroute', args=[self.pk])
