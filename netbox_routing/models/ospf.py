@@ -54,11 +54,33 @@ class OSPFInstance(PrimaryModel):
 
 class OSPFArea(PrimaryModel):
     area_id = models.CharField(max_length=100, verbose_name='Area ID')
-
-    prerequisite_models = ()
-    clone_fields = ()
+    area_type = models.CharField(
+        verbose_name=_('Area Type'),
+        help_text=_('OSPF Area Type'),
+        choices=choices.OSPFAreaTypeChoices,
+        default=choices.OSPFAreaTypeChoices.STANDARD,
+        blank=False,
+        null=False
+    )
+    instance = models.ForeignKey(
+        verbose_name=_('OSPF Instance'),
+        help_text=_('OSPF Instance where this area belongs'),
+        to=OSPFInstance,
+        related_name='ospf_areas',
+        on_delete=models.PROTECT,
+        blank=True,
+        null=True,
+    )
+    vrf = models.ForeignKey(
+        verbose_name=_('VRF'),
+        to='ipam.VRF',
+        related_name='ospf_areas',
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True
+    )
     class Meta:
-        verbose_name = 'OSPF Area'
+        verbose_name = _('OSPF Area')
 
     def __str__(self):
         return f'{self.area_id}'
@@ -75,7 +97,7 @@ class OSPFArea(PrimaryModel):
             try:
                 str(netaddr.IPAddress(area_id))
             except netaddr.core.AddrFormatError:
-                raise ValidationError({'area_id': ['This field must be an integer or a valid net address']})
+                raise ValidationError({'area_id': [_('This field must be an integer or a valid net address')]})
 
 
 class OSPFInterface(PrimaryModel):
