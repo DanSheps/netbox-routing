@@ -71,14 +71,7 @@ class OSPFArea(PrimaryModel):
         blank=True,
         null=True,
     )
-    vrf = models.ForeignKey(
-        verbose_name=_('VRF'),
-        to='ipam.VRF',
-        related_name='ospf_areas',
-        on_delete=models.CASCADE,
-        blank=True,
-        null=True
-    )
+
     class Meta:
         verbose_name = _('OSPF Area')
 

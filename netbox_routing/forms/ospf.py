@@ -43,7 +43,7 @@ class OSPFAreaForm(NetBoxModelForm):
 
     class Meta:
         model = OSPFArea
-        fields = ('area_id', 'area_type', 'instance', 'vrf', 'description', 'comments', )
+        fields = ('area_id', 'area_type', 'instance', 'description', 'comments', )
 
 
 class OSPFInterfaceForm(NetBoxModelForm):
