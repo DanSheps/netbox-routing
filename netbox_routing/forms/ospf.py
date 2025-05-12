@@ -83,7 +83,7 @@ class OSPFInterfaceForm(NetBoxModelForm):
     class Meta:
         model = OSPFInterface
         fields = (
-            'device', 'instance', 'area', 'interface', 'passive', 'priority', 'bfd', 'authentication', 'passphrase',
+            'device', 'instance', 'area', 'interface', 'network_type', 'passive', 'priority', 'bfd', 'authentication', 'passphrase',
             'description', 'comments',
         )
 

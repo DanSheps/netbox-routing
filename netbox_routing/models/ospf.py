@@ -90,7 +90,8 @@ class OSPFArea(PrimaryModel):
             try:
                 str(netaddr.IPAddress(area_id))
             except netaddr.core.AddrFormatError:
-                raise ValidationError({'area_id': [_('This field must be an integer or a valid net address')]})
+                raise ValidationError(
+                    {'area_id': [_('This field must be an integer or a valid net address')]})
 
 
 class OSPFInterface(PrimaryModel):
@@ -115,9 +116,28 @@ class OSPFInterface(PrimaryModel):
         blank=False,
         null=False
     )
-    passive = models.BooleanField(verbose_name='Passive', blank=True, null=True)
-    priority = models.IntegerField(blank=True, null=True)
-    bfd = models.BooleanField(blank=True, null=True, verbose_name='BFD')
+    network_type = models.CharField(
+        verbose_name=_('Network Type'),
+        help_text=_('OSPF Interface Network Type'),
+        choices=choices.OSPFNetworkTypeChoices,
+        default=choices.OSPFNetworkTypeChoices.BROADCAST,
+        blank=False,
+        null=False
+    )
+    passive = models.BooleanField(
+        verbose_name='Passive',
+        blank=True,
+        null=True
+    )
+    priority = models.IntegerField(
+        blank=True,
+        null=True
+    )
+    bfd = models.BooleanField(
+        blank=True,
+        null=True,
+        verbose_name=_('BFD')
+    )
     authentication = models.CharField(
         max_length=50,
         choices=choices.AuthenticationChoices,
@@ -130,9 +150,18 @@ class OSPFInterface(PrimaryModel):
         null=True
     )
 
-    clone_fields = ('instance', 'area', 'priority', 'bfd', 'authentication', 'passphrase')
+    clone_fields = (
+        'instance',
+        'area',
+        'priority',
+        'bfd',
+        'authentication',
+        'passphrase'
+    )
     prerequisite_models = (
-        'netbox_routing.OSPFInstance', 'netbox_routing.OSPFArea', 'dcim.Interface',
+        'netbox_routing.OSPFInstance',
+        'netbox_routing.OSPFArea',
+        'dcim.Interface',
     )
 
     class Meta:
@@ -150,4 +179,3 @@ class OSPFInterface(PrimaryModel):
 
     def get_absolute_url(self):
         return reverse('plugins:netbox_routing:ospfinterface', args=[self.pk])
-
