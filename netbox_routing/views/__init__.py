@@ -24,6 +24,8 @@ __all__ = (
     'OSPFInstanceEditView',
     'OSPFInstanceDeleteView',
     'OSPFInstanceInterfacesView',
+    'OSPFInstanceBulkImportView',
+
     'OSPFAreaListView',
     'OSPFAreaView',
     'OSPFAreaInterfacesView',

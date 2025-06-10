@@ -32,6 +32,8 @@ __all__ = (
     'OSPFInstanceBulkEditView',
     'OSPFInstanceDeleteView',
     'OSPFInstanceBulkDeleteView',
+    'OSPFInstanceBulkImportView',
+
     'OSPFAreaListView',
     'OSPFAreaView',
     'OSPFAreaInterfacesView',
@@ -39,12 +41,15 @@ __all__ = (
     'OSPFAreaBulkEditView',
     'OSPFAreaDeleteView',
     'OSPFAreaBulkDeleteView',
+    'OSPFAreaBulkImportView',
+
     'OSPFInterfaceListView',
     'OSPFInterfaceView',
     'OSPFInterfaceEditView',
     'OSPFInterfaceBulkEditView',
     'OSPFInterfaceDeleteView',
     'OSPFInterfaceBulkDeleteView',
+    'OSPFInterfaceBulkImportView',
 )
 
 
