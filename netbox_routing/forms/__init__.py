@@ -9,13 +9,16 @@ from .objects import (
 )
 from .ospf import OSPFAreaForm, OSPFInstanceForm, OSPFInterfaceForm
 from .bgp import BGPRouterForm, BGPScopeForm, BGPAddressFamilyForm
-from .static import StaticRouteForm
+from .static import *
 from .eigrp import *
 
 __all__ = (
     # Static Routes
     'StaticRouteForm',
     'StaticRouteFilterForm',
+    'StaticRouteImportForm',
+    'StaticRouteBulkEditForm',
+
     # OSPF
     'OSPFAreaForm',
     'OSPFAreaBulkEditForm',

@@ -18,6 +18,8 @@ __all__ = (
     'StaticRouteBulkEditView',
     'StaticRouteDeleteView',
     'StaticRouteBulkDeleteView',
+    'StaticRouteBulkImportView',
+
     # OSPF
     'OSPFInstanceListView',
     'OSPFInstanceView',
