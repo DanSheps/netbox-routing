@@ -11,7 +11,7 @@ from .models import StaticRoute, PrefixList, PrefixListEntry, RouteMap, RouteMap
 urlpatterns = [
     path('routes/static/', views.StaticRouteListView.as_view(), name='staticroute_list'),
     path('routes/static/add/', views.StaticRouteEditView.as_view(), name='staticroute_add'),
-    path('routes/static/import/', views.StaticRouteListView.as_view(), name='staticroute_import'),
+    path('routes/static/import/', views.StaticRouteBulkImportView.as_view(), name='staticroute_import'),
     path('routes/static/edit/', views.StaticRouteBulkEditView.as_view(), name='staticroute_bulk_edit'),
     path('routes/static/delete/', views.StaticRouteBulkDeleteView.as_view(), name='staticroute_bulk_delete'),
     path('routes/static/<int:pk>/', views.StaticRouteView.as_view(), name='staticroute'),
