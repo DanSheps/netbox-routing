@@ -44,9 +44,9 @@ class OSPFAreaImportForm(NetBoxModelImportForm):
 class OSPFInterfaceImportForm(NetBoxModelImportForm):
     instance = CSVModelChoiceField(
         queryset=OSPFInstance.objects.all(),
-        required=True,
-        to_field_name='id',
-        help_text=_('ID of OSPF Instance')
+        required=False,
+        to_field_name='name',
+        help_text=_('Name of OSPF Instance')
     )
     area = CSVModelChoiceField(
         queryset=OSPFArea.objects.all(),
