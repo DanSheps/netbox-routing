@@ -1,4 +1,3 @@
-from netbox.choices import ButtonColorChoices
 from netbox.plugins import PluginMenuItem, PluginMenuButton
 
 
