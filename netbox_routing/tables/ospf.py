@@ -26,10 +26,16 @@ class OSPFAreaTable(NetBoxTable):
         default_columns = ('pk', 'id', 'area_id')
 
 
+
 class OSPFInterfaceTable(NetBoxTable):
     instance = tables.Column(
         verbose_name=_('Instance'),
         linkify=True
+    )
+    instance_device = tables.Column(
+        verbose_name=_('Device'),
+        linkify=True,
+        accessor='instance.device',
     )
     area = tables.Column(
         verbose_name=_('Area'),
@@ -43,6 +49,6 @@ class OSPFInterfaceTable(NetBoxTable):
     class Meta(NetBoxTable.Meta):
         model = OSPFInterface
         fields = (
-            'pk', 'id', 'instance', 'area', 'interface', 'passive', 'priority', 'bfd', 'authentication', 'passphrase'
+            'pk', 'id', 'instance', 'instance_device', 'area', 'interface', 'passive', 'priority', 'bfd', 'authentication', 'passphrase'
         )
         default_columns = ('pk', 'id', 'instance', 'area', 'interface', 'passive')
