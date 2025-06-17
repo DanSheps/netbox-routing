@@ -54,11 +54,26 @@ class OSPFInstance(PrimaryModel):
 
 class OSPFArea(PrimaryModel):
     area_id = models.CharField(max_length=100, verbose_name='Area ID')
+    area_type = models.CharField(
+        verbose_name=_('Area Type'),
+        help_text=_('OSPF Area Type'),
+        choices=choices.OSPFAreaTypeChoices,
+        default=choices.OSPFAreaTypeChoices.STANDARD,
+        blank=False,
+        null=False
+    )
+    instance = models.ForeignKey(
+        verbose_name=_('OSPF Instance'),
+        help_text=_('OSPF Instance where this area belongs'),
+        to=OSPFInstance,
+        related_name='ospf_areas',
+        on_delete=models.PROTECT,
+        blank=True,
+        null=True,
+    )
 
-    prerequisite_models = ()
-    clone_fields = ()
     class Meta:
-        verbose_name = 'OSPF Area'
+        verbose_name = _('OSPF Area')
 
     def __str__(self):
         return f'{self.area_id}'
@@ -75,7 +90,8 @@ class OSPFArea(PrimaryModel):
             try:
                 str(netaddr.IPAddress(area_id))
             except netaddr.core.AddrFormatError:
-                raise ValidationError({'area_id': ['This field must be an integer or a valid net address']})
+                raise ValidationError(
+                    {'area_id': [_('This field must be an integer or a valid net address')]})
 
 
 class OSPFInterface(PrimaryModel):
@@ -100,9 +116,28 @@ class OSPFInterface(PrimaryModel):
         blank=False,
         null=False
     )
-    passive = models.BooleanField(verbose_name='Passive', blank=True, null=True)
-    priority = models.IntegerField(blank=True, null=True)
-    bfd = models.BooleanField(blank=True, null=True, verbose_name='BFD')
+    network_type = models.CharField(
+        verbose_name=_('Network Type'),
+        help_text=_('OSPF Interface Network Type'),
+        choices=choices.OSPFNetworkTypeChoices,
+        default=choices.OSPFNetworkTypeChoices.BROADCAST,
+        blank=False,
+        null=False
+    )
+    passive = models.BooleanField(
+        verbose_name='Passive',
+        blank=True,
+        null=True
+    )
+    priority = models.IntegerField(
+        blank=True,
+        null=True
+    )
+    bfd = models.BooleanField(
+        blank=True,
+        null=True,
+        verbose_name=_('BFD')
+    )
     authentication = models.CharField(
         max_length=50,
         choices=choices.AuthenticationChoices,
@@ -115,9 +150,18 @@ class OSPFInterface(PrimaryModel):
         null=True
     )
 
-    clone_fields = ('instance', 'area', 'priority', 'bfd', 'authentication', 'passphrase')
+    clone_fields = (
+        'instance',
+        'area',
+        'priority',
+        'bfd',
+        'authentication',
+        'passphrase'
+    )
     prerequisite_models = (
-        'netbox_routing.OSPFInstance', 'netbox_routing.OSPFArea', 'dcim.Interface',
+        'netbox_routing.OSPFInstance',
+        'netbox_routing.OSPFArea',
+        'dcim.Interface',
     )
 
     class Meta:
@@ -135,4 +179,3 @@ class OSPFInterface(PrimaryModel):
 
     def get_absolute_url(self):
         return reverse('plugins:netbox_routing:ospfinterface', args=[self.pk])
-

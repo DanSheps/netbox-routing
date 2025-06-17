@@ -6,6 +6,9 @@ from ipam.fields import IPNetworkField
 from netbox.models import PrimaryModel
 from netbox_routing.fields.ip import IPAddressField
 
+from dcim.models.device_components import Interface
+
+from django.core.exceptions import ValidationError
 
 __all__ = (
     'StaticRoute'
@@ -26,7 +29,18 @@ class StaticRoute(PrimaryModel):
         verbose_name='VRF'
     )
     prefix = IPNetworkField(help_text='IPv4 or IPv6 network with mask')
-    next_hop = IPAddressField()
+    next_hop = IPAddressField(
+        verbose_name='Next Hop',
+        help_text='IPv4 or IPv6 address of the next hop router',
+        blank=True,
+        null=True
+    )
+    interface_next_hop = models.CharField(
+        verbose_name='Interface Next Hop',
+        help_text='Forwarding interface, for routes without IP address as next hop',
+        blank=True,
+        null=True
+    )
     name = models.CharField(
         max_length=50,
         verbose_name='Name',
@@ -69,9 +83,17 @@ class StaticRoute(PrimaryModel):
         )
 
     def __str__(self):
-        if self.vrf is None:
-            return f'{self.prefix} NH {self.next_hop}'
-        return f'{self.prefix} VRF {self.vrf} NH {self.next_hop}'
+        next_hop = ('VRF' if self.vrf else '')
+        next_hop += (str(self.next_hop) if self.next_hop else '')
+        next_hop += (' via ' + self.interface_next_hop if self.interface_next_hop else '')
+        return f'{self.prefix} next-hop {next_hop}'
 
     def get_absolute_url(self):
         return reverse('plugins:netbox_routing:staticroute', args=[self.pk])
+
+    def clean(self):
+        super().clean()
+        if not self.interface_next_hop and not self.next_hop:
+            raise ValidationError({
+                "next_hop" : "A route requires set either an IP next hop or an Interface next hop."
+            })
