@@ -4,7 +4,7 @@ from .bulk_import import *
 from .objects import PrefixListForm, PrefixListEntryForm, RouteMapForm, RouteMapEntryForm
 from .ospf import OSPFAreaForm, OSPFInstanceForm, OSPFInterfaceForm
 from .bgp import BGPRouterForm, BGPScopeForm, BGPAddressFamilyForm
-from .static import StaticRouteForm
+from .static import *
 from .eigrp import *
 
 __all__ = (
@@ -12,6 +12,8 @@ __all__ = (
     # Static Routes
     'StaticRouteForm',
     'StaticRouteFilterForm',
+    'StaticRouteImportForm',
+    'StaticRouteBulkEditForm',
 
     # OSPF
     'OSPFAreaForm',
