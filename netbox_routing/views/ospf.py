@@ -16,6 +16,7 @@ __all__ = (
     'OSPFInstanceBulkEditView',
     'OSPFInstanceDeleteView',
     'OSPFInstanceBulkDeleteView',
+    'OSPFInstanceBulkImportView',
 
     'OSPFAreaListView',
     'OSPFAreaView',
@@ -24,6 +25,7 @@ __all__ = (
     'OSPFAreaBulkEditView',
     'OSPFAreaDeleteView',
     'OSPFAreaBulkDeleteView',
+    'OSPFAreaBulkImportView',
 
     'OSPFInterfaceListView',
     'OSPFInterfaceView',
@@ -31,6 +33,7 @@ __all__ = (
     'OSPFInterfaceBulkEditView',
     'OSPFInterfaceDeleteView',
     'OSPFInterfaceBulkDeleteView',
+    'OSPFInterfaceBulkImportView',
 )
 
 
@@ -93,7 +96,7 @@ class OSPFInstanceBulkDeleteView(BulkDeleteView):
     filterset = OSPFInstanceFilterSet
     table = OSPFInstanceTable
 
-
+@register_model_view(OSPFInstance, name='import')
 class OSPFInstanceBulkImportView(BulkImportView):
     queryset = OSPFInstance.objects.all()
     model_form = OSPFInstanceImportForm
@@ -151,13 +154,13 @@ class OSPFAreaDeleteView(ObjectDeleteView):
     queryset = OSPFArea.objects.all()
 
 
-@register_model_view(OSPFArea, name='delete')
+@register_model_view(OSPFArea, name='bulk_delete')
 class OSPFAreaBulkDeleteView(BulkDeleteView):
     queryset = OSPFArea.objects.all()
     table = OSPFAreaTable
     filterset = OSPFAreaFilterSet
 
-
+@register_model_view(OSPFArea, name='import')
 class OSPFAreaBulkImportView(BulkImportView):
     queryset = OSPFArea.objects.all()
     model_form = OSPFAreaImportForm
@@ -190,19 +193,19 @@ class OSPFInterfaceEditView(ObjectEditView):
 class OSPFInterfaceDeleteView(ObjectDeleteView):
     queryset = OSPFInterface.objects.all()
 
-
+@register_model_view(OSPFInterface, name='import')
 class OSPFInterfaceBulkImportView(BulkImportView):
     queryset = OSPFInterface.objects.all()
     model_form = OSPFInterfaceImportForm
 
-
+@register_model_view(OSPFInterface, name='bulk_edit')
 class OSPFInterfaceBulkEditView(BulkEditView):
     queryset = OSPFInterface.objects.all()
     filterset = OSPFInterfaceFilterSet
     table = OSPFInterfaceTable
     form = OSPFInterfaceBulkEditForm
 
-
+@register_model_view(OSPFInterface, name='bulk_delete')
 class OSPFInterfaceBulkDeleteView(BulkDeleteView):
     queryset = OSPFInterface.objects.all()
     filterset = OSPFInterfaceFilterSet

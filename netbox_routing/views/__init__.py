@@ -5,7 +5,7 @@ from .objects import PrefixListView, PrefixListEditView, PrefixListListView, Pre
     PrefixListEntryDeleteView, PrefixListEntryView, RouteMapEntryListView, RouteMapEntryView, RouteMapEntryEditView, \
     RouteMapEntryDeleteView, PrefixListEntriesView, RouteMapEntriesView, RouteMapEntryBulkEditView, \
     RouteMapEntryBulkDeleteView, PrefixListEntryBulkDeleteView, PrefixListEntryBulkEditView
-
+    
 from .ospf import *
 from .eigrp import *
 from .bgp import *
@@ -23,6 +23,7 @@ __all__ = (
     'StaticRouteBulkEditView',
     'StaticRouteDeleteView',
     'StaticRouteBulkDeleteView',
+    'StaticRouteBulkImportView',
 
     # OSPF
     'OSPFInstanceListView',
@@ -30,6 +31,7 @@ __all__ = (
     'OSPFInstanceEditView',
     'OSPFInstanceDeleteView',
     'OSPFInstanceInterfacesView',
+    'OSPFInstanceBulkImportView',
 
     'OSPFAreaListView',
     'OSPFAreaView',
