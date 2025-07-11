@@ -14,7 +14,7 @@ from utilities.views import register_model_view, ViewTab
 #
 # Prefix List
 #
-@register_model_view(PrefixList, name='list', detail=False)
+@register_model_view(PrefixList, name='list', path='', detail=False)
 class PrefixListListView(ObjectListView):
     queryset = PrefixList.objects.all()
     table = PrefixListTable
@@ -80,7 +80,7 @@ class PrefixListDeleteView(ObjectDeleteView):
 # Prefix List Entry
 #
 
-@register_model_view(PrefixListEntry, name='list', detail=False)
+@register_model_view(PrefixListEntry, name='list', path='', detail=False)
 class PrefixListEntryListView(ObjectListView):
     queryset = PrefixListEntry.objects.all()
     table = PrefixListEntryTable
@@ -124,7 +124,7 @@ class PrefixListEntryBulkDeleteView(BulkDeleteView):
 #
 # Route Map
 #
-@register_model_view(RouteMap, name='list', detail=False)
+@register_model_view(RouteMap, name='list', path='', detail=False)
 class RouteMapListView(ObjectListView):
     queryset = RouteMap.objects.all()
     table = RouteMapTable
@@ -189,7 +189,7 @@ class RouteMapDeleteView(ObjectDeleteView):
 #
 # Route Map Entry
 #
-@register_model_view(RouteMapEntry, name='list', detail=False)
+@register_model_view(RouteMapEntry, name='list', path='', detail=False)
 class RouteMapEntryListView(ObjectListView):
     queryset = RouteMapEntry.objects.all()
     table = RouteMapEntryTable

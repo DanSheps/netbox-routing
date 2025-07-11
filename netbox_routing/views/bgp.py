@@ -9,10 +9,26 @@ from netbox_routing.tables.bgp import BGPRouterTable, BGPScopeTable, BGPAddressF
 from utilities.views import register_model_view
 
 
+__all__ = (
+    'BGPRouterListView',
+    'BGPRouterView',
+    'BGPRouterEditView',
+    'BGPRouterDeleteView',
+    'BGPScopeListView',
+    'BGPScopeView',
+    'BGPScopeEditView',
+    'BGPScopeDeleteView',
+    'BGPAddressFamilyListView',
+    'BGPAddressFamilyView',
+    'BGPAddressFamilyEditView',
+    'BGPAddressFamilyDeleteView'
+)
+
+
 #
 # BGP Router Views
 #
-@register_model_view(BGPRouter, name='list', detail=False)
+@register_model_view(BGPRouter, name='list', path='', detail=False)
 class BGPRouterListView(ObjectListView):
     queryset = BGPRouter.objects.all()
     table = BGPRouterTable
@@ -41,7 +57,7 @@ class BGPRouterDeleteView(ObjectDeleteView):
 #
 # BGP Scope Views
 #
-@register_model_view(BGPScope, name='list', detail=False)
+@register_model_view(BGPScope, name='list', path='', detail=False)
 class BGPScopeListView(ObjectListView):
     queryset = BGPScope.objects.all()
     table = BGPScopeTable
@@ -70,7 +86,7 @@ class BGPScopeDeleteView(ObjectDeleteView):
 #
 # BGP Scope Views
 #
-@register_model_view(BGPAddressFamily, name='list', detail=False)
+@register_model_view(BGPAddressFamily, name='list', path='', detail=False)
 class BGPAddressFamilyListView(ObjectListView):
     queryset = BGPAddressFamily.objects.all()
     table = BGPAddressFamilyTable

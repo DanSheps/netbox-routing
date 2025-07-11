@@ -50,7 +50,7 @@ __all__ = (
 #
 
 
-@register_model_view(EIGRPRouter, name='list', detail=False)
+@register_model_view(EIGRPRouter, name='list', path='', detail=False)
 class EIGRPRouterListView(ObjectListView):
     queryset = EIGRPRouter.objects.all()
     table = EIGRPRouterTable
@@ -149,7 +149,7 @@ class EIGRPRouterImportView(BulkImportView):
 #
 
 
-@register_model_view(EIGRPAddressFamily, name='list', detail=False)
+@register_model_view(EIGRPAddressFamily, name='list', path='', detail=False)
 class EIGRPAddressFamilyListView(ObjectListView):
     queryset = EIGRPAddressFamily.objects.all()
     table = EIGRPAddressFamilyTable
@@ -228,7 +228,7 @@ class EIGRPAddressFamilyImportView(BulkImportView):
 #
 # Network
 #
-@register_model_view(EIGRPNetwork, name='list', detail=False)
+@register_model_view(EIGRPNetwork, name='list', path='', detail=False)
 class EIGRPNetworkListView(ObjectListView):
     queryset = EIGRPNetwork.objects.all()
     table = EIGRPNetworkTable
@@ -278,7 +278,7 @@ class EIGRPNetworkImportView(BulkImportView):
 #
 # Interface
 #
-@register_model_view(EIGRPInterface, name='list', detail=False)
+@register_model_view(EIGRPInterface, name='list', path='', detail=False)
 class EIGRPInterfaceListView(ObjectListView):
     queryset = EIGRPInterface.objects.all()
     table = EIGRPInterfaceTable
