@@ -41,6 +41,13 @@ class StaticRoute(PrimaryModel):
     )
     permanent = models.BooleanField(default=False, blank=True, null=True,)
 
+    tag = models.IntegerField(
+        verbose_name='Tag',
+        help_text='Optional tag for this static route',
+        blank=True,
+        null=True
+    )
+
     clone_fields = (
         'vrf', 'metric', 'permanent'
     )
