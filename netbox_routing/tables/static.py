@@ -14,7 +14,7 @@ class StaticRouteTable(NetBoxTable):
         verbose_name=_('VRF'),
         linkify=True,
     )
-    
+
     class Meta(NetBoxTable.Meta):
         model = StaticRoute
         fields = (

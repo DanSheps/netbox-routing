@@ -17,8 +17,6 @@ __all__ = (
 )
 
 
-
-
 class BGPSettingSerializer(NetBoxModelSerializer):
     url = serializers.HyperlinkedIdentityField(view_name='plugins-api:netbox_routing-api:bgprouter-detail')
 

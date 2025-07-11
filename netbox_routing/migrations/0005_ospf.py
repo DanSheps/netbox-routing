@@ -22,7 +22,11 @@ class Migration(migrations.Migration):
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False)),
                 ('created', models.DateTimeField(auto_now_add=True, null=True)),
                 ('last_updated', models.DateTimeField(auto_now=True, null=True)),
-                ('custom_field_data', models.JSONField(blank=True, default=dict, encoder=utilities.json.CustomFieldJSONEncoder)),
+                ('custom_field_data', models.JSONField(
+                    blank=True,
+                    default=dict,
+                    encoder=utilities.json.CustomFieldJSONEncoder
+                )),
                 ('area_id', models.CharField(max_length=100)),
                 ('tags', taggit.managers.TaggableManager(through='extras.TaggedItem', to='extras.Tag')),
             ],
@@ -36,11 +40,19 @@ class Migration(migrations.Migration):
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False)),
                 ('created', models.DateTimeField(auto_now_add=True, null=True)),
                 ('last_updated', models.DateTimeField(auto_now=True, null=True)),
-                ('custom_field_data', models.JSONField(blank=True, default=dict, encoder=utilities.json.CustomFieldJSONEncoder)),
+                ('custom_field_data', models.JSONField(
+                    blank=True,
+                    default=dict,
+                    encoder=utilities.json.CustomFieldJSONEncoder
+                )),
                 ('name', models.CharField(max_length=100)),
                 ('router_id', netbox_routing.fields.ip.IPAddressField()),
                 ('process_id', models.IntegerField()),
-                ('device', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='ospf_instances', to='dcim.device')),
+                ('device', models.ForeignKey(
+                    on_delete=django.db.models.deletion.CASCADE,
+                    related_name='ospf_instances',
+                    to='dcim.device'
+                )),
                 ('tags', taggit.managers.TaggableManager(through='extras.TaggedItem', to='extras.Tag')),
             ],
             options={
@@ -53,14 +65,30 @@ class Migration(migrations.Migration):
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False)),
                 ('created', models.DateTimeField(auto_now_add=True, null=True)),
                 ('last_updated', models.DateTimeField(auto_now=True, null=True)),
-                ('custom_field_data', models.JSONField(blank=True, default=dict, encoder=utilities.json.CustomFieldJSONEncoder)),
+                ('custom_field_data', models.JSONField(
+                    blank=True,
+                    default=dict,
+                    encoder=utilities.json.CustomFieldJSONEncoder
+                )),
                 ('priority', models.IntegerField(blank=True, null=True)),
                 ('bfd', models.BooleanField(blank=True, null=True)),
                 ('authentication', models.CharField(blank=True, max_length=50, null=True)),
                 ('passphrase', models.CharField(blank=True, max_length=200, null=True)),
-                ('area', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='interfaces', to='netbox_routing.ospfarea')),
-                ('instance', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='interfaces', to='netbox_routing.ospfinstance')),
-                ('interface', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='ospf_interfaces', to='dcim.interface')),
+                ('area', models.ForeignKey(
+                    on_delete=django.db.models.deletion.CASCADE,
+                    related_name='interfaces',
+                    to='netbox_routing.ospfarea'
+                )),
+                ('instance', models.ForeignKey(
+                    on_delete=django.db.models.deletion.PROTECT,
+                    related_name='interfaces',
+                    to='netbox_routing.ospfinstance'
+                )),
+                ('interface', models.ForeignKey(
+                    on_delete=django.db.models.deletion.CASCADE,
+                    related_name='ospf_interfaces',
+                    to='dcim.interface'
+                )),
                 ('tags', taggit.managers.TaggableManager(through='extras.TaggedItem', to='extras.Tag')),
             ],
             options={
@@ -70,6 +98,9 @@ class Migration(migrations.Migration):
         ),
         migrations.AddConstraint(
             model_name='ospfinterface',
-            constraint=models.UniqueConstraint(fields=('interface',), name='netbox_routing_ospfinterface_unique_interface'),
+            constraint=models.UniqueConstraint(
+                fields=('interface',),
+                name='netbox_routing_ospfinterface_unique_interface'
+            ),
         ),
     ]

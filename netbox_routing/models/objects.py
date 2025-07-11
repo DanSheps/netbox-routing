@@ -3,7 +3,6 @@ from django.utils.translation import gettext_lazy as _
 from django.urls import reverse
 
 from django.db import models
-from django.db.models import F, Q, CheckConstraint
 from django.core.exceptions import ValidationError
 
 from ipam.fields import IPNetworkField
@@ -47,6 +46,7 @@ class RouteMap(PrimaryModel):
 
     def get_absolute_url(self):
         return reverse('plugins:netbox_routing:routemap', args=[self.pk])
+
 
 class RouteMapEntry(PermitDenyChoiceMixin, PrimaryModel):
     route_map = models.ForeignKey(
@@ -196,4 +196,3 @@ class PrefixListEntry(PermitDenyChoiceMixin, PrimaryModel):
 
         if self.le is not None and self.prefix.prefix.prefixlen >= self.le:
             raise ValidationError('Prefix\'s length cannot be longer then greater or equals value')
-

@@ -22,6 +22,7 @@ __all__ = (
     'EIGRPInterfaceTestCase',
 )
 
+
 class AppTest(APITestCase):
     def test_root(self):
         url = reverse("plugins-api:netbox_routing-api:api-root")

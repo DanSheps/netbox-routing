@@ -1,7 +1,7 @@
 from netbox.plugins import PluginMenu
 
-from .bgp import MENUITEMS as BGP_MENU
-from .objects import MENUITEMS as OBJECT_MENU
+# from .bgp import MENUITEMS as BGP_MENU
+# from .objects import MENUITEMS as OBJECT_MENU
 from .ospf import MENUITEMS as OSPF_MENU
 from .eigrp import eigrp
 from .static import MENUITEMS as STATIC_MENU

@@ -1,4 +1,3 @@
-import netaddr
 from django.test import TestCase
 
 from dcim.models import Device, Interface
@@ -77,7 +76,6 @@ class OSPFInstanceTestCase(TestCase):
     def test_router_id(self):
         params = {'router_id': ['1.1.1.1', '2.2.2.2']}
         self.assertEqual(self.filterset(params, self.queryset).qs.count(), 2)
-
 
 
 class OSPFAreaTestCase(TestCase):
@@ -209,7 +207,5 @@ class OSPFInterfaceTestCase(TestCase):
         self.assertEqual(self.filterset(params, self.queryset).qs.count(), 2)
 
     def test_passive(self):
-        data = Interface.objects.all()[0:2]
-
         params = {'passive': True}
         self.assertEqual(self.filterset(params, self.queryset).qs.count(), 2)

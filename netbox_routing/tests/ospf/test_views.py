@@ -1,10 +1,8 @@
-import netaddr
-
 from dcim.models import Interface
 from ipam.models import VRF
 from utilities.testing import ViewTestCases, create_test_device
 
-from netbox_routing.models import StaticRoute, OSPFInstance, OSPFArea, OSPFInterface
+from netbox_routing.models import OSPFInstance, OSPFArea, OSPFInterface
 from netbox_routing.tests.base import IPAddressFieldMixin
 
 __all__ = (

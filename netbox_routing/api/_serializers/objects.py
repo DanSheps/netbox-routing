@@ -43,7 +43,6 @@ class RouteMapEntrySerializer(NetBoxModelSerializer):
     url = serializers.HyperlinkedIdentityField(view_name='plugins-api:netbox_routing-api:prefixlistentry-detail')
     route_map = RouteMapSerializer(nested=True)
 
-
     class Meta:
         model = RouteMapEntry
         fields = ('url', 'id', 'display', 'route_map', 'sequence', 'type', 'description', 'comments',)

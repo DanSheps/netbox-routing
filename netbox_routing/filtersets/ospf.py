@@ -18,7 +18,6 @@ __all__ = (
 )
 
 
-
 class OSPFInstanceFilterSet(NetBoxModelFilterSet):
     device_id = django_filters.ModelMultipleChoiceFilter(
         field_name='device',
@@ -166,4 +165,3 @@ class OSPFInterfaceFilterSet(NetBoxModelFilterSet):
             Q(interface__device__name__icontains=value)
         )
         return queryset.filter(qs_filter).distinct()
-

@@ -17,7 +17,6 @@ __all__ = (
 )
 
 
-
 class BGPRouterFilterSet(NetBoxModelFilterSet):
     device_id = django_filters.ModelMultipleChoiceFilter(
         field_name='device',
@@ -56,7 +55,6 @@ class BGPRouterFilterSet(NetBoxModelFilterSet):
         return queryset.filter(qs_filter).distinct()
 
 
-
 class BGPScopeFilterSet(NetBoxModelFilterSet):
     router_id = django_filters.ModelMultipleChoiceFilter(
         field_name='router',
@@ -88,7 +86,6 @@ class BGPScopeFilterSet(NetBoxModelFilterSet):
             Q(vrf__name__icontains=value)
         )
         return queryset.filter(qs_filter).distinct()
-
 
 
 class BGPAddressFamilyFilterSet(NetBoxModelFilterSet):

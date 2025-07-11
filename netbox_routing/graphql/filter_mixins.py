@@ -13,9 +13,13 @@ class DeviceMixin(BaseObjectTypeFilterMixin):
 
 
 class InterfaceMixin(DeviceMixin, BaseObjectTypeFilterMixin):
-    device: Annotated['DeviceFilter', strawberry.lazy('dcim.graphql.filters')] | None = strawberry_django.filter_field()
+    device: Annotated['DeviceFilter', strawberry.lazy('dcim.graphql.filters')] | None = (
+        strawberry_django.filter_field()
+    )
     device_id: ID | None = strawberry_django.filter_field()
-    interface: Annotated['InterfaceFilter', strawberry.lazy('dcim.graphql.filters')] | None = strawberry_django.filter_field()
+    interface: Annotated['InterfaceFilter', strawberry.lazy('dcim.graphql.filters')] | None = (
+        strawberry_django.filter_field()
+    )
     interface_id: ID | None = strawberry_django.filter_field()
 
 
@@ -24,5 +28,7 @@ class VRFMixin:
 
 
 class NetworkPrefixMixin(BaseObjectTypeFilterMixin):
-    network: Annotated['PrefixFilter', strawberry.lazy('ipam.graphql.filters')] | None = strawberry_django.filter_field()
+    network: Annotated['PrefixFilter', strawberry.lazy('ipam.graphql.filters')] | None = (
+        strawberry_django.filter_field()
+    )
     network_id: ID | None = strawberry_django.filter_field()
