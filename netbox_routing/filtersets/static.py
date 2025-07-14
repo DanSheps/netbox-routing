@@ -75,5 +75,5 @@ class StaticRouteFilterSet(NetBoxModelFilterSet):
         try:
             query = netaddr.IPAddress(value)
             return queryset.filter(**{f'{name}': query})
-        except (netaddr.AddrFormatError, ValueError) as e:
+        except (netaddr.AddrFormatError, ValueError):
             return queryset.none()

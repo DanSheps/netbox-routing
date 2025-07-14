@@ -1,4 +1,4 @@
-from typing import Annotated, List, Union
+from typing import Annotated, List
 
 import strawberry
 import strawberry_django
@@ -10,11 +10,11 @@ from netbox_routing import models
 
 __all__ = (
     'StaticRouteType',
-    
+
     'OSPFInstanceType',
     'OSPFAreaType',
     'OSPFInterfaceType',
-    
+
     'EIGRPRouterType',
     'EIGRPAddressFamilyType',
     'EIGRPNetworkType',
@@ -130,4 +130,3 @@ class EIGRPInterfaceType(NetBoxObjectType):
     bfd: bool | None
     authentication: str | None
     passphrase: str | None
-

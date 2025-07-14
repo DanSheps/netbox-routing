@@ -14,7 +14,7 @@ class StaticRouteTestCase(TestCase):
 
     @classmethod
     def setUpTestData(cls):
-        device = create_test_device(name='Device 1')
+        cls.device = create_test_device(name='Device 1')
 
     def test_staticroute(self):
         form = StaticRouteForm(data={

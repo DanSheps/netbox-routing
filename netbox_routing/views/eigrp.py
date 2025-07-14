@@ -48,7 +48,9 @@ __all__ = (
 #
 # Instance
 #
-@register_model_view(EIGRPRouter, name='list')
+
+
+@register_model_view(EIGRPRouter, name='list', path='', detail=False)
 class EIGRPRouterListView(ObjectListView):
     queryset = EIGRPRouter.objects.all()
     table = EIGRPRouterTable
@@ -110,18 +112,11 @@ class EIGRPRouterNetworksView(ObjectChildrenView):
         return self.child_model.objects.filter(router=parent)
 
 
+@register_model_view(EIGRPRouter, name='add', detail=False)
 @register_model_view(EIGRPRouter, name='edit')
 class EIGRPRouterEditView(ObjectEditView):
     queryset = EIGRPRouter.objects.all()
     form = EIGRPRouterForm
-
-
-@register_model_view(EIGRPRouter, name='bulk_edit')
-class EIGRPRouterBulkEditView(BulkEditView):
-    queryset = EIGRPRouter.objects.all()
-    filterset = EIGRPRouterFilterSet
-    table = EIGRPRouterTable
-    form = EIGRPRouterBulkEditForm
 
 
 @register_model_view(EIGRPRouter, name='delete')
@@ -129,13 +124,22 @@ class EIGRPRouterDeleteView(ObjectDeleteView):
     queryset = EIGRPRouter.objects.all()
 
 
-@register_model_view(EIGRPRouter, name='bulk_delete')
+@register_model_view(EIGRPRouter, name='bulk_edit', detail=False)
+class EIGRPRouterBulkEditView(BulkEditView):
+    queryset = EIGRPRouter.objects.all()
+    filterset = EIGRPRouterFilterSet
+    table = EIGRPRouterTable
+    form = EIGRPRouterBulkEditForm
+
+
+@register_model_view(EIGRPRouter, name='bulk_delete', detail=False)
 class EIGRPRouterBulkDeleteView(BulkDeleteView):
     queryset = EIGRPRouter.objects.all()
     filterset = EIGRPRouterFilterSet
     table = EIGRPRouterTable
 
 
+@register_model_view(EIGRPRouter, name='bulk_import', detail=False)
 class EIGRPRouterImportView(BulkImportView):
     queryset = EIGRPRouter.objects.all()
     model_form = EIGRPRouterImportForm
@@ -143,7 +147,9 @@ class EIGRPRouterImportView(BulkImportView):
 #
 # Address Family
 #
-@register_model_view(EIGRPAddressFamily, name='list')
+
+
+@register_model_view(EIGRPAddressFamily, name='list', path='', detail=False)
 class EIGRPAddressFamilyListView(ObjectListView):
     queryset = EIGRPAddressFamily.objects.all()
     table = EIGRPAddressFamilyTable
@@ -159,7 +165,7 @@ class EIGRPAddressFamilyView(ObjectView):
 
 @register_model_view(EIGRPAddressFamily, name='interfaces')
 class EIGRPAddressFamilyInterfacesView(ObjectChildrenView):
-    #template_name = 'netbox_routing/object_children.html'
+    # template_name = 'netbox_routing/object_children.html'
     queryset = EIGRPAddressFamily.objects.all()
     child_model = EIGRPInterface
     table = EIGRPInterfaceTable
@@ -172,7 +178,7 @@ class EIGRPAddressFamilyInterfacesView(ObjectChildrenView):
 
 @register_model_view(EIGRPAddressFamily, name='networks')
 class EIGRPAddressFamilyNetworksView(ObjectChildrenView):
-    #template_name = 'netbox_routing/object_children.html'
+    # template_name = 'netbox_routing/object_children.html'
     queryset = EIGRPAddressFamily.objects.all()
     child_model = EIGRPNetwork
     table = EIGRPNetworkTable
@@ -186,18 +192,11 @@ class EIGRPAddressFamilyNetworksView(ObjectChildrenView):
         return self.child_model.objects.filter(address_famiily=parent)
 
 
+@register_model_view(EIGRPAddressFamily, name='add', detail=False)
 @register_model_view(EIGRPAddressFamily, name='edit')
 class EIGRPAddressFamilyEditView(ObjectEditView):
     queryset = EIGRPAddressFamily.objects.all()
     form = EIGRPAddressFamilyForm
-
-
-@register_model_view(EIGRPAddressFamily, name='bulk_edit')
-class EIGRPAddressFamilyBulkEditView(BulkEditView):
-    queryset = EIGRPAddressFamily.objects.all()
-    table = EIGRPAddressFamilyTable
-    filterset = EIGRPAddressFamilyFilterSet
-    form = EIGRPAddressFamilyBulkEditForm
 
 
 @register_model_view(EIGRPAddressFamily, name='delete')
@@ -205,13 +204,22 @@ class EIGRPAddressFamilyDeleteView(ObjectDeleteView):
     queryset = EIGRPAddressFamily.objects.all()
 
 
-@register_model_view(EIGRPAddressFamily, name='delete')
+@register_model_view(EIGRPAddressFamily, name='bulk_edit', detail=False)
+class EIGRPAddressFamilyBulkEditView(BulkEditView):
+    queryset = EIGRPAddressFamily.objects.all()
+    table = EIGRPAddressFamilyTable
+    filterset = EIGRPAddressFamilyFilterSet
+    form = EIGRPAddressFamilyBulkEditForm
+
+
+@register_model_view(EIGRPAddressFamily, name='bulk_delete', detail=False)
 class EIGRPAddressFamilyBulkDeleteView(BulkDeleteView):
     queryset = EIGRPAddressFamily.objects.all()
     table = EIGRPAddressFamilyTable
     filterset = EIGRPAddressFamilyFilterSet
 
 
+@register_model_view(EIGRPAddressFamily, name='bulk_import', detail=False)
 class EIGRPAddressFamilyImportView(BulkImportView):
     queryset = EIGRPAddressFamily.objects.all()
     model_form = EIGRPAddressFamilyImportForm
@@ -220,7 +228,7 @@ class EIGRPAddressFamilyImportView(BulkImportView):
 #
 # Network
 #
-@register_model_view(EIGRPNetwork, name='list')
+@register_model_view(EIGRPNetwork, name='list', path='', detail=False)
 class EIGRPNetworkListView(ObjectListView):
     queryset = EIGRPNetwork.objects.all()
     table = EIGRPNetworkTable
@@ -234,6 +242,7 @@ class EIGRPNetworkView(ObjectView):
     template_name = 'netbox_routing/eigrpnetwork.html'
 
 
+@register_model_view(EIGRPNetwork, name='add', detail=False)
 @register_model_view(EIGRPNetwork, name='edit')
 class EIGRPNetworkEditView(ObjectEditView):
     queryset = EIGRPNetwork.objects.all()
@@ -245,11 +254,7 @@ class EIGRPNetworkDeleteView(ObjectDeleteView):
     queryset = EIGRPNetwork.objects.all()
 
 
-class EIGRPNetworkImportView(BulkImportView):
-    queryset = EIGRPNetwork.objects.all()
-    model_form = EIGRPNetworkImportForm
-
-
+@register_model_view(EIGRPNetwork, name='bulk_edit', detail=False)
 class EIGRPNetworkBulkEditView(BulkEditView):
     queryset = EIGRPNetwork.objects.all()
     filterset = EIGRPNetworkFilterSet
@@ -257,16 +262,23 @@ class EIGRPNetworkBulkEditView(BulkEditView):
     form = EIGRPNetworkBulkEditForm
 
 
+@register_model_view(EIGRPNetwork, name='bulk_delete', detail=False)
 class EIGRPNetworkBulkDeleteView(BulkDeleteView):
     queryset = EIGRPNetwork.objects.all()
     filterset = EIGRPNetworkFilterSet
     table = EIGRPNetworkTable
 
 
+@register_model_view(EIGRPNetwork, name='bulk_import', detail=False)
+class EIGRPNetworkImportView(BulkImportView):
+    queryset = EIGRPNetwork.objects.all()
+    model_form = EIGRPNetworkImportForm
+
+
 #
 # Interface
 #
-@register_model_view(EIGRPInterface, name='list')
+@register_model_view(EIGRPInterface, name='list', path='', detail=False)
 class EIGRPInterfaceListView(ObjectListView):
     queryset = EIGRPInterface.objects.all()
     table = EIGRPInterfaceTable
@@ -280,6 +292,7 @@ class EIGRPInterfaceView(ObjectView):
     template_name = 'netbox_routing/eigrpinterface.html'
 
 
+@register_model_view(EIGRPInterface, name='add', detail=False)
 @register_model_view(EIGRPInterface, name='edit')
 class EIGRPInterfaceEditView(ObjectEditView):
     queryset = EIGRPInterface.objects.all()
@@ -291,11 +304,7 @@ class EIGRPInterfaceDeleteView(ObjectDeleteView):
     queryset = EIGRPInterface.objects.all()
 
 
-class EIGRPInterfaceImportView(BulkImportView):
-    queryset = EIGRPInterface.objects.all()
-    model_form = EIGRPInterfaceImportForm
-
-
+@register_model_view(EIGRPInterface, name='bulk_edit', detail=False)
 class EIGRPInterfaceBulkEditView(BulkEditView):
     queryset = EIGRPInterface.objects.all()
     filterset = EIGRPInterfaceFilterSet
@@ -303,7 +312,14 @@ class EIGRPInterfaceBulkEditView(BulkEditView):
     form = EIGRPInterfaceBulkEditForm
 
 
+@register_model_view(EIGRPInterface, name='bulk_delete', detail=False)
 class EIGRPInterfaceBulkDeleteView(BulkDeleteView):
     queryset = EIGRPInterface.objects.all()
     filterset = EIGRPInterfaceFilterSet
     table = EIGRPInterfaceTable
+
+
+@register_model_view(EIGRPInterface, name='bulk_import', detail=False)
+class EIGRPInterfaceImportView(BulkImportView):
+    queryset = EIGRPInterface.objects.all()
+    model_form = EIGRPInterfaceImportForm

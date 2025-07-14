@@ -9,9 +9,9 @@ __all__ = (
     'OSPFAreaTestCase',
     'OSPFInterfaceTestCase',
 
-    #'EIGRPRouterTestCase',
-    #'EIGRPAddressFamilyTestCase',
-    #'EIGRPNetworkTestCase',
-    #'EIGRPInterfaceTestCase',
+    # 'EIGRPRouterTestCase',
+    # 'EIGRPAddressFamilyTestCase',
+    # 'EIGRPNetworkTestCase',
+    # 'EIGRPInterfaceTestCase',
 
 )

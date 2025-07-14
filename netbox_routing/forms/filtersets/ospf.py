@@ -21,21 +21,31 @@ from utilities.forms.rendering import FieldSet
 
 
 class OSPFInstanceFilterForm(NetBoxModelFilterSetForm):
-    device = DynamicModelMultipleChoiceField(
+    device_id = DynamicModelMultipleChoiceField(
         queryset=Device.objects.all(),
         required=False,
         selector=True,
         label=_('Device'),
     )
-    vrf = DynamicModelMultipleChoiceField(
+    vrf_id = DynamicModelMultipleChoiceField(
         queryset=VRF.objects.all(),
         required=False,
         selector=True,
         label=_('VRF'),
     )
+    router_id = forms.CharField(
+        required=False,
+        label=_('Router ID'),
+    )
+    process_id = forms.CharField(
+        required=False,
+        label=_('Process ID'),
+    )
+
     model = OSPFInstance
     fieldsets = (
-        FieldSet('q', 'filter_id', 'tag', 'device'),
+        FieldSet('q', 'filter_id', 'tag', ),
+        FieldSet('device_id', 'vrf_id', 'router_id', 'process_id', name=_('Device')),
     )
     tag = TagFilterField(model)
 
@@ -52,8 +62,8 @@ class OSPFInterfaceFilterForm(NetBoxModelFilterSetForm):
     model = OSPFInterface
     fieldsets = (
         FieldSet('q', 'filter_id', 'tag'),
-        FieldSet('instance', 'area', name=_('OSPF')),
-        FieldSet('interface', name=_('Device')),
+        FieldSet('instance_id', 'area_id', name=_('OSPF')),
+        FieldSet('device_id', 'interface_id', 'vrf_id', name=_('Device')),
         FieldSet('priority', 'bfd', 'authentication', name=_('Attributes'))
     )
     device_id = DynamicModelMultipleChoiceField(

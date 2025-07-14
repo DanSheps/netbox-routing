@@ -4,10 +4,10 @@ from django.db import models
 from django.utils.translation import gettext as _
 
 from netbox.models import PrimaryModel
-from netbox_routing import choices
 from netbox_routing.choices.bgp import BGPSettingChoices, BGPAddressFamilyChoices, BFDChoices
-from netbox_routing.constants.bgp import BGPSETTING_ASSIGNMENT_MODELS, BGPAF_ASSIGNMENT_MODELS, \
-    BGPPEER_ASSIGNMENT_MODELS, BGPPEERAF_ASSIGNMENT_MODELS
+from netbox_routing.constants.bgp import (
+    BGPSETTING_ASSIGNMENT_MODELS, BGPPEER_ASSIGNMENT_MODELS, BGPPEERAF_ASSIGNMENT_MODELS
+)
 from netbox_routing.fields.ip import IPAddressField
 
 

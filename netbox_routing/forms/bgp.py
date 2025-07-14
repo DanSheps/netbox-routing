@@ -27,7 +27,6 @@ class BGPSettingMixin:
         super().__init__(*args, **kwargs)
         self._append_settings_fields()
 
-
     def _append_settings_fields(self):
         assigned_fields = []
         fieldset = (
@@ -106,29 +105,27 @@ class BGPSettingMixin:
 
     def save(self, *args, **kwargs):
         settings = {}
-        for key, _ in BGPSettingChoices.CHOICES:
+        for key in BGPSettingChoices.CHOICES.keys():
             if key in self.cleaned_data:
                 settings[key] = self.cleaned_data.pop(key)
         obj = super().save(*args, **kwargs)
 
-
-
-        for key, _ in BGPSettingChoices.CHOICES:
+        for key in BGPSettingChoices.CHOICES.keys():
             value = settings.get(key, None)
             setting = BGPSetting.objects.filter(
                     assigned_object_type=self.get_assigned_object_type(),
                     assigned_object_id=self.get_assigned_object_id(),
                     key=key
             ).first()
-            print(f'{key}')
+            # print(f'{key}')
             if setting and value:
-                print('\tPrev: {setting.value}')
-                print('\tNew: {value}')
+                # print('\tPrev: {setting.value}')
+                # print('\tNew: {value}')
                 setting.value = settings.get(key)
                 setting.clean()
                 setting.save()
             elif value:
-                print('\tNew: {value}')
+                # print('\tNew: {value}')
                 setting = BGPSetting(
                     assigned_object=self.instance,
                     key=key,
@@ -137,7 +134,7 @@ class BGPSettingMixin:
                 setting.clean()
                 setting.save()
             elif setting:
-                print('\tPrev: {setting.value}')
+                # print('\tPrev: {setting.value}')
                 setting.delete()
 
         return obj
@@ -162,7 +159,6 @@ class BGPRouterForm(BGPSettingMixin, NetBoxModelForm):
         selector=True,
         label=_('ASN'),
     )
-
 
     fieldsets = (
         FieldSet('device', 'asn', name=_('Router')),
@@ -190,7 +186,6 @@ class BGPScopeForm(BGPSettingMixin, NetBoxModelForm):
         label=_('VRF'),
     )
 
-
     fieldsets = (
         FieldSet('router', 'vrf', name=_('Scope')),
     )
@@ -216,7 +211,6 @@ class BGPAddressFamilyForm(BGPSettingMixin, NetBoxModelForm):
         label=_('Address Family'),
     )
 
-
     fieldsets = (
         FieldSet('scope', 'address_family', name=_('Address Family')),
     )
@@ -239,7 +233,6 @@ class BGPSettingForm(NetBoxModelForm):
         required=True,
         label=_('Setting Value'),
     )
-
 
     fieldsets = (
         FieldSet('key', 'value', name=_('Settings')),
