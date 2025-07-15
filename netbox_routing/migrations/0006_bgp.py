@@ -21,14 +21,22 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='BGPAddressFamily',
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False)),
+                (
+                    'id',
+                    models.BigAutoField(
+                        auto_created=True, primary_key=True, serialize=False
+                    ),
+                ),
                 ('created', models.DateTimeField(auto_now_add=True, null=True)),
                 ('last_updated', models.DateTimeField(auto_now=True, null=True)),
-                ('custom_field_data', models.JSONField(
-                    blank=True,
-                    default=dict,
-                    encoder=utilities.json.CustomFieldJSONEncoder
-                )),
+                (
+                    'custom_field_data',
+                    models.JSONField(
+                        blank=True,
+                        default=dict,
+                        encoder=utilities.json.CustomFieldJSONEncoder,
+                    ),
+                ),
                 ('address_family', models.CharField(max_length=50)),
             ],
             options={
@@ -38,25 +46,44 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='BGPRouter',
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False)),
+                (
+                    'id',
+                    models.BigAutoField(
+                        auto_created=True, primary_key=True, serialize=False
+                    ),
+                ),
                 ('created', models.DateTimeField(auto_now_add=True, null=True)),
                 ('last_updated', models.DateTimeField(auto_now=True, null=True)),
-                ('custom_field_data', models.JSONField(
-                    blank=True,
-                    default=dict,
-                    encoder=utilities.json.CustomFieldJSONEncoder
-                )),
-                ('asn', models.ForeignKey(
-                    on_delete=django.db.models.deletion.PROTECT,
-                    related_name='router',
-                    to='ipam.asn'
-                )),
-                ('device', models.ForeignKey(
-                    on_delete=django.db.models.deletion.PROTECT,
-                    related_name='router',
-                    to='dcim.device'
-                )),
-                ('tags', taggit.managers.TaggableManager(through='extras.TaggedItem', to='extras.Tag')),
+                (
+                    'custom_field_data',
+                    models.JSONField(
+                        blank=True,
+                        default=dict,
+                        encoder=utilities.json.CustomFieldJSONEncoder,
+                    ),
+                ),
+                (
+                    'asn',
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.PROTECT,
+                        related_name='router',
+                        to='ipam.asn',
+                    ),
+                ),
+                (
+                    'device',
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.PROTECT,
+                        related_name='router',
+                        to='dcim.device',
+                    ),
+                ),
+                (
+                    'tags',
+                    taggit.managers.TaggableManager(
+                        through='extras.TaggedItem', to='extras.Tag'
+                    ),
+                ),
             ],
             options={
                 'verbose_name': 'BGP Router',
@@ -75,32 +102,57 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='BGPSetting',
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False)),
+                (
+                    'id',
+                    models.BigAutoField(
+                        auto_created=True, primary_key=True, serialize=False
+                    ),
+                ),
                 ('created', models.DateTimeField(auto_now_add=True, null=True)),
                 ('last_updated', models.DateTimeField(auto_now=True, null=True)),
-                ('custom_field_data', models.JSONField(
-                    blank=True,
-                    default=dict,
-                    encoder=utilities.json.CustomFieldJSONEncoder
-                )),
-                ('assigned_object_id', models.PositiveBigIntegerField(blank=True, null=True)),
+                (
+                    'custom_field_data',
+                    models.JSONField(
+                        blank=True,
+                        default=dict,
+                        encoder=utilities.json.CustomFieldJSONEncoder,
+                    ),
+                ),
+                (
+                    'assigned_object_id',
+                    models.PositiveBigIntegerField(blank=True, null=True),
+                ),
                 ('key', models.CharField()),
                 ('value', models.CharField()),
-                ('assigned_object_type', models.ForeignKey(
-                    blank=True,
-                    limit_choices_to=models.Q(
-                        models.Q(
-                            models.Q(('app_label', 'netbox_routing'), ('model', 'bgprouter')),
-                            models.Q(('app_label', 'netbox_routing'), ('model', 'bgpscope')),
-                            _connector='OR'
-                        )
+                (
+                    'assigned_object_type',
+                    models.ForeignKey(
+                        blank=True,
+                        limit_choices_to=models.Q(
+                            models.Q(
+                                models.Q(
+                                    ('app_label', 'netbox_routing'),
+                                    ('model', 'bgprouter'),
+                                ),
+                                models.Q(
+                                    ('app_label', 'netbox_routing'),
+                                    ('model', 'bgpscope'),
+                                ),
+                                _connector='OR',
+                            )
+                        ),
+                        null=True,
+                        on_delete=django.db.models.deletion.PROTECT,
+                        related_name='+',
+                        to='contenttypes.contenttype',
                     ),
-                    null=True,
-                    on_delete=django.db.models.deletion.PROTECT,
-                    related_name='+',
-                    to='contenttypes.contenttype'
-                )),
-                ('tags', taggit.managers.TaggableManager(through='extras.TaggedItem', to='extras.Tag')),
+                ),
+                (
+                    'tags',
+                    taggit.managers.TaggableManager(
+                        through='extras.TaggedItem', to='extras.Tag'
+                    ),
+                ),
             ],
             options={
                 'verbose_name': 'BGP Setting',
@@ -109,21 +161,38 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='BGPSessionTemplate',
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False)),
+                (
+                    'id',
+                    models.BigAutoField(
+                        auto_created=True, primary_key=True, serialize=False
+                    ),
+                ),
                 ('created', models.DateTimeField(auto_now_add=True, null=True)),
                 ('last_updated', models.DateTimeField(auto_now=True, null=True)),
-                ('custom_field_data', models.JSONField(
-                    blank=True,
-                    default=dict,
-                    encoder=utilities.json.CustomFieldJSONEncoder
-                )),
+                (
+                    'custom_field_data',
+                    models.JSONField(
+                        blank=True,
+                        default=dict,
+                        encoder=utilities.json.CustomFieldJSONEncoder,
+                    ),
+                ),
                 ('name', models.CharField(max_length=255)),
                 ('enabled', models.BooleanField(blank=True, null=True)),
-                ('router', models.ForeignKey(
-                    on_delete=django.db.models.deletion.PROTECT,
-                    related_name='session_templates',
-                    to='netbox_routing.bgprouter')),
-                ('tags', taggit.managers.TaggableManager(through='extras.TaggedItem', to='extras.Tag')),
+                (
+                    'router',
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.PROTECT,
+                        related_name='session_templates',
+                        to='netbox_routing.bgprouter',
+                    ),
+                ),
+                (
+                    'tags',
+                    taggit.managers.TaggableManager(
+                        through='extras.TaggedItem', to='extras.Tag'
+                    ),
+                ),
             ],
             options={
                 'abstract': False,
@@ -132,26 +201,46 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='BGPScope',
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False)),
+                (
+                    'id',
+                    models.BigAutoField(
+                        auto_created=True, primary_key=True, serialize=False
+                    ),
+                ),
                 ('created', models.DateTimeField(auto_now_add=True, null=True)),
                 ('last_updated', models.DateTimeField(auto_now=True, null=True)),
-                ('custom_field_data', models.JSONField(
-                    blank=True,
-                    default=dict,
-                    encoder=utilities.json.CustomFieldJSONEncoder
-                )),
-                ('router', models.ForeignKey(
-                    on_delete=django.db.models.deletion.PROTECT,
-                    related_name='scopes',
-                    to='netbox_routing.bgprouter'
-                )),
-                ('tags', taggit.managers.TaggableManager(through='extras.TaggedItem', to='extras.Tag')),
-                ('vrf', models.ForeignKey(
-                    blank=True,
-                    null=True,
-                    on_delete=django.db.models.deletion.PROTECT,
-                    related_name='scopes', to='ipam.vrf'
-                )),
+                (
+                    'custom_field_data',
+                    models.JSONField(
+                        blank=True,
+                        default=dict,
+                        encoder=utilities.json.CustomFieldJSONEncoder,
+                    ),
+                ),
+                (
+                    'router',
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.PROTECT,
+                        related_name='scopes',
+                        to='netbox_routing.bgprouter',
+                    ),
+                ),
+                (
+                    'tags',
+                    taggit.managers.TaggableManager(
+                        through='extras.TaggedItem', to='extras.Tag'
+                    ),
+                ),
+                (
+                    'vrf',
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.PROTECT,
+                        related_name='scopes',
+                        to='ipam.vrf',
+                    ),
+                ),
             ],
             options={
                 'verbose_name': 'BGP Scope',
@@ -160,46 +249,78 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='BGPPoliyTemplate',
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False)),
+                (
+                    'id',
+                    models.BigAutoField(
+                        auto_created=True, primary_key=True, serialize=False
+                    ),
+                ),
                 ('created', models.DateTimeField(auto_now_add=True, null=True)),
                 ('last_updated', models.DateTimeField(auto_now=True, null=True)),
-                ('custom_field_data', models.JSONField(
-                    blank=True,
-                    default=dict,
-                    encoder=utilities.json.CustomFieldJSONEncoder
-                )),
+                (
+                    'custom_field_data',
+                    models.JSONField(
+                        blank=True,
+                        default=dict,
+                        encoder=utilities.json.CustomFieldJSONEncoder,
+                    ),
+                ),
                 ('name', models.CharField(max_length=255)),
                 ('enabled', models.BooleanField(blank=True, null=True)),
-                ('prefixlist_in', models.ForeignKey(
-                    blank=True, null=True,
-                    on_delete=django.db.models.deletion.PROTECT,
-                    related_name='template_afs_in',
-                    to='netbox_routing.prefixlist'
-                )),
-                ('prefixlist_out', models.ForeignKey(
-                    blank=True, null=True,
-                    on_delete=django.db.models.deletion.PROTECT,
-                    related_name='template_afs_out',
-                    to='netbox_routing.prefixlist'
-                )),
-                ('routemap_in', models.ForeignKey(
-                    blank=True, null=True,
-                    on_delete=django.db.models.deletion.PROTECT,
-                    related_name='template_afs_in',
-                    to='netbox_routing.routemap'
-                )),
-                ('routemap_out', models.ForeignKey(
-                    blank=True, null=True,
-                    on_delete=django.db.models.deletion.PROTECT,
-                    related_name='template_afs_out',
-                    to='netbox_routing.routemap'
-                )),
-                ('router', models.ForeignKey(
-                    on_delete=django.db.models.deletion.PROTECT,
-                    related_name='policy_templates',
-                    to='netbox_routing.bgprouter'
-                )),
-                ('tags', taggit.managers.TaggableManager(through='extras.TaggedItem', to='extras.Tag')),
+                (
+                    'prefixlist_in',
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.PROTECT,
+                        related_name='template_afs_in',
+                        to='netbox_routing.prefixlist',
+                    ),
+                ),
+                (
+                    'prefixlist_out',
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.PROTECT,
+                        related_name='template_afs_out',
+                        to='netbox_routing.prefixlist',
+                    ),
+                ),
+                (
+                    'routemap_in',
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.PROTECT,
+                        related_name='template_afs_in',
+                        to='netbox_routing.routemap',
+                    ),
+                ),
+                (
+                    'routemap_out',
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.PROTECT,
+                        related_name='template_afs_out',
+                        to='netbox_routing.routemap',
+                    ),
+                ),
+                (
+                    'router',
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.PROTECT,
+                        related_name='policy_templates',
+                        to='netbox_routing.bgprouter',
+                    ),
+                ),
+                (
+                    'tags',
+                    taggit.managers.TaggableManager(
+                        through='extras.TaggedItem', to='extras.Tag'
+                    ),
+                ),
             ],
             options={
                 'abstract': False,
@@ -208,24 +329,40 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='BGPPeerTemplate',
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False)),
+                (
+                    'id',
+                    models.BigAutoField(
+                        auto_created=True, primary_key=True, serialize=False
+                    ),
+                ),
                 ('created', models.DateTimeField(auto_now_add=True, null=True)),
                 ('last_updated', models.DateTimeField(auto_now=True, null=True)),
-                ('custom_field_data', models.JSONField(
-                    blank=True,
-                    default=dict,
-                    encoder=utilities.json.CustomFieldJSONEncoder
-                )),
+                (
+                    'custom_field_data',
+                    models.JSONField(
+                        blank=True,
+                        default=dict,
+                        encoder=utilities.json.CustomFieldJSONEncoder,
+                    ),
+                ),
                 ('name', models.CharField(max_length=255)),
                 ('enabled', models.BooleanField(blank=True, null=True)),
-                ('remote_as', models.ForeignKey(
-                    blank=True,
-                    null=True,
-                    on_delete=django.db.models.deletion.PROTECT,
-                    related_name='+',
-                    to='ipam.asn'
-                )),
-                ('tags', taggit.managers.TaggableManager(through='extras.TaggedItem', to='extras.Tag')),
+                (
+                    'remote_as',
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.PROTECT,
+                        related_name='+',
+                        to='ipam.asn',
+                    ),
+                ),
+                (
+                    'tags',
+                    taggit.managers.TaggableManager(
+                        through='extras.TaggedItem', to='extras.Tag'
+                    ),
+                ),
             ],
             options={
                 'abstract': False,
@@ -234,73 +371,122 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='BGPPeerAddressFamily',
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False)),
+                (
+                    'id',
+                    models.BigAutoField(
+                        auto_created=True, primary_key=True, serialize=False
+                    ),
+                ),
                 ('created', models.DateTimeField(auto_now_add=True, null=True)),
                 ('last_updated', models.DateTimeField(auto_now=True, null=True)),
-                ('custom_field_data', models.JSONField(
-                    blank=True,
-                    default=dict,
-                    encoder=utilities.json.CustomFieldJSONEncoder
-                )),
-                ('assigned_object_id', models.PositiveBigIntegerField(blank=True, null=True)),
-                ('enabled', models.BooleanField(blank=True, null=True)),
-                ('address_family', models.ForeignKey(
-                    on_delete=django.db.models.deletion.PROTECT,
-                    related_name='address_families',
-                    to='netbox_routing.bgpaddressfamily'
-                )),
-                ('assigned_object_type', models.ForeignKey(
-                    blank=True,
-                    limit_choices_to=models.Q(
-                        models.Q(
-                            models.Q(('app_label', 'netbox_routing'), ('model', 'bgppeer')),
-                            models.Q(('app_label', 'netbox_routing'), ('model', 'bgppeergroup')),
-                            models.Q(('app_label', 'netbox_routing'), ('model', 'bgptemplatepeer')),
-                            models.Q(('app_label', 'netbox_routing'), ('model', 'bgptemplatepeerpolicy')),
-                            _connector='OR'
-                        )
+                (
+                    'custom_field_data',
+                    models.JSONField(
+                        blank=True,
+                        default=dict,
+                        encoder=utilities.json.CustomFieldJSONEncoder,
                     ),
-                    null=True,
-                    on_delete=django.db.models.deletion.PROTECT,
-                    related_name='+',
-                    to='contenttypes.contenttype'
-                )),
-                ('peer_session', models.ForeignKey(
-                    blank=True,
-                    null=True,
-                    on_delete=django.db.models.deletion.PROTECT,
-                    related_name='peer_afs',
-                    to='netbox_routing.bgpsessiontemplate'
-                )),
-                ('prefixlist_in', models.ForeignKey(
-                    blank=True,
-                    null=True,
-                    on_delete=django.db.models.deletion.PROTECT,
-                    related_name='peer_afs_in',
-                    to='netbox_routing.prefixlist'
-                )),
-                ('prefixlist_out', models.ForeignKey(
-                    blank=True,
-                    null=True,
-                    on_delete=django.db.models.deletion.PROTECT,
-                    related_name='peer_afs_out',
-                    to='netbox_routing.prefixlist'
-                )),
-                ('routemap_in', models.ForeignKey(
-                    blank=True,
-                    null=True,
-                    on_delete=django.db.models.deletion.PROTECT,
-                    related_name='peer_afs_in',
-                    to='netbox_routing.routemap'
-                )),
-                ('routemap_out', models.ForeignKey(
-                    blank=True,
-                    null=True,
-                    on_delete=django.db.models.deletion.PROTECT,
-                    related_name='peer_afs_out',
-                    to='netbox_routing.routemap'
-                )),
-                ('tags', taggit.managers.TaggableManager(through='extras.TaggedItem', to='extras.Tag')),
+                ),
+                (
+                    'assigned_object_id',
+                    models.PositiveBigIntegerField(blank=True, null=True),
+                ),
+                ('enabled', models.BooleanField(blank=True, null=True)),
+                (
+                    'address_family',
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.PROTECT,
+                        related_name='address_families',
+                        to='netbox_routing.bgpaddressfamily',
+                    ),
+                ),
+                (
+                    'assigned_object_type',
+                    models.ForeignKey(
+                        blank=True,
+                        limit_choices_to=models.Q(
+                            models.Q(
+                                models.Q(
+                                    ('app_label', 'netbox_routing'),
+                                    ('model', 'bgppeer'),
+                                ),
+                                models.Q(
+                                    ('app_label', 'netbox_routing'),
+                                    ('model', 'bgppeergroup'),
+                                ),
+                                models.Q(
+                                    ('app_label', 'netbox_routing'),
+                                    ('model', 'bgptemplatepeer'),
+                                ),
+                                models.Q(
+                                    ('app_label', 'netbox_routing'),
+                                    ('model', 'bgptemplatepeerpolicy'),
+                                ),
+                                _connector='OR',
+                            )
+                        ),
+                        null=True,
+                        on_delete=django.db.models.deletion.PROTECT,
+                        related_name='+',
+                        to='contenttypes.contenttype',
+                    ),
+                ),
+                (
+                    'peer_session',
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.PROTECT,
+                        related_name='peer_afs',
+                        to='netbox_routing.bgpsessiontemplate',
+                    ),
+                ),
+                (
+                    'prefixlist_in',
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.PROTECT,
+                        related_name='peer_afs_in',
+                        to='netbox_routing.prefixlist',
+                    ),
+                ),
+                (
+                    'prefixlist_out',
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.PROTECT,
+                        related_name='peer_afs_out',
+                        to='netbox_routing.prefixlist',
+                    ),
+                ),
+                (
+                    'routemap_in',
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.PROTECT,
+                        related_name='peer_afs_in',
+                        to='netbox_routing.routemap',
+                    ),
+                ),
+                (
+                    'routemap_out',
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.PROTECT,
+                        related_name='peer_afs_out',
+                        to='netbox_routing.routemap',
+                    ),
+                ),
+                (
+                    'tags',
+                    taggit.managers.TaggableManager(
+                        through='extras.TaggedItem', to='extras.Tag'
+                    ),
+                ),
             ],
             options={
                 'abstract': False,
@@ -309,56 +495,87 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='BGPPeer',
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False)),
+                (
+                    'id',
+                    models.BigAutoField(
+                        auto_created=True, primary_key=True, serialize=False
+                    ),
+                ),
                 ('created', models.DateTimeField(auto_now_add=True, null=True)),
                 ('last_updated', models.DateTimeField(auto_now=True, null=True)),
-                ('custom_field_data', models.JSONField(
-                    blank=True,
-                    default=dict,
-                    encoder=utilities.json.CustomFieldJSONEncoder
-                )),
-                ('assigned_object_id', models.PositiveBigIntegerField(blank=True, null=True)),
-                ('peer', netbox_routing.fields.ip.IPAddressField()),
-                ('enabled', models.BooleanField(
-                    blank=True,
-                    null=True
-                )),
-                ('assigned_object_type', models.ForeignKey(
-                    blank=True,
-                    limit_choices_to=models.Q(
-                        models.Q(
-                            models.Q(('app_label', 'netbox_routing'), ('model', 'bgprouter')),
-                            models.Q(('app_label', 'netbox_routing'), ('model', 'bgpscope')),
-                            _connector='OR'
-                        )
+                (
+                    'custom_field_data',
+                    models.JSONField(
+                        blank=True,
+                        default=dict,
+                        encoder=utilities.json.CustomFieldJSONEncoder,
                     ),
-                    null=True,
-                    on_delete=django.db.models.deletion.PROTECT,
-                    related_name='+',
-                    to='contenttypes.contenttype'
-                )),
-                ('peer_group', models.ForeignKey(
-                    blank=True,
-                    null=True,
-                    on_delete=django.db.models.deletion.PROTECT,
-                    related_name='peers',
-                    to='netbox_routing.bgppeertemplate'
-                )),
-                ('peer_policy', models.ForeignKey(
-                    blank=True,
-                    null=True,
-                    on_delete=django.db.models.deletion.PROTECT,
-                    related_name='peers',
-                    to='netbox_routing.bgppoliytemplate'
-                )),
-                ('remote_as', models.ForeignKey(
-                    blank=True,
-                    null=True,
-                    on_delete=django.db.models.deletion.PROTECT,
-                    related_name='+',
-                    to='ipam.asn'
-                )),
-                ('tags', taggit.managers.TaggableManager(through='extras.TaggedItem', to='extras.Tag')),
+                ),
+                (
+                    'assigned_object_id',
+                    models.PositiveBigIntegerField(blank=True, null=True),
+                ),
+                ('peer', netbox_routing.fields.ip.IPAddressField()),
+                ('enabled', models.BooleanField(blank=True, null=True)),
+                (
+                    'assigned_object_type',
+                    models.ForeignKey(
+                        blank=True,
+                        limit_choices_to=models.Q(
+                            models.Q(
+                                models.Q(
+                                    ('app_label', 'netbox_routing'),
+                                    ('model', 'bgprouter'),
+                                ),
+                                models.Q(
+                                    ('app_label', 'netbox_routing'),
+                                    ('model', 'bgpscope'),
+                                ),
+                                _connector='OR',
+                            )
+                        ),
+                        null=True,
+                        on_delete=django.db.models.deletion.PROTECT,
+                        related_name='+',
+                        to='contenttypes.contenttype',
+                    ),
+                ),
+                (
+                    'peer_group',
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.PROTECT,
+                        related_name='peers',
+                        to='netbox_routing.bgppeertemplate',
+                    ),
+                ),
+                (
+                    'peer_policy',
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.PROTECT,
+                        related_name='peers',
+                        to='netbox_routing.bgppoliytemplate',
+                    ),
+                ),
+                (
+                    'remote_as',
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.PROTECT,
+                        related_name='+',
+                        to='ipam.asn',
+                    ),
+                ),
+                (
+                    'tags',
+                    taggit.managers.TaggableManager(
+                        through='extras.TaggedItem', to='extras.Tag'
+                    ),
+                ),
             ],
             options={
                 'abstract': False,
@@ -370,12 +587,14 @@ class Migration(migrations.Migration):
             field=models.ForeignKey(
                 on_delete=django.db.models.deletion.PROTECT,
                 related_name='address_families',
-                to='netbox_routing.bgpscope'
+                to='netbox_routing.bgpscope',
             ),
         ),
         migrations.AddField(
             model_name='bgpaddressfamily',
             name='tags',
-            field=taggit.managers.TaggableManager(through='extras.TaggedItem', to='extras.Tag'),
+            field=taggit.managers.TaggableManager(
+                through='extras.TaggedItem', to='extras.Tag'
+            ),
         ),
     ]

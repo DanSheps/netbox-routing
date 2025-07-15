@@ -15,8 +15,23 @@ __all__ = (
 class OSPFInstanceTable(NetBoxTable):
     class Meta(NetBoxTable.Meta):
         model = OSPFInstance
-        fields = ('pk', 'id', 'name', 'router_id', 'process_id', 'device', 'vrf', )
-        default_columns = ('pk', 'id', 'name', 'router_id', 'process_id', 'device', )
+        fields = (
+            'pk',
+            'id',
+            'name',
+            'router_id',
+            'process_id',
+            'device',
+            'vrf',
+        )
+        default_columns = (
+            'pk',
+            'id',
+            'name',
+            'router_id',
+            'process_id',
+            'device',
+        )
 
 
 class OSPFAreaTable(NetBoxTable):
@@ -27,22 +42,22 @@ class OSPFAreaTable(NetBoxTable):
 
 
 class OSPFInterfaceTable(NetBoxTable):
-    instance = tables.Column(
-        verbose_name=_('Instance'),
-        linkify=True
-    )
-    area = tables.Column(
-        verbose_name=_('Area'),
-        linkify=True
-    )
-    interface = tables.Column(
-        verbose_name=_('Interface'),
-        linkify=True
-    )
+    instance = tables.Column(verbose_name=_('Instance'), linkify=True)
+    area = tables.Column(verbose_name=_('Area'), linkify=True)
+    interface = tables.Column(verbose_name=_('Interface'), linkify=True)
 
     class Meta(NetBoxTable.Meta):
         model = OSPFInterface
         fields = (
-            'pk', 'id', 'instance', 'area', 'interface', 'passive', 'priority', 'bfd', 'authentication', 'passphrase'
+            'pk',
+            'id',
+            'instance',
+            'area',
+            'interface',
+            'passive',
+            'priority',
+            'bfd',
+            'authentication',
+            'passphrase',
         )
         default_columns = ('pk', 'id', 'instance', 'area', 'interface', 'passive')

@@ -20,25 +20,39 @@ class OSPFInstanceImportForm(NetBoxModelImportForm):
         queryset=Device.objects.all(),
         required=True,
         to_field_name='name',
-        help_text=_('Name of device')
+        help_text=_('Name of device'),
     )
     vrf = CSVModelChoiceField(
         queryset=VRF.objects.all(),
         required=False,
         to_field_name='name',
-        help_text=_('Name of VRF')
+        help_text=_('Name of VRF'),
     )
 
     class Meta:
         model = OSPFInstance
-        fields = ('name', 'router_id', 'process_id', 'device', 'vrf', 'description', 'comments', 'tags',)
+        fields = (
+            'name',
+            'router_id',
+            'process_id',
+            'device',
+            'vrf',
+            'description',
+            'comments',
+            'tags',
+        )
 
 
 class OSPFAreaImportForm(NetBoxModelImportForm):
 
     class Meta:
         model = OSPFArea
-        fields = ('area_id', 'description', 'comments', 'tags',)
+        fields = (
+            'area_id',
+            'description',
+            'comments',
+            'tags',
+        )
 
 
 class OSPFInterfaceImportForm(NetBoxModelImportForm):
@@ -46,21 +60,29 @@ class OSPFInterfaceImportForm(NetBoxModelImportForm):
         queryset=OSPFInstance.objects.all(),
         required=False,
         to_field_name='name',
-        help_text=_('Name of OSPF Instance')
+        help_text=_('Name of OSPF Instance'),
     )
     area = CSVModelChoiceField(
         queryset=OSPFArea.objects.all(),
         required=False,
         to_field_name='name',
-        help_text=_('Area ID')
+        help_text=_('Area ID'),
     )
     interface = CSVModelChoiceField(
         queryset=Interface.objects.all(),
         required=False,
         to_field_name='name',
-        help_text=_('Name of interface')
+        help_text=_('Name of interface'),
     )
 
     class Meta:
         model = OSPFInterface
-        fields = ('instance', 'area', 'interface', 'passive', 'description', 'comments', 'tags',)
+        fields = (
+            'instance',
+            'area',
+            'interface',
+            'passive',
+            'description',
+            'comments',
+            'tags',
+        )

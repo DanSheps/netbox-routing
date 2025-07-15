@@ -1,8 +1,22 @@
 from netbox.api.routers import NetBoxRouter
-from .views import StaticRouteViewSet, PrefixListViewSet, RouteMapViewSet, PrefixListEntryViewSet, \
-    RouteMapEntryViewSet, OSPFInstanceViewSet, OSPFAreaViewSet, OSPFInterfaceViewSet, BGPRouterViewSet, \
-    BGPScopeViewSet, BGPAddressFamilyViewSet, BGPSettingViewSet, EIGRPRouterViewSet, EIGRPAddressFamilyViewSet, \
-    EIGRPNetworkViewSet, EIGRPInterfaceViewSet
+from .views import (
+    StaticRouteViewSet,
+    PrefixListViewSet,
+    RouteMapViewSet,
+    PrefixListEntryViewSet,
+    RouteMapEntryViewSet,
+    OSPFInstanceViewSet,
+    OSPFAreaViewSet,
+    OSPFInterfaceViewSet,
+    BGPRouterViewSet,
+    BGPScopeViewSet,
+    BGPAddressFamilyViewSet,
+    BGPSettingViewSet,
+    EIGRPRouterViewSet,
+    EIGRPAddressFamilyViewSet,
+    EIGRPNetworkViewSet,
+    EIGRPInterfaceViewSet,
+)
 
 router = NetBoxRouter()
 router.register('staticroute', StaticRouteViewSet)

@@ -1,5 +1,3 @@
 from .ip import IPAddressField
 
-__all__ = (
-    'IPAddressField',
-)
+__all__ = ('IPAddressField',)

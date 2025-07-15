@@ -4,11 +4,9 @@ from netbox_routing.tests.static.test_filtersets import *
 
 __all__ = (
     'StaticRouteTestCase',
-
     'OSPFInstanceTestCase',
     'OSPFAreaTestCase',
     'OSPFInterfaceTestCase',
-
     'EIGRPRouterTestCase',
     'EIGRPAddressFamilyTestCase',
     'EIGRPNetworkTestCase',

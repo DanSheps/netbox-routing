@@ -1,13 +1,37 @@
-
-from netbox.views.generic import ObjectListView, ObjectView, ObjectEditView, ObjectDeleteView, ObjectChildrenView, \
-    BulkDeleteView, BulkEditView
-from netbox_routing.filtersets import PrefixListFilterSet, PrefixListEntryFilterSet, RouteMapEntryFilterSet, \
-    RouteMapFilterSet
-from netbox_routing.forms import PrefixListFilterForm, PrefixListForm, PrefixListEntryFilterForm, \
-    PrefixListEntryForm, RouteMapEntryForm, RouteMapEntryFilterForm, RouteMapForm, RouteMapFilterForm, \
-    PrefixListEntryBulkEditForm, RouteMapEntryBulkEditForm
+from netbox.views.generic import (
+    ObjectListView,
+    ObjectView,
+    ObjectEditView,
+    ObjectDeleteView,
+    ObjectChildrenView,
+    BulkDeleteView,
+    BulkEditView,
+)
+from netbox_routing.filtersets import (
+    PrefixListFilterSet,
+    PrefixListEntryFilterSet,
+    RouteMapEntryFilterSet,
+    RouteMapFilterSet,
+)
+from netbox_routing.forms import (
+    PrefixListFilterForm,
+    PrefixListForm,
+    PrefixListEntryFilterForm,
+    PrefixListEntryForm,
+    RouteMapEntryForm,
+    RouteMapEntryFilterForm,
+    RouteMapForm,
+    RouteMapFilterForm,
+    PrefixListEntryBulkEditForm,
+    RouteMapEntryBulkEditForm,
+)
 from netbox_routing.models import PrefixList, PrefixListEntry, RouteMapEntry, RouteMap
-from netbox_routing.tables.objects import PrefixListTable, PrefixListEntryTable, RouteMapEntryTable, RouteMapTable
+from netbox_routing.tables.objects import (
+    PrefixListTable,
+    PrefixListEntryTable,
+    RouteMapEntryTable,
+    RouteMapTable,
+)
 from utilities.views import register_model_view, ViewTab
 
 
@@ -40,7 +64,7 @@ class PrefixListEntriesView(ObjectChildrenView):
         'edit': {'change'},
         'delete': {'delete'},
         'bulk_edit': {'change'},
-        'bulk_delete': {'delete'}
+        'bulk_delete': {'delete'},
     }
     tab = ViewTab(
         label='Entries',
@@ -60,7 +84,7 @@ class PrefixListEntriesView(ObjectChildrenView):
             'parent_name': 'prefix_list',
             'parent_view': 'prefixlist',
             'parent_view_path': 'entries',
-            'view': 'prefixlistentry'
+            'view': 'prefixlistentry',
         }
 
 
@@ -79,6 +103,7 @@ class PrefixListDeleteView(ObjectDeleteView):
 #
 # Prefix List Entry
 #
+
 
 @register_model_view(PrefixListEntry, name='list', path='', detail=False)
 class PrefixListEntryListView(ObjectListView):
@@ -150,7 +175,7 @@ class RouteMapEntriesView(ObjectChildrenView):
         'edit': {'change'},
         'delete': {'delete'},
         'bulk_edit': {'change'},
-        'bulk_delete': {'delete'}
+        'bulk_delete': {'delete'},
     }
     tab = ViewTab(
         label='Entries',
@@ -170,7 +195,7 @@ class RouteMapEntriesView(ObjectChildrenView):
             'parent_name': 'route_map',
             'parent_view': 'routemap',
             'parent_view_path': 'entries',
-            'view': 'routemapentry'
+            'view': 'routemapentry',
         }
 
 

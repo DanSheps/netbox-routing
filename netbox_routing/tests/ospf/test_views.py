@@ -13,15 +13,15 @@ __all__ = (
 
 
 class OSPFInstanceTestCase(
-        IPAddressFieldMixin,
-        ViewTestCases.GetObjectViewTestCase,
-        ViewTestCases.GetObjectChangelogViewTestCase,
-        ViewTestCases.CreateObjectViewTestCase,
-        ViewTestCases.EditObjectViewTestCase,
-        ViewTestCases.DeleteObjectViewTestCase,
-        ViewTestCases.ListObjectsViewTestCase,
-        ViewTestCases.BulkEditObjectsViewTestCase,
-        ViewTestCases.BulkDeleteObjectsViewTestCase,
+    IPAddressFieldMixin,
+    ViewTestCases.GetObjectViewTestCase,
+    ViewTestCases.GetObjectChangelogViewTestCase,
+    ViewTestCases.CreateObjectViewTestCase,
+    ViewTestCases.EditObjectViewTestCase,
+    ViewTestCases.DeleteObjectViewTestCase,
+    ViewTestCases.ListObjectsViewTestCase,
+    ViewTestCases.BulkEditObjectsViewTestCase,
+    ViewTestCases.BulkDeleteObjectsViewTestCase,
 ):
     # ViewTestCases.BulkImportObjectsViewTestCase,
     model = OSPFInstance
@@ -29,12 +29,33 @@ class OSPFInstanceTestCase(
     @classmethod
     def setUpTestData(cls):
         vrf = VRF.objects.create(name='Test')
-        devices = [create_test_device(name='Device 1'), create_test_device(name='Device 2')]
+        devices = [
+            create_test_device(name='Device 1'),
+            create_test_device(name='Device 2'),
+        ]
 
         instances = (
-            cls.model(name="Instance 0", device=devices[0], router_id='0.0.0.0', process_id='0', vrf=None),
-            cls.model(name="Instance 1", device=devices[0], router_id='1.1.1.1', process_id='1', vrf=None),
-            cls.model(name="Instance 2", device=devices[0], router_id='2.2.2.2', process_id='2', vrf=vrf),
+            cls.model(
+                name="Instance 0",
+                device=devices[0],
+                router_id='0.0.0.0',
+                process_id='0',
+                vrf=None,
+            ),
+            cls.model(
+                name="Instance 1",
+                device=devices[0],
+                router_id='1.1.1.1',
+                process_id='1',
+                vrf=None,
+            ),
+            cls.model(
+                name="Instance 2",
+                device=devices[0],
+                router_id='2.2.2.2',
+                process_id='2',
+                vrf=vrf,
+            ),
         )
         cls.model.objects.bulk_create(instances)
 
@@ -48,7 +69,7 @@ class OSPFInstanceTestCase(
 
         cls.bulk_edit_data = {
             'description': 'A test Instance description',
-            'vrf': vrf.pk
+            'vrf': vrf.pk,
         }
 
     def _get_base_url(self):
@@ -56,15 +77,15 @@ class OSPFInstanceTestCase(
 
 
 class OSPFAreaTestCase(
-        IPAddressFieldMixin,
-        ViewTestCases.GetObjectViewTestCase,
-        ViewTestCases.GetObjectChangelogViewTestCase,
-        ViewTestCases.CreateObjectViewTestCase,
-        ViewTestCases.EditObjectViewTestCase,
-        ViewTestCases.DeleteObjectViewTestCase,
-        ViewTestCases.ListObjectsViewTestCase,
-        ViewTestCases.BulkEditObjectsViewTestCase,
-        ViewTestCases.BulkDeleteObjectsViewTestCase,
+    IPAddressFieldMixin,
+    ViewTestCases.GetObjectViewTestCase,
+    ViewTestCases.GetObjectChangelogViewTestCase,
+    ViewTestCases.CreateObjectViewTestCase,
+    ViewTestCases.EditObjectViewTestCase,
+    ViewTestCases.DeleteObjectViewTestCase,
+    ViewTestCases.ListObjectsViewTestCase,
+    ViewTestCases.BulkEditObjectsViewTestCase,
+    ViewTestCases.BulkDeleteObjectsViewTestCase,
 ):
     # ViewTestCases.BulkImportObjectsViewTestCase,
     model = OSPFArea
@@ -82,31 +103,32 @@ class OSPFAreaTestCase(
             'area_id': '4.4.4.4',
         }
 
-        cls.bulk_edit_data = {
-            'description': 'A test Area description'
-        }
+        cls.bulk_edit_data = {'description': 'A test Area description'}
 
     def _get_base_url(self):
         return 'plugins:netbox_routing:ospfarea_{}'
 
 
 class OSPFInterfaceTestCase(
-        IPAddressFieldMixin,
-        ViewTestCases.GetObjectViewTestCase,
-        ViewTestCases.GetObjectChangelogViewTestCase,
-        ViewTestCases.CreateObjectViewTestCase,
-        ViewTestCases.EditObjectViewTestCase,
-        ViewTestCases.DeleteObjectViewTestCase,
-        ViewTestCases.ListObjectsViewTestCase,
-        ViewTestCases.BulkEditObjectsViewTestCase,
-        ViewTestCases.BulkDeleteObjectsViewTestCase,
+    IPAddressFieldMixin,
+    ViewTestCases.GetObjectViewTestCase,
+    ViewTestCases.GetObjectChangelogViewTestCase,
+    ViewTestCases.CreateObjectViewTestCase,
+    ViewTestCases.EditObjectViewTestCase,
+    ViewTestCases.DeleteObjectViewTestCase,
+    ViewTestCases.ListObjectsViewTestCase,
+    ViewTestCases.BulkEditObjectsViewTestCase,
+    ViewTestCases.BulkDeleteObjectsViewTestCase,
 ):
     # ViewTestCases.BulkImportObjectsViewTestCase,
     model = OSPFInterface
 
     @classmethod
     def setUpTestData(cls):
-        devices = [create_test_device(name='Device 1'), create_test_device(name='Device 2')]
+        devices = [
+            create_test_device(name='Device 1'),
+            create_test_device(name='Device 2'),
+        ]
         interfaces = (
             Interface(name='Interface 1', device=devices[0], type='virtual'),
             Interface(name='Interface 2', device=devices[0], type='virtual'),
@@ -116,10 +138,30 @@ class OSPFInterfaceTestCase(
         Interface.objects.bulk_create(interfaces)
 
         instances = (
-            OSPFInstance(name="Instance 0", device=devices[0], router_id='0.0.0.0', process_id='0'),
-            OSPFInstance(name="Instance 1", device=devices[0], router_id='1.1.1.1', process_id='1'),
-            OSPFInstance(name="Instance 2", device=devices[1], router_id='2.2.2.2', process_id='2'),
-            OSPFInstance(name="Instance 3", device=devices[1], router_id='3.3.3.3', process_id='3'),
+            OSPFInstance(
+                name="Instance 0",
+                device=devices[0],
+                router_id='0.0.0.0',
+                process_id='0',
+            ),
+            OSPFInstance(
+                name="Instance 1",
+                device=devices[0],
+                router_id='1.1.1.1',
+                process_id='1',
+            ),
+            OSPFInstance(
+                name="Instance 2",
+                device=devices[1],
+                router_id='2.2.2.2',
+                process_id='2',
+            ),
+            OSPFInstance(
+                name="Instance 3",
+                device=devices[1],
+                router_id='3.3.3.3',
+                process_id='3',
+            ),
         )
         OSPFInstance.objects.bulk_create(instances)
 
@@ -132,9 +174,19 @@ class OSPFInterfaceTestCase(
         OSPFArea.objects.bulk_create(areas)
 
         ospfinterfaces = (
-            cls.model(interface=interfaces[0], instance=instances[0], area=areas[0], passive=False),
+            cls.model(
+                interface=interfaces[0],
+                instance=instances[0],
+                area=areas[0],
+                passive=False,
+            ),
             cls.model(interface=interfaces[1], instance=instances[1], area=areas[1]),
-            cls.model(interface=interfaces[2], instance=instances[2], area=areas[2], passive=False),
+            cls.model(
+                interface=interfaces[2],
+                instance=instances[2],
+                area=areas[2],
+                passive=False,
+            ),
         )
         cls.model.objects.bulk_create(ospfinterfaces)
 

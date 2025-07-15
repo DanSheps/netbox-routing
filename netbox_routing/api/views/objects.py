@@ -1,7 +1,11 @@
 from netbox.api.viewsets import NetBoxModelViewSet
 from netbox_routing import filtersets
-from netbox_routing.api.serializers import PrefixListSerializer, PrefixListEntrySerializer, RouteMapSerializer, \
-    RouteMapEntrySerializer
+from netbox_routing.api.serializers import (
+    PrefixListSerializer,
+    PrefixListEntrySerializer,
+    RouteMapSerializer,
+    RouteMapEntrySerializer,
+)
 from netbox_routing.models import PrefixList, PrefixListEntry, RouteMap, RouteMapEntry
 
 

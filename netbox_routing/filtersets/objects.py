@@ -14,9 +14,7 @@ class PrefixListFilterSet(NetBoxModelFilterSet):
     def search(self, queryset, name, value):
         if not value.strip():
             return queryset
-        qs_filter = (
-            Q(name=value)
-        )
+        qs_filter = Q(name=value)
         return queryset.filter(qs_filter).distinct()
 
 
@@ -35,9 +33,9 @@ class PrefixListEntryFilterSet(NetBoxModelFilterSet):
         if not value.strip():
             return queryset
         qs_filter = (
-            Q(prefix_list__name__icontains=value) |
-            Q(prefix__icontains=value) |
-            Q(type=value)
+            Q(prefix_list__name__icontains=value)
+            | Q(prefix__icontains=value)
+            | Q(type=value)
         )
         return queryset.filter(qs_filter).distinct()
 
@@ -60,9 +58,7 @@ class RouteMapFilterSet(NetBoxModelFilterSet):
     def search(self, queryset, name, value):
         if not value.strip():
             return queryset
-        qs_filter = (
-            Q(name__icontains=value)
-        )
+        qs_filter = Q(name__icontains=value)
         return queryset.filter(qs_filter).distinct()
 
 
@@ -75,8 +71,5 @@ class RouteMapEntryFilterSet(NetBoxModelFilterSet):
     def search(self, queryset, name, value):
         if not value.strip():
             return queryset
-        qs_filter = (
-            Q(route_map__name__icontains=value) |
-            Q(type=value)
-        )
+        qs_filter = Q(route_map__name__icontains=value) | Q(type=value)
         return queryset.filter(qs_filter).distinct()

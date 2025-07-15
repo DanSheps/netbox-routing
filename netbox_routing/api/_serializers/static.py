@@ -8,13 +8,13 @@ from netbox_routing.api.field_serializers import IPAddressField
 from netbox_routing.models import StaticRoute
 
 
-__all__ = (
-    'StaticRouteSerializer'
-)
+__all__ = 'StaticRouteSerializer'
 
 
 class StaticRouteSerializer(NetBoxModelSerializer):
-    url = serializers.HyperlinkedIdentityField(view_name='plugins-api:netbox_routing-api:staticroute-detail')
+    url = serializers.HyperlinkedIdentityField(
+        view_name='plugins-api:netbox_routing-api:staticroute-detail'
+    )
     devices = DeviceSerializer(many=True, nested=True, required=False, allow_null=True)
     vrf = VRFSerializer(nested=True, required=False, allow_null=True)
     next_hop = IPAddressField()
@@ -22,10 +22,28 @@ class StaticRouteSerializer(NetBoxModelSerializer):
     class Meta:
         model = StaticRoute
         fields = (
-            'url', 'id', 'display', 'devices', 'vrf', 'prefix', 'next_hop', 'name', 'metric', 'permanent',
-            'description', 'comments'
+            'url',
+            'id',
+            'display',
+            'devices',
+            'vrf',
+            'prefix',
+            'next_hop',
+            'name',
+            'metric',
+            'permanent',
+            'description',
+            'comments',
         )
-        brief_fields = ('url', 'id', 'display', 'name', 'prefix', 'next_hop', 'description')
+        brief_fields = (
+            'url',
+            'id',
+            'display',
+            'name',
+            'prefix',
+            'next_hop',
+            'description',
+        )
 
     def create(self, validated_data):
         devices = validated_data.pop('devices', None)
