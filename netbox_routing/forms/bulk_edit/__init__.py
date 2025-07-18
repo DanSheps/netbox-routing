@@ -7,7 +7,7 @@ from .eigrp import *
 __all__ = (
     # Staticroute
     'StaticRouteBulkEditForm',
-    
+
     # OSPF
     'OSPFInstanceBulkEditForm',
     'OSPFInterfaceBulkEditForm',
@@ -23,4 +23,3 @@ __all__ = (
     'PrefixListEntryBulkEditForm',
     'RouteMapEntryBulkEditForm'
 )
-

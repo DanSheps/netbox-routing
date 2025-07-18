@@ -69,7 +69,6 @@ class EIGRPAddressFamilyForm(NetBoxModelForm):
     )
     comments = CommentField()
 
-
     class Meta:
         model = EIGRPAddressFamily
         fields = (
@@ -97,7 +96,6 @@ class EIGRPNetworkForm(NetBoxModelForm):
         label=_('Prefix'),
     )
     comments = CommentField()
-
 
     class Meta:
         model = EIGRPNetwork
@@ -148,7 +146,6 @@ class EIGRPInterfaceForm(NetBoxModelForm):
         )
     )
     comments = CommentField()
-
 
     class Meta:
         model = EIGRPInterface

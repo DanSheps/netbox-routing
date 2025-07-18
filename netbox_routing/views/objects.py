@@ -14,7 +14,7 @@ from utilities.views import register_model_view, ViewTab
 #
 # Prefix List
 #
-@register_model_view(PrefixList, name='list')
+@register_model_view(PrefixList, name='list', path='', detail=False)
 class PrefixListListView(ObjectListView):
     queryset = PrefixList.objects.all()
     table = PrefixListTable
@@ -64,11 +64,14 @@ class PrefixListEntriesView(ObjectChildrenView):
         }
 
 
+@register_model_view(PrefixList, name='add', detail=False)
+@register_model_view(PrefixList, name='edit')
 class PrefixListEditView(ObjectEditView):
     queryset = PrefixList.objects.all()
     form = PrefixListForm
 
 
+@register_model_view(PrefixList, name='delete')
 class PrefixListDeleteView(ObjectDeleteView):
     pass
 
@@ -76,6 +79,8 @@ class PrefixListDeleteView(ObjectDeleteView):
 #
 # Prefix List Entry
 #
+
+@register_model_view(PrefixListEntry, name='list', path='', detail=False)
 class PrefixListEntryListView(ObjectListView):
     queryset = PrefixListEntry.objects.all()
     table = PrefixListEntryTable
@@ -83,20 +88,25 @@ class PrefixListEntryListView(ObjectListView):
     filterset_form = PrefixListEntryFilterForm
 
 
+@register_model_view(PrefixListEntry)
 class PrefixListEntryView(ObjectView):
     queryset = PrefixListEntry.objects.all()
     template_name = 'netbox_routing/prefixlistentry.html'
 
 
+@register_model_view(PrefixListEntry, name='add', detail=False)
+@register_model_view(PrefixListEntry, name='edit')
 class PrefixListEntryEditView(ObjectEditView):
     queryset = PrefixListEntry.objects.all()
     form = PrefixListEntryForm
 
 
+@register_model_view(PrefixListEntry, name='delete')
 class PrefixListEntryDeleteView(ObjectDeleteView):
     pass
 
 
+@register_model_view(PrefixListEntry, name='bulk_edit', detail=False)
 class PrefixListEntryBulkEditView(BulkEditView):
     queryset = PrefixListEntry.objects.all()
     filterset = PrefixListEntryFilterSet
@@ -104,6 +114,7 @@ class PrefixListEntryBulkEditView(BulkEditView):
     form = PrefixListEntryBulkEditForm
 
 
+@register_model_view(PrefixListEntry, name='bulk_delete', detail=False)
 class PrefixListEntryBulkDeleteView(BulkDeleteView):
     queryset = PrefixListEntry.objects.all()
     filterset = PrefixListEntryFilterSet
@@ -113,6 +124,7 @@ class PrefixListEntryBulkDeleteView(BulkDeleteView):
 #
 # Route Map
 #
+@register_model_view(RouteMap, name='list', path='', detail=False)
 class RouteMapListView(ObjectListView):
     queryset = RouteMap.objects.all()
     table = RouteMapTable
@@ -120,6 +132,7 @@ class RouteMapListView(ObjectListView):
     filterset_form = RouteMapFilterForm
 
 
+@register_model_view(RouteMap)
 class RouteMapView(ObjectView):
     queryset = RouteMap.objects.all()
     template_name = 'netbox_routing/routemap.html'
@@ -161,11 +174,14 @@ class RouteMapEntriesView(ObjectChildrenView):
         }
 
 
+@register_model_view(RouteMap, name='add', detail=False)
+@register_model_view(RouteMap, name='edit')
 class RouteMapEditView(ObjectEditView):
     queryset = RouteMap.objects.all()
     form = RouteMapForm
 
 
+@register_model_view(RouteMap, name='delete')
 class RouteMapDeleteView(ObjectDeleteView):
     pass
 
@@ -173,6 +189,7 @@ class RouteMapDeleteView(ObjectDeleteView):
 #
 # Route Map Entry
 #
+@register_model_view(RouteMapEntry, name='list', path='', detail=False)
 class RouteMapEntryListView(ObjectListView):
     queryset = RouteMapEntry.objects.all()
     table = RouteMapEntryTable
@@ -180,20 +197,25 @@ class RouteMapEntryListView(ObjectListView):
     filterset_form = RouteMapEntryFilterForm
 
 
+@register_model_view(RouteMapEntry)
 class RouteMapEntryView(ObjectView):
     queryset = RouteMapEntry.objects.all()
     template_name = 'netbox_routing/routemapentry.html'
 
 
+@register_model_view(RouteMapEntry, name='add', detail=False)
+@register_model_view(RouteMapEntry, name='edit')
 class RouteMapEntryEditView(ObjectEditView):
     queryset = RouteMapEntry.objects.all()
     form = RouteMapEntryForm
 
 
+@register_model_view(RouteMapEntry, name='delete')
 class RouteMapEntryDeleteView(ObjectDeleteView):
     pass
 
 
+@register_model_view(RouteMapEntry, name='bulk_edit', detail=False)
 class RouteMapEntryBulkEditView(BulkEditView):
     queryset = RouteMapEntry.objects.all()
     filterset = RouteMapEntryFilterSet
@@ -201,6 +223,7 @@ class RouteMapEntryBulkEditView(BulkEditView):
     form = RouteMapEntryBulkEditForm
 
 
+@register_model_view(RouteMapEntry, name='bulk_delete', detail=False)
 class RouteMapEntryBulkDeleteView(BulkDeleteView):
     queryset = RouteMapEntry.objects.all()
     filterset = RouteMapEntryFilterSet

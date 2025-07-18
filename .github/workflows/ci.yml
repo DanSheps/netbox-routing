@@ -38,8 +38,6 @@ jobs:
           - 5432:5432
 
     steps:
-      - name: Echo concurrency group
-        run: echo "::info ci-${{ github.event_name }}-${{ github.ref }}-${{ github.actor }}"
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v5
         with:
@@ -48,7 +46,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: netbox-community/netbox
-          ref: master
+          ref: main
           path: netbox
 
       - name: Check out repo
@@ -60,9 +58,13 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r netbox/requirements.txt
-          pip install pycodestyle coverage tblib
+          pip install ruff black coverage tblib
           pip install -e netbox-routing
           cp -f netbox-routing/.github/configuration.testing.py netbox/netbox/netbox/configuration_testing.py
+
+      - name: Check PEP8 compliance
+        run: |
+          ruff check netbox-routing/netbox_routing/
 
       - name: Run tests
         run: coverage run --source="netbox-routing/netbox_routing" netbox/netbox/manage.py test netbox-routing/netbox_routing --parallel

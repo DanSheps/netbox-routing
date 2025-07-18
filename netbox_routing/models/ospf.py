@@ -142,4 +142,3 @@ class OSPFInterface(PrimaryModel):
 
     def get_absolute_url(self):
         return reverse('plugins:netbox_routing:ospfinterface', args=[self.pk])
-

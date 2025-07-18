@@ -31,7 +31,6 @@ class EIGRPAddressFamilySerializer(NetBoxModelSerializer):
     url = serializers.HyperlinkedIdentityField(view_name='plugins-api:netbox_routing-api:eigrpaddressfamily-detail')
     router = EIGRPRouterSerializer(nested=True)
 
-
     class Meta:
         model = EIGRPAddressFamily
         fields = (

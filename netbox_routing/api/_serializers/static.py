@@ -30,20 +30,19 @@ class StaticRouteSerializer(NetBoxModelSerializer):
     def create(self, validated_data):
         devices = validated_data.pop('devices', None)
         instance = super(StaticRouteSerializer, self).create(validated_data)
-        
+
         return self._update_devices(instance, devices)
-    
+
     def update(self, instance, validated_data):
         devices = validated_data.pop('devices', None)
         instance = super(StaticRouteSerializer, self).update(instance, validated_data)
-        
+
         return self._update_devices(instance, devices)
-    
+
     def _update_devices(self, instance: StaticRoute, devices: object) -> StaticRoute:
         if devices:
             instance.devices.set(devices)
         elif devices is not None:
             instance.devices.clear()
-        
+
         return instance
-        

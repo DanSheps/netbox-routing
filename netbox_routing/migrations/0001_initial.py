@@ -25,7 +25,10 @@ class Migration(migrations.Migration):
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False)),
                 ('created', models.DateTimeField(auto_now_add=True, null=True)),
                 ('last_updated', models.DateTimeField(auto_now=True, null=True)),
-                ('custom_field_data', models.JSONField(blank=True, default=dict, encoder=django.core.serializers.json.DjangoJSONEncoder)),
+                ('custom_field_data', models.JSONField(
+                    blank=True, default=dict,
+                    encoder=django.core.serializers.json.DjangoJSONEncoder
+                )),
                 ('name', models.CharField(max_length=255)),
                 ('tags', taggit.managers.TaggableManager(through='extras.TaggedItem', to='extras.Tag')),
             ],
@@ -39,7 +42,10 @@ class Migration(migrations.Migration):
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False)),
                 ('created', models.DateTimeField(auto_now_add=True, null=True)),
                 ('last_updated', models.DateTimeField(auto_now=True, null=True)),
-                ('custom_field_data', models.JSONField(blank=True, default=dict, encoder=django.core.serializers.json.DjangoJSONEncoder)),
+                ('custom_field_data', models.JSONField(
+                    blank=True, default=dict,
+                    encoder=django.core.serializers.json.DjangoJSONEncoder
+                )),
                 ('name', models.CharField(max_length=255)),
                 ('tags', taggit.managers.TaggableManager(through='extras.TaggedItem', to='extras.Tag')),
             ],
@@ -53,7 +59,11 @@ class Migration(migrations.Migration):
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False)),
                 ('created', models.DateTimeField(auto_now_add=True, null=True)),
                 ('last_updated', models.DateTimeField(auto_now=True, null=True)),
-                ('custom_field_data', models.JSONField(blank=True, default=dict, encoder=django.core.serializers.json.DjangoJSONEncoder)),
+                ('custom_field_data', models.JSONField(
+                    blank=True,
+                    default=dict,
+                    encoder=django.core.serializers.json.DjangoJSONEncoder
+                )),
                 ('prefix', ipam.fields.IPNetworkField()),
                 ('next_hop', netbox_routing.fields.ip.IPAddressField()),
                 ('name', models.CharField(blank=True, max_length=50, null=True)),
@@ -61,7 +71,13 @@ class Migration(migrations.Migration):
                 ('permanent', models.BooleanField()),
                 ('devices', models.ManyToManyField(related_name='static_routes', to='dcim.device')),
                 ('tags', taggit.managers.TaggableManager(through='extras.TaggedItem', to='extras.Tag')),
-                ('vrf', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT, related_name='staticroutes', to='ipam.vrf')),
+                ('vrf', models.ForeignKey(
+                    blank=True,
+                    null=True,
+                    on_delete=django.db.models.deletion.PROTECT,
+                    related_name='staticroutes',
+                    to='ipam.vrf'
+                )),
             ],
         ),
         migrations.CreateModel(
@@ -70,10 +86,18 @@ class Migration(migrations.Migration):
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False)),
                 ('created', models.DateTimeField(auto_now_add=True, null=True)),
                 ('last_updated', models.DateTimeField(auto_now=True, null=True)),
-                ('custom_field_data', models.JSONField(blank=True, default=dict, encoder=django.core.serializers.json.DjangoJSONEncoder)),
+                ('custom_field_data', models.JSONField(
+                    blank=True,
+                    default=dict,
+                    encoder=django.core.serializers.json.DjangoJSONEncoder
+                )),
                 ('type', models.CharField(max_length=6)),
                 ('sequence', models.PositiveSmallIntegerField()),
-                ('route_map', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='entries', to='netbox_routing.routemap')),
+                ('route_map', models.ForeignKey(
+                    on_delete=django.db.models.deletion.PROTECT,
+                    related_name='entries',
+                    to='netbox_routing.routemap'
+                )),
                 ('tags', taggit.managers.TaggableManager(through='extras.TaggedItem', to='extras.Tag')),
             ],
             options={
@@ -86,13 +110,21 @@ class Migration(migrations.Migration):
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False)),
                 ('created', models.DateTimeField(auto_now_add=True, null=True)),
                 ('last_updated', models.DateTimeField(auto_now=True, null=True)),
-                ('custom_field_data', models.JSONField(blank=True, default=dict, encoder=django.core.serializers.json.DjangoJSONEncoder)),
+                ('custom_field_data', models.JSONField(
+                    blank=True,
+                    default=dict,
+                    encoder=django.core.serializers.json.DjangoJSONEncoder
+                )),
                 ('sequence', models.PositiveSmallIntegerField()),
                 ('type', models.CharField(max_length=6)),
                 ('prefix', ipam.fields.IPNetworkField()),
                 ('ge', models.PositiveSmallIntegerField(blank=True, null=True)),
                 ('le', models.PositiveSmallIntegerField(blank=True, null=True)),
-                ('prefix_list', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='entries', to='netbox_routing.prefixlist')),
+                ('prefix_list', models.ForeignKey(
+                    on_delete=django.db.models.deletion.PROTECT,
+                    related_name='entries',
+                    to='netbox_routing.prefixlist'
+                )),
                 ('tags', taggit.managers.TaggableManager(through='extras.TaggedItem', to='extras.Tag')),
             ],
             options={
@@ -101,6 +133,8 @@ class Migration(migrations.Migration):
         ),
         migrations.AddConstraint(
             model_name='staticroute',
-            constraint=models.CheckConstraint(check=models.Q(models.Q(('metric__lte', 255), ('metric__gte', 0))), name='metric_gte_lte'),
+            constraint=models.CheckConstraint(
+                check=models.Q(models.Q(('metric__lte', 255), ('metric__gte', 0))), name='metric_gte_lte'
+            ),
         ),
     ]

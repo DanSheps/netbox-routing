@@ -8,7 +8,7 @@ from .static import StaticRouteForm
 from .eigrp import *
 
 __all__ = (
-    
+
     # Static Routes
     'StaticRouteForm',
     'StaticRouteFilterForm',

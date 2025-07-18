@@ -18,8 +18,8 @@ class OSPFInstanceTestCase(TestCase):
 
     @classmethod
     def setUpTestData(cls):
-        vrf = VRF.objects.create(name='Test VRF')
-        device = create_test_device(name='Device 1')
+        cls.vrf = VRF.objects.create(name='Test VRF')
+        cls.device = create_test_device(name='Device 1')
 
     def test_instance(self):
         form = OSPFInstanceForm(data={
@@ -84,14 +84,14 @@ class OSPFInterfaceTestCase(TestCase):
     @classmethod
     def setUpTestData(cls):
         device = create_test_device(name='Device 1')
-        interface = Interface.objects.create(name='Interface 1', device=device, type='virtual')
-        instance = OSPFInstance.objects.create(
+        cls.interface = Interface.objects.create(name='Interface 1', device=device, type='virtual')
+        cls.instance = OSPFInstance.objects.create(
             name='Instance 1',
             router_id='10.10.10.1',
             process_id=0,
             device_id=device.pk
         )
-        area = OSPFArea.objects.create(area_id='0.0.0.0')
+        cls.area = OSPFArea.objects.create(area_id='0.0.0.0')
 
     def test_interface_with_correct_device(self):
         form = OSPFInterfaceForm(data={

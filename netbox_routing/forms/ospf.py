@@ -6,7 +6,7 @@ from dcim.models import Interface, Device
 from ipam.models import VRF
 from netbox.forms import NetBoxModelForm
 from utilities.forms import BOOLEAN_WITH_BLANK_CHOICES
-from utilities.forms.fields import DynamicModelChoiceField, DynamicModelMultipleChoiceField, CommentField
+from utilities.forms.fields import DynamicModelChoiceField, CommentField
 
 from netbox_routing.models import OSPFArea, OSPFInstance, OSPFInterface
 
@@ -78,7 +78,6 @@ class OSPFInterfaceForm(NetBoxModelForm):
         }
     )
     comments = CommentField()
-
 
     class Meta:
         model = OSPFInterface

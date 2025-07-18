@@ -46,7 +46,7 @@ class OSPFInstanceTestCase(IPAddressFieldMixin, APIViewTestCases.APIViewTestCase
         ]
 
 
-class OSPFAreaTestCase(IPAddressFieldMixin , APIViewTestCases.APIViewTestCase):
+class OSPFAreaTestCase(IPAddressFieldMixin, APIViewTestCases.APIViewTestCase):
     model = OSPFArea
     view_namespace = 'plugins-api:netbox_routing'
     brief_fields = ['area_id', 'area_type', 'display', 'id', 'url', ]

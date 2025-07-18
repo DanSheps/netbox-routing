@@ -1,6 +1,6 @@
 import django_filters
 import netaddr
-from django import forms
+
 from django.core.exceptions import ValidationError
 from django.db.models import Q
 from django.utils.translation import gettext as _
@@ -91,7 +91,7 @@ class EIGRPAddressFamilyFilterSet(RouterMixin, NetBoxModelFilterSet):
 
     class Meta:
         model = EIGRPAddressFamily
-        fields = ('router_id', 'router', 'device_id', 'device', 'rid', 'family' )
+        fields = ('router_id', 'router', 'device_id', 'device', 'rid', 'family', )
 
     def search(self, queryset, name, value):
         if not value.strip():
@@ -231,4 +231,3 @@ class EIGRPInterfaceFilterSet(NetBoxModelFilterSet):
             Q(interface__device__name__icontains=value)
         )
         return queryset.filter(qs_filter).distinct()
-
