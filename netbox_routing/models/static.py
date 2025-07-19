@@ -1,6 +1,8 @@
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import CheckConstraint, Q
 from django.urls import reverse
+from django.utils.translation import gettext as _
 
 from ipam.fields import IPNetworkField
 from netbox.models import PrimaryModel
@@ -23,16 +25,18 @@ class StaticRoute(PrimaryModel):
         related_name='staticroutes',
         blank=True,
         null=True,
-        verbose_name='VRF'
     )
-    prefix = IPNetworkField(help_text='IPv4 or IPv6 network with mask')
-    next_hop = IPAddressField()
+    prefix = IPNetworkField(
+        help_text=_('IPv4 or IPv6 network with mask'),
+    )
+    next_hop = IPAddressField(
+        verbose_name=_('Next Hop'),
+    )
     name = models.CharField(
         max_length=50,
         verbose_name='Name',
         blank=True,
         null=True,
-        help_text='Optional name for this static route'
     )
     metric = models.PositiveSmallIntegerField(
         verbose_name='Metric',
@@ -40,10 +44,8 @@ class StaticRoute(PrimaryModel):
         default=1,
     )
     permanent = models.BooleanField(default=False, blank=True, null=True,)
-
     tag = models.IntegerField(
         verbose_name='Tag',
-        help_text='Optional tag for this static route',
         blank=True,
         null=True
     )
@@ -60,7 +62,7 @@ class StaticRoute(PrimaryModel):
             models.UniqueConstraint(
                 'vrf', 'prefix', 'next_hop',
                 name='%(app_label)s_%(class)s_unique_vrf_prefix_nexthop',
-                violation_error_message="VRF, Prefix and Next Hop must be unique."
+                violation_error_message=_('VRF, Prefix and Next Hop must be unique.'),
             ),
         )
 
@@ -71,3 +73,10 @@ class StaticRoute(PrimaryModel):
 
     def get_absolute_url(self):
         return reverse('plugins:netbox_routing:staticroute', args=[self.pk])
+
+    def clean(self):
+        super().clean()
+
+        # IPv4 and IPv6 cannot be mixed.
+        if self.prefix.version != self.next_hop.version:
+            raise ValidationError(_('The IP version must be the same for the prefix and next hop.'))
