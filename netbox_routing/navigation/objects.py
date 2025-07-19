@@ -1,4 +1,3 @@
-from netbox.choices import ButtonColorChoices as ColorChoices
 from netbox.plugins import PluginMenuButton, PluginMenuItem
 
 
@@ -16,8 +15,8 @@ prefixlist = PluginMenuItem(
     link_text='Prefix Lists',
     permissions=['netbox_routing.view_prefixlist'],
     buttons=(
-        PluginMenuButton('plugins:netbox_routing:prefixlist_add', 'Add', COL_ADD, ColorChoices.GREEN),
-        PluginMenuButton('plugins:netbox_routing:prefixlist_bulk_import', 'Import', COL_IMPORT, ColorChoices.CYAN),
+        PluginMenuButton('plugins:netbox_routing:prefixlist_add', 'Add', COL_ADD),
+        PluginMenuButton('plugins:netbox_routing:prefixlist_bulk_import', 'Import', COL_IMPORT),
     )
 )
 routemap = PluginMenuItem(
@@ -25,8 +24,8 @@ routemap = PluginMenuItem(
     link_text='Route Maps',
     permissions=['netbox_routing.view_routemap'],
     buttons=(
-        PluginMenuButton('plugins:netbox_routing:routemap_add', 'Add', COL_ADD, ColorChoices.GREEN),
-        PluginMenuButton('plugins:netbox_routing:routemap_bulk_import', 'Import', COL_IMPORT, ColorChoices.CYAN),
+        PluginMenuButton('plugins:netbox_routing:routemap_add', 'Add', COL_ADD),
+        PluginMenuButton('plugins:netbox_routing:routemap_bulk_import', 'Import', COL_IMPORT),
     )
 )
 
