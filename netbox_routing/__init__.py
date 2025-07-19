@@ -16,7 +16,9 @@ class NetboxRouting(PluginConfig):
     min_version = '4.1.0'
     required_settings = []
     caching_config = {}
-    default_settings = {}
+    default_settings = {
+        'menu_name': 'NetBox Routing',
+    }
     graphql_schema = 'graphql.schema.schema'
 
 

@@ -1,4 +1,5 @@
 from netbox.plugins import PluginMenu
+from netbox.plugins.utils import get_plugin_config
 
 # from .bgp import MENUITEMS as BGP_MENU
 # from .objects import MENUITEMS as OBJECT_MENU
@@ -12,7 +13,7 @@ __all__ = (
 )
 
 menu = PluginMenu(
-    label='Netbox Routing',
+    label=get_plugin_config('netbox_routing', 'menu_name'),
     groups=(
         # ('Routing Objects', OBJECT_MENU),
         ('Static', STATIC_MENU),
