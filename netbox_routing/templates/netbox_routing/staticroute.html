@@ -8,75 +8,71 @@
   <div class="col col-md-6">
     <div class="card">
       <h5 class="card-header">Details</h5>
-      <div class="card-body">
-        <table class="table table-hover attr-table">
-          <tr>
-            <th scope="row">Name</th>
-            <td>
-              {{object.name}}
-            </td>
-          </tr>
-          <tr>
-            <th scope="row">Description</th>
-            <td>
-              {{object.description}}
-            </td>
-          </tr>
-        </table>
-      </div>
+      <table class="table table-hover attr-table">
+        <tr>
+          <th scope="row">Name</th>
+          <td>
+            {{object.name}}
+          </td>
+        </tr>
+        <tr>
+          <th scope="row">Description</th>
+          <td>
+            {{object.description}}
+          </td>
+        </tr>
+      </table>
     </div>
     <div class="card">
       <h5 class="card-header">Static Route</h5>
-      <div class="card-body">
-        <table class="table table-hover attr-table">
-          <tr>
-            <th scope="row">VRF</th>
-            <td>
-              {% if object.vrf %}
-                <a href="{% url 'ipam:vrf' pk=object.vrf.pk %}">{{ object.vrf }}</a>
-              {% else %}
-                <span>Global</span>
-              {% endif %}
-            </td>
-          </tr>
-          <tr>
-            <th scope="row">Prefix</th>
-            <td>
-              {{ object.prefix }}
-            </td>
-          </tr>
-          <tr>
-            <th scope="row">Next Hop</th>
-            <td>
-              {{ object.next_hop }}
-            </td>
-          </tr>
-          <tr>
-            <th scope="row">Name</th>
-            <td>
-              {{ object.name|placeholder }}
-            </td>
-          </tr>
-          <tr>
-            <th scope="row">Metric</th>
-            <td>
-              {{ object.metric }}
-            </td>
-          </tr>
-          <tr>
-            <th scope="row">Permanent</th>
-            <td>
-              {{ object.permanent }}
-            </td>
-          </tr>
-          <tr>
-            <th scope="row">Route Tag</th>
-            <td>
-              {{ object.tag }}
-            </td>
-          </tr>
-        </table>
-      </div>
+      <table class="table table-hover attr-table">
+        <tr>
+          <th scope="row">VRF</th>
+          <td>
+            {% if object.vrf %}
+              <a href="{% url 'ipam:vrf' pk=object.vrf.pk %}">{{ object.vrf }}</a>
+            {% else %}
+              <span>Global</span>
+            {% endif %}
+          </td>
+        </tr>
+        <tr>
+          <th scope="row">Prefix</th>
+          <td>
+            {{ object.prefix }}
+          </td>
+        </tr>
+        <tr>
+          <th scope="row">Next Hop</th>
+          <td>
+            {{ object.next_hop }}
+          </td>
+        </tr>
+        <tr>
+          <th scope="row">Name</th>
+          <td>
+            {{ object.name|placeholder }}
+          </td>
+        </tr>
+        <tr>
+          <th scope="row">Metric</th>
+          <td>
+            {{ object.metric }}
+          </td>
+        </tr>
+        <tr>
+          <th scope="row">Permanent</th>
+          <td>
+            {{ object.permanent }}
+          </td>
+        </tr>
+        <tr>
+          <th scope="row">Route Tag</th>
+          <td>
+            {{ object.tag }}
+          </td>
+        </tr>
+      </table>
     </div>
       {% plugin_left_page object %}
   </div>

@@ -8,34 +8,32 @@
   <div class="col col-md-6">
     <div class="card">
       <h5 class="card-header">EIGRP Details</h5>
-      <div class="card-body">
-        <table class="table table-hover attr-table">
-          <tr>
-            <th scope="row">Router</th>
-            <td>
-              {{ object.router }}
-            </td>
-          </tr>
-          <tr>
-            <th scope="row">VRF</th>
-            <td>
-              {{ object.vrf }}
-            </td>
-          </tr>
-          <tr>
-            <th scope="row">Family</th>
-            <td>
-              {{ object.family }}
-            </td>
-          </tr>
-          <tr>
-            <th scope="row">Router ID</th>
-            <td>
-              {% if object.rid %}{{ object.rid }}{% else %}{{ object.router.rid}}{% endif %}
-            </td>
-          </tr>
-        </table>
-      </div>
+      <table class="table table-hover attr-table">
+        <tr>
+          <th scope="row">Router</th>
+          <td>
+            {{ object.router }}
+          </td>
+        </tr>
+        <tr>
+          <th scope="row">VRF</th>
+          <td>
+            {{ object.vrf }}
+          </td>
+        </tr>
+        <tr>
+          <th scope="row">Family</th>
+          <td>
+            {{ object.family }}
+          </td>
+        </tr>
+        <tr>
+          <th scope="row">Router ID</th>
+          <td>
+            {% if object.rid %}{{ object.rid }}{% else %}{{ object.router.rid}}{% endif %}
+          </td>
+        </tr>
+      </table>
     </div>
       {% plugin_left_page object %}
   </div>
