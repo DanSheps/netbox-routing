@@ -48,6 +48,8 @@ class StaticRouteDevicesView(ObjectChildrenView):
     tab = ViewTab(
         label='Assigned Devices',
         badge=lambda obj: Device.objects.filter(static_routes=obj).count(),
+        permission='netbox_routing.view_staticroute',
+        hide_if_empty=True,
     )
 
     def get_children(self, request, parent):
