@@ -15,8 +15,18 @@ prefixlist = PluginMenuItem(
     link_text='Prefix Lists',
     permissions=['netbox_routing.view_prefixlist'],
     buttons=(
-        PluginMenuButton('plugins:netbox_routing:prefixlist_add', 'Add', COL_ADD),
-        PluginMenuButton('plugins:netbox_routing:prefixlist_bulk_import', 'Import', COL_IMPORT),
+        PluginMenuButton(
+            link='plugins:netbox_routing:prefixlist_add',
+            title='Add',
+            icon_class=COL_ADD,
+            permissions=['netbox_routing.add_prefixlist'],
+        ),
+        PluginMenuButton(
+            link='plugins:netbox_routing:prefixlist_bulk_import',
+            title='Import',
+            icon_class=COL_IMPORT,
+            permissions=['netbox_routing.add_prefixlist'],
+        ),
     )
 )
 routemap = PluginMenuItem(
@@ -24,8 +34,18 @@ routemap = PluginMenuItem(
     link_text='Route Maps',
     permissions=['netbox_routing.view_routemap'],
     buttons=(
-        PluginMenuButton('plugins:netbox_routing:routemap_add', 'Add', COL_ADD),
-        PluginMenuButton('plugins:netbox_routing:routemap_bulk_import', 'Import', COL_IMPORT),
+        PluginMenuButton(
+            link='plugins:netbox_routing:routemap_add',
+            title='Add',
+            icon_class=COL_ADD,
+            permissions=['netbox_routing.add_routemap'],
+        ),
+        PluginMenuButton(
+            link='plugins:netbox_routing:routemap_bulk_import',
+            title='Import',
+            icon_class=COL_IMPORT,
+            permissions=['netbox_routing.add_routemap'],
+        ),
     )
 )
 
