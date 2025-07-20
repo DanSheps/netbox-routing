@@ -8,59 +8,55 @@
   <div class="col col-md-6">
     <div class="card">
       <h5 class="card-header"></h5>
-      <div class="card-body">
-        <table class="table table-hover attr-table">
-          <tr>
-            <th scope="row">Router</th>
-            <td>
-              {{ object.router|linkify }}
-            </td>
-          </tr>
-          <tr>
-            <th scope="row">Address Family</th>
-            <td>
-              {{ object.address_family|linkify }}
-            </td>
-          </tr>
-          <tr>
-            <th scope="row">Interface</th>
-            <td>
-              {{ object.interface|linkify }}
-            </td>
-          </tr>
-        </table>
-      </div>
+      <table class="table table-hover attr-table">
+        <tr>
+          <th scope="row">Router</th>
+          <td>
+            {{ object.router|linkify }}
+          </td>
+        </tr>
+        <tr>
+          <th scope="row">Address Family</th>
+          <td>
+            {{ object.address_family|linkify }}
+          </td>
+        </tr>
+        <tr>
+          <th scope="row">Interface</th>
+          <td>
+            {{ object.interface|linkify }}
+          </td>
+        </tr>
+      </table>
     </div>
     <div class="card">
       <h5 class="card-header">Attributes</h5>
-      <div class="card-body">
-        <table class="table table-hover attr-table">
-          <tr>
-            <th scope="row">Passive</th>
-            <td>
-              {{ object.passive|placeholder }}
-            </td>
-          </tr>
-          <tr>
-            <th scope="row">BFD</th>
-            <td>
-              {{ object.bfd|placeholder }}
-            </td>
-          </tr>
-          <tr>
-            <th scope="row">Authentication Type</th>
-            <td>
-              {{ object.authentication|placeholder }}
-            </td>
-          </tr>
-          <tr>
-            <th scope="row">Passphrase (or keyring)</th>
-            <td>
-              {{ object.passphrase|placeholder }}
-            </td>
-          </tr>
-        </table>
-      </div>
+      <table class="table table-hover attr-table">
+        <tr>
+          <th scope="row">Passive</th>
+          <td>
+            {{ object.passive|placeholder }}
+          </td>
+        </tr>
+        <tr>
+          <th scope="row">BFD</th>
+          <td>
+            {{ object.bfd|placeholder }}
+          </td>
+        </tr>
+        <tr>
+          <th scope="row">Authentication Type</th>
+          <td>
+            {{ object.authentication|placeholder }}
+          </td>
+        </tr>
+        <tr>
+          <th scope="row">Passphrase (or keyring)</th>
+          <td>
+            {{ object.passphrase|placeholder }}
+          </td>
+        </tr>
+      </table>
     </div>
       {% plugin_left_page object %}
   </div>
