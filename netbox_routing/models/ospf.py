@@ -7,6 +7,7 @@ from django.utils.translation import gettext as _
 from netbox.models import PrimaryModel
 
 from netbox_routing import choices
+from netbox_routing.choices.ospf import OSPFAreaTypeChoices
 from netbox_routing.fields.ip import IPAddressField
 
 
@@ -52,7 +53,13 @@ class OSPFInstance(PrimaryModel):
 
 class OSPFArea(PrimaryModel):
     area_id = models.CharField(max_length=100, verbose_name='Area ID')
-
+    area_type = models.CharField(
+        verbose_name=_('Area Type'),
+        choices=OSPFAreaTypeChoices,
+        blank=False,
+        null=False,
+        default='standard',
+    )
     prerequisite_models = ()
     clone_fields = ()
 

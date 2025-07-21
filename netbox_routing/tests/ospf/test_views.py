@@ -93,17 +93,21 @@ class OSPFAreaTestCase(
     @classmethod
     def setUpTestData(cls):
         areas = (
-            cls.model(area_id='0.0.0.0'),
-            cls.model(area_id='1.1.1.1'),
-            cls.model(area_id='2.2.2.2'),
+            cls.model(area_id='0.0.0.0', area_type='stub'),
+            cls.model(area_id='1.1.1.1', area_type='tsa'),
+            cls.model(area_id='2.2.2.2', area_type='nssa'),
         )
         cls.model.objects.bulk_create(areas)
 
         cls.form_data = {
             'area_id': '4.4.4.4',
+            'area_type': 'standard',
         }
 
-        cls.bulk_edit_data = {'description': 'A test Area description'}
+        cls.bulk_edit_data = {
+            'description': 'A test Area description',
+            'area_type': 'backbone',
+        }
 
     def _get_base_url(self):
         return 'plugins:netbox_routing:ospfarea_{}'

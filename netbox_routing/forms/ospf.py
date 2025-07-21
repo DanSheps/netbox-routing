@@ -53,6 +53,7 @@ class OSPFAreaForm(NetBoxModelForm):
         model = OSPFArea
         fields = (
             'area_id',
+            'area_type',
             'description',
             'comments',
         )

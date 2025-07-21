@@ -59,6 +59,7 @@ class OSPFAreaSerializer(NetBoxModelSerializer):
             'id',
             'display',
             'area_id',
+            'area_type',
             'description',
             'comments',
         )
@@ -67,6 +68,7 @@ class OSPFAreaSerializer(NetBoxModelSerializer):
             'id',
             'display',
             'area_id',
+            'area_type',
         )
 
 
