@@ -61,6 +61,7 @@ class OSPFAreaTestCase(TestCase):
         form = OSPFAreaForm(
             data={
                 'area_id': '0.0.0.0',
+                'area_type': 'standard',
             }
         )
         self.assertTrue(form.is_valid())
@@ -70,6 +71,7 @@ class OSPFAreaTestCase(TestCase):
         form = OSPFAreaForm(
             data={
                 'area_id': '0',
+                'area_type': 'standard',
             }
         )
         self.assertTrue(form.is_valid())
@@ -79,6 +81,7 @@ class OSPFAreaTestCase(TestCase):
         form = OSPFAreaForm(
             data={
                 'area_id': 'a.a.a.a',
+                'area_type': 'standard',
             }
         )
         self.assertFalse(form.is_valid())

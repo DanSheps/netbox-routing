@@ -49,6 +49,7 @@ class OSPFAreaImportForm(NetBoxModelImportForm):
         model = OSPFArea
         fields = (
             'area_id',
+            'area_type',
             'description',
             'comments',
             'tags',

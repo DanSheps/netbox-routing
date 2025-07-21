@@ -5,6 +5,7 @@ from dcim.models import Interface, Device
 from ipam.models import VRF
 from netbox.forms import NetBoxModelFilterSetForm
 from netbox_routing.choices import AuthenticationChoices
+from netbox_routing.choices.ospf import OSPFAreaTypeChoices
 from utilities.forms import BOOLEAN_WITH_BLANK_CHOICES, add_blank_choice
 from utilities.forms.fields import TagFilterField, DynamicModelMultipleChoiceField
 
@@ -56,7 +57,10 @@ class OSPFInstanceFilterForm(NetBoxModelFilterSetForm):
 
 class OSPFAreaFilterForm(NetBoxModelFilterSetForm):
     model = OSPFArea
-    fieldsets = (FieldSet('q', 'filter_id', 'tag'),)
+    fieldsets = (FieldSet('q', 'filter_id', 'area_type', 'tag'),)
+    area_type = forms.ChoiceField(
+        choices=add_blank_choice(OSPFAreaTypeChoices), label='Area Type', required=False
+    )
     tag = TagFilterField(model)
 
 
