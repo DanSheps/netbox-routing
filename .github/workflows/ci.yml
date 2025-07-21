@@ -69,8 +69,8 @@ jobs:
       - name: Check Black
         uses: psf/black@stable
         with:
+          options: "--check --skip-string-normalization"
           src: "netbox-routing/netbox_routing"
-          use_pyproject: true
 
       - name: Run tests
         run: coverage run --source="netbox-routing/netbox_routing" netbox/netbox/manage.py test netbox-routing/netbox_routing --parallel
