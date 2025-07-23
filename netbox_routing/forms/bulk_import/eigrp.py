@@ -93,7 +93,6 @@ class EIGRPInterfaceImportForm(NetBoxModelImportForm):
     address_family = CSVModelChoiceField(
         queryset=EIGRPAddressFamily.objects.all(),
         required=False,
-        to_field_name='id',
         help_text=_('ID of Address Family')
     )
     interface = CSVModelChoiceField(
