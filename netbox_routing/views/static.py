@@ -78,7 +78,8 @@ class StaticRouteBulkDeleteView(BulkDeleteView):
     filterset = StaticRouteFilterSet
     table = StaticRouteTable
     
-@register_model_view(StaticRoute, name='import')
+
+@register_model_view(StaticRoute, name='bulk_import', detail=False)
 class StaticRouteBulkImportView(BulkImportView):
     queryset = StaticRoute.objects.all()
     model_form = StaticRouteImportForm
