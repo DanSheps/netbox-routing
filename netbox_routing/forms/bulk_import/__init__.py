@@ -1,5 +1,5 @@
 from .ospf import *
-from .eigrp import EIGRPRouterImportForm, EIGRPAddressFamilyImportForm, EIGRPNetworkImportForm, EIGRPInterfaceImportForm
+from .eigrp import *
 from .static import *
 
 
