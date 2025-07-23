@@ -26,7 +26,6 @@ class OSPFAreaTable(NetBoxTable):
         default_columns = ('pk', 'id', 'area_id')
 
 
-
 class OSPFInterfaceTable(NetBoxTable):
     instance = tables.Column(
         verbose_name=_('Instance'),
