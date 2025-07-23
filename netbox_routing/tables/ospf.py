@@ -32,7 +32,7 @@ class OSPFInterfaceTable(NetBoxTable):
         verbose_name=_('Instance'),
         linkify=True
     )
-    instance_device = tables.Column(
+    device = tables.Column(
         verbose_name=_('Device'),
         linkify=True,
         accessor='instance__device',
