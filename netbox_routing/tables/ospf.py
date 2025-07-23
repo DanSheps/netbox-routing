@@ -35,7 +35,7 @@ class OSPFInterfaceTable(NetBoxTable):
     instance_device = tables.Column(
         verbose_name=_('Device'),
         linkify=True,
-        accessor='instance.device',
+        accessor='instance__device',
     )
     area = tables.Column(
         verbose_name=_('Area'),
