@@ -4,7 +4,6 @@ from dcim.models import Interface, Device
 from ipam.models import Prefix, VRF
 from ipam.choices import IPAddressFamilyChoices
 from netbox.forms import NetBoxModelImportForm
-# from django.db.models import CharField
 from utilities.forms.fields import CSVModelChoiceField
 
 from netbox_routing.models import *
@@ -45,13 +44,6 @@ class EIGRPAddressFamilyImportForm(NetBoxModelImportForm):
         to_field_name='name',
         help_text=_('Name of VRF (if applicable)')
     )
-    
-    # family = CSVModelChoiceField(
-    #     queryset=IPAddressFamilyChoices.objects.all(),
-    #     required=True,
-    #     to_field_name='name',
-    #     help_text=_('IPv4/IPv6 Address Family')
-    # )
     
     class Meta:
         model = EIGRPAddressFamily
