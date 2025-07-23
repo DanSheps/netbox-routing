@@ -46,13 +46,6 @@ class EIGRPAddressFamilyImportForm(NetBoxModelImportForm):
         help_text=_('Name of VRF (if applicable)')
     )
     
-    # family = CSVModelChoiceField(
-    #     queryset=IPAddressFamilyChoices.objects.all(),
-    #     required=True,
-    #     to_field_name='name',
-    #     help_text=_('IPv4/IPv6 Address Family')
-    # )
-    
     class Meta:
         model = EIGRPAddressFamily
         fields = ('router', 'vrf', 'family', 'rid', 'description', 'comments', 'tags',)
