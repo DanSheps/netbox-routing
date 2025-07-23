@@ -49,6 +49,6 @@ class OSPFInterfaceTable(NetBoxTable):
     class Meta(NetBoxTable.Meta):
         model = OSPFInterface
         fields = (
-            'pk', 'id', 'instance', 'instance_device', 'area', 'interface', 'passive', 'priority', 'bfd', 'authentication', 'passphrase'
+            'pk', 'id', 'instance', 'device', 'area', 'interface', 'passive', 'priority', 'bfd', 'authentication', 'passphrase'
         )
         default_columns = ('pk', 'id', 'instance', 'area', 'interface', 'passive')
