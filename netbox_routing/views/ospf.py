@@ -53,7 +53,7 @@ class OSPFInstanceView(ObjectView):
 
 @register_model_view(OSPFInstance, name='interfaces')
 class OSPFInstanceInterfacesView(ObjectChildrenView):
-    template_name = 'netbox_routing/object_children.html'
+    template_name = 'netbox_routing/ospf_interfaces.html'
     queryset = OSPFInstance.objects.all()
     child_model = OSPFInterface
     table = OSPFInterfaceTable
@@ -66,6 +66,11 @@ class OSPFInstanceInterfacesView(ObjectChildrenView):
 
     def get_children(self, request, parent):
         return self.child_model.objects.filter(instance=parent)
+
+    def get_extra_context(self, request, instance):
+        return {
+            'form_interface_assignment': 'instance',
+        }
 
 
 @register_model_view(OSPFInstance, 'add', detail=False)
@@ -120,7 +125,7 @@ class OSPFAreaView(ObjectView):
 
 @register_model_view(OSPFArea, name='interfaces')
 class OSPFAreaInterfacesView(ObjectChildrenView):
-    template_name = 'netbox_routing/object_children.html'
+    template_name = 'netbox_routing/ospf_interfaces.html'
     queryset = OSPFArea.objects.all()
     child_model = OSPFInterface
     table = OSPFInterfaceTable
@@ -132,6 +137,11 @@ class OSPFAreaInterfacesView(ObjectChildrenView):
 
     def get_children(self, request, parent):
         return self.child_model.objects.filter(area=parent)
+
+    def get_extra_context(self, request, instance):
+        return {
+            'form_interface_assignment': 'area',
+        }
 
 
 @register_model_view(OSPFArea, name='add', detail=False)
