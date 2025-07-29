@@ -21,16 +21,22 @@ class PrefixListTable(NetBoxTable):
 
 
 class PrefixListEntryTable(NetBoxTable):
-    prefix_list = tables.Column(
-        verbose_name=_('Prefix List'),
-        linkify=True
-    )
+    prefix_list = tables.Column(verbose_name=_('Prefix List'), linkify=True)
     type = columns.ChoiceFieldColumn()
 
     class Meta(NetBoxTable.Meta):
         model = PrefixListEntry
-        fields = ('pk', 'id', 'prefix_list', 'sequence', 'type', 'prefix', 'le', 'ge')
-        default_columns = ('pk', 'id', 'prefix_list', 'sequence', 'type', 'prefix', 'le', 'ge')
+        fields = ('pk', 'id', 'prefix_list', 'sequence', 'action', 'prefix', 'le', 'ge')
+        default_columns = (
+            'pk',
+            'id',
+            'prefix_list',
+            'sequence',
+            'action',
+            'prefix',
+            'le',
+            'ge',
+        )
 
 
 class RouteMapTable(NetBoxTable):
@@ -41,13 +47,10 @@ class RouteMapTable(NetBoxTable):
 
 
 class RouteMapEntryTable(NetBoxTable):
-    route_map = tables.Column(
-        verbose_name=_('Route Map'),
-        linkify=True
-    )
+    route_map = tables.Column(verbose_name=_('Route Map'), linkify=True)
     type = columns.ChoiceFieldColumn()
 
     class Meta(NetBoxTable.Meta):
         model = RouteMapEntry
-        fields = ('pk', 'id', 'route_map', 'sequence', 'type')
-        default_columns = ('pk', 'id', 'route_map', 'sequence', 'type')
+        fields = ('pk', 'id', 'route_map', 'sequence', 'action')
+        default_columns = ('pk', 'id', 'route_map', 'sequence', 'action')

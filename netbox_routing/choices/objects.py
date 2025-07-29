@@ -4,14 +4,16 @@ from graphene_django import DjangoObjectType
 from utilities.choices import ChoiceSet
 
 
+class PermitDenyChoiceMixin:
+    def get_type_color(self):
+        return PermitDenyChoices.colors.get(self.type)
+
+
 class PermitDenyChoices(ChoiceSet):
     PERMIT = 'permit'
     DENY = 'deny'
 
-    CHOICES = [
-        (PERMIT, 'Permit', 'blue'),
-        (DENY, 'Deny', 'red')
-    ]
+    CHOICES = [(PERMIT, 'Permit', 'blue'), (DENY, 'Deny', 'red')]
 
 
 class RouteMapOptions(ChoiceSet):
@@ -42,7 +44,7 @@ class RouteMapOptions(ChoiceSet):
     MATCH_V6_IP_NEXTHOP_ACL = 'match_v6_nh_acl'
     MATCH_V6_IP_ROUTESOURCE_PREFIXLIST = 'match_v6_rs_prefixlist'
     MATCH_V6_IP_ROUTESOURCE_ACL = 'match_v6_rs_acl'
-    
+
     MATCH_INTERFACE = 'match_interface'
 
     #
@@ -62,13 +64,23 @@ class RouteMapOptions(ChoiceSet):
     ]
 
     FIELD_TYPES = {
-        MATCH_V4_IP_PREFFIXLIST: {'model': 'netbox_routing.PrefixList', 'multiple': True},
-        MATCH_V6_IP_PREFFIXLIST: {'model': 'netbox_routing.PrefixList', 'multiple': True},
+        MATCH_V4_IP_PREFFIXLIST: {
+            'model': 'netbox_routing.PrefixList',
+            'multiple': True,
+        },
+        MATCH_V6_IP_PREFFIXLIST: {
+            'model': 'netbox_routing.PrefixList',
+            'multiple': True,
+        },
         MATCH_INTERFACE: 'char',
         SET_INTERFACE: 'char',
     }
 
     DYNAMIC_MODEL_RESTRICTIONS = {
-        MATCH_V4_IP_PREFFIXLIST: {'family': 'ipv4', },
-        MATCH_V6_IP_PREFFIXLIST: {'family': 'ipv6', }
+        MATCH_V4_IP_PREFFIXLIST: {
+            'family': 'ipv4',
+        },
+        MATCH_V6_IP_PREFFIXLIST: {
+            'family': 'ipv6',
+        },
     }
