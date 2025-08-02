@@ -1,4 +1,3 @@
-from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import CheckConstraint, Q
 from django.urls import reverse
@@ -73,10 +72,3 @@ class StaticRoute(PrimaryModel):
 
     def get_absolute_url(self):
         return reverse('plugins:netbox_routing:staticroute', args=[self.pk])
-
-    def clean(self):
-        super().clean()
-
-        # IPv4 and IPv6 cannot be mixed.
-        if self.prefix.version != self.next_hop.version:
-            raise ValidationError(_('The IP version must be the same for the prefix and next hop.'))
