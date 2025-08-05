@@ -199,6 +199,7 @@ class OSPFInterfaceDeleteView(ObjectDeleteView):
 @register_model_view(OSPFInterface, name='bulk_import', detail=False)
 class OSPFInterfaceBulkImportView(BulkImportView):
     queryset = OSPFInterface.objects.all()
+    model_form = OSPFInterfaceImportForm
 
 
 @register_model_view(OSPFInterface, name='bulk_edit', detail=False)
