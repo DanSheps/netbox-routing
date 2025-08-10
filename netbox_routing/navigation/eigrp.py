@@ -1,6 +1,4 @@
-from netbox.choices import ButtonColorChoices as ColorChoices
-from netbox.plugins import PluginMenuItem, PluginMenuButton
-
+from netbox.plugins import PluginMenuButton, PluginMenuItem
 
 __all__ = ('eigrp',)
 
@@ -15,13 +13,16 @@ routers = PluginMenuItem(
     permissions=['netbox_routing.view_eigrprouter'],
     buttons=(
         PluginMenuButton(
-            'plugins:netbox_routing:eigrprouter_add', 'Add', COL_ADD, ColorChoices.GREEN
+            link='plugins:netbox_routing:eigrprouter_add',
+            title='Add',
+            icon_class=COL_ADD,
+            permissions=['netbox_routing.add_eigrprouter'],
         ),
         PluginMenuButton(
-            'plugins:netbox_routing:eigrprouter_bulk_import',
-            'Import',
-            COL_IMPORT,
-            ColorChoices.CYAN,
+            link='plugins:netbox_routing:eigrprouter_bulk_import',
+            title='Import',
+            icon_class=COL_IMPORT,
+            permissions=['netbox_routing.add_eigrprouter'],
         ),
     ),
 )
@@ -31,10 +32,10 @@ address_families = PluginMenuItem(
     permissions=['netbox_routing.view_eigrpaddressfamily'],
     buttons=(
         PluginMenuButton(
-            'plugins:netbox_routing:eigrpaddressfamily_add',
-            'Add',
-            COL_ADD,
-            ColorChoices.GREEN,
+            link='plugins:netbox_routing:eigrpaddressfamily_add',
+            title='Add',
+            icon_class=COL_ADD,
+            permissions=['netbox_routing.add_eigrpaddressfamily'],
         ),
     ),
 )
@@ -44,10 +45,10 @@ networks = PluginMenuItem(
     permissions=['netbox_routing.view_eigrpnetwork'],
     buttons=(
         PluginMenuButton(
-            'plugins:netbox_routing:eigrpnetwork_add',
-            'Add',
-            COL_ADD,
-            ColorChoices.GREEN,
+            link='plugins:netbox_routing:eigrpnetwork_add',
+            title='Add',
+            icon_class=COL_ADD,
+            permissions=['netbox_routing.add_eigrpnetwork'],
         ),
     ),
 )
@@ -57,10 +58,10 @@ interfaces = PluginMenuItem(
     permissions=['netbox_routing.view_eigrpinterface'],
     buttons=(
         PluginMenuButton(
-            'plugins:netbox_routing:eigrpinterface_add',
-            'Add',
-            COL_ADD,
-            ColorChoices.GREEN,
+            link='plugins:netbox_routing:eigrpinterface_add',
+            title='Add',
+            icon_class=COL_ADD,
+            permissions=['netbox_routing.add_eigrpinterface'],
         ),
     ),
 )
