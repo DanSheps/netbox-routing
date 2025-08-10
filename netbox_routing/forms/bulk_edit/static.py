@@ -5,15 +5,17 @@ from dcim.models import Device
 from ipam.models import VRF
 from netbox.forms import NetBoxModelBulkEditForm
 from utilities.forms import BOOLEAN_WITH_BLANK_CHOICES
-from utilities.forms.fields import DynamicModelChoiceField, DynamicModelMultipleChoiceField, CommentField
+from utilities.forms.fields import (
+    DynamicModelChoiceField,
+    DynamicModelMultipleChoiceField,
+    CommentField,
+)
 from utilities.forms.rendering import FieldSet
 
 from netbox_routing.models import StaticRoute
 
 
-__all__ = (
-    'StaticRouteBulkEditForm',
-)
+__all__ = ('StaticRouteBulkEditForm',)
 
 
 class StaticRouteBulkEditForm(NetBoxModelBulkEditForm):
@@ -30,12 +32,12 @@ class StaticRouteBulkEditForm(NetBoxModelBulkEditForm):
         selector=True,
     )
     metric = forms.IntegerField(label=_('Metric'), required=False)
-    permanent = forms.ChoiceField(label=_('Permanent'), choices=BOOLEAN_WITH_BLANK_CHOICES, required=False)
+    permanent = forms.ChoiceField(
+        label=_('Permanent'), choices=BOOLEAN_WITH_BLANK_CHOICES, required=False
+    )
 
     description = forms.CharField(
-        label=_('Description'),
-        max_length=200,
-        required=False
+        label=_('Description'), max_length=200, required=False
     )
     comments = CommentField()
 
@@ -43,6 +45,15 @@ class StaticRouteBulkEditForm(NetBoxModelBulkEditForm):
     fieldsets = (
         FieldSet('devices', 'vrf', 'prefix', 'next_hop', name='Route'),
         FieldSet('metric', 'permanent', name='Attributes'),
-        FieldSet('description', )
+        FieldSet(
+            'description',
+        ),
     )
-    nullable_fields = ('devices', 'vrf', 'metric', 'permanent', 'description', 'comments')
+    nullable_fields = (
+        'devices',
+        'vrf',
+        'metric',
+        'permanent',
+        'description',
+        'comments',
+    )

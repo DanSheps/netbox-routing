@@ -5,9 +5,7 @@ from django.test import TestCase
 
 # from netbox_routing.models import *
 
-__all__ = (
-    'StaticRouteTestCase',
-)
+__all__ = ('StaticRouteTestCase',)
 
 
 class StaticRouteTestCase(TestCase):

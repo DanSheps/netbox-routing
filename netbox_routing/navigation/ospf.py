@@ -1,9 +1,6 @@
-from netbox.plugins import PluginMenuItem, PluginMenuButton
+from netbox.plugins import PluginMenuButton, PluginMenuItem
 
-
-__all__ = (
-    'MENUITEMS',
-)
+__all__ = ('MENUITEMS',)
 
 
 ospf_instance = PluginMenuItem(
@@ -23,7 +20,7 @@ ospf_instance = PluginMenuItem(
             icon_class='mdi mdi-upload',
             permissions=['netbox_routing.add_ospfinstance'],
         ),
-    )
+    ),
 )
 ospf_area = PluginMenuItem(
     link='plugins:netbox_routing:ospfarea_list',
@@ -42,7 +39,7 @@ ospf_area = PluginMenuItem(
             icon_class='mdi mdi-upload',
             permissions=['netbox_routing.add_ospfarea'],
         ),
-    )
+    ),
 )
 ospf_interfaces = PluginMenuItem(
     link='plugins:netbox_routing:ospfinterface_list',
@@ -61,7 +58,7 @@ ospf_interfaces = PluginMenuItem(
             icon_class='mdi mdi-upload',
             permissions=['netbox_routing.add_ospfinterface'],
         ),
-    )
+    ),
 )
 
 MENUITEMS = (ospf_instance, ospf_area, ospf_interfaces)

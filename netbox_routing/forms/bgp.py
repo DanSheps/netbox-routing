@@ -30,7 +30,8 @@ class BGPSettingMixin:
     def _append_settings_fields(self):
         assigned_fields = []
         fieldset = (
-            _('Settings'), [
+            _('Settings'),
+            [
                 'router_id',
                 'asdot',
                 'timers_keepalive',
@@ -49,24 +50,23 @@ class BGPSettingMixin:
                 'additional_paths_send',
                 'additional_paths_install',
                 'test',
-            ]
+            ],
         )
         for key, label in BGPSettingChoices.CHOICES:
             initial = None
             if hasattr(self, 'instance'):
                 setting = BGPSetting.objects.filter(
-                        assigned_object_type=ContentType.objects.get_for_model(self.Meta.model),
-                        assigned_object_id=self.instance.pk,
-                        key=key
+                    assigned_object_type=ContentType.objects.get_for_model(
+                        self.Meta.model
+                    ),
+                    assigned_object_id=self.instance.pk,
+                    key=key,
                 ).first()
                 if setting:
                     initial = setting.value
             if BGPSettingChoices.FIELD_TYPES[key] == 'ipaddr':
                 self.fields[key] = fields.CharField(
-                    label=label,
-                    required=False,
-                    initial=initial,
-                    max_length=128
+                    label=label, required=False, initial=initial, max_length=128
                 )
                 css = self.fields[key].widget.attrs.get('class', '')
                 self.fields[key].widget.attrs['class'] = f'{css} form-control'
@@ -76,7 +76,7 @@ class BGPSettingMixin:
                     required=False,
                     initial=initial,
                     min_value=0,
-                    max_value=65535
+                    max_value=65535,
                 )
                 css = self.fields[key].widget.attrs.get('class', '')
                 self.fields[key].widget.attrs['class'] = f'{css} form-control'
@@ -90,7 +90,7 @@ class BGPSettingMixin:
                     label=label,
                     required=False,
                     initial=initial,
-                    widget=forms.Select(choices=choices)
+                    widget=forms.Select(choices=choices),
                 )
                 css = self.fields[key].widget.attrs.get('class', '')
                 self.fields[key].widget.attrs['class'] = f'{css} form-control'
@@ -113,9 +113,9 @@ class BGPSettingMixin:
         for key in BGPSettingChoices.CHOICES.keys():
             value = settings.get(key, None)
             setting = BGPSetting.objects.filter(
-                    assigned_object_type=self.get_assigned_object_type(),
-                    assigned_object_id=self.get_assigned_object_id(),
-                    key=key
+                assigned_object_type=self.get_assigned_object_type(),
+                assigned_object_id=self.get_assigned_object_id(),
+                key=key,
             ).first()
             # print(f'{key}')
             if setting and value:
@@ -129,7 +129,7 @@ class BGPSettingMixin:
                 setting = BGPSetting(
                     assigned_object=self.instance,
                     key=key,
-                    value=settings.get(key, None)
+                    value=settings.get(key, None),
                 )
                 setting.clean()
                 setting.save()
@@ -160,13 +160,14 @@ class BGPRouterForm(BGPSettingMixin, NetBoxModelForm):
         label=_('ASN'),
     )
 
-    fieldsets = (
-        FieldSet('device', 'asn', name=_('Router')),
-    )
+    fieldsets = (FieldSet('device', 'asn', name=_('Router')),)
 
     class Meta:
         model = BGPRouter
-        fields = ['device', 'asn', ]
+        fields = [
+            'device',
+            'asn',
+        ]
 
     def save(self, *args, **kwargs):
         return super().save(*args, **kwargs)
@@ -186,13 +187,14 @@ class BGPScopeForm(BGPSettingMixin, NetBoxModelForm):
         label=_('VRF'),
     )
 
-    fieldsets = (
-        FieldSet('router', 'vrf', name=_('Scope')),
-    )
+    fieldsets = (FieldSet('router', 'vrf', name=_('Scope')),)
 
     class Meta:
         model = BGPScope
-        fields = ['router', 'vrf', ]
+        fields = [
+            'router',
+            'vrf',
+        ]
 
     def save(self, *args, **kwargs):
         return super().save(*args, **kwargs)
@@ -211,13 +213,14 @@ class BGPAddressFamilyForm(BGPSettingMixin, NetBoxModelForm):
         label=_('Address Family'),
     )
 
-    fieldsets = (
-        FieldSet('scope', 'address_family', name=_('Address Family')),
-    )
+    fieldsets = (FieldSet('scope', 'address_family', name=_('Address Family')),)
 
     class Meta:
         model = BGPAddressFamily
-        fields = ['scope', 'address_family', ]
+        fields = [
+            'scope',
+            'address_family',
+        ]
 
     def save(self, *args, **kwargs):
         return super().save(*args, **kwargs)
@@ -234,10 +237,11 @@ class BGPSettingForm(NetBoxModelForm):
         label=_('Setting Value'),
     )
 
-    fieldsets = (
-        FieldSet('key', 'value', name=_('Settings')),
-    )
+    fieldsets = (FieldSet('key', 'value', name=_('Settings')),)
 
     class Meta:
         model = BGPSetting
-        fields = ['key', 'value', ]
+        fields = [
+            'key',
+            'value',
+        ]

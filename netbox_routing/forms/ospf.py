@@ -35,7 +35,15 @@ class OSPFInstanceForm(NetBoxModelForm):
 
     class Meta:
         model = OSPFInstance
-        fields = ('name', 'router_id', 'process_id', 'device', 'vrf', 'description', 'comments', )
+        fields = (
+            'name',
+            'router_id',
+            'process_id',
+            'device',
+            'vrf',
+            'description',
+            'comments',
+        )
 
 
 class OSPFAreaForm(NetBoxModelForm):
@@ -43,7 +51,12 @@ class OSPFAreaForm(NetBoxModelForm):
 
     class Meta:
         model = OSPFArea
-        fields = ('area_id', 'description', 'comments', )
+        fields = (
+            'area_id',
+            'area_type',
+            'description',
+            'comments',
+        )
 
 
 class OSPFInterfaceForm(NetBoxModelForm):
@@ -60,7 +73,7 @@ class OSPFInterfaceForm(NetBoxModelForm):
         label=_('Instance'),
         query_params={
             'device_id': '$device',
-        }
+        },
     )
     area = DynamicModelChoiceField(
         queryset=OSPFArea.objects.all(),
@@ -75,15 +88,24 @@ class OSPFInterfaceForm(NetBoxModelForm):
         label=_('Interface'),
         query_params={
             'device_id': '$device',
-        }
+        },
     )
     comments = CommentField()
 
     class Meta:
         model = OSPFInterface
         fields = (
-            'device', 'instance', 'area', 'interface', 'passive', 'priority', 'bfd', 'authentication', 'passphrase',
-            'description', 'comments',
+            'device',
+            'instance',
+            'area',
+            'interface',
+            'passive',
+            'priority',
+            'bfd',
+            'authentication',
+            'passphrase',
+            'description',
+            'comments',
         )
 
         widgets = {
@@ -99,10 +121,17 @@ class OSPFInterfaceForm(NetBoxModelForm):
     def clean(self):
         super().clean()
         if self.cleaned_data.get('instance') and self.cleaned_data.get('interface'):
-            if self.cleaned_data.get('instance').device != self.cleaned_data.get('interface').device:
+            if (
+                self.cleaned_data.get('instance').device
+                != self.cleaned_data.get('interface').device
+            ):
                 raise ValidationError(
                     {
-                        'instance': _('OSPF Instance Device and Interface Device must match'),
-                        'interface': _('OSPF Instance Device and Interface Device must match')
+                        'instance': _(
+                            'OSPF Instance Device and Interface Device must match'
+                        ),
+                        'interface': _(
+                            'OSPF Instance Device and Interface Device must match'
+                        ),
                     }
                 )

@@ -7,7 +7,6 @@ __all__ = (
     'OSPFInstanceImportForm',
     'OSPFAreaImportForm',
     'OSPFInterfaceImportForm',
-
     # EIGRP
     'EIGRPRouterImportForm',
     'EIGRPAddressFamilyImportForm',

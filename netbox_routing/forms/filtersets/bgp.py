@@ -33,9 +33,7 @@ class BGPRouterFilterForm(NetBoxModelFilterSetForm):
         label=_('ASN'),
     )
     model = BGPRouter
-    fieldsets = (
-       FieldSet('q', 'filter_id', 'tag', 'device_id', 'asn_id'),
-    )
+    fieldsets = (FieldSet('q', 'filter_id', 'tag', 'device_id', 'asn_id'),)
     tag = TagFilterField(model)
 
 
@@ -53,9 +51,7 @@ class BGPScopeFilterForm(NetBoxModelFilterSetForm):
         label=_('VRF'),
     )
     model = BGPScope
-    fieldsets = (
-       FieldSet('q', 'filter_id', 'tag', 'router_id', 'vrf_id'),
-    )
+    fieldsets = (FieldSet('q', 'filter_id', 'tag', 'router_id', 'vrf_id'),)
     tag = TagFilterField(model)
 
 
@@ -72,15 +68,11 @@ class BGPAddressFamilyFilterForm(NetBoxModelFilterSetForm):
         label=_('Address Family'),
     )
     model = BGPAddressFamily
-    fieldsets = (
-       FieldSet('q', 'filter_id', 'tag', 'scope_id', 'address_family'),
-    )
+    fieldsets = (FieldSet('q', 'filter_id', 'tag', 'scope_id', 'address_family'),)
     tag = TagFilterField(model)
 
 
 class BGPSettingFilterForm(NetBoxModelFilterSetForm):
     model = BGPSetting
-    fieldsets = (
-       FieldSet('q', 'filter_id', 'tag'),
-    )
+    fieldsets = (FieldSet('q', 'filter_id', 'tag'),)
     tag = TagFilterField(model)

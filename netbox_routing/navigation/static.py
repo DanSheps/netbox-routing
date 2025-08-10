@@ -1,8 +1,6 @@
-from netbox.plugins import PluginMenuItem, PluginMenuButton
+from netbox.plugins import PluginMenuButton, PluginMenuItem
 
-__all__ = (
-    'MENUITEMS',
-)
+__all__ = ('MENUITEMS',)
 
 static = PluginMenuItem(
     link='plugins:netbox_routing:staticroute_list',
@@ -20,8 +18,7 @@ static = PluginMenuItem(
         #    'Import',
         #    'mdi mdi-upload',
         # ),
-
-    )
+    ),
 )
 
 MENUITEMS = (static,)

@@ -1,9 +1,6 @@
-from netbox.plugins import PluginMenuItem, PluginMenuButton
+from netbox.plugins import PluginMenuButton, PluginMenuItem
 
-
-__all__ = (
-    'eigrp',
-)
+__all__ = ('eigrp',)
 
 
 COL_ADD = 'mdi mdi-plus'
@@ -27,7 +24,7 @@ routers = PluginMenuItem(
             icon_class=COL_IMPORT,
             permissions=['netbox_routing.add_eigrprouter'],
         ),
-    )
+    ),
 )
 address_families = PluginMenuItem(
     link='plugins:netbox_routing:eigrpaddressfamily_list',
@@ -40,7 +37,7 @@ address_families = PluginMenuItem(
             icon_class=COL_ADD,
             permissions=['netbox_routing.add_eigrpaddressfamily'],
         ),
-    )
+    ),
 )
 networks = PluginMenuItem(
     link='plugins:netbox_routing:eigrpnetwork_list',
@@ -53,7 +50,7 @@ networks = PluginMenuItem(
             icon_class=COL_ADD,
             permissions=['netbox_routing.add_eigrpnetwork'],
         ),
-    )
+    ),
 )
 interfaces = PluginMenuItem(
     link='plugins:netbox_routing:eigrpinterface_list',
@@ -66,7 +63,7 @@ interfaces = PluginMenuItem(
             icon_class=COL_ADD,
             permissions=['netbox_routing.add_eigrpinterface'],
         ),
-    )
+    ),
 )
 
 eigrp = (routers, address_families, networks, interfaces)

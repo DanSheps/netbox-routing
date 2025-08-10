@@ -13,7 +13,14 @@ class StaticRouteFilterForm(NetBoxModelFilterSetForm):
     model = StaticRoute
     fieldsets = (
         FieldSet('q', 'filter_id', 'tag'),
-        FieldSet('device_id', 'vrf_id', 'prefix', 'next_hop', 'name', name=_('Route Attributes')),
+        FieldSet(
+            'device_id',
+            'vrf_id',
+            'prefix',
+            'next_hop',
+            'name',
+            name=_('Route Attributes'),
+        ),
     )
     vrf_id = DynamicModelMultipleChoiceField(
         queryset=VRF.objects.all(),

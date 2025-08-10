@@ -1,9 +1,6 @@
 from netbox.plugins import PluginMenuButton, PluginMenuItem
 
-
-__all__ = (
-    'MENUITEMS',
-)
+__all__ = ('MENUITEMS',)
 
 
 COL_ADD = 'mdi mdi-plus'
@@ -27,7 +24,7 @@ prefixlist = PluginMenuItem(
             icon_class=COL_IMPORT,
             permissions=['netbox_routing.add_prefixlist'],
         ),
-    )
+    ),
 )
 routemap = PluginMenuItem(
     link='plugins:netbox_routing:routemap_list',
@@ -46,7 +43,7 @@ routemap = PluginMenuItem(
             icon_class=COL_IMPORT,
             permissions=['netbox_routing.add_routemap'],
         ),
-    )
+    ),
 )
 
 MENUITEMS = (prefixlist, routemap)
