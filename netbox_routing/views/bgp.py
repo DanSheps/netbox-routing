@@ -1,11 +1,28 @@
-from netbox.views.generic import ObjectView, ObjectEditView, ObjectListView, ObjectDeleteView
-from netbox_routing.filtersets import BGPRouterFilterSet, BGPScopeFilterSet, BGPAddressFamilyFilterSet
+from netbox.views.generic import (
+    ObjectView,
+    ObjectEditView,
+    ObjectListView,
+    ObjectDeleteView,
+)
+from netbox_routing.filtersets import (
+    BGPRouterFilterSet,
+    BGPScopeFilterSet,
+    BGPAddressFamilyFilterSet,
+)
 from netbox_routing.forms import (
-    BGPRouterForm, BGPScopeForm, BGPRouterFilterForm, BGPAddressFamilyForm, BGPScopeFilterForm,
-    BGPAddressFamilyFilterForm
+    BGPRouterForm,
+    BGPScopeForm,
+    BGPRouterFilterForm,
+    BGPAddressFamilyForm,
+    BGPScopeFilterForm,
+    BGPAddressFamilyFilterForm,
 )
 from netbox_routing.models import BGPRouter, BGPScope, BGPAddressFamily
-from netbox_routing.tables.bgp import BGPRouterTable, BGPScopeTable, BGPAddressFamilyTable
+from netbox_routing.tables.bgp import (
+    BGPRouterTable,
+    BGPScopeTable,
+    BGPAddressFamilyTable,
+)
 from utilities.views import register_model_view
 
 
@@ -21,7 +38,7 @@ __all__ = (
     'BGPAddressFamilyListView',
     'BGPAddressFamilyView',
     'BGPAddressFamilyEditView',
-    'BGPAddressFamilyDeleteView'
+    'BGPAddressFamilyDeleteView',
 )
 
 

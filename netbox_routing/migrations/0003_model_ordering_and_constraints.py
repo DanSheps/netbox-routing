@@ -36,7 +36,7 @@ class Migration(migrations.Migration):
             constraint=models.UniqueConstraint(
                 django.db.models.functions.text.Lower('name'),
                 name='netbox_routing_prefixlist_unique_name',
-                violation_error_message='Name must be unique.'
+                violation_error_message='Name must be unique.',
             ),
         ),
         migrations.AddConstraint(
@@ -45,7 +45,7 @@ class Migration(migrations.Migration):
                 models.F('prefix_list'),
                 models.F('sequence'),
                 name='netbox_routing_prefixlistentry_unique_prefixlist_sequence',
-                violation_error_message='Prefix List sequence must be unique.'
+                violation_error_message='Prefix List sequence must be unique.',
             ),
         ),
         migrations.AddConstraint(
@@ -53,7 +53,7 @@ class Migration(migrations.Migration):
             constraint=models.UniqueConstraint(
                 django.db.models.functions.text.Lower('name'),
                 name='netbox_routing_routemap_unique_name',
-                violation_error_message='Name must be unique.'
+                violation_error_message='Name must be unique.',
             ),
         ),
         migrations.AddConstraint(
@@ -62,7 +62,7 @@ class Migration(migrations.Migration):
                 models.F('route_map'),
                 models.F('sequence'),
                 name='netbox_routing_routemapentry_unique_routemap_sequence',
-                violation_error_message='Route Map sequence must be unique.'
+                violation_error_message='Route Map sequence must be unique.',
             ),
         ),
         migrations.AddConstraint(
@@ -72,7 +72,7 @@ class Migration(migrations.Migration):
                 models.F('prefix'),
                 models.F('next_hop'),
                 name='netbox_routing_staticroute_unique_vrf_prefix_nexthop',
-                violation_error_message='VRF, Prefix and Next Hop must be unique.'
+                violation_error_message='VRF, Prefix and Next Hop must be unique.',
             ),
         ),
     ]

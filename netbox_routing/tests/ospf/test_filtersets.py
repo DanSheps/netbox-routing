@@ -35,10 +35,34 @@ class OSPFInstanceTestCase(TestCase):
         ]
 
         data = (
-            OSPFInstance(name='Instance 1', device=devices[0], router_id='0.0.0.0', process_id=0, vrf=vrfs[0]),
-            OSPFInstance(name='Instance 2', device=devices[1], router_id='1.1.1.1', process_id=1, vrf=vrfs[1]),
-            OSPFInstance(name='Instance 3', device=devices[2], router_id='2.2.2.2', process_id=2, vrf=None),
-            OSPFInstance(name='Instance 3', device=devices[3], router_id='3.3.3.3', process_id=3, vrf=vrfs[2]),
+            OSPFInstance(
+                name='Instance 1',
+                device=devices[0],
+                router_id='0.0.0.0',
+                process_id=0,
+                vrf=vrfs[0],
+            ),
+            OSPFInstance(
+                name='Instance 2',
+                device=devices[1],
+                router_id='1.1.1.1',
+                process_id=1,
+                vrf=vrfs[1],
+            ),
+            OSPFInstance(
+                name='Instance 3',
+                device=devices[2],
+                router_id='2.2.2.2',
+                process_id=2,
+                vrf=None,
+            ),
+            OSPFInstance(
+                name='Instance 3',
+                device=devices[3],
+                router_id='3.3.3.3',
+                process_id=3,
+                vrf=vrfs[2],
+            ),
         )
 
         OSPFInstance.objects.bulk_create(data)
@@ -139,18 +163,62 @@ class OSPFInterfaceTestCase(TestCase):
         OSPFArea.objects.bulk_create(areas)
 
         instances = (
-            OSPFInstance(name='Instance 0', device=devices[0], router_id='0.0.0.0', process_id=0, vrf=vrfs[0]),
-            OSPFInstance(name='Instance 1', device=devices[1], router_id='1.1.1.1', process_id=1, vrf=vrfs[1]),
-            OSPFInstance(name='Instance 2', device=devices[2], router_id='2.2.2.2', process_id=2, vrf=None),
-            OSPFInstance(name='Instance 3', device=devices[3], router_id='3.3.3.3', process_id=3, vrf=vrfs[2]),
+            OSPFInstance(
+                name='Instance 0',
+                device=devices[0],
+                router_id='0.0.0.0',
+                process_id=0,
+                vrf=vrfs[0],
+            ),
+            OSPFInstance(
+                name='Instance 1',
+                device=devices[1],
+                router_id='1.1.1.1',
+                process_id=1,
+                vrf=vrfs[1],
+            ),
+            OSPFInstance(
+                name='Instance 2',
+                device=devices[2],
+                router_id='2.2.2.2',
+                process_id=2,
+                vrf=None,
+            ),
+            OSPFInstance(
+                name='Instance 3',
+                device=devices[3],
+                router_id='3.3.3.3',
+                process_id=3,
+                vrf=vrfs[2],
+            ),
         )
         OSPFInstance.objects.bulk_create(instances)
 
         data = (
-            OSPFInterface(interface=interfaces[0], instance=instances[0], area=areas[0], passive=True),
-            OSPFInterface(interface=interfaces[1], instance=instances[1], area=areas[1], passive=False),
-            OSPFInterface(interface=interfaces[2], instance=instances[2], area=areas[2], passive=True),
-            OSPFInterface(interface=interfaces[3], instance=instances[3], area=areas[3], passive=False),
+            OSPFInterface(
+                interface=interfaces[0],
+                instance=instances[0],
+                area=areas[0],
+                passive=True,
+            ),
+            OSPFInterface(
+                interface=interfaces[1],
+                instance=instances[1],
+                area=areas[1],
+                passive=False,
+            ),
+            OSPFInterface(
+                interface=interfaces[2],
+                instance=instances[2],
+                area=areas[2],
+                passive=True,
+            ),
+            OSPFInterface(
+                interface=interfaces[3],
+                instance=instances[3],
+                area=areas[3],
+                passive=False,
+            ),
         )
         OSPFInterface.objects.bulk_create(data)
 

@@ -1,5 +1,13 @@
-from netbox.views.generic import ObjectListView, ObjectEditView, ObjectView, ObjectDeleteView, ObjectChildrenView, \
-    BulkImportView, BulkEditView, BulkDeleteView
+from netbox.views.generic import (
+    ObjectListView,
+    ObjectEditView,
+    ObjectView,
+    ObjectDeleteView,
+    ObjectChildrenView,
+    BulkImportView,
+    BulkEditView,
+    BulkDeleteView,
+)
 from netbox_routing.filtersets.eigrp import *
 from netbox_routing.forms import *
 from netbox_routing.tables.eigrp import *
@@ -19,7 +27,6 @@ __all__ = (
     'EIGRPRouterBulkEditView',
     'EIGRPRouterDeleteView',
     'EIGRPRouterBulkDeleteView',
-
     'EIGRPAddressFamilyListView',
     'EIGRPAddressFamilyView',
     'EIGRPAddressFamilyInterfacesView',
@@ -28,14 +35,12 @@ __all__ = (
     'EIGRPAddressFamilyBulkEditView',
     'EIGRPAddressFamilyDeleteView',
     'EIGRPAddressFamilyBulkDeleteView',
-
     'EIGRPNetworkListView',
     'EIGRPNetworkView',
     'EIGRPNetworkEditView',
     'EIGRPNetworkBulkEditView',
     'EIGRPNetworkDeleteView',
     'EIGRPNetworkBulkDeleteView',
-
     'EIGRPInterfaceListView',
     'EIGRPInterfaceView',
     'EIGRPInterfaceEditView',
@@ -143,6 +148,7 @@ class EIGRPRouterBulkDeleteView(BulkDeleteView):
 class EIGRPRouterImportView(BulkImportView):
     queryset = EIGRPRouter.objects.all()
     model_form = EIGRPRouterImportForm
+
 
 #
 # Address Family

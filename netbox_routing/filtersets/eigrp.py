@@ -10,13 +10,18 @@ from ipam.models import Prefix
 from utilities.filters import MultiValueCharFilter
 
 from netbox.filtersets import NetBoxModelFilterSet
-from netbox_routing.models import EIGRPAddressFamily, EIGRPRouter, EIGRPNetwork, EIGRPInterface
+from netbox_routing.models import (
+    EIGRPAddressFamily,
+    EIGRPRouter,
+    EIGRPNetwork,
+    EIGRPInterface,
+)
 
 __all__ = (
     'EIGRPRouterFilterSet',
     'EIGRPAddressFamilyFilterSet',
     'EIGRPNetworkFilterSet',
-    'EIGRPInterfaceFilterSet'
+    'EIGRPInterfaceFilterSet',
 )
 
 
@@ -91,14 +96,19 @@ class EIGRPAddressFamilyFilterSet(RouterMixin, NetBoxModelFilterSet):
 
     class Meta:
         model = EIGRPAddressFamily
-        fields = ('router_id', 'router', 'device_id', 'device', 'rid', 'family', )
+        fields = (
+            'router_id',
+            'router',
+            'device_id',
+            'device',
+            'rid',
+            'family',
+        )
 
     def search(self, queryset, name, value):
         if not value.strip():
             return queryset
-        qs_filter = Q(
-            Q(rid__icontains=value)
-        )
+        qs_filter = Q(Q(rid__icontains=value))
         qs_filter |= Q(eigrprouternamed__name__icontains=value)
         return queryset.filter(qs_filter).distinct()
 
@@ -144,7 +154,13 @@ class EIGRPNetworkFilterSet(NetBoxModelFilterSet):
     class Meta:
         model = EIGRPNetwork
         fields = (
-            'router_id', 'router', 'address_family_id', 'address_family', 'device_id', 'device', 'network_id',
+            'router_id',
+            'router',
+            'address_family_id',
+            'address_family',
+            'device_id',
+            'device',
+            'network_id',
             'network',
         )
 
@@ -161,8 +177,8 @@ class EIGRPNetworkFilterSet(NetBoxModelFilterSet):
         if not value.strip():
             return queryset
         qs_filter = Q(
-            Q(eigrprouternamed__name__icontains=value) |
-            Q(address_family__rid__icontains=value)
+            Q(eigrprouternamed__name__icontains=value)
+            | Q(address_family__rid__icontains=value)
         )
         qs_filter |= Q(network__contains=value.strip())
         try:
@@ -216,18 +232,28 @@ class EIGRPInterfaceFilterSet(NetBoxModelFilterSet):
     class Meta:
         model = EIGRPInterface
         fields = (
-            'router_id', 'router', 'address_family_id', 'address_family', 'device_id', 'device', 'interface_id',
-            'interface', 'bfd', 'passive', 'authentication', 'passphrase'
+            'router_id',
+            'router',
+            'address_family_id',
+            'address_family',
+            'device_id',
+            'device',
+            'interface_id',
+            'interface',
+            'bfd',
+            'passive',
+            'authentication',
+            'passphrase',
         )
 
     def search(self, queryset, name, value):
         if not value.strip():
             return queryset
         qs_filter = (
-            Q(router__name__icontains=value) |
-            Q(router__device__name__icontains=value) |
-            Q(interface__name__icontains=value) |
-            Q(interface__label__icontains=value) |
-            Q(interface__device__name__icontains=value)
+            Q(router__name__icontains=value)
+            | Q(router__device__name__icontains=value)
+            | Q(interface__name__icontains=value)
+            | Q(interface__label__icontains=value)
+            | Q(interface__device__name__icontains=value)
         )
         return queryset.filter(qs_filter).distinct()
