@@ -4,7 +4,7 @@ __all__ = ('MENUITEMS',)
 
 static = PluginMenuItem(
     link='plugins:netbox_routing:staticroute_list',
-    link_text='Static Route',
+    link_text='Static Routes',
     permissions=['netbox_routing.view_staticroute'],
     buttons=(
         PluginMenuButton(
