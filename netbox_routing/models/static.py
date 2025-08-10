@@ -8,22 +8,18 @@ from netbox.models import PrimaryModel
 from netbox_routing.fields.ip import IPAddressField
 
 
-__all__ = (
-    'StaticRoute'
-)
+__all__ = ('StaticRoute',)
 
 
 class StaticRoute(PrimaryModel):
-    devices = models.ManyToManyField(
-        to='dcim.Device',
-        related_name='static_routes'
-    )
+    devices = models.ManyToManyField(to='dcim.Device', related_name='static_routes')
     vrf = models.ForeignKey(
         to='ipam.VRF',
         on_delete=models.PROTECT,
         related_name='staticroutes',
         blank=True,
         null=True,
+        verbose_name='VRF',
     )
     prefix = IPNetworkField(
         help_text=_('IPv4 or IPv6 network with mask'),
@@ -36,32 +32,43 @@ class StaticRoute(PrimaryModel):
         verbose_name='Name',
         blank=True,
         null=True,
+        help_text='Optional name for this static route',
     )
     metric = models.PositiveSmallIntegerField(
         verbose_name='Metric',
         blank=True,
         default=1,
     )
-    permanent = models.BooleanField(default=False, blank=True, null=True,)
+    permanent = models.BooleanField(
+        default=False,
+        blank=True,
+        null=True,
+    )
+
     tag = models.IntegerField(
         verbose_name='Tag',
         blank=True,
-        null=True
+        null=True,
     )
 
-    clone_fields = (
-        'vrf', 'metric', 'permanent'
+    clone_fields = ('vrf', 'metric', 'permanent')
+    prerequisite_models = (
+        'dcim.Device',
+        'ipam.VRF',
     )
-    prerequisite_models = ('dcim.Device',)
 
     class Meta:
         ordering = ['vrf', 'prefix', 'metric']
         constraints = (
-            CheckConstraint(check=Q(Q(metric__lte=255) & Q(metric__gte=0)), name='metric_gte_lte'),
+            CheckConstraint(
+                check=Q(Q(metric__lte=255) & Q(metric__gte=0)), name='metric_gte_lte'
+            ),
             models.UniqueConstraint(
-                'vrf', 'prefix', 'next_hop',
+                'vrf',
+                'prefix',
+                'next_hop',
                 name='%(app_label)s_%(class)s_unique_vrf_prefix_nexthop',
-                violation_error_message=_('VRF, Prefix and Next Hop must be unique.'),
+                violation_error_message="VRF, Prefix and Next Hop must be unique.",
             ),
         )
 

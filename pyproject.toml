@@ -36,3 +36,5 @@ exclude=["netbox_routing.tests"]
 
 [tool.black]
 skip-string-normalization = 1
+check = 1
+diff = 0

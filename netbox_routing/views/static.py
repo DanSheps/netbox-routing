@@ -1,8 +1,15 @@
 from dcim.filtersets import DeviceFilterSet
 from dcim.models import Device
 from dcim.tables import DeviceTable
-from netbox.views.generic import ObjectListView, ObjectEditView, ObjectView, ObjectDeleteView, ObjectChildrenView, \
-    BulkDeleteView, BulkEditView
+from netbox.views.generic import (
+    ObjectListView,
+    ObjectEditView,
+    ObjectView,
+    ObjectDeleteView,
+    ObjectChildrenView,
+    BulkDeleteView,
+    BulkEditView,
+)
 from utilities.views import register_model_view, ViewTab
 
 from netbox_routing.filtersets.static import StaticRouteFilterSet

@@ -8,14 +8,11 @@ from ipam.models import VRF
 from utilities.filters import MultiValueCharFilter
 
 from netbox.filtersets import NetBoxModelFilterSet
+from netbox_routing.choices.ospf import OSPFAreaTypeChoices
 from netbox_routing.models import OSPFArea, OSPFInstance, OSPFInterface
 
 
-__all__ = (
-    'OSPFAreaFilterSet',
-    'OSPFInstanceFilterSet',
-    'OSPFInterfaceFilterSet'
-)
+__all__ = ('OSPFAreaFilterSet', 'OSPFInstanceFilterSet', 'OSPFInterfaceFilterSet')
 
 
 class OSPFInstanceFilterSet(NetBoxModelFilterSet):
@@ -49,15 +46,23 @@ class OSPFInstanceFilterSet(NetBoxModelFilterSet):
 
     class Meta:
         model = OSPFInstance
-        fields = ('device_id', 'device', 'name', 'vrf_id', 'vrf', 'router_id', 'process_id')
+        fields = (
+            'device_id',
+            'device',
+            'name',
+            'vrf_id',
+            'vrf',
+            'router_id',
+            'process_id',
+        )
 
     def search(self, queryset, name, value):
         if not value.strip():
             return queryset
         qs_filter = (
-            Q(name__icontains=value) |
-            Q(device__name__icontains=value) |
-            Q(router_id__icontains=value)
+            Q(name__icontains=value)
+            | Q(device__name__icontains=value)
+            | Q(router_id__icontains=value)
         )
         return queryset.filter(qs_filter).distinct()
 
@@ -74,16 +79,19 @@ class OSPFAreaFilterSet(NetBoxModelFilterSet):
         label=_('Area ID'),
     )
 
+    area_type = django_filters.MultipleChoiceFilter(
+        choices=OSPFAreaTypeChoices,
+        label=_('Area Type'),
+    )
+
     class Meta:
         model = OSPFArea
-        fields = ('area_id', )
+        fields = ('area_id', 'area_type')
 
     def search(self, queryset, name, value):
         if not value.strip():
             return queryset
-        qs_filter = (
-            Q(area_id__icontains=value)
-        )
+        qs_filter = Q(area_id__icontains=value)
         return queryset.filter(qs_filter).distinct()
 
     def filter_aid(self, queryset, name, value):
@@ -152,16 +160,25 @@ class OSPFInterfaceFilterSet(NetBoxModelFilterSet):
 
     class Meta:
         model = OSPFInterface
-        fields = ('instance', 'area', 'interface', 'passive', 'bfd', 'priority', 'authentication', 'passphrase')
+        fields = (
+            'instance',
+            'area',
+            'interface',
+            'passive',
+            'bfd',
+            'priority',
+            'authentication',
+            'passphrase',
+        )
 
     def search(self, queryset, name, value):
         if not value.strip():
             return queryset
         qs_filter = (
-            Q(instance__name__icontains=value) |
-            Q(area__area_id__icontains=value) |
-            Q(interface__name__icontains=value) |
-            Q(interface__label__icontains=value) |
-            Q(interface__device__name__icontains=value)
+            Q(instance__name__icontains=value)
+            | Q(area__area_id__icontains=value)
+            | Q(interface__name__icontains=value)
+            | Q(interface__label__icontains=value)
+            | Q(interface__device__name__icontains=value)
         )
         return queryset.filter(qs_filter).distinct()

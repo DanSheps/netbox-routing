@@ -7,6 +7,7 @@ from django.utils.translation import gettext as _
 from netbox.models import PrimaryModel
 
 from netbox_routing import choices
+from netbox_routing.choices.ospf import OSPFAreaTypeChoices
 from netbox_routing.fields.ip import IPAddressField
 
 
@@ -26,7 +27,7 @@ class OSPFInstance(PrimaryModel):
         related_name='ospf_instances',
         on_delete=models.CASCADE,
         blank=False,
-        null=False
+        null=False,
     )
     vrf = models.ForeignKey(
         verbose_name=_('VRF'),
@@ -34,15 +35,14 @@ class OSPFInstance(PrimaryModel):
         related_name='ospf_instances',
         on_delete=models.CASCADE,
         blank=True,
-        null=True
+        null=True,
     )
 
     clone_fields = ('device',)
-    prerequisite_models = (
-        'dcim.Device',
-    )
+    prerequisite_models = ('dcim.Device',)
 
     class Meta:
+        ordering = ['vrf', 'router_id', 'process_id']
         verbose_name = 'OSPF Instance'
 
     def __str__(self):
@@ -54,10 +54,18 @@ class OSPFInstance(PrimaryModel):
 
 class OSPFArea(PrimaryModel):
     area_id = models.CharField(max_length=100, verbose_name='Area ID')
-
+    area_type = models.CharField(
+        verbose_name=_('Area Type'),
+        choices=OSPFAreaTypeChoices,
+        blank=False,
+        null=False,
+        default='standard',
+    )
     prerequisite_models = ()
     clone_fields = ()
+
     class Meta:
+        ordering = ['area_id']
         verbose_name = 'OSPF Area'
 
     def __str__(self):
@@ -75,7 +83,13 @@ class OSPFArea(PrimaryModel):
             try:
                 str(netaddr.IPAddress(area_id))
             except netaddr.core.AddrFormatError:
-                raise ValidationError({'area_id': ['This field must be an integer or a valid net address']})
+                raise ValidationError(
+                    {
+                        'area_id': [
+                            'This field must be an integer or a valid net address'
+                        ]
+                    }
+                )
 
 
 class OSPFInterface(PrimaryModel):
@@ -91,33 +105,35 @@ class OSPFInterface(PrimaryModel):
         on_delete=models.CASCADE,
         related_name='interfaces',
         blank=False,
-        null=False
+        null=False,
     )
     interface = models.ForeignKey(
         to='dcim.Interface',
         related_name='ospf_interfaces',
         on_delete=models.CASCADE,
         blank=False,
-        null=False
+        null=False,
     )
     passive = models.BooleanField(verbose_name='Passive', blank=True, null=True)
     priority = models.IntegerField(blank=True, null=True)
     bfd = models.BooleanField(blank=True, null=True, verbose_name='BFD')
     authentication = models.CharField(
-        max_length=50,
-        choices=choices.AuthenticationChoices,
-        blank=True,
-        null=True
+        max_length=50, choices=choices.AuthenticationChoices, blank=True, null=True
     )
-    passphrase = models.CharField(
-        max_length=200,
-        blank=True,
-        null=True
-    )
+    passphrase = models.CharField(max_length=200, blank=True, null=True)
 
-    clone_fields = ('instance', 'area', 'priority', 'bfd', 'authentication', 'passphrase')
+    clone_fields = (
+        'instance',
+        'area',
+        'priority',
+        'bfd',
+        'authentication',
+        'passphrase',
+    )
     prerequisite_models = (
-        'netbox_routing.OSPFInstance', 'netbox_routing.OSPFArea', 'dcim.Interface',
+        'netbox_routing.OSPFInstance',
+        'netbox_routing.OSPFArea',
+        'dcim.Interface',
     )
 
     class Meta:
@@ -125,8 +141,7 @@ class OSPFInterface(PrimaryModel):
         ordering = ('instance', 'area', 'interface')  # Name may be non-unique
         constraints = (
             models.UniqueConstraint(
-                fields=('interface', ),
-                name='%(app_label)s_%(class)s_unique_interface'
+                fields=('interface',), name='%(app_label)s_%(class)s_unique_interface'
             ),
         )
 
