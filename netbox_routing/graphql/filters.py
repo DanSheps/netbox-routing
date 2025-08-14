@@ -7,8 +7,13 @@ from strawberry_django import FilterLookup
 
 from netbox.graphql.filter_mixins import BaseObjectTypeFilterMixin
 
-from netbox_routing import filtersets, models
-from netbox_routing.graphql.filter_mixins import DeviceMixin, InterfaceMixin, VRFMixin, NetworkPrefixMixin
+from netbox_routing import models
+from netbox_routing.graphql.filter_mixins import (
+    DeviceMixin,
+    InterfaceMixin,
+    VRFMixin,
+    NetworkPrefixMixin,
+)
 
 __all__ = (
     'StaticRouteFilter',
@@ -40,9 +45,17 @@ class OSPFAreaFilter(BaseObjectTypeFilterMixin):
 
 @strawberry_django.filter(models.OSPFInterface, lookups=True)
 class OSPFInterfaceFilter(InterfaceMixin, VRFMixin, BaseObjectTypeFilterMixin):
-    instance: Annotated['OSPFInstanceFilter', strawberry.lazy('netbox_routing.graphql.filters')] | None = strawberry_django.filter_field()
+    instance: (
+        Annotated[
+            'OSPFInstanceFilter', strawberry.lazy('netbox_routing.graphql.filters')
+        ]
+        | None
+    ) = strawberry_django.filter_field()
     instance_id: ID | None = strawberry_django.filter_field()
-    area: Annotated['OSPFAreaFilter', strawberry.lazy('netbox_routing.graphql.filters')] | None = strawberry_django.filter_field()
+    area: (
+        Annotated['OSPFAreaFilter', strawberry.lazy('netbox_routing.graphql.filters')]
+        | None
+    ) = strawberry_django.filter_field()
     area_id: ID | None = strawberry_django.filter_field()
 
 
@@ -53,23 +66,49 @@ class EIGRPRouterFilter(DeviceMixin, BaseObjectTypeFilterMixin):
 
 @strawberry_django.filter(models.EIGRPAddressFamily, lookups=True)
 class EIGRPAddressFamilyFilter(BaseObjectTypeFilterMixin):
-    router: Annotated['EIGRPRouterFilter', strawberry.lazy('netbox_routing.graphql.filters')] | None = strawberry_django.filter_field()
+    router: (
+        Annotated[
+            'EIGRPRouterFilter', strawberry.lazy('netbox_routing.graphql.filters')
+        ]
+        | None
+    ) = strawberry_django.filter_field()
     router_id: ID | None = strawberry_django.filter_field()
     rid: FilterLookup[str] | None = strawberry_django.filter_field()
 
 
 @strawberry_django.filter(models.EIGRPNetwork, lookups=True)
 class EIGRPNetworkFilter(NetworkPrefixMixin, BaseObjectTypeFilterMixin):
-    router: Annotated['EIGRPRouterFilter', strawberry.lazy('netbox_routing.graphql.filters')] | None = strawberry_django.filter_field()
+    router: (
+        Annotated[
+            'EIGRPRouterFilter', strawberry.lazy('netbox_routing.graphql.filters')
+        ]
+        | None
+    ) = strawberry_django.filter_field()
     router_id: ID | None = strawberry_django.filter_field()
-    address_family: Annotated['EIGRPAddressFamilyFilter', strawberry.lazy('netbox_routing.graphql.filters')] | None = strawberry_django.filter_field()
+    address_family: (
+        Annotated[
+            'EIGRPAddressFamilyFilter',
+            strawberry.lazy('netbox_routing.graphql.filters'),
+        ]
+        | None
+    ) = strawberry_django.filter_field()
     address_family_id: ID | None = strawberry_django.filter_field()
 
 
 @strawberry_django.filter(models.EIGRPInterface, lookups=True)
 class EIGRPInterfaceFilter(InterfaceMixin, BaseObjectTypeFilterMixin):
-    router: Annotated['EIGRPRouterFilter', strawberry.lazy('netbox_routing.graphql.filters')] | None = strawberry_django.filter_field()
+    router: (
+        Annotated[
+            'EIGRPRouterFilter', strawberry.lazy('netbox_routing.graphql.filters')
+        ]
+        | None
+    ) = strawberry_django.filter_field()
     router_id: ID | None = strawberry_django.filter_field()
-    address_family: Annotated['EIGRPAddressFamilyFilter', strawberry.lazy('netbox_routing.graphql.filters')] | None = strawberry_django.filter_field()
+    address_family: (
+        Annotated[
+            'EIGRPAddressFamilyFilter',
+            strawberry.lazy('netbox_routing.graphql.filters'),
+        ]
+        | None
+    ) = strawberry_django.filter_field()
     address_family_id: ID | None = strawberry_django.filter_field()
-

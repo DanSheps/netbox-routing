@@ -17,20 +17,34 @@ __all__ = (
 )
 
 
-
-
 class BGPSettingSerializer(NetBoxModelSerializer):
-    url = serializers.HyperlinkedIdentityField(view_name='plugins-api:netbox_routing-api:bgprouter-detail')
+    url = serializers.HyperlinkedIdentityField(
+        view_name='plugins-api:netbox_routing-api:bgprouter-detail'
+    )
 
     assigned_object = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = BGPSetting
         fields = (
-            'url', 'id', 'display', 'assigned_object_type', 'assigned_object_id', 'assigned_object', 'key', 'value',
-            'description', 'comments',
+            'url',
+            'id',
+            'display',
+            'assigned_object_type',
+            'assigned_object_id',
+            'assigned_object',
+            'key',
+            'value',
+            'description',
+            'comments',
         )
-        brief_fields = ('url', 'id', 'display', 'assigned_object', 'key', )
+        brief_fields = (
+            'url',
+            'id',
+            'display',
+            'assigned_object',
+            'key',
+        )
 
     @extend_schema_field(serializers.JSONField(allow_null=True))
     def get_assigned_object(self, obj):
@@ -42,7 +56,9 @@ class BGPSettingSerializer(NetBoxModelSerializer):
 
 
 class BGPRouterSerializer(NetBoxModelSerializer):
-    url = serializers.HyperlinkedIdentityField(view_name='plugins-api:netbox_routing-api:bgprouter-detail')
+    url = serializers.HyperlinkedIdentityField(
+        view_name='plugins-api:netbox_routing-api:bgprouter-detail'
+    )
 
     device = DeviceSerializer(nested=True)
     asn = ASNSerializer(nested=True)
@@ -51,12 +67,29 @@ class BGPRouterSerializer(NetBoxModelSerializer):
 
     class Meta:
         model = BGPRouter
-        fields = ('url', 'id', 'display', 'device', 'asn', 'settings', 'description', 'comments',)
-        brief_fields = ('url', 'id', 'display', 'device', 'asn', )
+        fields = (
+            'url',
+            'id',
+            'display',
+            'device',
+            'asn',
+            'settings',
+            'description',
+            'comments',
+        )
+        brief_fields = (
+            'url',
+            'id',
+            'display',
+            'device',
+            'asn',
+        )
 
 
 class BGPScopeSerializer(NetBoxModelSerializer):
-    url = serializers.HyperlinkedIdentityField(view_name='plugins-api:netbox_routing-api:bgpscope-detail')
+    url = serializers.HyperlinkedIdentityField(
+        view_name='plugins-api:netbox_routing-api:bgpscope-detail'
+    )
 
     router = BGPRouterSerializer(nested=True)
     vrf = VRFSerializer(nested=True)
@@ -65,17 +98,49 @@ class BGPScopeSerializer(NetBoxModelSerializer):
 
     class Meta:
         model = BGPScope
-        fields = ('url', 'id', 'display', 'router', 'vrf', 'settings', 'description', 'comments',)
-        brief_fields = ('url', 'id', 'display', 'router', 'vrf', )
+        fields = (
+            'url',
+            'id',
+            'display',
+            'router',
+            'vrf',
+            'settings',
+            'description',
+            'comments',
+        )
+        brief_fields = (
+            'url',
+            'id',
+            'display',
+            'router',
+            'vrf',
+        )
 
 
 class BGPAddressFamilySerializer(NetBoxModelSerializer):
-    url = serializers.HyperlinkedIdentityField(view_name='plugins-api:netbox_routing-api:bgpaddressfamily-detail')
+    url = serializers.HyperlinkedIdentityField(
+        view_name='plugins-api:netbox_routing-api:bgpaddressfamily-detail'
+    )
 
     scope = BGPScopeSerializer(nested=True)
     settings = BGPSettingSerializer(many=True)
 
     class Meta:
         model = BGPAddressFamily
-        fields = ('url', 'id', 'display', 'scope', 'address_family', 'settings', 'description', 'comments',)
-        brief_fields = ('url', 'id', 'display', 'scope', 'address_family', )
+        fields = (
+            'url',
+            'id',
+            'display',
+            'scope',
+            'address_family',
+            'settings',
+            'description',
+            'comments',
+        )
+        brief_fields = (
+            'url',
+            'id',
+            'display',
+            'scope',
+            'address_family',
+        )

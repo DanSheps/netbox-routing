@@ -17,7 +17,7 @@ class DeviceStaticRoutesView(generic.ObjectChildrenView):
     tab = ViewTab(
         label='Static Routes',
         badge=lambda obj: StaticRoute.objects.filter(devices=obj).count(),
-        permission='netbox_routing.view_staticroute'
+        permission='netbox_routing.view_staticroute',
     )
 
     def get_children(self, request, device):

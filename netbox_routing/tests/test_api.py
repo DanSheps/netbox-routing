@@ -9,18 +9,16 @@ from netbox_routing.tests.static.test_api import *
 
 __all__ = (
     'AppTest',
-
     'StaticRouteTestCase',
-
     'OSPFInstanceTestCase',
     'OSPFAreaTestCase',
     'OSPFInterfaceTestCase',
-
     'EIGRPRouterTestCase',
     'EIGRPAddressFamilyTestCase',
     'EIGRPNetworkTestCase',
     'EIGRPInterfaceTestCase',
 )
+
 
 class AppTest(APITestCase):
     def test_root(self):

@@ -23,29 +23,18 @@ class EIGRPRouter(PrimaryModel):
         related_name='eigrp',
         on_delete=models.CASCADE,
         blank=False,
-        null=False
+        null=False,
     )
     mode = models.CharField(
-        verbose_name=_('Mode'),
-        max_length=10,
-        choices=EIGRPRouterChoices
+        verbose_name=_('Mode'), max_length=10, choices=EIGRPRouterChoices
     )
     name = models.CharField(
-        verbose_name=_('Name'),
-        max_length=100,
-        blank=True,
-        null=True
+        verbose_name=_('Name'), max_length=100, blank=True, null=True
     )
     pid = models.PositiveIntegerField(
-        verbose_name=_('Process ID'),
-        blank=True,
-        null=True
+        verbose_name=_('Process ID'), blank=True, null=True
     )
-    rid = IPAddressField(
-        verbose_name=_('Router ID'),
-        blank=True,
-        null=True
-    )
+    rid = IPAddressField(verbose_name=_('Router ID'), blank=True, null=True)
 
     class Meta:
         verbose_name = 'EIGRP Router'
@@ -73,7 +62,7 @@ class EIGRPAddressFamily(PrimaryModel):
         to=EIGRPRouter,
         on_delete=models.CASCADE,
         blank=False,
-        null=False
+        null=False,
     )
     vrf = models.ForeignKey(
         verbose_name=_('VRF'),
@@ -81,26 +70,22 @@ class EIGRPAddressFamily(PrimaryModel):
         related_name='eigrp_address_families',
         on_delete=models.CASCADE,
         blank=True,
-        null=True
+        null=True,
     )
     family = models.PositiveSmallIntegerField(
         verbose_name=_('Address Family'),
         choices=IPAddressFamilyChoices,
         blank=False,
-        null=False
+        null=False,
     )
-    rid = IPAddressField(
-        verbose_name=_('Router ID'),
-        blank=True,
-        null=True
-    )
+    rid = IPAddressField(verbose_name=_('Router ID'), blank=True, null=True)
 
     class Meta:
         verbose_name = 'EIGRP Address Family'
         constraints = (
             models.UniqueConstraint(
                 fields=('router', 'vrf', 'family'),
-                name='%(app_label)s_%(class)s_unique_af'
+                name='%(app_label)s_%(class)s_unique_af',
             ),
         )
 
@@ -119,14 +104,14 @@ class EIGRPNetwork(PrimaryModel):
         to=EIGRPRouter,
         on_delete=models.CASCADE,
         blank=False,
-        null=False
+        null=False,
     )
     address_family = models.ForeignKey(
         verbose_name=_('Address Family'),
         to=EIGRPAddressFamily,
         on_delete=models.CASCADE,
         blank=True,
-        null=True
+        null=True,
     )
     network = models.ForeignKey(
         verbose_name=_('Network'),
@@ -134,15 +119,19 @@ class EIGRPNetwork(PrimaryModel):
         related_name='eigrp',
         on_delete=models.CASCADE,
         blank=False,
-        null=False
+        null=False,
     )
 
     class Meta:
         verbose_name = 'EIGRP Network'
         constraints = (
             models.UniqueConstraint(
-                fields=('router', 'address_family', 'network',),
-                name='%(app_label)s_%(class)s_unique_network'
+                fields=(
+                    'router',
+                    'address_family',
+                    'network',
+                ),
+                name='%(app_label)s_%(class)s_unique_network',
             ),
         )
 
@@ -161,14 +150,14 @@ class EIGRPInterface(PrimaryModel):
         to=EIGRPRouter,
         on_delete=models.CASCADE,
         blank=False,
-        null=False
+        null=False,
     )
     address_family = models.ForeignKey(
         verbose_name=_('Address Family'),
         to=EIGRPAddressFamily,
         on_delete=models.CASCADE,
         blank=True,
-        null=True
+        null=True,
     )
     interface = models.ForeignKey(
         verbose_name=_('Interface'),
@@ -176,7 +165,7 @@ class EIGRPInterface(PrimaryModel):
         related_name='eigrp',
         on_delete=models.CASCADE,
         blank=False,
-        null=False
+        null=False,
     )
     passive = models.BooleanField(
         verbose_name=_('Passive'),
@@ -189,21 +178,22 @@ class EIGRPInterface(PrimaryModel):
         max_length=50,
         choices=choices.AuthenticationChoices,
         blank=True,
-        null=True
+        null=True,
     )
     passphrase = models.CharField(
-        verbose_name=_('Passphrase'),
-        max_length=200,
-        blank=True,
-        null=True
+        verbose_name=_('Passphrase'), max_length=200, blank=True, null=True
     )
 
     class Meta:
         verbose_name = 'EIGRP Interface'
         constraints = (
             models.UniqueConstraint(
-                fields=('router', 'address_family', 'interface',),
-                name='%(app_label)s_%(class)s_unique_interface'
+                fields=(
+                    'router',
+                    'address_family',
+                    'interface',
+                ),
+                name='%(app_label)s_%(class)s_unique_interface',
             ),
         )
 

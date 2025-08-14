@@ -1,10 +1,10 @@
 from django.test import TestCase
 
-from dcim.models import Device, Interface
-from utilities.testing import create_test_device
+# from dcim.models import Device, Interface
+# from utilities.testing import create_test_device
 
-from netbox_routing.forms import *
-from netbox_routing.models import *
+# from netbox_routing.forms import *
+# from netbox_routing.models import *
 
 __all__ = (
     'EIGRPRouterTestCase',

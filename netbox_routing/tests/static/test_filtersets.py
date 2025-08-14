@@ -7,9 +7,7 @@ from utilities.testing import create_test_device
 from netbox_routing.filtersets import *
 from netbox_routing.models import *
 
-__all__ = (
-    'StaticRouteTestCase',
-)
+__all__ = ('StaticRouteTestCase',)
 
 
 class StaticRouteTestCase(TestCase):
@@ -18,15 +16,23 @@ class StaticRouteTestCase(TestCase):
 
     @classmethod
     def setUpTestData(cls):
-        devices = [create_test_device(name='Device 1'), create_test_device(name='Device 2')]
+        devices = [
+            create_test_device(name='Device 1'),
+            create_test_device(name='Device 2'),
+        ]
         vrf = VRF.objects.create(name='Test VRF')
 
         nh = netaddr.IPAddress('10.10.10.1')
 
         routes = (
             StaticRoute(name="Route 1", vrf=vrf, prefix='0.0.0.0/0', next_hop=nh),
-            StaticRoute(name="Route 2", vrf=vrf, prefix='1.1.1.0/24', next_hop=netaddr.IPAddress('10.10.10.2')),
-            StaticRoute(name="Route 3", prefix='0.0.0.0/0', next_hop=nh, metric=100)
+            StaticRoute(
+                name="Route 2",
+                vrf=vrf,
+                prefix='1.1.1.0/24',
+                next_hop=netaddr.IPAddress('10.10.10.2'),
+            ),
+            StaticRoute(name="Route 3", prefix='0.0.0.0/0', next_hop=nh, metric=100),
         )
 
         StaticRoute.objects.bulk_create(routes)

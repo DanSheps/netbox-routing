@@ -1,4 +1,4 @@
-from typing import Annotated, List, Union
+from typing import Annotated, List
 
 import strawberry
 import strawberry_django
@@ -10,11 +10,9 @@ from netbox_routing import models
 
 __all__ = (
     'StaticRouteType',
-    
     'OSPFInstanceType',
     'OSPFAreaType',
     'OSPFInterfaceType',
-    
     'EIGRPRouterType',
     'EIGRPAddressFamilyType',
     'EIGRPNetworkType',
@@ -22,11 +20,7 @@ __all__ = (
 )
 
 
-@strawberry_django.type(
-    models.StaticRoute,
-    fields='__all__',
-    filters=StaticRouteFilter
-)
+@strawberry_django.type(models.StaticRoute, fields='__all__', filters=StaticRouteFilter)
 class StaticRouteType(NetBoxObjectType):
 
     name: str
@@ -39,9 +33,7 @@ class StaticRouteType(NetBoxObjectType):
 
 
 @strawberry_django.type(
-    models.OSPFInstance,
-    fields='__all__',
-    filters=OSPFInstanceFilter
+    models.OSPFInstance, fields='__all__', filters=OSPFInstanceFilter
 )
 class OSPFInstanceType(NetBoxObjectType):
 
@@ -52,24 +44,21 @@ class OSPFInstanceType(NetBoxObjectType):
     process_id: str
 
 
-@strawberry_django.type(
-    models.OSPFArea,
-    fields='__all__',
-    filters=OSPFAreaFilter
-)
+@strawberry_django.type(models.OSPFArea, fields='__all__', filters=OSPFAreaFilter)
 class OSPFAreaType(NetBoxObjectType):
 
     area_id: str
+    area_type: str
 
 
 @strawberry_django.type(
-    models.OSPFInterface,
-    fields='__all__',
-    filters=OSPFInterfaceFilter
+    models.OSPFInterface, fields='__all__', filters=OSPFInterfaceFilter
 )
 class OSPFInterfaceType(NetBoxObjectType):
 
-    instance: Annotated["OSPFInstanceType", strawberry.lazy('netbox_routing.graphql.types')]
+    instance: Annotated[
+        "OSPFInstanceType", strawberry.lazy('netbox_routing.graphql.types')
+    ]
     area: Annotated["OSPFAreaType", strawberry.lazy('netbox_routing.graphql.types')]
     interface: Annotated["InterfaceType", strawberry.lazy('dcim.graphql.types')]
     passive: bool | None
@@ -79,11 +68,7 @@ class OSPFInterfaceType(NetBoxObjectType):
     passphrase: str | None
 
 
-@strawberry_django.type(
-    models.EIGRPRouter,
-    fields='__all__',
-    filters=EIGRPRouterFilter
-)
+@strawberry_django.type(models.EIGRPRouter, fields='__all__', filters=EIGRPRouterFilter)
 class EIGRPRouterType(NetBoxObjectType):
 
     device: Annotated["DeviceType", strawberry.lazy('dcim.graphql.types')]
@@ -94,40 +79,49 @@ class EIGRPRouterType(NetBoxObjectType):
 
 
 @strawberry_django.type(
-    models.EIGRPAddressFamily,
-    fields='__all__',
-    filters=EIGRPAddressFamilyFilter
+    models.EIGRPAddressFamily, fields='__all__', filters=EIGRPAddressFamilyFilter
 )
 class EIGRPAddressFamilyType(NetBoxObjectType):
 
-    router: Annotated["EIGRPRouterType", strawberry.lazy('netbox_routing.graphql.types')]
+    router: Annotated[
+        "EIGRPRouterType", strawberry.lazy('netbox_routing.graphql.types')
+    ]
     rid: str
 
 
 @strawberry_django.type(
-    models.EIGRPNetwork,
-    fields='__all__',
-    filters=EIGRPNetworkFilter
+    models.EIGRPNetwork, fields='__all__', filters=EIGRPNetworkFilter
 )
 class EIGRPNetworkType(NetBoxObjectType):
 
-    router: Annotated["EIGRPRouterType", strawberry.lazy('netbox_routing.graphql.types')]
-    address_family: Annotated["EIGRPAddressFamilyType", strawberry.lazy('netbox_routing.graphql.types')] | None
+    router: Annotated[
+        "EIGRPRouterType", strawberry.lazy('netbox_routing.graphql.types')
+    ]
+    address_family: (
+        Annotated[
+            "EIGRPAddressFamilyType", strawberry.lazy('netbox_routing.graphql.types')
+        ]
+        | None
+    )
     network: Annotated["PrefixType", strawberry.lazy('ipam.graphql.types')]
 
 
 @strawberry_django.type(
-    models.EIGRPInterface,
-    fields='__all__',
-    filters=EIGRPInterfaceFilter
+    models.EIGRPInterface, fields='__all__', filters=EIGRPInterfaceFilter
 )
 class EIGRPInterfaceType(NetBoxObjectType):
 
-    router: Annotated["EIGRPRouterType", strawberry.lazy('netbox_routing.graphql.types')]
-    address_family: Annotated["EIGRPAddressFamilyType", strawberry.lazy('netbox_routing.graphql.types')] | None
+    router: Annotated[
+        "EIGRPRouterType", strawberry.lazy('netbox_routing.graphql.types')
+    ]
+    address_family: (
+        Annotated[
+            "EIGRPAddressFamilyType", strawberry.lazy('netbox_routing.graphql.types')
+        ]
+        | None
+    )
     interface: Annotated["InterfaceType", strawberry.lazy('dcim.graphql.types')]
     passive: str | None
     bfd: bool | None
     authentication: str | None
     passphrase: str | None
-

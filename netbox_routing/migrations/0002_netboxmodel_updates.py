@@ -14,26 +14,36 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='prefixlist',
             name='custom_field_data',
-            field=models.JSONField(blank=True, default=dict, encoder=utilities.json.CustomFieldJSONEncoder),
+            field=models.JSONField(
+                blank=True, default=dict, encoder=utilities.json.CustomFieldJSONEncoder
+            ),
         ),
         migrations.AlterField(
             model_name='prefixlistentry',
             name='custom_field_data',
-            field=models.JSONField(blank=True, default=dict, encoder=utilities.json.CustomFieldJSONEncoder),
+            field=models.JSONField(
+                blank=True, default=dict, encoder=utilities.json.CustomFieldJSONEncoder
+            ),
         ),
         migrations.AlterField(
             model_name='routemap',
             name='custom_field_data',
-            field=models.JSONField(blank=True, default=dict, encoder=utilities.json.CustomFieldJSONEncoder),
+            field=models.JSONField(
+                blank=True, default=dict, encoder=utilities.json.CustomFieldJSONEncoder
+            ),
         ),
         migrations.AlterField(
             model_name='routemapentry',
             name='custom_field_data',
-            field=models.JSONField(blank=True, default=dict, encoder=utilities.json.CustomFieldJSONEncoder),
+            field=models.JSONField(
+                blank=True, default=dict, encoder=utilities.json.CustomFieldJSONEncoder
+            ),
         ),
         migrations.AlterField(
             model_name='staticroute',
             name='custom_field_data',
-            field=models.JSONField(blank=True, default=dict, encoder=utilities.json.CustomFieldJSONEncoder),
+            field=models.JSONField(
+                blank=True, default=dict, encoder=utilities.json.CustomFieldJSONEncoder
+            ),
         ),
     ]

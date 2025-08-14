@@ -34,7 +34,15 @@ class EIGRPRouterForm(NetBoxModelForm):
 
     class Meta:
         model = EIGRPRouter
-        fields = ('device', 'mode', 'name', 'pid', 'rid', 'description', 'comments', )
+        fields = (
+            'device',
+            'mode',
+            'name',
+            'pid',
+            'rid',
+            'description',
+            'comments',
+        )
         widgets = {
             'mode': HTMXSelect(),
         }
@@ -69,11 +77,15 @@ class EIGRPAddressFamilyForm(NetBoxModelForm):
     )
     comments = CommentField()
 
-
     class Meta:
         model = EIGRPAddressFamily
         fields = (
-            'router', 'vrf', 'family', 'rid', 'description', 'comments',
+            'router',
+            'vrf',
+            'family',
+            'rid',
+            'description',
+            'comments',
         )
 
 
@@ -98,11 +110,14 @@ class EIGRPNetworkForm(NetBoxModelForm):
     )
     comments = CommentField()
 
-
     class Meta:
         model = EIGRPNetwork
         fields = (
-            'router', 'address_family', 'network', 'description', 'comments',
+            'router',
+            'address_family',
+            'network',
+            'description',
+            'comments',
         )
 
 
@@ -120,7 +135,7 @@ class EIGRPInterfaceForm(NetBoxModelForm):
         label=_('EIGRP Router'),
         query_params={
             'device_id': '$device',
-        }
+        },
     )
     address_family = DynamicModelChoiceField(
         queryset=EIGRPAddressFamily.objects.all(),
@@ -129,7 +144,7 @@ class EIGRPInterfaceForm(NetBoxModelForm):
         label=_('Address Family'),
         query_params={
             'router_id': '$router',
-        }
+        },
     )
     interface = DynamicModelChoiceField(
         queryset=Interface.objects.all(),
@@ -138,23 +153,28 @@ class EIGRPInterfaceForm(NetBoxModelForm):
         label=_('Interface'),
         query_params={
             'device_id': '$device',
-        }
+        },
     )
     passive = forms.BooleanField(
         required=False,
         label='Passive Interface',
-        widget=forms.Select(
-            choices=BOOLEAN_WITH_BLANK_CHOICES
-        )
+        widget=forms.Select(choices=BOOLEAN_WITH_BLANK_CHOICES),
     )
     comments = CommentField()
-
 
     class Meta:
         model = EIGRPInterface
         fields = (
-            'device', 'router', 'address_family', 'interface', 'passive', 'bfd', 'authentication', 'passphrase',
-            'description', 'comments',
+            'device',
+            'router',
+            'address_family',
+            'interface',
+            'passive',
+            'bfd',
+            'authentication',
+            'passphrase',
+            'description',
+            'comments',
         )
 
         widgets = {
@@ -169,18 +189,32 @@ class EIGRPInterfaceForm(NetBoxModelForm):
     def clean(self):
         super().clean()
         if self.cleaned_data.get('router') and self.cleaned_data.get('address_family'):
-            if self.cleaned_data.get('router') != self.cleaned_data.get('address_family').router:
+            if (
+                self.cleaned_data.get('router')
+                != self.cleaned_data.get('address_family').router
+            ):
                 raise ValidationError(
                     {
-                        'router': _('EIGRP Router and EIGRP Address Family Router must match'),
-                        'interface': _('EIGRP Router and EIGRP Address Family Router must match')
+                        'router': _(
+                            'EIGRP Router and EIGRP Address Family Router must match'
+                        ),
+                        'interface': _(
+                            'EIGRP Router and EIGRP Address Family Router must match'
+                        ),
                     }
                 )
         if self.cleaned_data.get('router') and self.cleaned_data.get('interface'):
-            if self.cleaned_data.get('router').device != self.cleaned_data.get('interface').device:
+            if (
+                self.cleaned_data.get('router').device
+                != self.cleaned_data.get('interface').device
+            ):
                 raise ValidationError(
                     {
-                        'router': _('EIGRP Router Device and Interface Device must match'),
-                        'interface': _('EIGRP Interface Device and Interface Device must match')
+                        'router': _(
+                            'EIGRP Router Device and Interface Device must match'
+                        ),
+                        'interface': _(
+                            'EIGRP Interface Device and Interface Device must match'
+                        ),
                     }
                 )

@@ -45,18 +45,28 @@ class StaticRouteFilterSet(NetBoxModelFilterSet):
 
     class Meta:
         model = StaticRoute
-        fields = ('name', 'devices', 'device', 'device_id', 'vrf', 'vrf_id', 'prefix', 'metric', 'next_hop')
+        fields = (
+            'name',
+            'devices',
+            'device',
+            'device_id',
+            'vrf',
+            'vrf_id',
+            'prefix',
+            'metric',
+            'next_hop',
+        )
 
     def search(self, queryset, name, value):
         if not value.strip():
             return queryset
         qs_filter = (
-            Q(devices__name__icontains=value) |
-            Q(vrf__name__icontains=value) |
-            Q(vrf__rd__icontains=value) |
-            Q(prefix__icontains=value) |
-            Q(next_hop__icontains=value) |
-            Q(name__icontains=value)
+            Q(devices__name__icontains=value)
+            | Q(vrf__name__icontains=value)
+            | Q(vrf__rd__icontains=value)
+            | Q(prefix__icontains=value)
+            | Q(next_hop__icontains=value)
+            | Q(name__icontains=value)
         )
         return queryset.filter(qs_filter).distinct()
 
@@ -75,5 +85,5 @@ class StaticRouteFilterSet(NetBoxModelFilterSet):
         try:
             query = netaddr.IPAddress(value)
             return queryset.filter(**{f'{name}': query})
-        except (netaddr.AddrFormatError, ValueError) as e:
+        except (netaddr.AddrFormatError, ValueError):
             return queryset.none()

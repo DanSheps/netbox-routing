@@ -1,6 +1,10 @@
 from netbox.api.viewsets import NetBoxModelViewSet
 from netbox_routing import filtersets
-from netbox_routing.api.serializers import OSPFInstanceSerializer, OSPFAreaSerializer, OSPFInterfaceSerializer
+from netbox_routing.api.serializers import (
+    OSPFInstanceSerializer,
+    OSPFAreaSerializer,
+    OSPFInterfaceSerializer,
+)
 from netbox_routing.models import OSPFInstance, OSPFArea, OSPFInterface
 
 

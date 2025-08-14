@@ -15,7 +15,13 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='bgpsessiontemplate',
             name='asn',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT, related_name='session_templates', to='ipam.asn'),
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.PROTECT,
+                related_name='session_templates',
+                to='ipam.asn',
+            ),
         ),
         migrations.AddField(
             model_name='bgpsessiontemplate',
@@ -25,7 +31,13 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='bgpsessiontemplate',
             name='parent',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT, related_name='children', to='netbox_routing.bgpsessiontemplate'),
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.PROTECT,
+                related_name='children',
+                to='netbox_routing.bgpsessiontemplate',
+            ),
         ),
         migrations.AddField(
             model_name='bgpsessiontemplate',

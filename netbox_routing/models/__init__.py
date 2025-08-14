@@ -6,24 +6,20 @@ from .eigrp import *
 
 __all__ = (
     'StaticRoute',
-
     'OSPFArea',
     'OSPFInstance',
     'OSPFInterface',
-
     'EIGRPRouter',
     'EIGRPAddressFamily',
     'EIGRPNetwork',
     'EIGRPInterface',
-
     'PrefixList',
     'PrefixListEntry',
     'RouteMap',
     'RouteMapEntry',
-
     # Not fully implemented
     'BGPRouter',
     'BGPScope',
     'BGPAddressFamily',
-    'BGPSetting'
+    'BGPSetting',
 )

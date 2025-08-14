@@ -1,139 +1,117 @@
 from django.urls import path, include
 
-from netbox.views.generic import ObjectChangeLogView
 from utilities.urls import get_model_urls
 
-from . import views
-from .models import StaticRoute, PrefixList, PrefixListEntry, RouteMap, RouteMapEntry, OSPFInstance, OSPFArea, \
-    OSPFInterface, BGPRouter, BGPScope, BGPAddressFamily
-
+from . import views  # noqa F401
 
 urlpatterns = [
-    path('routes/static/', views.StaticRouteListView.as_view(), name='staticroute_list'),
-    path('routes/static/add/', views.StaticRouteEditView.as_view(), name='staticroute_add'),
-    path('routes/static/import/', views.StaticRouteListView.as_view(), name='staticroute_import'),
-    path('routes/static/edit/', views.StaticRouteBulkEditView.as_view(), name='staticroute_bulk_edit'),
-    path('routes/static/delete/', views.StaticRouteBulkDeleteView.as_view(), name='staticroute_bulk_delete'),
-    path('routes/static/<int:pk>/', views.StaticRouteView.as_view(), name='staticroute'),
-    path('routes/static/<int:pk>/edit/', views.StaticRouteEditView.as_view(), name='staticroute_edit'),
-    path('routes/static/<int:pk>/devices/', views.StaticRouteDevicesView.as_view(), name='staticroute_devices'),
-    path('routes/static/<int:pk>/delete/', views.StaticRouteDeleteView.as_view(), name='staticroute_delete'),
-    path('routes/static/<int:pk>/changelog/', ObjectChangeLogView.as_view(), name='staticroute_changelog', kwargs={'model': StaticRoute}),
-
-    path('ospf/instance/', views.OSPFInstanceListView.as_view(), name='ospfinstance_list'),
-    path('ospf/instance/add/', views.OSPFInstanceEditView.as_view(), name='ospfinstance_add'),
-    path('ospf/instance/edit/', views.OSPFInstanceBulkEditView.as_view(), name='ospfinstance_bulk_edit'),
-    path('ospf/instance/delete/', views.OSPFInstanceBulkDeleteView.as_view(), name='ospfinstance_bulk_delete'),
-    path('ospf/instance/import/', views.OSPFInstanceListView.as_view(), name='ospfinstance_import'),
-    path('ospf/instance/<int:pk>/', views.OSPFInstanceView.as_view(), name='ospfinstance'),
-    path('ospf/instance/<int:pk>/edit/', views.OSPFInstanceEditView.as_view(), name='ospfinstance_edit'),
-    path('ospf/instance/<int:pk>/interfaces/', views.OSPFInstanceInterfacesView.as_view(), name='ospfinstance_interfaces'),
-    path('ospf/instance/<int:pk>/delete/', views.OSPFInstanceDeleteView.as_view(), name='ospfinstance_delete'),
-    path('ospf/instance/<int:pk>/changelog/', ObjectChangeLogView.as_view(), name='ospfinstance_changelog', kwargs={'model': OSPFInstance}),
-
-    path('ospf/area/', views.OSPFAreaListView.as_view(), name='ospfarea_list'),
-    path('ospf/area/add/', views.OSPFAreaEditView.as_view(), name='ospfarea_add'),
-    path('ospf/area/edit/', views.OSPFAreaBulkEditView.as_view(), name='ospfarea_bulk_edit'),
-    path('ospf/area/delete/', views.OSPFAreaBulkDeleteView.as_view(), name='ospfarea_bulk_delete'),
-    path('ospf/area/import/', views.OSPFAreaListView.as_view(), name='ospfarea_import'),
-    path('ospf/area/<int:pk>/', views.OSPFAreaView.as_view(), name='ospfarea'),
-    path('ospf/area/<int:pk>/edit/', views.OSPFAreaEditView.as_view(), name='ospfarea_edit'),
-    path('ospf/area/<int:pk>/interfaces/', views.OSPFAreaInterfacesView.as_view(), name='ospfarea_interfaces'),
-    path('ospf/area/<int:pk>/delete/', views.OSPFAreaDeleteView.as_view(), name='ospfarea_delete'),
-    path('ospf/area/<int:pk>/changelog/', ObjectChangeLogView.as_view(), name='ospfarea_changelog', kwargs={'model': OSPFArea}),
-
-    path('ospf/interface/', views.OSPFInterfaceListView.as_view(), name='ospfinterface_list'),
-    path('ospf/interface/add/', views.OSPFInterfaceEditView.as_view(), name='ospfinterface_add'),
-    path('ospf/interface/import/', views.OSPFInterfaceListView.as_view(), name='ospfinterface_import'),
-    path('ospf/interface/edit/', views.OSPFInterfaceBulkEditView.as_view(), name='ospfinterface_bulk_edit'),
-    path('ospf/interface/delete/', views.OSPFInterfaceBulkDeleteView.as_view(), name='ospfinterface_bulk_delete'),
-    path('ospf/interface/<int:pk>/', views.OSPFInterfaceView.as_view(), name='ospfinterface'),
-    path('ospf/interface/<int:pk>/edit/', views.OSPFInterfaceEditView.as_view(), name='ospfinterface_edit'),
-    path('ospf/interface/<int:pk>/delete/', views.OSPFInterfaceDeleteView.as_view(), name='ospfinterface_delete'),
-    path('ospf/interface/<int:pk>/changelog/', ObjectChangeLogView.as_view(), name='ospfinterface_changelog', kwargs={'model': OSPFInterface}),
-
-    path('eigrp/router/', views.EIGRPRouterListView.as_view(), name='eigrprouter_list'),
-    path('eigrp/router/add/', views.EIGRPRouterEditView.as_view(), name='eigrprouter_add'),
-    path('eigrp/router/edit/', views.EIGRPRouterBulkEditView.as_view(), name='eigrprouter_bulk_edit'),
-    path('eigrp/router/delete/', views.EIGRPRouterBulkDeleteView.as_view(), name='eigrprouter_bulk_delete'),
-    path('eigrp/router/import/', views.EIGRPRouterImportView.as_view(), name='eigrprouter_import'),
-    path('eigrp/router/<int:pk>/', include(get_model_urls('netbox_routing', 'eigrprouter'))),
-
-    path('eigrp/address-family/', views.EIGRPAddressFamilyListView.as_view(), name='eigrpaddressfamily_list'),
-    path('eigrp/address-family/add/', views.EIGRPAddressFamilyEditView.as_view(), name='eigrpaddressfamily_add'),
-    path('eigrp/address-family/edit/', views.EIGRPAddressFamilyBulkEditView.as_view(), name='eigrpaddressfamily_bulk_edit'),
-    path('eigrp/address-family/delete/', views.EIGRPAddressFamilyBulkDeleteView.as_view(), name='eigrpaddressfamily_bulk_delete'),
-    path('eigrp/address-family/<int:pk>/', include(get_model_urls('netbox_routing', 'eigrpaddressfamily'))),
-
-    path('eigrp/network/', views.EIGRPNetworkListView.as_view(), name='eigrpnetwork_list'),
-    path('eigrp/network/add/', views.EIGRPNetworkEditView.as_view(), name='eigrpnetwork_add'),
-    path('eigrp/network/edit/', views.EIGRPNetworkBulkEditView.as_view(), name='eigrpnetwork_bulk_edit'),
-    path('eigrp/network/delete/', views.EIGRPNetworkBulkDeleteView.as_view(), name='eigrpnetwork_bulk_delete'),
-    path('eigrp/network/<int:pk>/', include(get_model_urls('netbox_routing', 'eigrpnetwork'))),
-
-    path('eigrp/interface/', views.EIGRPInterfaceListView.as_view(), name='eigrpinterface_list'),
-    path('eigrp/interface/add/', views.EIGRPInterfaceEditView.as_view(), name='eigrpinterface_add'),
-    path('eigrp/interface/import/', views.EIGRPInterfaceListView.as_view(), name='eigrpinterface_import'),
-    path('eigrp/interface/edit/', views.EIGRPInterfaceBulkEditView.as_view(), name='eigrpinterface_bulk_edit'),
-    path('eigrp/interface/delete/', views.EIGRPInterfaceBulkDeleteView.as_view(), name='eigrpinterface_bulk_delete'),
-    path('eigrp/interface/<int:pk>/', include(get_model_urls('netbox_routing', 'eigrpinterface'))),
-
-    path('bgp/router/', views.BGPRouterListView.as_view(), name='bgprouter_list'),
-    path('bgp/router/add/', views.BGPRouterEditView.as_view(), name='bgprouter_add'),
-    path('bgp/router/<int:pk>/', views.BGPRouterView.as_view(), name='bgprouter'),
-    path('bgp/router/<int:pk>/edit', views.BGPRouterEditView.as_view(), name='bgprouter_edit'),
-    path('bgp/router/<int:pk>/delete', views.BGPRouterEditView.as_view(), name='bgprouter_delete'),
-    path('bgp/<int:pk>/changelog/', ObjectChangeLogView.as_view(), name='bgprouter_changelog', kwargs={'model': BGPRouter}),
-
-    path('bgp/scope/', views.BGPScopeListView.as_view(), name='bgpscope_list'),
-    path('bgp/scope/add/', views.BGPScopeEditView.as_view(), name='bgpscope_add'),
-    path('bgp/scope/<int:pk>/', views.BGPScopeView.as_view(), name='bgpscope'),
-    path('bgp/scope/<int:pk>/edit', views.BGPScopeEditView.as_view(), name='bgpscope_edit'),
-    path('bgp/scope/<int:pk>/delete', views.BGPScopeEditView.as_view(), name='bgpscope_delete'),
-    path('bgp/<int:pk>/changelog/', ObjectChangeLogView.as_view(), name='bgpscope_changelog', kwargs={'model': BGPScope}),
-
-    path('bgp/address_family/', views.BGPAddressFamilyListView.as_view(), name='bgpaddressfamily_list'),
-    path('bgp/address_family/add/', views.BGPAddressFamilyEditView.as_view(), name='bgpaddressfamily_add'),
-    path('bgp/address_family/<int:pk>/', views.BGPAddressFamilyView.as_view(), name='bgpaddressfamily'),
-    path('bgp/address_family/<int:pk>/edit', views.BGPAddressFamilyEditView.as_view(), name='bgpaddressfamily_edit'),
-    path('bgp/address_family/<int:pk>/delete', views.BGPAddressFamilyEditView.as_view(), name='bgpaddressfamily_delete'),
-    path('bgp/<int:pk>/changelog/', ObjectChangeLogView.as_view(), name='bgpaddressfamily_changelog', kwargs={'model': BGPAddressFamily}),
-
-    path('prefix-list/', views.PrefixListListView.as_view(), name='prefixlist_list'),
-    path('prefix-list/add/', views.PrefixListEditView.as_view(), name='prefixlist_add'),
-    path('prefix-list/import/', views.PrefixListListView.as_view(), name='prefixlist_import'),
-    path('prefix-list/<int:pk>/', views.PrefixListView.as_view(), name='prefixlist'),
-    path('prefix-list/<int:pk>/edit/', views.PrefixListEditView.as_view(), name='prefixlist_edit'),
-    path('prefix-list/<int:pk>/entries/', views.PrefixListEntriesView.as_view(), name='prefixlist_entries'),
-    path('prefix-list/<int:pk>/delete/', views.PrefixListView.as_view(), name='prefixlist_delete'),
-    path('prefix-list/<int:pk>/changelog/', ObjectChangeLogView.as_view(), name='prefixlist_changelog', kwargs={'model': PrefixList}),
-
-    path('prefix-list-entry/', views.PrefixListEntryListView.as_view(), name='prefixlistentry_list'),
-    path('prefix-list-entry/add/', views.PrefixListEntryEditView.as_view(), name='prefixlistentry_add'),
-    path('prefix-list-entry/edit/', views.PrefixListEntryBulkEditView.as_view(), name='prefixlistentry_bulk_edit'),
-    path('prefix-list-entry/delete/', views.PrefixListEntryBulkDeleteView.as_view(), name='prefixlistentry_bulk_delete'),
-    path('prefix-list-entry/import/', views.PrefixListEntryListView.as_view(), name='prefixlistentry_import'),
-    path('prefix-list-entry/<int:pk>/', views.PrefixListEntryView.as_view(), name='prefixlistentry'),
-    path('prefix-list-entry/<int:pk>/edit/', views.PrefixListEntryEditView.as_view(), name='prefixlistentry_edit'),
-    path('prefix-list-entry/<int:pk>/delete/', views.PrefixListEntryDeleteView.as_view(), name='prefixlistentry_delete'),
-    path('prefix-list-entry/<int:pk>/changelog/', ObjectChangeLogView.as_view(), name='prefixlistentry_changelog', kwargs={'model': PrefixListEntry}),
-
-    path('route-map/', views.RouteMapListView.as_view(), name='routemap_list'),
-    path('route-map/add/', views.RouteMapEditView.as_view(), name='routemap_add'),
-    path('route-map/import/', views.RouteMapListView.as_view(), name='routemap_import'),
-    path('route-map/<int:pk>/', views.RouteMapView.as_view(), name='routemap'),
-    path('route-map/<int:pk>/entries/', views.RouteMapEntriesView.as_view(), name='routemap_entries'),
-    path('route-map/<int:pk>/edit/', views.RouteMapEditView.as_view(), name='routemap_edit'),
-    path('route-map/<int:pk>/delete/', views.RouteMapView.as_view(), name='routemap_delete'),
-    path('route-map/<int:pk>/changelog/', ObjectChangeLogView.as_view(), name='routemap_changelog', kwargs={'model': RouteMap}),
-
-    path('route-map-entry/', views.RouteMapEntryListView.as_view(), name='routemapentry_list'),
-    path('route-map-entry/add/', views.RouteMapEntryEditView.as_view(), name='routemapentry_add'),
-    path('route-map-entry/edit/', views.RouteMapEntryBulkEditView.as_view(), name='routemapentry_bulk_edit'),
-    path('route-map-entry/delete/', views.RouteMapEntryBulkDeleteView.as_view(), name='routemapentry_bulk_delete'),
-    path('route-map-entry/import/', views.RouteMapEntryListView.as_view(), name='routemapentry_import'),
-    path('route-map-entry/<int:pk>/', views.RouteMapEntryView.as_view(), name='routemapentry'),
-    path('route-map-entry/<int:pk>/edit/', views.RouteMapEntryEditView.as_view(), name='routemapentry_edit'),
-    path('route-map-entry/<int:pk>/delete/', views.RouteMapEntryDeleteView.as_view(), name='routemapentry_delete'),
-    path('route-map-entry/<int:pk>/changelog/', ObjectChangeLogView.as_view(), name='routemapentry_changelog', kwargs={'model': RouteMapEntry}),
+    path(
+        'routes/static/',
+        include(get_model_urls('netbox_routing', 'staticroute', detail=False)),
+    ),
+    path(
+        'routes/static/<int:pk>/',
+        include(get_model_urls('netbox_routing', 'staticroute')),
+    ),
+    path(
+        'ospf/instance/',
+        include(get_model_urls('netbox_routing', 'ospfinstance', detail=False)),
+    ),
+    path(
+        'ospf/instance/<int:pk>/',
+        include(get_model_urls('netbox_routing', 'ospfinstance')),
+    ),
+    path(
+        'ospf/area/',
+        include(get_model_urls('netbox_routing', 'ospfarea', detail=False)),
+    ),
+    path('ospf/area/<int:pk>/', include(get_model_urls('netbox_routing', 'ospfarea'))),
+    path(
+        'ospf/interface/',
+        include(get_model_urls('netbox_routing', 'ospfinterface', detail=False)),
+    ),
+    path(
+        'ospf/interface/<int:pk>/',
+        include(get_model_urls('netbox_routing', 'ospfinterface')),
+    ),
+    path(
+        'eigrp/router/',
+        include(get_model_urls('netbox_routing', 'eigrprouter', detail=False)),
+    ),
+    path(
+        'eigrp/router/<int:pk>/',
+        include(get_model_urls('netbox_routing', 'eigrprouter')),
+    ),
+    path(
+        'eigrp/address-family/',
+        include(get_model_urls('netbox_routing', 'eigrpaddressfamily', detail=False)),
+    ),
+    path(
+        'eigrp/address-family/<int:pk>/',
+        include(get_model_urls('netbox_routing', 'eigrpaddressfamily')),
+    ),
+    path(
+        'eigrp/network/',
+        include(get_model_urls('netbox_routing', 'eigrpnetwork', detail=False)),
+    ),
+    path(
+        'eigrp/network/<int:pk>/',
+        include(get_model_urls('netbox_routing', 'eigrpnetwork')),
+    ),
+    path(
+        'eigrp/interface/',
+        include(get_model_urls('netbox_routing', 'eigrpinterface', detail=False)),
+    ),
+    path(
+        'eigrp/interface/<int:pk>/',
+        include(get_model_urls('netbox_routing', 'eigrpinterface')),
+    ),
+    path(
+        'bgp/router/',
+        include(get_model_urls('netbox_routing', 'bgprouter', detail=False)),
+    ),
+    path(
+        'bgp/router/<int:pk>/', include(get_model_urls('netbox_routing', 'bgprouter'))
+    ),
+    path(
+        'bgp/scope/',
+        include(get_model_urls('netbox_routing', 'bgpscope', detail=False)),
+    ),
+    path('bgp/scope/<int:pk>/', include(get_model_urls('netbox_routing', 'bgpscope'))),
+    path(
+        'bgp/address-family/',
+        include(get_model_urls('netbox_routing', 'bgpaddressfamily', detail=False)),
+    ),
+    path(
+        'bgp/address-family/<int:pk>/',
+        include(get_model_urls('netbox_routing', 'bgpaddressfamily')),
+    ),
+    path(
+        'prefix-list/',
+        include(get_model_urls('netbox_routing', 'prefixlist', detail=False)),
+    ),
+    path(
+        'prefix-list/<int:pk>/', include(get_model_urls('netbox_routing', 'prefixlist'))
+    ),
+    path(
+        'prefix-list-entry/',
+        include(get_model_urls('netbox_routing', 'prefixlistentry', detail=False)),
+    ),
+    path(
+        'prefix-list-entry/<int:pk>/',
+        include(get_model_urls('netbox_routing', 'prefixlistentry')),
+    ),
+    path(
+        'route-map/',
+        include(get_model_urls('netbox_routing', 'routemap', detail=False)),
+    ),
+    path('route-map/<int:pk>/', include(get_model_urls('netbox_routing', 'routemap'))),
+    path(
+        'route-map-entry/',
+        include(get_model_urls('netbox_routing', 'routemapentry', detail=False)),
+    ),
+    path(
+        'route-map-entry/<int:pk>/',
+        include(get_model_urls('netbox_routing', 'routemapentry')),
+    ),
 ]

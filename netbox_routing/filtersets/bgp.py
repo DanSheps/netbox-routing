@@ -17,7 +17,6 @@ __all__ = (
 )
 
 
-
 class BGPRouterFilterSet(NetBoxModelFilterSet):
     device_id = django_filters.ModelMultipleChoiceFilter(
         field_name='device',
@@ -49,12 +48,8 @@ class BGPRouterFilterSet(NetBoxModelFilterSet):
     def search(self, queryset, name, value):
         if not value.strip():
             return queryset
-        qs_filter = (
-            Q(device__name__icontains=value) |
-            Q(asn__asn__icontains=value)
-        )
+        qs_filter = Q(device__name__icontains=value) | Q(asn__asn__icontains=value)
         return queryset.filter(qs_filter).distinct()
-
 
 
 class BGPScopeFilterSet(NetBoxModelFilterSet):
@@ -83,12 +78,11 @@ class BGPScopeFilterSet(NetBoxModelFilterSet):
         if not value.strip():
             return queryset
         qs_filter = (
-            Q(router__device__name__icontains=value) |
-            Q(router__asn__asn__icontains=value) |
-            Q(vrf__name__icontains=value)
+            Q(router__device__name__icontains=value)
+            | Q(router__asn__asn__icontains=value)
+            | Q(vrf__name__icontains=value)
         )
         return queryset.filter(qs_filter).distinct()
-
 
 
 class BGPAddressFamilyFilterSet(NetBoxModelFilterSet):
@@ -98,9 +92,7 @@ class BGPAddressFamilyFilterSet(NetBoxModelFilterSet):
         label=_('Router (ID)'),
     )
     address_family = django_filters.MultipleChoiceFilter(
-        choices=BGPAddressFamilyChoices,
-        null_value=None,
-        label=_('Address Family')
+        choices=BGPAddressFamilyChoices, null_value=None, label=_('Address Family')
     )
 
     class Meta:
@@ -110,27 +102,21 @@ class BGPAddressFamilyFilterSet(NetBoxModelFilterSet):
     def search(self, queryset, name, value):
         if not value.strip():
             return queryset
-        qs_filter = (
-            Q(address_family__icontains=value)
-        )
+        qs_filter = Q(address_family__icontains=value)
         return queryset.filter(qs_filter).distinct()
 
 
 class BGPSettingFilterSet(NetBoxModelFilterSet):
     key = django_filters.MultipleChoiceFilter(
-        choices=BGPSettingChoices,
-        null_value=None,
-        label=_('Setting Name')
+        choices=BGPSettingChoices, null_value=None, label=_('Setting Name')
     )
 
     class Meta:
         model = BGPSetting
-        fields = ('key', )
+        fields = ('key',)
 
     def search(self, queryset, name, value):
         if not value.strip():
             return queryset
-        qs_filter = (
-            Q(key__icontains=value)
-        )
+        qs_filter = Q(key__icontains=value)
         return queryset.filter(qs_filter).distinct()

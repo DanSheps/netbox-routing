@@ -1,11 +1,16 @@
 from netbox.api.viewsets import NetBoxModelViewSet
 from netbox_routing import filtersets
 from netbox_routing.api.serializers import (
-    EIGRPRouterSerializer, EIGRPRouterSerializer, EIGRPAddressFamilySerializer,
-    EIGRPInterfaceSerializer, EIGRPNetworkSerializer
+    EIGRPRouterSerializer,
+    EIGRPAddressFamilySerializer,
+    EIGRPInterfaceSerializer,
+    EIGRPNetworkSerializer,
 )
 from netbox_routing.models import (
-    EIGRPRouter, EIGRPAddressFamily, EIGRPNetwork, EIGRPInterface
+    EIGRPRouter,
+    EIGRPAddressFamily,
+    EIGRPNetwork,
+    EIGRPInterface,
 )
 
 

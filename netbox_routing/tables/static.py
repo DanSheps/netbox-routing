@@ -14,11 +14,21 @@ class StaticRouteTable(NetBoxTable):
         verbose_name=_('VRF'),
         linkify=True,
     )
-    
+
     class Meta(NetBoxTable.Meta):
         model = StaticRoute
         fields = (
-            'pk', 'id', 'devices', 'vrf', 'prefix', 'next_hop', 'name', 'metric', 'permanent', 'description',
+            'pk',
+            'id',
+            'devices',
+            'vrf',
+            'prefix',
+            'next_hop',
+            'name',
+            'metric',
+            'permanent',
+            'tag',
+            'description',
             'comments',
         )
         default_columns = ('pk', 'id', 'devices', 'vrf', 'prefix', 'next_hop', 'name')

@@ -5,19 +5,24 @@ from utilities.testing import APIViewTestCases, create_test_device
 from netbox_routing.models import StaticRoute
 from netbox_routing.tests.base import IPAddressFieldMixin
 
-__all__ = (
-    'StaticRouteTestCase',
-)
+
+__all__ = ('StaticRouteTestCase',)
+
 
 class StaticRouteTestCase(IPAddressFieldMixin, APIViewTestCases.APIViewTestCase):
     model = StaticRoute
     view_namespace = "plugins-api:netbox_routing"
-    brief_fields = ['description', 'display', 'id', 'name', 'next_hop', 'prefix', 'url', ]
+    brief_fields = [
+        'description',
+        'display',
+        'id',
+        'name',
+        'next_hop',
+        'prefix',
+        'url',
+    ]
 
-
-    bulk_update_data = {
-        'metric': 5
-    }
+    bulk_update_data = {'metric': 5}
 
     @classmethod
     def setUpTestData(cls):
@@ -29,7 +34,9 @@ class StaticRouteTestCase(IPAddressFieldMixin, APIViewTestCases.APIViewTestCase)
 
         routes = (
             StaticRoute(name='Test Route 1', vrf=vrf, prefix='0.0.0.0/0', next_hop=nh),
-            StaticRoute(name='Test Route 2', vrf=None, prefix='1.1.1.1/32', next_hop=nh),
+            StaticRoute(
+                name='Test Route 2', vrf=None, prefix='1.1.1.1/32', next_hop=nh
+            ),
             StaticRoute(name='Test Route 3', vrf=vrf, prefix='2.2.2.2/32', next_hop=nh),
         )
         StaticRoute.objects.bulk_create(routes)
@@ -46,7 +53,7 @@ class StaticRouteTestCase(IPAddressFieldMixin, APIViewTestCases.APIViewTestCase)
                 'prefix': '0.0.0.0/0',
                 'next_hop': '10.10.10.2',
                 'metric': 1,
-                'permanent': True
+                'permanent': True,
             },
             {
                 'name': 'Google DNS',
@@ -55,7 +62,7 @@ class StaticRouteTestCase(IPAddressFieldMixin, APIViewTestCases.APIViewTestCase)
                 'prefix': '4.4.4.4/32',
                 'next_hop': '10.10.10.1',
                 'metric': 1,
-                'permanent': True
+                'permanent': True,
             },
             {
                 'name': 'One dot one dot one dot one',
@@ -64,6 +71,6 @@ class StaticRouteTestCase(IPAddressFieldMixin, APIViewTestCases.APIViewTestCase)
                 'prefix': '1.1.1.0/24',
                 'next_hop': '10.10.10.1',
                 'metric': 1,
-                'permanent': True
+                'permanent': True,
             },
         ]
