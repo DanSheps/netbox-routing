@@ -10,12 +10,7 @@ from netbox.models import PrimaryModel
 from netbox_routing.choices.objects import PermitDenyChoices
 
 
-__all__ = (
-    'RouteMap',
-    'RouteMapEntry',
-    'PrefixList',
-    'PrefixListEntry'
-)
+__all__ = ('RouteMap', 'RouteMapEntry', 'PrefixList', 'PrefixListEntry')
 
 
 class PermitDenyChoiceMixin:
@@ -24,20 +19,20 @@ class PermitDenyChoiceMixin:
 
 
 class RouteMap(PrimaryModel):
-    name = models.CharField(
-        max_length=255
-    )
+    name = models.CharField(max_length=255)
 
     clone_fields = ()
     prerequisite_models = ()
 
     class Meta:
-        ordering = ['name', ]
+        ordering = [
+            'name',
+        ]
         constraints = (
             models.UniqueConstraint(
                 Lower('name'),
                 name='%(app_label)s_%(class)s_unique_name',
-                violation_error_message="Name must be unique."
+                violation_error_message="Name must be unique.",
             ),
         )
 
@@ -53,7 +48,7 @@ class RouteMapEntry(PermitDenyChoiceMixin, PrimaryModel):
         to="netbox_routing.RouteMap",
         on_delete=models.PROTECT,
         related_name='entries',
-        verbose_name='Route Map'
+        verbose_name='Route Map',
     )
     type = models.CharField(max_length=6, choices=PermitDenyChoices)
     sequence = models.PositiveSmallIntegerField()
@@ -61,29 +56,29 @@ class RouteMapEntry(PermitDenyChoiceMixin, PrimaryModel):
         blank=True,
         null=True,
         verbose_name=_('Set parameters'),
-        help_text=_("JSON blob of options to match ")
+        help_text=_("JSON blob of options to match "),
     )
     set = models.JSONField(
         blank=True,
         null=True,
         verbose_name=_('Set parameters'),
-        help_text=_("JSON blob of options to set ")
+        help_text=_("JSON blob of options to set "),
     )
 
     clone_fields = (
-        'route_map', 'type',
+        'route_map',
+        'type',
     )
-    prerequisite_models = (
-        'netbox_routing.RouteMap',
-    )
+    prerequisite_models = ('netbox_routing.RouteMap',)
 
     class Meta:
         ordering = ['route_map', 'sequence']
         constraints = (
             models.UniqueConstraint(
-                'route_map', 'sequence',
+                'route_map',
+                'sequence',
                 name='%(app_label)s_%(class)s_unique_routemap_sequence',
-                violation_error_message="Route Map sequence must be unique."
+                violation_error_message="Route Map sequence must be unique.",
             ),
         )
 
@@ -95,20 +90,20 @@ class RouteMapEntry(PermitDenyChoiceMixin, PrimaryModel):
 
 
 class PrefixList(PrimaryModel):
-    name = models.CharField(
-        max_length=255
-    )
+    name = models.CharField(max_length=255)
 
     clone_fields = ()
     prerequisite_models = ()
 
     class Meta:
-        ordering = ['name', ]
+        ordering = [
+            'name',
+        ]
         constraints = (
             models.UniqueConstraint(
                 Lower('name'),
                 name='%(app_label)s_%(class)s_unique_name',
-                violation_error_message="Name must be unique."
+                violation_error_message="Name must be unique.",
             ),
         )
 
@@ -124,7 +119,7 @@ class PrefixListEntry(PermitDenyChoiceMixin, PrimaryModel):
         to="netbox_routing.PrefixList",
         on_delete=models.PROTECT,
         related_name='entries',
-        verbose_name='Prefix List'
+        verbose_name='Prefix List',
     )
     sequence = models.PositiveSmallIntegerField()
     type = models.CharField(max_length=6, choices=PermitDenyChoices)
@@ -141,19 +136,19 @@ class PrefixListEntry(PermitDenyChoiceMixin, PrimaryModel):
     )
 
     clone_fields = (
-        'prefix_list', 'type',
+        'prefix_list',
+        'type',
     )
-    prerequisite_models = (
-        'netbox_routing.PrefixList',
-    )
+    prerequisite_models = ('netbox_routing.PrefixList',)
 
     class Meta:
         ordering = ['prefix_list', 'sequence']
         constraints = (
             models.UniqueConstraint(
-                'prefix_list', 'sequence',
+                'prefix_list',
+                'sequence',
                 name='%(app_label)s_%(class)s_unique_prefixlist_sequence',
-                violation_error_message="Prefix List sequence must be unique."
+                violation_error_message="Prefix List sequence must be unique.",
             ),
         )
 
@@ -168,31 +163,26 @@ class PrefixListEntry(PermitDenyChoiceMixin, PrimaryModel):
 
         if self.prefix.version == 6:
             if self.le is not None and self.le > 128:
-                raise ValidationError({
-                    'le': 'LE value cannot be longer then 128'
-                })
+                raise ValidationError({'le': 'LE value cannot be longer then 128'})
             if self.ge is not None and self.ge > 128:
-                raise ValidationError({
-                    'ge': 'GE value cannot be longer then 128'
-                })
+                raise ValidationError({'ge': 'GE value cannot be longer then 128'})
         elif self.prefix.version == 4:
             if self.le is not None and self.le > 32:
-                raise ValidationError({
-                    'le': 'LE value cannot be longer then 32'
-                })
+                raise ValidationError({'le': 'LE value cannot be longer then 32'})
             if self.ge is not None and self.ge > 32:
-                raise ValidationError({
-                    'ge': 'GE value cannot be longer then 32'
-                })
+                raise ValidationError({'ge': 'GE value cannot be longer then 32'})
 
         if self.ge and self.le and self.ge < self.le:
-            raise ValidationError({
-                    'ge': 'GE cannot be more then LE',
-                    'le': 'LE cannot be less then GE'
-            })
+            raise ValidationError(
+                {'ge': 'GE cannot be more then LE', 'le': 'LE cannot be less then GE'}
+            )
 
         if self.ge is not None and self.prefix.prefix.prefixlen >= self.ge:
-            raise ValidationError('Prefix\'s length cannot be longer then greater or equals value')
+            raise ValidationError(
+                'Prefix\'s length cannot be longer then greater or equals value'
+            )
 
         if self.le is not None and self.prefix.prefix.prefixlen >= self.le:
-            raise ValidationError('Prefix\'s length cannot be longer then greater or equals value')
+            raise ValidationError(
+                'Prefix\'s length cannot be longer then greater or equals value'
+            )

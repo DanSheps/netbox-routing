@@ -8,10 +8,19 @@ from ipam.models import VRF, Prefix
 from netbox.forms import NetBoxModelFilterSetForm
 from netbox_routing.choices import AuthenticationChoices
 from utilities.forms import BOOLEAN_WITH_BLANK_CHOICES, add_blank_choice
-from utilities.forms.fields import TagFilterField, DynamicModelMultipleChoiceField, DynamicModelChoiceField
+from utilities.forms.fields import (
+    TagFilterField,
+    DynamicModelMultipleChoiceField,
+    DynamicModelChoiceField,
+)
 from utilities.forms.rendering import FieldSet
 
-from netbox_routing.models import EIGRPRouter, EIGRPAddressFamily, EIGRPNetwork, EIGRPInterface
+from netbox_routing.models import (
+    EIGRPRouter,
+    EIGRPAddressFamily,
+    EIGRPNetwork,
+    EIGRPInterface,
+)
 
 
 __all__ = (
@@ -24,9 +33,7 @@ __all__ = (
 
 class EIGRPRouterFilterForm(NetBoxModelFilterSetForm):
     model = EIGRPRouter
-    fieldsets = (
-        FieldSet('q', 'filter_id', 'tag', 'device', 'mode'),
-    )
+    fieldsets = (FieldSet('q', 'filter_id', 'tag', 'device', 'mode'),)
 
     device_id = DynamicModelMultipleChoiceField(
         queryset=Device.objects.all(),
@@ -39,9 +46,7 @@ class EIGRPRouterFilterForm(NetBoxModelFilterSetForm):
 
 class EIGRPAddressFamilyFilterForm(NetBoxModelFilterSetForm):
     model = EIGRPAddressFamily
-    fieldsets = (
-        FieldSet('q', 'filter_id', 'router_id', 'vrf_id', 'family', 'tag'),
-    )
+    fieldsets = (FieldSet('q', 'filter_id', 'router_id', 'vrf_id', 'family', 'tag'),)
 
     router_id = DynamicModelMultipleChoiceField(
         queryset=Device.objects.all(),
@@ -58,7 +63,7 @@ class EIGRPAddressFamilyFilterForm(NetBoxModelFilterSetForm):
     family = forms.ChoiceField(
         required=False,
         choices=add_blank_choice(IPAddressFamilyChoices),
-        label=_('Address family')
+        label=_('Address family'),
     )
     tag = TagFilterField(model)
 
@@ -69,8 +74,14 @@ class EIGRPNetworkFilterForm(NetBoxModelFilterSetForm):
         FieldSet('q', 'filter_id', 'tag'),
         FieldSet('router_id', 'address_family', name=_('EIGRP')),
         FieldSet(
-            'prefix_id', 'vrf_id', 'present_in_vrf_id', 'family', 'mask_length__lte', 'within_include',
-            'mask_length', name=_('Prefix')
+            'prefix_id',
+            'vrf_id',
+            'present_in_vrf_id',
+            'family',
+            'mask_length__lte',
+            'within_include',
+            'mask_length',
+            name=_('Prefix'),
         ),
     )
     prefix_id = DynamicModelMultipleChoiceField(
@@ -95,21 +106,17 @@ class EIGRPNetworkFilterForm(NetBoxModelFilterSetForm):
         queryset=VRF.objects.all(),
         required=False,
         label=_('Assigned VRF'),
-        null_option='Global'
+        null_option='Global',
     )
     present_in_vrf_id = DynamicModelChoiceField(
-        queryset=VRF.objects.all(),
-        required=False,
-        label=_('Present in VRF')
+        queryset=VRF.objects.all(), required=False, label=_('Present in VRF')
     )
     family = forms.ChoiceField(
         required=False,
         choices=add_blank_choice(IPAddressFamilyChoices),
-        label=_('Address family')
+        label=_('Address family'),
     )
-    mask_length__lte = forms.IntegerField(
-        widget=forms.HiddenInput()
-    )
+    mask_length__lte = forms.IntegerField(widget=forms.HiddenInput())
     within_include = forms.CharField(
         required=False,
         widget=forms.TextInput(
@@ -117,12 +124,10 @@ class EIGRPNetworkFilterForm(NetBoxModelFilterSetForm):
                 'placeholder': 'Prefix',
             }
         ),
-        label=_('Search within')
+        label=_('Search within'),
     )
     mask_length = forms.MultipleChoiceField(
-        required=False,
-        choices=PREFIX_MASK_LENGTH_CHOICES,
-        label=_('Mask length')
+        required=False, choices=PREFIX_MASK_LENGTH_CHOICES, label=_('Mask length')
     )
     tag = TagFilterField(model)
 
@@ -133,7 +138,7 @@ class EIGRPInterfaceFilterForm(NetBoxModelFilterSetForm):
         FieldSet('q', 'filter_id', 'tag'),
         FieldSet('router_id', 'address_family_id', name=_('EIGRP')),
         FieldSet('device_id', 'interface_id', name=_('Device')),
-        FieldSet('passive', 'bfd', 'authentication', name=_('Attributes'))
+        FieldSet('passive', 'bfd', 'authentication', name=_('Attributes')),
     )
     router_id = DynamicModelMultipleChoiceField(
         queryset=EIGRPRouter.objects.all(),
@@ -162,19 +167,14 @@ class EIGRPInterfaceFilterForm(NetBoxModelFilterSetForm):
     bfd = forms.NullBooleanField(
         required=False,
         label='BFD Enabled',
-        widget=forms.Select(
-            choices=BOOLEAN_WITH_BLANK_CHOICES
-        )
+        widget=forms.Select(choices=BOOLEAN_WITH_BLANK_CHOICES),
     )
     passive = forms.BooleanField(
         required=False,
         label='Passive Interface',
-        widget=forms.Select(
-            choices=BOOLEAN_WITH_BLANK_CHOICES
-        )
+        widget=forms.Select(choices=BOOLEAN_WITH_BLANK_CHOICES),
     )
     authentication = forms.ChoiceField(
-        choices=add_blank_choice(AuthenticationChoices),
-        required=False
+        choices=add_blank_choice(AuthenticationChoices), required=False
     )
     tag = TagFilterField(model)

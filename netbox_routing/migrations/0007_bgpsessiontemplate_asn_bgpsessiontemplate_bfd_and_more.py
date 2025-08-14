@@ -20,7 +20,7 @@ class Migration(migrations.Migration):
                 null=True,
                 on_delete=django.db.models.deletion.PROTECT,
                 related_name='session_templates',
-                to='ipam.asn'
+                to='ipam.asn',
             ),
         ),
         migrations.AddField(
@@ -36,7 +36,7 @@ class Migration(migrations.Migration):
                 null=True,
                 on_delete=django.db.models.deletion.PROTECT,
                 related_name='children',
-                to='netbox_routing.bgpsessiontemplate'
+                to='netbox_routing.bgpsessiontemplate',
             ),
         ),
         migrations.AddField(

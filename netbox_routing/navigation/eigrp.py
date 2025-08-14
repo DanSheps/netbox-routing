@@ -1,10 +1,6 @@
-from netbox.choices import ButtonColorChoices as ColorChoices
-from netbox.plugins import PluginMenuItem, PluginMenuButton
+from netbox.plugins import PluginMenuButton, PluginMenuItem
 
-
-__all__ = (
-    'eigrp',
-)
+__all__ = ('eigrp',)
 
 
 COL_ADD = 'mdi mdi-plus'
@@ -16,33 +12,58 @@ routers = PluginMenuItem(
     link_text='Routers',
     permissions=['netbox_routing.view_eigrprouter'],
     buttons=(
-        PluginMenuButton('plugins:netbox_routing:eigrprouter_add', 'Add', COL_ADD, ColorChoices.GREEN),
-        PluginMenuButton('plugins:netbox_routing:eigrprouter_bulk_import', 'Import', COL_IMPORT, ColorChoices.CYAN),
-    )
+        PluginMenuButton(
+            link='plugins:netbox_routing:eigrprouter_add',
+            title='Add',
+            icon_class=COL_ADD,
+            permissions=['netbox_routing.add_eigrprouter'],
+        ),
+        PluginMenuButton(
+            link='plugins:netbox_routing:eigrprouter_bulk_import',
+            title='Import',
+            icon_class=COL_IMPORT,
+            permissions=['netbox_routing.add_eigrprouter'],
+        ),
+    ),
 )
 address_families = PluginMenuItem(
     link='plugins:netbox_routing:eigrpaddressfamily_list',
     link_text='Address Families',
     permissions=['netbox_routing.view_eigrpaddressfamily'],
     buttons=(
-        PluginMenuButton('plugins:netbox_routing:eigrpaddressfamily_add', 'Add', COL_ADD, ColorChoices.GREEN),
-    )
+        PluginMenuButton(
+            link='plugins:netbox_routing:eigrpaddressfamily_add',
+            title='Add',
+            icon_class=COL_ADD,
+            permissions=['netbox_routing.add_eigrpaddressfamily'],
+        ),
+    ),
 )
 networks = PluginMenuItem(
     link='plugins:netbox_routing:eigrpnetwork_list',
     link_text='Networks',
     permissions=['netbox_routing.view_eigrpnetwork'],
     buttons=(
-        PluginMenuButton('plugins:netbox_routing:eigrpnetwork_add', 'Add', COL_ADD, ColorChoices.GREEN),
-    )
+        PluginMenuButton(
+            link='plugins:netbox_routing:eigrpnetwork_add',
+            title='Add',
+            icon_class=COL_ADD,
+            permissions=['netbox_routing.add_eigrpnetwork'],
+        ),
+    ),
 )
 interfaces = PluginMenuItem(
     link='plugins:netbox_routing:eigrpinterface_list',
     link_text='Interfaces',
     permissions=['netbox_routing.view_eigrpinterface'],
     buttons=(
-        PluginMenuButton('plugins:netbox_routing:eigrpinterface_add', 'Add', COL_ADD, ColorChoices.GREEN),
-    )
+        PluginMenuButton(
+            link='plugins:netbox_routing:eigrpinterface_add',
+            title='Add',
+            icon_class=COL_ADD,
+            permissions=['netbox_routing.add_eigrpinterface'],
+        ),
+    ),
 )
 
 eigrp = (routers, address_families, networks, interfaces)

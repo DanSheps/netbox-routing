@@ -81,7 +81,7 @@ class BGPAdditionalPathSelectChoices(ChoiceSet):
         (ALL, 'All'),
         (BACKUP, 'Backup'),
         (BEST_EXTERNAL, 'Best External'),
-        (GROUP_BEST, 'Group Best')
+        (GROUP_BEST, 'Group Best'),
     ]
 
 
@@ -89,20 +89,14 @@ class BFDChoices(ChoiceSet):
     SINGLEHOP = 'singlehop'
     MULTIHOP = 'multihop'
 
-    CHOICES = [
-        (SINGLEHOP, 'Single-Hop'),
-        (MULTIHOP, 'Multi-Hop')
-    ]
+    CHOICES = [(SINGLEHOP, 'Single-Hop'), (MULTIHOP, 'Multi-Hop')]
 
 
 class BGPBestPathASPathChoices(ChoiceSet):
     IGNORE = 'ignore'
     MULTIPATH = 'multipath-relax'
 
-    CHOICES = [
-        (IGNORE, 'Ignore'),
-        (MULTIPATH, 'Multipath Relax Comparison')
-    ]
+    CHOICES = [(IGNORE, 'Ignore'), (MULTIPATH, 'Multipath Relax Comparison')]
 
 
 class BGPAddressFamilyChoices(ChoiceSet):
@@ -141,5 +135,5 @@ class BGPAddressFamilyChoices(ChoiceSet):
         (L2VPNVPLS, 'L2VPN VPLS'),
         (L2VPSEVPN, 'L2VPN EVPN'),
         (LINKSTATE, 'LINK-STATE'),
-        (RTFILTER_UNICAST, 'RTFILTER')
+        (RTFILTER_UNICAST, 'RTFILTER'),
     ]

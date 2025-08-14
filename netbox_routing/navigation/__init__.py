@@ -7,9 +7,7 @@ from .eigrp import eigrp
 from .static import MENUITEMS as STATIC_MENU
 
 
-__all__ = (
-    'menu',
-)
+__all__ = ('menu',)
 
 menu = PluginMenu(
     label='Netbox Routing',
@@ -20,5 +18,5 @@ menu = PluginMenu(
         ('OSPF', OSPF_MENU),
         ('EIGRP', eigrp),
     ),
-    icon_class='mdi mdi-router'
+    icon_class='mdi mdi-router',
 )

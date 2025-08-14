@@ -1,7 +1,11 @@
 from netbox.api.viewsets import NetBoxModelViewSet
 from netbox_routing import filtersets
-from netbox_routing.api.serializers import BGPRouterSerializer, BGPSettingSerializer, BGPScopeSerializer, \
-    BGPAddressFamilySerializer
+from netbox_routing.api.serializers import (
+    BGPRouterSerializer,
+    BGPSettingSerializer,
+    BGPScopeSerializer,
+    BGPAddressFamilySerializer,
+)
 from netbox_routing.models import BGPRouter, BGPSetting, BGPScope, BGPAddressFamily
 
 __all__ = (

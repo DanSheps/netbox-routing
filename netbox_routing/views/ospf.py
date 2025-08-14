@@ -1,8 +1,24 @@
-from netbox.views.generic import ObjectListView, ObjectEditView, ObjectView, ObjectDeleteView, ObjectChildrenView, \
-    BulkImportView, BulkEditView, BulkDeleteView
-from netbox_routing.filtersets.ospf import OSPFInterfaceFilterSet, OSPFAreaFilterSet, OSPFInstanceFilterSet
+from netbox.views.generic import (
+    ObjectListView,
+    ObjectEditView,
+    ObjectView,
+    ObjectDeleteView,
+    ObjectChildrenView,
+    BulkImportView,
+    BulkEditView,
+    BulkDeleteView,
+)
+from netbox_routing.filtersets.ospf import (
+    OSPFInterfaceFilterSet,
+    OSPFAreaFilterSet,
+    OSPFInstanceFilterSet,
+)
 from netbox_routing.forms import *
-from netbox_routing.tables.ospf import OSPFAreaTable, OSPFInstanceTable, OSPFInterfaceTable
+from netbox_routing.tables.ospf import (
+    OSPFAreaTable,
+    OSPFInstanceTable,
+    OSPFInterfaceTable,
+)
 from utilities.views import register_model_view, ViewTab
 
 from netbox_routing.models import OSPFArea, OSPFInstance, OSPFInterface
@@ -16,7 +32,6 @@ __all__ = (
     'OSPFInstanceBulkEditView',
     'OSPFInstanceDeleteView',
     'OSPFInstanceBulkDeleteView',
-
     'OSPFAreaListView',
     'OSPFAreaView',
     'OSPFAreaInterfacesView',
@@ -24,7 +39,6 @@ __all__ = (
     'OSPFAreaBulkEditView',
     'OSPFAreaDeleteView',
     'OSPFAreaBulkDeleteView',
-
     'OSPFInterfaceListView',
     'OSPFInterfaceView',
     'OSPFInterfaceEditView',
@@ -104,7 +118,12 @@ class OSPFInstanceBulkImportView(BulkImportView):
 #
 # Area
 #
-@register_model_view(OSPFArea, name='list', path='', detail=False,)
+@register_model_view(
+    OSPFArea,
+    name='list',
+    path='',
+    detail=False,
+)
 class OSPFAreaListView(ObjectListView):
     queryset = OSPFArea.objects.all()
     table = OSPFAreaTable

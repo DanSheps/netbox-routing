@@ -10,7 +10,6 @@ from .core import *
 __all__ = (
     # Core View Extensions
     'DeviceStaticRoutesView',
-
     # Static
     'StaticRouteListView',
     'StaticRouteView',
@@ -19,25 +18,21 @@ __all__ = (
     'StaticRouteBulkEditView',
     'StaticRouteDeleteView',
     'StaticRouteBulkDeleteView',
-
     # OSPF
     'OSPFInstanceListView',
     'OSPFInstanceView',
     'OSPFInstanceEditView',
     'OSPFInstanceDeleteView',
     'OSPFInstanceInterfacesView',
-
     'OSPFAreaListView',
     'OSPFAreaView',
     'OSPFAreaInterfacesView',
     'OSPFAreaEditView',
     'OSPFAreaDeleteView',
-
     'OSPFInterfaceListView',
     'OSPFInterfaceView',
     'OSPFInterfaceEditView',
     'OSPFInterfaceDeleteView',
-
     # EIGRP
     'EIGRPRouterListView',
     'EIGRPRouterView',
@@ -47,7 +42,6 @@ __all__ = (
     'EIGRPRouterBulkEditView',
     'EIGRPRouterDeleteView',
     'EIGRPRouterBulkDeleteView',
-
     'EIGRPAddressFamilyListView',
     'EIGRPAddressFamilyView',
     'EIGRPAddressFamilyInterfacesView',
@@ -55,24 +49,20 @@ __all__ = (
     'EIGRPAddressFamilyBulkEditView',
     'EIGRPAddressFamilyDeleteView',
     'EIGRPAddressFamilyBulkDeleteView',
-
     'EIGRPNetworkListView',
     'EIGRPNetworkView',
     'EIGRPNetworkEditView',
     'EIGRPNetworkBulkEditView',
     'EIGRPNetworkDeleteView',
     'EIGRPNetworkBulkDeleteView',
-
     'EIGRPInterfaceListView',
     'EIGRPInterfaceView',
     'EIGRPInterfaceEditView',
     'EIGRPInterfaceBulkEditView',
     'EIGRPInterfaceDeleteView',
     'EIGRPInterfaceBulkDeleteView',
-
     'BGPRouterView',
     'BGPRouterEditView',
-
     # Routing Objects
     'PrefixListListView',
     'PrefixListView',
@@ -85,7 +75,6 @@ __all__ = (
     'PrefixListEntryDeleteView',
     'PrefixListEntryBulkEditView',
     'PrefixListEntryBulkDeleteView',
-
     'RouteMapListView',
     'RouteMapView',
     'RouteMapEntriesView',
@@ -97,5 +86,4 @@ __all__ = (
     'RouteMapEntryDeleteView',
     'RouteMapEntryBulkEditView',
     'RouteMapEntryBulkDeleteView',
-
 )

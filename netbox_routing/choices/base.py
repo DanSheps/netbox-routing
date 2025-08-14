@@ -1,9 +1,7 @@
 from utilities.choices import ChoiceSet
 
 
-__all__ = (
-    'AuthenticationChoices',
-)
+__all__ = ('AuthenticationChoices',)
 
 
 class AuthenticationChoices(ChoiceSet):
@@ -14,5 +12,5 @@ class AuthenticationChoices(ChoiceSet):
     CHOICES = [
         (KEYCHAIN, 'Key Chain'),
         (MESSAGE_DIGEST, 'Message Digest'),
-        (NULL, 'Null Authentication')
+        (NULL, 'Null Authentication'),
     ]
