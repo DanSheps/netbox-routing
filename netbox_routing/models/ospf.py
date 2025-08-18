@@ -44,7 +44,7 @@ class OSPFInstance(PrimaryModel):
     class Meta:
         ordering = ['vrf', 'router_id', 'process_id']
         verbose_name = 'OSPF Instance'
-        unique_together = [['device',  'name']]
+        unique_together = [['device', 'name']]
 
     def __str__(self):
         return f'{self.name} ({self.router_id})'
