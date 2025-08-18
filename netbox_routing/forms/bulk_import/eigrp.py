@@ -22,12 +22,21 @@ class EIGRPRouterImportForm(NetBoxModelImportForm):
         queryset=Device.objects.all(),
         required=True,
         to_field_name='name',
-        help_text=_('Name of device')
+        help_text=_('Name of device'),
     )
-    
+
     class Meta:
         model = EIGRPRouter
-        fields = ('device', 'rid', 'mode', 'name', 'pid', 'description', 'comments', 'tags',)
+        fields = (
+            'device',
+            'rid',
+            'mode',
+            'name',
+            'pid',
+            'description',
+            'comments',
+            'tags',
+        )
 
 
 class EIGRPAddressFamilyImportForm(NetBoxModelImportForm):
@@ -35,19 +44,27 @@ class EIGRPAddressFamilyImportForm(NetBoxModelImportForm):
         queryset=EIGRPRouter.objects.all(),
         required=True,
         to_field_name='name',
-        help_text=_('Name of device')
+        help_text=_('Name of device'),
     )
-    
+
     vrf = CSVModelChoiceField(
         queryset=VRF.objects.all(),
         required=False,
         to_field_name='name',
-        help_text=_('Name of VRF (if applicable)')
+        help_text=_('Name of VRF (if applicable)'),
     )
-    
+
     class Meta:
         model = EIGRPAddressFamily
-        fields = ('router', 'vrf', 'family', 'rid', 'description', 'comments', 'tags',)
+        fields = (
+            'router',
+            'vrf',
+            'family',
+            'rid',
+            'description',
+            'comments',
+            'tags',
+        )
 
 
 class EIGRPNetworkImportForm(NetBoxModelImportForm):
@@ -55,23 +72,30 @@ class EIGRPNetworkImportForm(NetBoxModelImportForm):
         queryset=EIGRPRouter.objects.all(),
         required=True,
         to_field_name='name',
-        help_text=_('PK of Router Instance')
+        help_text=_('PK of Router Instance'),
     )
     address_family = CSVModelChoiceField(
         queryset=EIGRPAddressFamily.objects.all(),
         required=False,
-        help_text=_('ID of Address Family')
+        help_text=_('ID of Address Family'),
     )
     network = CSVModelChoiceField(
         queryset=Prefix.objects.all(),
         required=True,
         to_field_name='prefix',
-        help_text=_('Prefix of Network')
+        help_text=_('Prefix of Network'),
     )
 
     class Meta:
         model = EIGRPNetwork
-        fields = ('router', 'address_family', 'network', 'description', 'comments', 'tags',)
+        fields = (
+            'router',
+            'address_family',
+            'network',
+            'description',
+            'comments',
+            'tags',
+        )
 
 
 class EIGRPInterfaceImportForm(NetBoxModelImportForm):
@@ -79,27 +103,39 @@ class EIGRPInterfaceImportForm(NetBoxModelImportForm):
         queryset=Device.objects.all(),
         required=True,
         to_field_name='name',
-        help_text=_('Name of device')
+        help_text=_('Name of device'),
     )
-    
+
     router = CSVModelChoiceField(
         queryset=EIGRPRouter.objects.all(),
         required=True,
         to_field_name='name',
-        help_text=_('PK of Router Instance')
+        help_text=_('PK of Router Instance'),
     )
     address_family = CSVModelChoiceField(
         queryset=EIGRPAddressFamily.objects.all(),
         required=False,
-        help_text=_('ID of Address Family')
+        help_text=_('ID of Address Family'),
     )
     interface = CSVModelChoiceField(
         queryset=Interface.objects.all(),
         required=False,
         to_field_name='name',
-        help_text=_('Name of interface')
+        help_text=_('Name of interface'),
     )
 
     class Meta:
         model = EIGRPInterface
-        fields = ('device', 'router', 'address_family', 'interface', 'passive', 'bfd', 'authentication', 'passphrase', 'description', 'comments', 'tags',)
+        fields = (
+            'device',
+            'router',
+            'address_family',
+            'interface',
+            'passive',
+            'bfd',
+            'authentication',
+            'passphrase',
+            'description',
+            'comments',
+            'tags',
+        )

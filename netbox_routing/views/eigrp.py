@@ -1,5 +1,13 @@
-from netbox.views.generic import ObjectListView, ObjectEditView, ObjectView, ObjectDeleteView, ObjectChildrenView, \
-    BulkImportView, BulkEditView, BulkDeleteView
+from netbox.views.generic import (
+    ObjectListView,
+    ObjectEditView,
+    ObjectView,
+    ObjectDeleteView,
+    ObjectChildrenView,
+    BulkImportView,
+    BulkEditView,
+    BulkDeleteView,
+)
 from netbox_routing.filtersets.eigrp import *
 from netbox_routing.forms import *
 from netbox_routing.tables.eigrp import *
@@ -19,7 +27,6 @@ __all__ = (
     'EIGRPRouterBulkEditView',
     'EIGRPRouterDeleteView',
     'EIGRPRouterBulkDeleteView',
-
     'EIGRPAddressFamilyListView',
     'EIGRPAddressFamilyView',
     'EIGRPAddressFamilyInterfacesView',
@@ -29,7 +36,6 @@ __all__ = (
     'EIGRPAddressFamilyDeleteView',
     'EIGRPAddressFamilyBulkDeleteView',
     'EIGRPAddressFamilyBulkImportView',
-
     'EIGRPNetworkListView',
     'EIGRPNetworkView',
     'EIGRPNetworkEditView',
@@ -37,7 +43,6 @@ __all__ = (
     'EIGRPNetworkDeleteView',
     'EIGRPNetworkBulkDeleteView',
     'EIGRPNetworkBulkImportView',
-
     'EIGRPInterfaceListView',
     'EIGRPInterfaceView',
     'EIGRPInterfaceEditView',
@@ -144,6 +149,7 @@ class EIGRPRouterBulkImportView(BulkImportView):
     queryset = EIGRPRouter.objects.all()
     model_form = EIGRPRouterImportForm
 
+
 #
 # Address Family
 #
@@ -163,7 +169,7 @@ class EIGRPAddressFamilyView(ObjectView):
 
 @register_model_view(EIGRPAddressFamily, name='interfaces')
 class EIGRPAddressFamilyInterfacesView(ObjectChildrenView):
-    #template_name = 'netbox_routing/object_children.html'
+    # template_name = 'netbox_routing/object_children.html'
     queryset = EIGRPAddressFamily.objects.all()
     child_model = EIGRPInterface
     table = EIGRPInterfaceTable
@@ -176,7 +182,7 @@ class EIGRPAddressFamilyInterfacesView(ObjectChildrenView):
 
 @register_model_view(EIGRPAddressFamily, name='networks')
 class EIGRPAddressFamilyNetworksView(ObjectChildrenView):
-    #template_name = 'netbox_routing/object_children.html'
+    # template_name = 'netbox_routing/object_children.html'
     queryset = EIGRPAddressFamily.objects.all()
     child_model = EIGRPNetwork
     table = EIGRPNetworkTable
@@ -215,11 +221,11 @@ class EIGRPAddressFamilyBulkDeleteView(BulkDeleteView):
     table = EIGRPAddressFamilyTable
     filterset = EIGRPAddressFamilyFilterSet
 
+
 @register_model_view(EIGRPAddressFamily, name='bulk_import', detail=False)
 class EIGRPAddressFamilyBulkImportView(BulkImportView):
     queryset = EIGRPAddressFamily.objects.all()
     model_form = EIGRPAddressFamilyImportForm
-
 
 
 #
@@ -248,6 +254,7 @@ class EIGRPNetworkEditView(ObjectEditView):
 @register_model_view(EIGRPNetwork, name='delete')
 class EIGRPNetworkDeleteView(ObjectDeleteView):
     queryset = EIGRPNetwork.objects.all()
+
 
 @register_model_view(EIGRPNetwork, name='import')
 class EIGRPNetworkBulkImportView(BulkImportView):
@@ -294,6 +301,7 @@ class EIGRPInterfaceEditView(ObjectEditView):
 @register_model_view(EIGRPInterface, name='delete')
 class EIGRPInterfaceDeleteView(ObjectDeleteView):
     queryset = EIGRPInterface.objects.all()
+
 
 @register_model_view(EIGRPInterface, name='bulk_import', detail=False)
 class EIGRPInterfaceBulkImportView(BulkImportView):

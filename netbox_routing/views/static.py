@@ -1,8 +1,16 @@
 from dcim.filtersets import DeviceFilterSet
 from dcim.models import Device
 from dcim.tables import DeviceTable
-from netbox.views.generic import ObjectListView, ObjectEditView, ObjectView, ObjectDeleteView, ObjectChildrenView, \
-    BulkDeleteView, BulkEditView, BulkImportView
+from netbox.views.generic import (
+    ObjectListView,
+    ObjectEditView,
+    ObjectView,
+    ObjectDeleteView,
+    ObjectChildrenView,
+    BulkDeleteView,
+    BulkEditView,
+    BulkImportView,
+)
 from netbox_routing.filtersets.static import StaticRouteFilterSet
 from netbox_routing.forms import *
 from netbox_routing.models import StaticRoute
@@ -77,7 +85,7 @@ class StaticRouteBulkDeleteView(BulkDeleteView):
     queryset = StaticRoute.objects.all()
     filterset = StaticRouteFilterSet
     table = StaticRouteTable
-    
+
 
 @register_model_view(StaticRoute, name='bulk_import', detail=False)
 class StaticRouteBulkImportView(BulkImportView):
