@@ -19,7 +19,6 @@ __all__ = (
     'StaticRouteDeleteView',
     'StaticRouteBulkDeleteView',
     'StaticRouteBulkImportView',
-
     # OSPF
     'OSPFInstanceListView',
     'OSPFInstanceView',
@@ -27,7 +26,6 @@ __all__ = (
     'OSPFInstanceDeleteView',
     'OSPFInstanceInterfacesView',
     'OSPFInstanceBulkImportView',
-
     'OSPFAreaListView',
     'OSPFAreaView',
     'OSPFAreaInterfacesView',

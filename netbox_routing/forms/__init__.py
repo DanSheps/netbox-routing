@@ -18,7 +18,6 @@ __all__ = (
     'StaticRouteFilterForm',
     'StaticRouteImportForm',
     'StaticRouteBulkEditForm',
-
     # OSPF
     'OSPFAreaForm',
     'OSPFAreaBulkEditForm',

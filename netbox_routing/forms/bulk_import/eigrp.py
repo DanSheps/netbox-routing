@@ -23,10 +23,21 @@ class EIGRPRouterImportForm(NetBoxModelImportForm):
         required=True,
         to_field_name='name',
         help_text=_('Name of device'),
+        help_text=_('Name of device'),
     )
-    
+
     class Meta:
         model = EIGRPRouter
+        fields = (
+            'device',
+            'rid',
+            'mode',
+            'name',
+            'pid',
+            'description',
+            'comments',
+            'tags',
+        )
         fields = (
             'device',
             'rid',
@@ -44,21 +55,22 @@ class EIGRPAddressFamilyImportForm(NetBoxModelImportForm):
         queryset=EIGRPRouter.objects.all(),
         required=True,
         to_field_name='name',
-        help_text=_('Name of device')
+        help_text=_('Name of device'),
     )
-    
+
     vrf = CSVModelChoiceField(
         queryset=VRF.objects.all(),
         required=False,
         to_field_name='name',
-        help_text=_('Name of VRF (if applicable)')
+        help_text=_('Name of VRF (if applicable)'),
     )
-    
+
     class Meta:
         model = EIGRPAddressFamily
         fields = (
             'router',
-            'vrf', 'family',
+            'vrf',
+            'family',
             'rid',
             'description',
             'comments',
@@ -71,7 +83,7 @@ class EIGRPNetworkImportForm(NetBoxModelImportForm):
         queryset=EIGRPRouter.objects.all(),
         required=True,
         to_field_name='name',
-        help_text=_('PK of Router Instance')
+        help_text=_('PK of Router Instance'),
     )
     address_family = CSVModelChoiceField(
         queryset=EIGRPAddressFamily.objects.all(),
@@ -102,9 +114,9 @@ class EIGRPInterfaceImportForm(NetBoxModelImportForm):
         queryset=Device.objects.all(),
         required=True,
         to_field_name='name',
-        help_text=_('Name of device')
+        help_text=_('Name of device'),
     )
-    
+
     router = CSVModelChoiceField(
         queryset=EIGRPRouter.objects.all(),
         required=True,
@@ -126,10 +138,15 @@ class EIGRPInterfaceImportForm(NetBoxModelImportForm):
     class Meta:
         model = EIGRPInterface
         fields = (
-            'device', 'router',
+            'device',
+            'router',
             'address_family',
             'interface',
-            'passive', 'bfd', 'authentication', 'passphrase', 'description',
+            'passive',
+            'bfd',
+            'authentication',
+            'passphrase',
+            'description',
             'comments',
             'tags',
         )
