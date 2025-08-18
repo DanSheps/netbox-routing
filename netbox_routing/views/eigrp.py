@@ -263,7 +263,7 @@ class EIGRPNetworkDeleteView(ObjectDeleteView):
     queryset = EIGRPNetwork.objects.all()
 
 
-@register_model_view(EIGRPNetwork, name='import')
+@register_model_view(EIGRPNetwork, name='bulk_import')
 class EIGRPNetworkBulkImportView(BulkImportView):
     queryset = EIGRPNetwork.objects.all()
     model_form = EIGRPNetworkImportForm
