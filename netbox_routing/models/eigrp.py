@@ -38,7 +38,7 @@ class EIGRPRouter(PrimaryModel):
 
     class Meta:
         verbose_name = 'EIGRP Router'
-        unique_together=[['device', 'name']]
+        unique_together = [['device', 'name']]
 
     def __str__(self):
         if self.pid:
