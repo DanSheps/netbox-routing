@@ -51,7 +51,7 @@ class EIGRPAddressFamilyImportForm(NetBoxModelImportForm):
         to_field_name='name',
         help_text=_('Name of VRF (if applicable)'),
     )
-    
+
     class Meta:
         model = EIGRPAddressFamily
         fields = (
