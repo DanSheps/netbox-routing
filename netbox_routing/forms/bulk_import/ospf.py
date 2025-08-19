@@ -57,6 +57,12 @@ class OSPFAreaImportForm(NetBoxModelImportForm):
 
 
 class OSPFInterfaceImportForm(NetBoxModelImportForm):
+    device = CSVModelChoiceField(
+        queryset=Device.objects.all(),
+        required=False,
+        to_field_name='name',
+        help_text=_('Name of device'),
+    )
     instance = CSVModelChoiceField(
         queryset=OSPFInstance.objects.all(),
         required=True,
@@ -79,10 +85,15 @@ class OSPFInterfaceImportForm(NetBoxModelImportForm):
     class Meta:
         model = OSPFInterface
         fields = (
+            'device',
             'instance',
             'area',
             'interface',
             'passive',
+            'priority',
+            'bfd',
+            'authentication',
+            'passphrase',
             'description',
             'comments',
             'tags',
