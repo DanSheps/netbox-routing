@@ -1,7 +1,7 @@
 from django.utils.translation import gettext as _
 
-from dcim.models import Interface
-from ipam.models import Prefix
+from dcim.models import Interface, Device
+from ipam.models import Prefix, VRF
 from netbox.forms import NetBoxModelImportForm
 from utilities.forms.fields import CSVModelChoiceField
 
@@ -18,8 +18,8 @@ __all__ = (
 
 class EIGRPRouterImportForm(NetBoxModelImportForm):
     device = CSVModelChoiceField(
-        queryset=Interface.objects.all(),
-        required=False,
+        queryset=Device.objects.all(),
+        required=True,
         to_field_name='name',
         help_text=_('Name of device'),
     )
@@ -39,12 +39,25 @@ class EIGRPRouterImportForm(NetBoxModelImportForm):
 
 
 class EIGRPAddressFamilyImportForm(NetBoxModelImportForm):
-
+    router = CSVModelChoiceField(
+        queryset=EIGRPRouter.objects.all(),
+        required=True,
+        to_field_name='name',
+        help_text=_('Name of device'),
+    )
+    vrf = CSVModelChoiceField(
+        queryset=VRF.objects.all(),
+        required=False,
+        to_field_name='name',
+        help_text=_('Name of VRF (if applicable)'),
+    )
+    
     class Meta:
         model = EIGRPAddressFamily
         fields = (
             'router',
             'family',
+            'vrf',
             'rid',
             'description',
             'comments',
@@ -56,6 +69,7 @@ class EIGRPNetworkImportForm(NetBoxModelImportForm):
     router = CSVModelChoiceField(
         queryset=EIGRPRouter.objects.all(),
         required=True,
+        to_field_name='name',
         help_text=_('PK of Router Instance'),
     )
     address_family = CSVModelChoiceField(
@@ -83,6 +97,12 @@ class EIGRPNetworkImportForm(NetBoxModelImportForm):
 
 
 class EIGRPInterfaceImportForm(NetBoxModelImportForm):
+    device = CSVModelChoiceField(
+        queryset=Device.objects.all(),
+        required=False,
+        to_field_name='name',
+        help_text=_('Name of device'),
+    )
     router = CSVModelChoiceField(
         queryset=EIGRPRouter.objects.all(),
         required=True,
@@ -95,7 +115,7 @@ class EIGRPInterfaceImportForm(NetBoxModelImportForm):
     )
     interface = CSVModelChoiceField(
         queryset=Interface.objects.all(),
-        required=False,
+        required=True,
         to_field_name='name',
         help_text=_('Name of interface'),
     )
@@ -103,9 +123,14 @@ class EIGRPInterfaceImportForm(NetBoxModelImportForm):
     class Meta:
         model = EIGRPInterface
         fields = (
+            'device',
             'router',
             'address_family',
             'interface',
+            'passive',
+            'bfd',
+            'authentication',
+            'passphrase',
             'description',
             'comments',
             'tags',
