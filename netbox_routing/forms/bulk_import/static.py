@@ -1,7 +1,7 @@
 from django.utils.translation import gettext as _
 
-from dcim.models import Interface, Device
-from ipam.models import VRF, IPAddress
+from dcim.models import Device
+from ipam.models import VRF
 from netbox.forms import NetBoxModelImportForm
 from utilities.forms.fields import CSVModelChoiceField
 
