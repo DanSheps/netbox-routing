@@ -13,7 +13,27 @@ from netbox_routing.filtersets.ospf import (
     OSPFAreaFilterSet,
     OSPFInstanceFilterSet,
 )
+from netbox.views.generic import (
+    ObjectListView,
+    ObjectEditView,
+    ObjectView,
+    ObjectDeleteView,
+    ObjectChildrenView,
+    BulkImportView,
+    BulkEditView,
+    BulkDeleteView,
+)
+from netbox_routing.filtersets.ospf import (
+    OSPFInterfaceFilterSet,
+    OSPFAreaFilterSet,
+    OSPFInstanceFilterSet,
+)
 from netbox_routing.forms import *
+from netbox_routing.tables.ospf import (
+    OSPFAreaTable,
+    OSPFInstanceTable,
+    OSPFInterfaceTable,
+)
 from netbox_routing.tables.ospf import (
     OSPFAreaTable,
     OSPFInstanceTable,
@@ -33,6 +53,7 @@ __all__ = (
     'OSPFInstanceDeleteView',
     'OSPFInstanceBulkDeleteView',
     'OSPFInstanceBulkImportView',
+    'OSPFInstanceBulkImportView',
     'OSPFAreaListView',
     'OSPFAreaView',
     'OSPFAreaInterfacesView',
@@ -41,12 +62,14 @@ __all__ = (
     'OSPFAreaDeleteView',
     'OSPFAreaBulkDeleteView',
     'OSPFAreaBulkImportView',
+    'OSPFAreaBulkImportView',
     'OSPFInterfaceListView',
     'OSPFInterfaceView',
     'OSPFInterfaceEditView',
     'OSPFInterfaceBulkEditView',
     'OSPFInterfaceDeleteView',
     'OSPFInterfaceBulkDeleteView',
+    'OSPFInterfaceBulkImportView',
     'OSPFInterfaceBulkImportView',
 )
 
@@ -184,6 +207,7 @@ class OSPFAreaDeleteView(ObjectDeleteView):
 
 
 @register_model_view(OSPFArea, name='bulk_delete', detail=False)
+@register_model_view(OSPFArea, name='bulk_delete', detail=False)
 class OSPFAreaBulkDeleteView(BulkDeleteView):
     queryset = OSPFArea.objects.all()
     table = OSPFAreaTable
@@ -244,6 +268,7 @@ class OSPFInterfaceBulkEditView(BulkEditView):
     table = OSPFInterfaceTable
 
 
+@register_model_view(OSPFInterface, name='bulk_delete', detail=False)
 @register_model_view(OSPFInterface, name='bulk_delete', detail=False)
 class OSPFInterfaceBulkDeleteView(BulkDeleteView):
     queryset = OSPFInterface.objects.all()

@@ -3,6 +3,9 @@ from django.utils.translation import gettext as _
 from dcim.models import Interface, Device
 from ipam.models import Prefix, VRF
 from ipam.choices import IPAddressFamilyChoices
+from dcim.models import Interface, Device
+from ipam.models import Prefix, VRF
+from ipam.choices import IPAddressFamilyChoices
 from netbox.forms import NetBoxModelImportForm
 from utilities.forms.fields import CSVModelChoiceField
 
@@ -19,6 +22,8 @@ __all__ = (
 
 class EIGRPRouterImportForm(NetBoxModelImportForm):
     device = CSVModelChoiceField(
+        queryset=Device.objects.all(),
+        required=True,
         queryset=Device.objects.all(),
         required=True,
         to_field_name='name',
@@ -64,9 +69,31 @@ class EIGRPAddressFamilyImportForm(NetBoxModelImportForm):
         to_field_name='name',
         help_text=_('Name of VRF (if applicable)'),
     )
+    router = CSVModelChoiceField(
+        queryset=EIGRPRouter.objects.all(),
+        required=True,
+        to_field_name='name',
+        help_text=_('Name of device'),
+    )
+
+    vrf = CSVModelChoiceField(
+        queryset=VRF.objects.all(),
+        required=False,
+        to_field_name='name',
+        help_text=_('Name of VRF (if applicable)'),
+    )
 
     class Meta:
         model = EIGRPAddressFamily
+        fields = (
+            'router',
+            'vrf',
+            'family',
+            'rid',
+            'description',
+            'comments',
+            'tags',
+        )
         fields = (
             'router',
             'vrf',
@@ -84,6 +111,8 @@ class EIGRPNetworkImportForm(NetBoxModelImportForm):
         required=True,
         to_field_name='name',
         help_text=_('PK of Router Instance'),
+        to_field_name='name',
+        help_text=_('PK of Router Instance'),
     )
     address_family = CSVModelChoiceField(
         queryset=EIGRPAddressFamily.objects.all(),
@@ -95,10 +124,19 @@ class EIGRPNetworkImportForm(NetBoxModelImportForm):
         required=True,
         to_field_name='prefix',
         help_text=_('Prefix of Network'),
+        help_text=_('Prefix of Network'),
     )
 
     class Meta:
         model = EIGRPNetwork
+        fields = (
+            'router',
+            'address_family',
+            'network',
+            'description',
+            'comments',
+            'tags',
+        )
         fields = (
             'router',
             'address_family',
@@ -117,9 +155,18 @@ class EIGRPInterfaceImportForm(NetBoxModelImportForm):
         help_text=_('Name of device'),
     )
 
+    device = CSVModelChoiceField(
+        queryset=Device.objects.all(),
+        required=True,
+        to_field_name='name',
+        help_text=_('Name of device'),
+    )
+
     router = CSVModelChoiceField(
         queryset=EIGRPRouter.objects.all(),
         required=True,
+        to_field_name='name',
+        help_text=_('PK of Router Instance'),
         to_field_name='name',
         help_text=_('PK of Router Instance'),
     )
@@ -127,16 +174,31 @@ class EIGRPInterfaceImportForm(NetBoxModelImportForm):
         queryset=EIGRPAddressFamily.objects.all(),
         required=False,
         help_text=_('ID of Address Family'),
+        help_text=_('ID of Address Family'),
     )
     interface = CSVModelChoiceField(
         queryset=Interface.objects.all(),
         required=False,
         to_field_name='name',
         help_text=_('Name of interface'),
+        help_text=_('Name of interface'),
     )
 
     class Meta:
         model = EIGRPInterface
+        fields = (
+            'device',
+            'router',
+            'address_family',
+            'interface',
+            'passive',
+            'bfd',
+            'authentication',
+            'passphrase',
+            'description',
+            'comments',
+            'tags',
+        )
         fields = (
             'device',
             'router',

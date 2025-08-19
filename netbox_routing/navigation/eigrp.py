@@ -25,6 +25,7 @@ routers = PluginMenuItem(
             permissions=['netbox_routing.add_eigrprouter'],
         ),
     ),
+    ),
 )
 address_families = PluginMenuItem(
     link='plugins:netbox_routing:eigrpaddressfamily_list',
