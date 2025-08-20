@@ -42,6 +42,7 @@ class OSPFInstance(PrimaryModel):
     prerequisite_models = ('dcim.Device',)
 
     class Meta:
+        ordering = ['vrf', 'router_id', 'process_id']
         verbose_name = 'OSPF Instance'
 
     def __str__(self):
@@ -64,6 +65,7 @@ class OSPFArea(PrimaryModel):
     clone_fields = ()
 
     class Meta:
+        ordering = ['area_id']
         verbose_name = 'OSPF Area'
 
     def __str__(self):
