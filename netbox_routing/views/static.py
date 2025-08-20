@@ -58,6 +58,8 @@ class StaticRouteDevicesView(ObjectChildrenView):
     tab = ViewTab(
         label='Assigned Devices',
         badge=lambda obj: Device.objects.filter(static_routes=obj).count(),
+        permission='dcim.view_device',
+        hide_if_empty=True,
     )
 
     def get_children(self, request, parent):
