@@ -1,7 +1,9 @@
-from netbox.choices import ButtonColorChoices as ColorChoices
-from netbox.plugins import PluginMenuItem, PluginMenuButton
+from netbox.plugins import PluginMenuButton, PluginMenuItem
 
 __all__ = ('MENUITEMS',)
+
+COL_ADD = 'mdi mdi-plus'
+COL_IMPORT = 'mdi mdi-upload'
 
 static = PluginMenuItem(
     link='plugins:netbox_routing:staticroute_list',
@@ -9,17 +11,17 @@ static = PluginMenuItem(
     permissions=['netbox_routing.view_staticroute'],
     buttons=(
         PluginMenuButton(
-            'plugins:netbox_routing:staticroute_add',
-            'Add',
-            'mdi mdi-plus',
-            ColorChoices.GREEN,
+            link='plugins:netbox_routing:staticroute_add',
+            title='Add',
+            icon_class=COL_ADD,
+            permissions=['netbox_routing.add_staticroute'],
         ),
-        # PluginMenuButton(
-        #    'plugins:netbox_routing:staticroute_bulk_import',
-        #    'Import',
-        #    'mdi mdi-upload',
-        #    ColorChoices.CYAN
-        # ),
+        PluginMenuButton(
+            link='plugins:netbox_routing:staticroute_bulk_import',
+            title='Import',
+            icon_class=COL_IMPORT,
+            permissions=['netbox_routing.import_staticroute'],
+        ),
     ),
 )
 
