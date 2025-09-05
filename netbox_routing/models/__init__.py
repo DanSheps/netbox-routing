@@ -1,25 +1,39 @@
-from .static import StaticRoute
-from .ospf import OSPFArea, OSPFInstance, OSPFInterface
-from .objects import PrefixList, PrefixListEntry, RouteMap, RouteMapEntry
-from .bgp import BGPRouter, BGPScope, BGPAddressFamily, BGPSetting
+from .bgp import *
+from .communities import *
 from .eigrp import *
+from .objects import PrefixList, PrefixListEntry, RouteMap, RouteMapEntry
+from .ospf import OSPFArea, OSPFInstance, OSPFInterface
+from .static import StaticRoute
 
 __all__ = (
-    'StaticRoute',
-    'OSPFArea',
-    'OSPFInstance',
-    'OSPFInterface',
+    # BGP
+    'BGPRouter',
+    'BGPScope',
+    'BGPAddressFamily',
+    'BGPPeerTemplate',
+    'BGPPolicyTemplate',
+    'BGPSessionTemplate',
+    'BGPSetting',
+    'BGPPeer',
+    'BGPPeerAddressFamily',
+    # Communities
+    'Community',
+    'CommunityList',
+    # EIGRP
     'EIGRPRouter',
     'EIGRPAddressFamily',
     'EIGRPNetwork',
     'EIGRPInterface',
+    # OSPF
+    'OSPFArea',
+    'OSPFInstance',
+    'OSPFInterface',
+    # Objects -> Prefix Lists
     'PrefixList',
     'PrefixListEntry',
+    # Objects -> Route Maps
     'RouteMap',
     'RouteMapEntry',
-    # Not fully implemented
-    'BGPRouter',
-    'BGPScope',
-    'BGPAddressFamily',
-    'BGPSetting',
+    # Static Routing
+    'StaticRoute',
 )

@@ -27,7 +27,7 @@ class PrefixListEntryFilterSet(NetBoxModelFilterSet):
 
     class Meta:
         model = PrefixListEntry
-        fields = ('prefix_list', 'prefix', 'sequence', 'type', 'le', 'ge')
+        fields = ('prefix_list', 'prefix', 'sequence', 'action', 'le', 'ge')
 
     def search(self, queryset, name, value):
         if not value.strip():
@@ -66,7 +66,7 @@ class RouteMapEntryFilterSet(NetBoxModelFilterSet):
 
     class Meta:
         model = RouteMapEntry
-        fields = ('route_map', 'sequence', 'type')
+        fields = ('route_map', 'sequence', 'action')
 
     def search(self, queryset, name, value):
         if not value.strip():

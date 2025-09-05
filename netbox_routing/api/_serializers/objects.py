@@ -4,7 +4,12 @@ from netbox.api.serializers import NetBoxModelSerializer
 from netbox_routing.models import PrefixList, PrefixListEntry, RouteMap, RouteMapEntry
 
 
-__all__ = 'StaticRouteSerializer'
+__all__ = (
+    'PrefixListSerializer',
+    'PrefixListEntrySerializer',
+    'RouteMapSerializer',
+    'RouteMapEntrySerializer',
+)
 
 
 class PrefixListSerializer(NetBoxModelSerializer):
@@ -44,7 +49,7 @@ class PrefixListEntrySerializer(NetBoxModelSerializer):
             'display',
             'prefix_list',
             'sequence',
-            'type',
+            'action',
             'prefix',
             'le',
             'ge',
@@ -57,7 +62,7 @@ class PrefixListEntrySerializer(NetBoxModelSerializer):
             'display',
             'prefix_list',
             'sequence',
-            'type',
+            'action',
             'prefix',
             'le',
             'ge',
@@ -96,8 +101,8 @@ class RouteMapEntrySerializer(NetBoxModelSerializer):
             'display',
             'route_map',
             'sequence',
-            'type',
+            'action',
             'description',
             'comments',
         )
-        brief_fields = ('url', 'id', 'display', 'route_map', 'sequence', 'type')
+        brief_fields = ('url', 'id', 'display', 'route_map', 'sequence', 'action')

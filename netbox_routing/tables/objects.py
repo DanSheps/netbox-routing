@@ -18,13 +18,13 @@ class PrefixListEntryTable(NetBoxTable):
 
     class Meta(NetBoxTable.Meta):
         model = PrefixListEntry
-        fields = ('pk', 'id', 'prefix_list', 'sequence', 'type', 'prefix', 'le', 'ge')
+        fields = ('pk', 'id', 'prefix_list', 'sequence', 'action', 'prefix', 'le', 'ge')
         default_columns = (
             'pk',
             'id',
             'prefix_list',
             'sequence',
-            'type',
+            'action',
             'prefix',
             'le',
             'ge',
@@ -44,5 +44,5 @@ class RouteMapEntryTable(NetBoxTable):
 
     class Meta(NetBoxTable.Meta):
         model = RouteMapEntry
-        fields = ('pk', 'id', 'route_map', 'sequence', 'type')
-        default_columns = ('pk', 'id', 'route_map', 'sequence', 'type')
+        fields = ('pk', 'id', 'route_map', 'sequence', 'action')
+        default_columns = ('pk', 'id', 'route_map', 'sequence', 'action')

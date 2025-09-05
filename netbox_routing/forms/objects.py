@@ -20,7 +20,7 @@ class PrefixListEntryForm(NetBoxModelForm):
         fields = (
             'prefix_list',
             'sequence',
-            'type',
+            'action',
             'prefix',
             'le',
             'ge',
@@ -47,7 +47,7 @@ class RouteMapEntryForm(NetBoxModelForm):
         fields = (
             'route_map',
             'sequence',
-            'type',
+            'action',
             'description',
             'comments',
         )
