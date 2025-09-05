@@ -1,9 +1,9 @@
-from netbox.choices import ButtonColorChoices as ColorChoices
-from netbox.plugins import PluginMenuItem, PluginMenuButton
-
+from netbox.plugins import PluginMenuButton, PluginMenuItem
 
 __all__ = ('MENUITEMS',)
 
+COL_ADD = 'mdi mdi-plus'
+COL_IMPORT = 'mdi mdi-upload'
 
 ospf_instance = PluginMenuItem(
     link='plugins:netbox_routing:ospfinstance_list',
@@ -11,16 +11,16 @@ ospf_instance = PluginMenuItem(
     permissions=['netbox_routing.view_ospfinstance'],
     buttons=(
         PluginMenuButton(
-            'plugins:netbox_routing:ospfinstance_add',
-            'Add',
-            'mdi mdi-plus',
-            ColorChoices.GREEN,
+            link='plugins:netbox_routing:ospfinstance_add',
+            title='Add',
+            icon_class=COL_ADD,
+            permissions=['netbox_routing.add_ospfinstance'],
         ),
         PluginMenuButton(
-            'plugins:netbox_routing:ospfinstance_bulk_import',
-            'Import',
-            'mdi mdi-upload',
-            ColorChoices.CYAN,
+            link='plugins:netbox_routing:ospfinstance_bulk_import',
+            title='Import',
+            icon_class=COL_IMPORT,
+            permissions=['netbox_routing.import_ospfinstance'],
         ),
     ),
 )
@@ -30,16 +30,16 @@ ospf_area = PluginMenuItem(
     permissions=['netbox_routing.view_ospfarea'],
     buttons=(
         PluginMenuButton(
-            'plugins:netbox_routing:ospfarea_add',
-            'Add',
-            'mdi mdi-plus',
-            ColorChoices.GREEN,
+            link='plugins:netbox_routing:ospfarea_add',
+            title='Add',
+            icon_class=COL_ADD,
+            permissions=['netbox_routing.add_ospfarea'],
         ),
         PluginMenuButton(
-            'plugins:netbox_routing:ospfarea_bulk_import',
-            'Import',
-            'mdi mdi-upload',
-            ColorChoices.CYAN,
+            link='plugins:netbox_routing:ospfarea_bulk_import',
+            title='Import',
+            icon_class=COL_IMPORT,
+            permissions=['netbox_routing.import_ospfarea'],
         ),
     ),
 )
@@ -49,16 +49,16 @@ ospf_interfaces = PluginMenuItem(
     permissions=['netbox_routing.view_ospfinterface'],
     buttons=(
         PluginMenuButton(
-            'plugins:netbox_routing:ospfinterface_add',
-            'Add',
-            'mdi mdi-plus',
-            ColorChoices.GREEN,
+            link='plugins:netbox_routing:ospfinterface_add',
+            title='Add',
+            icon_class=COL_ADD,
+            permissions=['netbox_routing.add_ospfinterface'],
         ),
         PluginMenuButton(
-            'plugins:netbox_routing:ospfinterface_bulk_import',
-            'Import',
-            'mdi mdi-upload',
-            ColorChoices.CYAN,
+            link='plugins:netbox_routing:ospfinterface_bulk_import',
+            title='Import',
+            icon_class=COL_IMPORT,
+            permissions=['netbox_routing.import_ospfinterface'],
         ),
     ),
 )

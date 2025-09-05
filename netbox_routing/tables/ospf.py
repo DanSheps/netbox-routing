@@ -43,6 +43,11 @@ class OSPFAreaTable(NetBoxTable):
 
 class OSPFInterfaceTable(NetBoxTable):
     instance = tables.Column(verbose_name=_('Instance'), linkify=True)
+    device = tables.Column(
+        verbose_name=_('Device'),
+        linkify=True,
+        accessor='instance__device',
+    )
     area = tables.Column(verbose_name=_('Area'), linkify=True)
     interface = tables.Column(verbose_name=_('Interface'), linkify=True)
 
@@ -52,6 +57,7 @@ class OSPFInterfaceTable(NetBoxTable):
             'pk',
             'id',
             'instance',
+            'device',
             'area',
             'interface',
             'passive',

@@ -1,6 +1,4 @@
-from netbox.choices import ButtonColorChoices as ColorChoices
-from netbox.plugins import PluginMenuItem, PluginMenuButton
-
+from netbox.plugins import PluginMenuButton, PluginMenuItem
 
 __all__ = ('MENUITEMS',)
 
@@ -15,9 +13,12 @@ router = PluginMenuItem(
     permissions=['netbox_routing.view_bgprouter'],
     buttons=(
         PluginMenuButton(
-            'plugins:netbox_routing:bgprouter_add', 'Add', COL_ADD, ColorChoices.GREEN
+            link='plugins:netbox_routing:bgprouter_add',
+            title='Add',
+            icon_class=COL_ADD,
+            permissions=['netbox_routing.add_bgprouter'],
         ),
-        # PluginMenuButton('plugins:netbox_routing:bgprouter_bulk_import', 'Import', COL_IMPORT, ColorChoices.CYAN),
+        # PluginMenuButton('plugins:netbox_routing:bgprouter_bulk_import', 'Import', COL_IMPORT),
     ),
 )
 
@@ -28,9 +29,12 @@ scope = PluginMenuItem(
     permissions=['netbox_routing.view_bgpscope'],
     buttons=(
         PluginMenuButton(
-            'plugins:netbox_routing:bgpscope_add', 'Add', COL_ADD, ColorChoices.GREEN
+            link='plugins:netbox_routing:bgpscope_add',
+            title='Add',
+            icon_class=COL_ADD,
+            permissions=['netbox_routing.add_bgpscope'],
         ),
-        # PluginMenuButton('plugins:netbox_routing:bgpscope_bulk_import', 'Import', COL_IMPORT, ColorChoices.CYAN),
+        # PluginMenuButton('plugins:netbox_routing:bgpscope_bulk_import', 'Import', COL_IMPORT),
     ),
 )
 
@@ -41,12 +45,12 @@ address_family = PluginMenuItem(
     permissions=['netbox_routing.view_bgpaddressfamily'],
     buttons=(
         PluginMenuButton(
-            'plugins:netbox_routing:bgpaddressfamily_add',
-            'Add',
-            COL_ADD,
-            ColorChoices.GREEN,
+            link='plugins:netbox_routing:bgpaddressfamily_add',
+            title='Add',
+            icon_class=COL_ADD,
+            permissions=['netbox_routing.add_bgpaddressfamily'],
         ),
-        # PluginMenuButton('plugins:netbox_routing:bgpaf_bulk_import', 'Import', COL_IMPORT, ColorChoices.CYAN),
+        # PluginMenuButton('plugins:netbox_routing:bgpaf_bulk_import', 'Import', COL_IMPORT),
     ),
 )
 
