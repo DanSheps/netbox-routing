@@ -28,7 +28,7 @@ def unset_peer(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('netbox_routing', '0018_fix_peer_policy_and_session_position'),
+        ('netbox_routing', '0019_fix_peer_policy_and_session_position'),
     ]
 
     operations = [

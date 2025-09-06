@@ -6,7 +6,7 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('netbox_routing', '0016_rename_bgppolicytemplate'),
+        ('netbox_routing', '0017_rename_bgppolicytemplate'),
     ]
 
     operations = [

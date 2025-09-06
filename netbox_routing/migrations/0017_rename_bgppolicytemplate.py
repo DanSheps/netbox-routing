@@ -6,7 +6,7 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('netbox_routing', '0015_ospfinterface_unique_interface'),
+        ('netbox_routing', '0016_ospfinterface_interface_onetoonefield'),
     ]
 
     operations = [
