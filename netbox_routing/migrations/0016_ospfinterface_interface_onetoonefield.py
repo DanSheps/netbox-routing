@@ -7,7 +7,6 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('dcim', '0215_rackreservation_status'),
         ('netbox_routing', '0015_alter_ospfarea_options_alter_ospfinstance_options'),
     ]
 
