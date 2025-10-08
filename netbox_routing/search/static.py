@@ -10,3 +10,4 @@ class StaticRouteIndex(SearchIndex):
         ('next_hop', 300),
         ('comments', 5000),
     )
+    display_attrs = ('prefix', 'next_hop', 'vrf')
