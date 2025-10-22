@@ -1,6 +1,5 @@
 from netbox.search import SearchIndex, register_search
 from netbox_routing.models.ospf import OSPFInstance, OSPFArea
-
 @register_search
 class OSPFInstanceIndex(SearchIndex):
     model = OSPFInstance
@@ -12,6 +11,7 @@ class OSPFInstanceIndex(SearchIndex):
     )
     display_attrs = ('process_id', 'device', 'vrf')
 
+
 @register_search
 class OSPFAreaIndex(SearchIndex):
     model = OSPFArea
@@ -19,3 +19,4 @@ class OSPFAreaIndex(SearchIndex):
         ('area_id', 100),
         ('comments', 5000),
     )
+

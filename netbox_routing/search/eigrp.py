@@ -1,6 +1,7 @@
 from netbox.search import SearchIndex, register_search
 from netbox_routing.models.eigrp import EIGRPRouter, EIGRPAddressFamily
 
+
 @register_search
 class EIGRPRouterIndex(SearchIndex):
     model = EIGRPRouter
@@ -12,6 +13,7 @@ class EIGRPRouterIndex(SearchIndex):
     )
     display_attrs = ('device', 'mode')
 
+
 @register_search
 class EIGRPAddressFamilyIndex(SearchIndex):
     model = EIGRPAddressFamily
@@ -19,3 +21,4 @@ class EIGRPAddressFamilyIndex(SearchIndex):
         ('rid', 100),
         ('comments', 5000),
     )
+
