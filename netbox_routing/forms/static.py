@@ -1,3 +1,5 @@
+from django.utils.translation import gettext as _
+
 from dcim.models import Device
 from ipam.models import VRF
 from netbox.forms import NetBoxModelForm
@@ -7,14 +9,40 @@ from utilities.forms.fields import (
     DynamicModelMultipleChoiceField,
     CommentField,
 )
+from utilities.forms.rendering import FieldSet
 
 
 class StaticRouteForm(NetBoxModelForm):
-    devices = DynamicModelMultipleChoiceField(queryset=Device.objects.all())
+    devices = DynamicModelMultipleChoiceField(
+        queryset=Device.objects.all(),
+        label=_('Devices'),
+    )
     vrf = DynamicModelChoiceField(
-        queryset=VRF.objects.all(), required=False, label='VRF'
+        queryset=VRF.objects.all(),
+        required=False,
+        label=_('VRF'),
     )
     comments = CommentField()
+
+    fieldsets = (
+        FieldSet(
+            'devices',
+            'vrf',
+        ),
+        FieldSet(
+            'prefix',
+            'next_hop',
+            'metric',
+            name=_('Route'),
+        ),
+        FieldSet(
+            'name',
+            'description',
+            'tag',
+            'permanent',
+            name=_('Metadata'),
+        ),
+    )
 
     class Meta:
         model = StaticRoute
