@@ -46,16 +46,14 @@ class StaticRoute(PrimaryModel):
     )
 
     tag = models.IntegerField(
-        verbose_name='Tag',
+        verbose_name='Route Tag',
+        help_text='Optional tag for this static route',
         blank=True,
         null=True,
     )
 
     clone_fields = ('vrf', 'metric', 'permanent')
-    prerequisite_models = (
-        'dcim.Device',
-        'ipam.VRF',
-    )
+    prerequisite_models = ('dcim.Device',)
 
     class Meta:
         ordering = ['vrf', 'prefix', 'metric']
