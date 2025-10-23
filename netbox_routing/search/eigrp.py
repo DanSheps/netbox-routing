@@ -21,4 +21,3 @@ class EIGRPAddressFamilyIndex(SearchIndex):
         ('rid', 100),
         ('comments', 5000),
     )
-
