@@ -2,6 +2,8 @@ from netbox.plugins import PluginMenuButton, PluginMenuItem
 
 __all__ = ('MENUITEMS',)
 
+COL_ADD = 'mdi mdi-plus'
+COL_IMPORT = 'mdi mdi-upload'
 
 ospf_instance = PluginMenuItem(
     link='plugins:netbox_routing:ospfinstance_list',
@@ -11,14 +13,14 @@ ospf_instance = PluginMenuItem(
         PluginMenuButton(
             link='plugins:netbox_routing:ospfinstance_add',
             title='Add',
-            icon_class='mdi mdi-plus',
+            icon_class=COL_ADD,
             permissions=['netbox_routing.add_ospfinstance'],
         ),
         PluginMenuButton(
             link='plugins:netbox_routing:ospfinstance_bulk_import',
             title='Import',
-            icon_class='mdi mdi-upload',
-            permissions=['netbox_routing.add_ospfinstance'],
+            icon_class=COL_IMPORT,
+            permissions=['netbox_routing.import_ospfinstance'],
         ),
     ),
 )
@@ -30,14 +32,14 @@ ospf_area = PluginMenuItem(
         PluginMenuButton(
             link='plugins:netbox_routing:ospfarea_add',
             title='Add',
-            icon_class='mdi mdi-plus',
+            icon_class=COL_ADD,
             permissions=['netbox_routing.add_ospfarea'],
         ),
         PluginMenuButton(
             link='plugins:netbox_routing:ospfarea_bulk_import',
             title='Import',
-            icon_class='mdi mdi-upload',
-            permissions=['netbox_routing.add_ospfarea'],
+            icon_class=COL_IMPORT,
+            permissions=['netbox_routing.import_ospfarea'],
         ),
     ),
 )
@@ -49,14 +51,14 @@ ospf_interfaces = PluginMenuItem(
         PluginMenuButton(
             link='plugins:netbox_routing:ospfinterface_add',
             title='Add',
-            icon_class='mdi mdi-plus',
+            icon_class=COL_ADD,
             permissions=['netbox_routing.add_ospfinterface'],
         ),
         PluginMenuButton(
             link='plugins:netbox_routing:ospfinterface_bulk_import',
             title='Import',
-            icon_class='mdi mdi-upload',
-            permissions=['netbox_routing.add_ospfinterface'],
+            icon_class=COL_IMPORT,
+            permissions=['netbox_routing.import_ospfinterface'],
         ),
     ),
 )

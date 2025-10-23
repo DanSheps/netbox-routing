@@ -29,6 +29,7 @@ class StaticRouteForm(NetBoxModelForm):
             'tag',
             'description',
             'comments',
+            'tags',
         )
 
     def __init__(self, data=None, instance=None, *args, **kwargs):

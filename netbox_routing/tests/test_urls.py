@@ -13,6 +13,7 @@ class URLTestCase(TestCase):
                 'staticroute_add',
                 'staticroute_bulk_edit',
                 'staticroute_bulk_delete',
+                'staticroute_bulk_import',
                 'staticroute',
                 'staticroute_edit',
                 'staticroute_devices',

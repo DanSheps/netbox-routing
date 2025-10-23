@@ -108,7 +108,7 @@ class OSPFInterface(PrimaryModel):
         blank=False,
         null=False,
     )
-    interface = models.ForeignKey(
+    interface = models.OneToOneField(
         to='dcim.Interface',
         related_name='ospf_interfaces',
         on_delete=models.CASCADE,
@@ -140,11 +140,6 @@ class OSPFInterface(PrimaryModel):
     class Meta:
         verbose_name = 'OSPF Interface'
         ordering = ('instance', 'area', 'interface')  # Name may be non-unique
-        constraints = (
-            models.UniqueConstraint(
-                fields=('interface',), name='%(app_label)s_%(class)s_unique_interface'
-            ),
-        )
 
     def __str__(self):
         return f'{self.interface.name}'
