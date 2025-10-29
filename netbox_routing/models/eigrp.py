@@ -38,7 +38,14 @@ class EIGRPRouter(PrimaryModel):
 
     class Meta:
         verbose_name = 'EIGRP Router'
-        unique_together = [['device', 'name']]
+        constraints = (
+            models.UniqueConstraint(
+                fields=('device', 'name'),
+                name='%(app_label)s_%(class)s_unique_device_name',
+                violation_error_message="Name must be unique per device.  Only a single empty name is permitted per device",
+                nulls_distinct=False
+            ),
+        )
 
     def __str__(self):
         if self.pid:
