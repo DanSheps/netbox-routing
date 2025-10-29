@@ -114,6 +114,13 @@ class OSPFInterface(PrimaryModel):
         blank=False,
         null=False,
     )
+    neighbor = models.ForeignKey(
+        to='self',
+        related_name='ospf_neighbors',
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True,
+    )
     passive = models.BooleanField(verbose_name='Passive', blank=True, null=True)
     priority = models.IntegerField(blank=True, null=True)
     bfd = models.BooleanField(blank=True, null=True, verbose_name='BFD')

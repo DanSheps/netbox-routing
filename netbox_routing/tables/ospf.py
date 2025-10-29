@@ -50,6 +50,7 @@ class OSPFInterfaceTable(NetBoxTable):
     )
     area = tables.Column(verbose_name=_('Area'), linkify=True)
     interface = tables.Column(verbose_name=_('Interface'), linkify=True)
+    neighbor = tables.Column(verbose_name=_('Neighbor'), linkify=True)
 
     class Meta(NetBoxTable.Meta):
         model = OSPFInterface
