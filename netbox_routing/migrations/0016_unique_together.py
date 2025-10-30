@@ -15,10 +15,22 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AddConstraint(
             model_name='eigrprouter',
-            constraint=models.UniqueConstraint(fields=('device', 'name'), name='netbox_routing_eigrprouter_unique_device_name', nulls_distinct=False, violation_error_message='Name must be unique per device.  Only a single empty name is permitted per device'),
+            constraint=models.UniqueConstraint(
+                fields=('device', 'name'),
+                name='netbox_routing_eigrprouter_unique_device_name',
+                nulls_distinct=False,
+                violation_error_message="""Name must be unique per device.
+                Only a single empty name is permitted per device""",
+            ),
         ),
         migrations.AddConstraint(
             model_name='ospfinstance',
-            constraint=models.UniqueConstraint(fields=('device', 'name'), name='netbox_routing_ospfinstance_unique_device_name', nulls_distinct=False, violation_error_message='Name must be unique per device.  Only a single empty name is permitted per device'),
+            constraint=models.UniqueConstraint(
+                fields=('device', 'name'),
+                name='netbox_routing_ospfinstance_unique_device_name',
+                nulls_distinct=False,
+                violation_error_message="""Name must be unique per device.
+                Only a single empty name is permitted per device""",
+            ),
         ),
     ]

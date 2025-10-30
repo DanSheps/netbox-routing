@@ -42,8 +42,9 @@ class EIGRPRouter(PrimaryModel):
             models.UniqueConstraint(
                 fields=('device', 'name'),
                 name='%(app_label)s_%(class)s_unique_device_name',
-                violation_error_message="Name must be unique per device.  Only a single empty name is permitted per device",
-                nulls_distinct=False
+                violation_error_message="""Name must be unique per device.
+                Only a single empty name is permitted per device""",
+                nulls_distinct=False,
             ),
         )
 
