@@ -22,7 +22,7 @@ routers = PluginMenuItem(
             link='plugins:netbox_routing:eigrprouter_bulk_import',
             title='Import',
             icon_class=COL_IMPORT,
-            permissions=['netbox_routing.add_eigrprouter'],
+            permissions=['netbox_routing.import_eigrprouter'],
         ),
     ),
 )
@@ -37,6 +37,12 @@ address_families = PluginMenuItem(
             icon_class=COL_ADD,
             permissions=['netbox_routing.add_eigrpaddressfamily'],
         ),
+        PluginMenuButton(
+            link='plugins:netbox_routing:eigrpaddressfamily_bulk_import',
+            title='Import',
+            icon_class=COL_IMPORT,
+            permissions=['netbox_routing.import_eigrpaddressfamily'],
+        ),
     ),
 )
 networks = PluginMenuItem(
@@ -50,6 +56,12 @@ networks = PluginMenuItem(
             icon_class=COL_ADD,
             permissions=['netbox_routing.add_eigrpnetwork'],
         ),
+        PluginMenuButton(
+            link='plugins:netbox_routing:eigrpnetwork_bulk_import',
+            title='Import',
+            icon_class=COL_IMPORT,
+            permissions=['netbox_routing.import_eigrpnetwork'],
+        ),
     ),
 )
 interfaces = PluginMenuItem(
@@ -62,6 +74,12 @@ interfaces = PluginMenuItem(
             title='Add',
             icon_class=COL_ADD,
             permissions=['netbox_routing.add_eigrpinterface'],
+        ),
+        PluginMenuButton(
+            link='plugins:netbox_routing:eigrpinterface_bulk_import',
+            title='Import',
+            icon_class=COL_IMPORT,
+            permissions=['netbox_routing.import_eigrpinterface'],
         ),
     ),
 )
