@@ -27,6 +27,16 @@
             {{ object.interface|linkify }}
           </td>
         </tr>
+        <tr>
+          <th scope="row">Neighbor</th>
+          <td>
+            {% if object.neighbor %}
+              <a href="{{ object.neighbor.get_absolute_url }}">{{ object.neighbor.interface.device.name }}:{{ object.neighbor.interface.name }}</a>
+            {% else %}
+              —
+            {% endif %}
+          </td>
+        </tr>
       </table>
     </div>
     <div class="card">

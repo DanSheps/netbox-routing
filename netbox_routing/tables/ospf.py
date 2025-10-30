@@ -50,7 +50,15 @@ class OSPFInterfaceTable(NetBoxTable):
     )
     area = tables.Column(verbose_name=_('Area'), linkify=True)
     interface = tables.Column(verbose_name=_('Interface'), linkify=True)
-    neighbor = tables.Column(verbose_name=_('Neighbor'), linkify=True)
+    neighbor = tables.Column(verbose_name=_('Neighbor'), linkify=True, accessor='neighbor')
+
+    def render_neighbor(self, value, record):
+        if value:
+            from django.utils.html import format_html
+            neighbor_url = value.get_absolute_url()
+            display_text = f"{value.interface.device.name}:{value.interface.name}"
+            return format_html('<a href="{}">{}</a>', neighbor_url, display_text)
+        return "—"
 
     class Meta(NetBoxTable.Meta):
         model = OSPFInterface
@@ -59,6 +67,7 @@ class OSPFInterfaceTable(NetBoxTable):
             'id',
             'instance',
             'device',
+            'neighbor',
             'area',
             'interface',
             'passive',

@@ -95,9 +95,6 @@ class OSPFInterfaceForm(NetBoxModelForm):
         required=False,
         selector=True,
         label=_('Neighbor'),
-        query_params={
-            'device_id': '$device',
-        },
     )
     comments = CommentField()
 
