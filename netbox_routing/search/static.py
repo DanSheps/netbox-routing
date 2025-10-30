@@ -2,6 +2,11 @@ from netbox.search import SearchIndex, register_search
 from netbox_routing.models.static import StaticRoute
 
 
+__all__ = (
+    'StaticRouteIndex',
+    )
+
+
 @register_search
 class StaticRouteIndex(SearchIndex):
     model = StaticRoute

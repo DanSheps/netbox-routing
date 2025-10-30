@@ -2,6 +2,12 @@ from netbox.search import SearchIndex, register_search
 from netbox_routing.models.eigrp import EIGRPRouter, EIGRPAddressFamily
 
 
+__all__ = (
+    'EIGRPRouterIndex',
+    'EIGRPAddressFamilyIndex',
+)
+
+
 @register_search
 class EIGRPRouterIndex(SearchIndex):
     model = EIGRPRouter

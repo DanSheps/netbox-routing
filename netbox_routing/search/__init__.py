@@ -5,10 +5,8 @@ from .eigrp import EIGRPRouterIndex, EIGRPAddressFamilyIndex
 
 __all__ = (
     'StaticRouteIndex',
-
     'OSPFInstanceIndex',
     'OSPFAreaIndex',
-
     'EIGRPRouterIndex',
     'EIGRPAddressFamilyIndex',
 )

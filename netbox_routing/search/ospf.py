@@ -2,6 +2,12 @@ from netbox.search import SearchIndex, register_search
 from netbox_routing.models.ospf import OSPFInstance, OSPFArea
 
 
+__all__ = (
+    'OSPFInstanceIndex',
+    'OSPFAreaIndex',
+    )
+
+
 @register_search
 class OSPFInstanceIndex(SearchIndex):
     model = OSPFInstance
