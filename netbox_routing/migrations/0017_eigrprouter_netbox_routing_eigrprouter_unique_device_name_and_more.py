@@ -6,10 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('dcim', '0207_remove_redundant_indexes'),
-        ('extras', '0128_tableconfig'),
-        ('ipam', '0081_remove_service_device_virtual_machine_add_parent_gfk_index'),
-        ('netbox_routing', '0015_alter_ospfarea_options_alter_ospfinstance_options'),
+        ('netbox_routing', '0016_ospfinterface_interface_onetoonefield'),
     ]
 
     operations = [
