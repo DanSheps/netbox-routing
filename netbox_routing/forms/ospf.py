@@ -99,6 +99,7 @@ class OSPFInterfaceForm(NetBoxModelForm):
             'instance',
             'area',
             'interface',
+            'network_type',
             'passive',
             'priority',
             'bfd',
