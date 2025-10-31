@@ -50,7 +50,7 @@ class RouteMapEntry(PermitDenyChoiceMixin, PrimaryModel):
         related_name='entries',
         verbose_name='Route Map',
     )
-    type = models.CharField(max_length=6, choices=PermitDenyChoices)
+    action = models.CharField(max_length=6, choices=PermitDenyChoices)
     sequence = models.PositiveSmallIntegerField()
     match = models.JSONField(
         blank=True,
@@ -122,7 +122,7 @@ class PrefixListEntry(PermitDenyChoiceMixin, PrimaryModel):
         verbose_name='Prefix List',
     )
     sequence = models.PositiveSmallIntegerField()
-    type = models.CharField(max_length=6, choices=PermitDenyChoices)
+    action = models.CharField(max_length=6, choices=PermitDenyChoices)
     prefix = IPNetworkField(help_text='IPv4 or IPv6 network with mask')
     ge = models.PositiveSmallIntegerField(
         verbose_name='GE',

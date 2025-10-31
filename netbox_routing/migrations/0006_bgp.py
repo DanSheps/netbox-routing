@@ -10,10 +10,6 @@ import utilities.json
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('contenttypes', '0002_remove_content_type_name'),
-        ('ipam', '0067_ipaddress_index_host'),
-        ('dcim', '0181_rename_device_role_device_role'),
-        ('extras', '0098_webhook_custom_field_data_webhook_tags'),
         ('netbox_routing', '0005_ospf'),
     ]
 
