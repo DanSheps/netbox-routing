@@ -10,6 +10,7 @@ from utilities.forms.fields import DynamicModelChoiceField, CommentField
 
 from netbox_routing.models import OSPFArea, OSPFInstance, OSPFInterface
 
+from netbox_routing import choices
 
 __all__ = (
     'OSPFAreaForm',
@@ -89,6 +90,11 @@ class OSPFInterfaceForm(NetBoxModelForm):
         query_params={
             'device_id': '$device',
         },
+    )
+    network_type = forms.ChoiceField(
+        choices=choices.OSPFInterfaceTypeChoices,
+        label=_('Network Type'),
+        required=True,
     )
     comments = CommentField()
 

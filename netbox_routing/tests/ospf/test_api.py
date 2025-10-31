@@ -161,6 +161,7 @@ class OSPFInterfaceTestCase(IPAddressFieldMixin, APIViewTestCases.APIViewTestCas
                 'instance': instance.pk,
                 'area': area.pk,
                 'interface': interfaces[3].pk,
+                'network_type': 'broadcast',
                 'passive': True,
                 'priority': 2,
                 'authentication': 'message-digest',

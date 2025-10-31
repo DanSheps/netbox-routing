@@ -199,6 +199,7 @@ class OSPFInterfaceTestCase(
             'area': areas[3].pk,
             'instance': instances[3].pk,
             'passive': True,
+            'network_type': 'broadcast',
         }
 
         cls.bulk_edit_data = {
