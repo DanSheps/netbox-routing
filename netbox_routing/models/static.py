@@ -52,7 +52,7 @@ class StaticRoute(PrimaryModel):
         null=True,
     )
 
-    clone_fields = ('vrf', 'metric', 'permanent')
+    clone_fields = ('devices', 'prefix', 'next_hop', 'vrf', 'metric', 'permanent')
     prerequisite_models = ('dcim.Device',)
 
     class Meta:
