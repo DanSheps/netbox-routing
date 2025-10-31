@@ -36,6 +36,10 @@ class EIGRPRouter(PrimaryModel):
     )
     rid = IPAddressField(verbose_name=_('Router ID'), blank=True, null=True)
 
+    clone_fields = ('device', 'mode', 'name', 'pid', 'rid')
+    
+    prerequisite_models = ('dcim.Device',)
+    
     class Meta:
         verbose_name = 'EIGRP Router'
 
@@ -80,6 +84,10 @@ class EIGRPAddressFamily(PrimaryModel):
     )
     rid = IPAddressField(verbose_name=_('Router ID'), blank=True, null=True)
 
+    clone_fields = ('router', 'vrf', 'family')
+    
+    prerequisite_models = ('netbox_routing.EIGRPRouter',)
+    
     class Meta:
         verbose_name = 'EIGRP Address Family'
         constraints = (
@@ -121,6 +129,9 @@ class EIGRPNetwork(PrimaryModel):
         blank=False,
         null=False,
     )
+    
+    clone_fields = ('router', 'address_family', 'network')
+    prerequisite_models = ('netbox_routing.EIGRPRouter', 'ipam.Prefix',)
 
     class Meta:
         verbose_name = 'EIGRP Network'
@@ -183,6 +194,9 @@ class EIGRPInterface(PrimaryModel):
     passphrase = models.CharField(
         verbose_name=_('Passphrase'), max_length=200, blank=True, null=True
     )
+    
+    clone_fields = ('router', 'address_family', 'interface', 'passive', 'bfd', 'authentication', 'passphrase')
+    prerequisite_models = ('netbox_routing.EIGRPRouter', 'dcim.Interface',)
 
     class Meta:
         verbose_name = 'EIGRP Interface'
