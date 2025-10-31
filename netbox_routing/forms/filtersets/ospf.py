@@ -58,7 +58,7 @@ class OSPFInstanceFilterForm(NetBoxModelFilterSetForm):
 class OSPFAreaFilterForm(NetBoxModelFilterSetForm):
     model = OSPFArea
     fieldsets = (FieldSet('q', 'device_id', 'filter_id', 'area_type', 'tag'),)
-    
+
     device_id = DynamicModelMultipleChoiceField(
         queryset=Device.objects.all(),
         required=False,
