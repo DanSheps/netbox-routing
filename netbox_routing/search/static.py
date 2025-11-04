@@ -4,7 +4,7 @@ from netbox_routing.models.static import StaticRoute
 
 __all__ = (
     'StaticRouteIndex',
-    )
+)
 
 
 @register_search
