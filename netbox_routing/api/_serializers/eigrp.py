@@ -38,6 +38,7 @@ class EIGRPRouterSerializer(NetBoxModelSerializer):
             'device',
             'description',
             'comments',
+            'custom_fields',
         )
         brief_fields = (
             'url',

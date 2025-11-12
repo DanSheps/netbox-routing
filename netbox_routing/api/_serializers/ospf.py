@@ -34,6 +34,7 @@ class OSPFInstanceSerializer(NetBoxModelSerializer):
             'vrf',
             'description',
             'comments',
+            'custom_fields',
         )
         brief_fields = (
             'url',
