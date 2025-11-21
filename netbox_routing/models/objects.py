@@ -10,7 +10,7 @@ from netbox.models import PrimaryModel
 from netbox_routing.choices.objects import PermitDenyChoices
 
 
-__all__ = ('RouteMap', 'RouteMapEntry', 'PrefixList', 'PrefixListEntry')
+__all__ = ('RouteMap', 'RouteMapEntry', 'RoutingPrefixList', 'PrefixListEntry')
 
 
 class PermitDenyChoiceMixin:
@@ -89,7 +89,7 @@ class RouteMapEntry(PermitDenyChoiceMixin, PrimaryModel):
         return reverse('plugins:netbox_routing:routemapentry', args=[self.pk])
 
 
-class PrefixList(PrimaryModel):
+class RoutingPrefixList(PrimaryModel):
     name = models.CharField(max_length=255)
 
     clone_fields = ()
@@ -116,7 +116,7 @@ class PrefixList(PrimaryModel):
 
 class PrefixListEntry(PermitDenyChoiceMixin, PrimaryModel):
     prefix_list = models.ForeignKey(
-        to="netbox_routing.PrefixList",
+        to="netbox_routing.RoutingPrefixList",
         on_delete=models.PROTECT,
         related_name='entries',
         verbose_name='Prefix List',
@@ -139,7 +139,7 @@ class PrefixListEntry(PermitDenyChoiceMixin, PrimaryModel):
         'prefix_list',
         'type',
     )
-    prerequisite_models = ('netbox_routing.PrefixList',)
+    prerequisite_models = ('netbox_routing.RoutingPrefixList',)
 
     class Meta:
         ordering = ['prefix_list', 'sequence']

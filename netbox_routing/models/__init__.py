@@ -1,6 +1,6 @@
 from .static import StaticRoute
 from .ospf import OSPFArea, OSPFInstance, OSPFInterface
-from .objects import PrefixList, PrefixListEntry, RouteMap, RouteMapEntry
+from .objects import RoutingPrefixList, PrefixListEntry, RouteMap, RouteMapEntry
 from .bgp import BGPRouter, BGPScope, BGPAddressFamily, BGPSetting
 from .eigrp import *
 
@@ -13,7 +13,7 @@ __all__ = (
     'EIGRPAddressFamily',
     'EIGRPNetwork',
     'EIGRPInterface',
-    'PrefixList',
+    'RoutingPrefixList',
     'PrefixListEntry',
     'RouteMap',
     'RouteMapEntry',

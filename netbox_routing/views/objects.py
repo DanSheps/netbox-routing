@@ -25,7 +25,7 @@ from netbox_routing.forms import (
     PrefixListEntryBulkEditForm,
     RouteMapEntryBulkEditForm,
 )
-from netbox_routing.models import PrefixList, PrefixListEntry, RouteMapEntry, RouteMap
+from netbox_routing.models import RoutingPrefixList, PrefixListEntry, RouteMapEntry, RouteMap
 from netbox_routing.tables.objects import (
     PrefixListTable,
     PrefixListEntryTable,
@@ -38,24 +38,24 @@ from utilities.views import register_model_view, ViewTab
 #
 # Prefix List
 #
-@register_model_view(PrefixList, name='list', path='', detail=False)
+@register_model_view(RoutingPrefixList, name='list', path='', detail=False)
 class PrefixListListView(ObjectListView):
-    queryset = PrefixList.objects.all()
+    queryset = RoutingPrefixList.objects.all()
     table = PrefixListTable
     filterset = PrefixListFilterSet
     filterset_form = PrefixListFilterForm
 
 
-@register_model_view(PrefixList)
+@register_model_view(RoutingPrefixList)
 class PrefixListView(ObjectView):
-    queryset = PrefixList.objects.all()
+    queryset = RoutingPrefixList.objects.all()
     template_name = 'netbox_routing/prefixlist.html'
 
 
-@register_model_view(PrefixList, name='entries')
+@register_model_view(RoutingPrefixList, name='entries')
 class PrefixListEntriesView(ObjectChildrenView):
     template_name = 'netbox_routing/objecttable.html'
-    queryset = PrefixList.objects.all()
+    queryset = RoutingPrefixList.objects.all()
     child_model = PrefixListEntry
     table = PrefixListEntryTable
     filterset = PrefixListEntryFilterSet
@@ -88,14 +88,14 @@ class PrefixListEntriesView(ObjectChildrenView):
         }
 
 
-@register_model_view(PrefixList, name='add', detail=False)
-@register_model_view(PrefixList, name='edit')
+@register_model_view(RoutingPrefixList, name='add', detail=False)
+@register_model_view(RoutingPrefixList, name='edit')
 class PrefixListEditView(ObjectEditView):
-    queryset = PrefixList.objects.all()
+    queryset = RoutingPrefixList.objects.all()
     form = PrefixListForm
 
 
-@register_model_view(PrefixList, name='delete')
+@register_model_view(RoutingPrefixList, name='delete')
 class PrefixListDeleteView(ObjectDeleteView):
     pass
 

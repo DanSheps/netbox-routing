@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from netbox.api.serializers import NetBoxModelSerializer
-from netbox_routing.models import PrefixList, PrefixListEntry, RouteMap, RouteMapEntry
+from netbox_routing.models import RoutingPrefixList, PrefixListEntry, RouteMap, RouteMapEntry
 
 
 __all__ = 'StaticRouteSerializer'
@@ -13,7 +13,7 @@ class PrefixListSerializer(NetBoxModelSerializer):
     )
 
     class Meta:
-        model = PrefixList
+        model = RoutingPrefixList
         fields = (
             'url',
             'id',

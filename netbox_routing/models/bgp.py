@@ -192,14 +192,14 @@ class BGPPoliyTemplate(PrimaryModel):
     )
     enabled = models.BooleanField(blank=True, null=True)
     prefixlist_out = models.ForeignKey(
-        to='netbox_routing.PrefixList',
+        to='netbox_routing.RoutingPrefixList',
         on_delete=models.PROTECT,
         related_name='template_afs_out',
         blank=True,
         null=True,
     )
     prefixlist_in = models.ForeignKey(
-        to='netbox_routing.PrefixList',
+        to='netbox_routing.RoutingPrefixList',
         on_delete=models.PROTECT,
         related_name='template_afs_in',
         blank=True,
@@ -290,14 +290,14 @@ class BGPPeerAddressFamily(PrimaryModel):
     enabled = models.BooleanField(blank=True, null=True)
 
     prefixlist_out = models.ForeignKey(
-        to='netbox_routing.PrefixList',
+        to='netbox_routing.RoutingPrefixList',
         on_delete=models.PROTECT,
         related_name='peer_afs_out',
         blank=True,
         null=True,
     )
     prefixlist_in = models.ForeignKey(
-        to='netbox_routing.PrefixList',
+        to='netbox_routing.RoutingPrefixList',
         on_delete=models.PROTECT,
         related_name='peer_afs_in',
         blank=True,

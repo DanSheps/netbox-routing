@@ -3,12 +3,12 @@ import netaddr
 from django.db.models import Q
 
 from netbox.filtersets import NetBoxModelFilterSet
-from netbox_routing.models import PrefixList, PrefixListEntry, RouteMapEntry, RouteMap
+from netbox_routing.models import RoutingPrefixList, PrefixListEntry, RouteMapEntry, RouteMap
 
 
 class PrefixListFilterSet(NetBoxModelFilterSet):
     class Meta:
-        model = PrefixList
+        model = RoutingPrefixList
         fields = ()
 
     def search(self, queryset, name, value):
