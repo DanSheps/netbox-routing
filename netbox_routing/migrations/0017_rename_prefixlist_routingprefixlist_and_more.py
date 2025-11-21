@@ -22,6 +22,10 @@ class Migration(migrations.Migration):
         ),
         migrations.AddConstraint(
             model_name='routingprefixlist',
-            constraint=models.UniqueConstraint(django.db.models.functions.text.Lower('name'), name='netbox_routing_routingprefixlist_unique_name', violation_error_message='Name must be unique.'),
+            constraint=models.UniqueConstraint(
+                django.db.models.functions.text.Lower('name'),
+                name='netbox_routing_routingprefixlist_unique_name',
+                violation_error_message='Name must be unique.',
+            ),
         ),
     ]
