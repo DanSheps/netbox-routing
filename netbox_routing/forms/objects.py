@@ -1,5 +1,10 @@
 from netbox.forms import NetBoxModelForm
-from netbox_routing.models import RoutingPrefixList, PrefixListEntry, RouteMap, RouteMapEntry
+from netbox_routing.models import (
+    RoutingPrefixList,
+    PrefixListEntry,
+    RouteMap,
+    RouteMapEntry,
+)
 
 
 class PrefixListForm(NetBoxModelForm):

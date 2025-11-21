@@ -6,7 +6,12 @@ from netbox_routing.api.serializers import (
     RouteMapSerializer,
     RouteMapEntrySerializer,
 )
-from netbox_routing.models import RoutingPrefixList, PrefixListEntry, RouteMap, RouteMapEntry
+from netbox_routing.models import (
+    RoutingPrefixList,
+    PrefixListEntry,
+    RouteMap,
+    RouteMapEntry,
+)
 
 
 class PrefixListViewSet(NetBoxModelViewSet):

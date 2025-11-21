@@ -1,7 +1,12 @@
 from rest_framework import serializers
 
 from netbox.api.serializers import NetBoxModelSerializer
-from netbox_routing.models import RoutingPrefixList, PrefixListEntry, RouteMap, RouteMapEntry
+from netbox_routing.models import (
+    RoutingPrefixList,
+    PrefixListEntry,
+    RouteMap,
+    RouteMapEntry,
+)
 
 
 __all__ = 'StaticRouteSerializer'

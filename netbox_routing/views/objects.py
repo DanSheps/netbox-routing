@@ -25,7 +25,12 @@ from netbox_routing.forms import (
     PrefixListEntryBulkEditForm,
     RouteMapEntryBulkEditForm,
 )
-from netbox_routing.models import RoutingPrefixList, PrefixListEntry, RouteMapEntry, RouteMap
+from netbox_routing.models import (
+    RoutingPrefixList,
+    PrefixListEntry,
+    RouteMapEntry,
+    RouteMap,
+)
 from netbox_routing.tables.objects import (
     PrefixListTable,
     PrefixListEntryTable,
