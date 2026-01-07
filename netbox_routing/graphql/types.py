@@ -3,7 +3,7 @@ from typing import Annotated, List
 import strawberry
 import strawberry_django
 
-from netbox.graphql.types import NetBoxObjectType
+from netbox.graphql.types import PrimaryObjectType
 from .filters import *
 
 from netbox_routing import models
@@ -21,7 +21,7 @@ __all__ = (
 
 
 @strawberry_django.type(models.StaticRoute, fields='__all__', filters=StaticRouteFilter)
-class StaticRouteType(NetBoxObjectType):
+class StaticRouteType(PrimaryObjectType):
 
     name: str
     devices: List[Annotated["DeviceType", strawberry.lazy('dcim.graphql.types')]] | None
@@ -35,7 +35,7 @@ class StaticRouteType(NetBoxObjectType):
 @strawberry_django.type(
     models.OSPFInstance, fields='__all__', filters=OSPFInstanceFilter
 )
-class OSPFInstanceType(NetBoxObjectType):
+class OSPFInstanceType(PrimaryObjectType):
 
     name: str
     device: Annotated["DeviceType", strawberry.lazy('dcim.graphql.types')]
@@ -45,7 +45,7 @@ class OSPFInstanceType(NetBoxObjectType):
 
 
 @strawberry_django.type(models.OSPFArea, fields='__all__', filters=OSPFAreaFilter)
-class OSPFAreaType(NetBoxObjectType):
+class OSPFAreaType(PrimaryObjectType):
 
     area_id: str
     area_type: str
@@ -54,7 +54,7 @@ class OSPFAreaType(NetBoxObjectType):
 @strawberry_django.type(
     models.OSPFInterface, fields='__all__', filters=OSPFInterfaceFilter
 )
-class OSPFInterfaceType(NetBoxObjectType):
+class OSPFInterfaceType(PrimaryObjectType):
 
     instance: Annotated[
         "OSPFInstanceType", strawberry.lazy('netbox_routing.graphql.types')
@@ -69,7 +69,7 @@ class OSPFInterfaceType(NetBoxObjectType):
 
 
 @strawberry_django.type(models.EIGRPRouter, fields='__all__', filters=EIGRPRouterFilter)
-class EIGRPRouterType(NetBoxObjectType):
+class EIGRPRouterType(PrimaryObjectType):
 
     device: Annotated["DeviceType", strawberry.lazy('dcim.graphql.types')]
     rid: str
@@ -81,7 +81,7 @@ class EIGRPRouterType(NetBoxObjectType):
 @strawberry_django.type(
     models.EIGRPAddressFamily, fields='__all__', filters=EIGRPAddressFamilyFilter
 )
-class EIGRPAddressFamilyType(NetBoxObjectType):
+class EIGRPAddressFamilyType(PrimaryObjectType):
 
     router: Annotated[
         "EIGRPRouterType", strawberry.lazy('netbox_routing.graphql.types')
@@ -92,7 +92,7 @@ class EIGRPAddressFamilyType(NetBoxObjectType):
 @strawberry_django.type(
     models.EIGRPNetwork, fields='__all__', filters=EIGRPNetworkFilter
 )
-class EIGRPNetworkType(NetBoxObjectType):
+class EIGRPNetworkType(PrimaryObjectType):
 
     router: Annotated[
         "EIGRPRouterType", strawberry.lazy('netbox_routing.graphql.types')
@@ -109,7 +109,7 @@ class EIGRPNetworkType(NetBoxObjectType):
 @strawberry_django.type(
     models.EIGRPInterface, fields='__all__', filters=EIGRPInterfaceFilter
 )
-class EIGRPInterfaceType(NetBoxObjectType):
+class EIGRPInterfaceType(PrimaryObjectType):
 
     router: Annotated[
         "EIGRPRouterType", strawberry.lazy('netbox_routing.graphql.types')
