@@ -32,7 +32,11 @@ REDIS = {
         'PASSWORD': '',
         'DATABASE': 1,
         'SSL': False,
-    }
+    },
 }
 
 SECRET_KEY = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
+
+API_TOKEN_PEPPERS = {
+    1: 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789',
+}
