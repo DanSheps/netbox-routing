@@ -1,6 +1,7 @@
 from django.db import models
 from django.db.models import CheckConstraint, Q
 from django.urls import reverse
+from django.utils.translation import gettext as _
 
 from ipam.fields import IPNetworkField
 from netbox.models import PrimaryModel
@@ -20,8 +21,12 @@ class StaticRoute(PrimaryModel):
         null=True,
         verbose_name='VRF',
     )
-    prefix = IPNetworkField(help_text='IPv4 or IPv6 network with mask')
-    next_hop = IPAddressField()
+    prefix = IPNetworkField(
+        help_text=_('IPv4 or IPv6 network with mask'),
+    )
+    next_hop = IPAddressField(
+        verbose_name=_('Next Hop'),
+    )
     name = models.CharField(
         max_length=50,
         verbose_name='Name',
@@ -41,7 +46,7 @@ class StaticRoute(PrimaryModel):
     )
 
     tag = models.IntegerField(
-        verbose_name='Tag',
+        verbose_name='Route Tag',
         help_text='Optional tag for this static route',
         blank=True,
         null=True,
