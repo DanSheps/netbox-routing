@@ -1,3 +1,7 @@
+from django.core.validators import (
+    MinValueValidator,
+    MaxValueValidator,
+)
 from django.db.models.functions import Lower
 from django.utils.translation import gettext_lazy as _
 from django.urls import reverse
@@ -5,17 +9,23 @@ from django.urls import reverse
 from django.db import models
 from django.core.exceptions import ValidationError
 
+from ipam.choices import IPAddressFamilyChoices
 from ipam.fields import IPNetworkField
 from netbox.models import PrimaryModel
-from netbox_routing.choices.objects import PermitDenyChoices
+from netbox_routing.choices import ActionChoices
 
 
-__all__ = ('RouteMap', 'RouteMapEntry', 'PrefixList', 'PrefixListEntry')
+__all__ = (
+    'RouteMap',
+    'RouteMapEntry',
+    'PrefixList',
+    'PrefixListEntry',
+)
 
 
 class PermitDenyChoiceMixin:
     def get_type_color(self):
-        return PermitDenyChoices.colors.get(self.type)
+        return ActionChoices.colors.get(self.type)
 
 
 class RouteMap(PrimaryModel):
@@ -50,7 +60,7 @@ class RouteMapEntry(PermitDenyChoiceMixin, PrimaryModel):
         related_name='entries',
         verbose_name='Route Map',
     )
-    action = models.CharField(max_length=6, choices=PermitDenyChoices)
+    action = models.CharField(max_length=6, choices=ActionChoices)
     sequence = models.PositiveSmallIntegerField()
     match = models.JSONField(
         blank=True,
@@ -91,6 +101,7 @@ class RouteMapEntry(PermitDenyChoiceMixin, PrimaryModel):
 
 class PrefixList(PrimaryModel):
     name = models.CharField(max_length=255)
+    family = models.CharField(max_length=10, choices=IPAddressFamilyChoices)
 
     clone_fields = ()
     prerequisite_models = ()
@@ -122,22 +133,24 @@ class PrefixListEntry(PermitDenyChoiceMixin, PrimaryModel):
         verbose_name='Prefix List',
     )
     sequence = models.PositiveSmallIntegerField()
-    action = models.CharField(max_length=6, choices=PermitDenyChoices)
+    action = models.CharField(max_length=6, choices=ActionChoices)
     prefix = IPNetworkField(help_text='IPv4 or IPv6 network with mask')
     ge = models.PositiveSmallIntegerField(
         verbose_name='GE',
         null=True,
         blank=True,
+        validators=[MinValueValidator(0), MaxValueValidator(128)],
     )
     le = models.PositiveSmallIntegerField(
         verbose_name='LE',
         null=True,
         blank=True,
+        validators=[MinValueValidator(0), MaxValueValidator(128)],
     )
 
     clone_fields = (
         'prefix_list',
-        'type',
+        'action',
     )
     prerequisite_models = ('netbox_routing.PrefixList',)
 
@@ -160,17 +173,12 @@ class PrefixListEntry(PermitDenyChoiceMixin, PrimaryModel):
 
     def clean(self):
         super().clean()
+        boundary = 32 if self.prefix.version == 4 else 128
 
-        if self.prefix.version == 6:
-            if self.le is not None and self.le > 128:
-                raise ValidationError({'le': 'LE value cannot be longer then 128'})
-            if self.ge is not None and self.ge > 128:
-                raise ValidationError({'ge': 'GE value cannot be longer then 128'})
-        elif self.prefix.version == 4:
-            if self.le is not None and self.le > 32:
-                raise ValidationError({'le': 'LE value cannot be longer then 32'})
-            if self.ge is not None and self.ge > 32:
-                raise ValidationError({'ge': 'GE value cannot be longer then 32'})
+        if self.le is not None and self.le > boundary:
+            raise ValidationError({'le': 'LE value cannot be longer then 32'})
+        if self.ge is not None and self.ge > boundary:
+            raise ValidationError({'ge': 'GE value cannot be longer then 32'})
 
         if self.ge and self.le and self.ge < self.le:
             raise ValidationError(
