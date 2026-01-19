@@ -13,10 +13,13 @@ from utilities.api import get_serializer_for_model
 from netbox_routing.models.bgp import *
 
 __all__ = (
+    'BGPSettingSerializer',
     'BGPRouterSerializer',
     'BGPScopeSerializer',
     'BGPAddressFamilySerializer',
-    'BGPSettingSerializer',
+    'BGPPeerSerializer',
+    'BGPPeerTemplateSerializer',
+    'BGPPeerAddressFamilySerializer',
 )
 
 
@@ -129,7 +132,6 @@ class BGPAddressFamilySerializer(NetBoxModelSerializer):
 
     scope = BGPScopeSerializer(nested=True)
     settings = BGPSettingSerializer(many=True)
-    tenant = TenantSerializer(nested=True)
 
     class Meta:
         model = BGPAddressFamily
@@ -140,7 +142,6 @@ class BGPAddressFamilySerializer(NetBoxModelSerializer):
             'scope',
             'address_family',
             'settings',
-            'tenant',
             'description',
             'comments',
         )
@@ -255,7 +256,7 @@ class BGPPeerTemplateSerializer(NetBoxModelSerializer):
 
 class BGPPeerSerializer(NetBoxModelSerializer):
     url = serializers.HyperlinkedIdentityField(
-        view_name='plugins-api:netbox_routing-api:bgpaddressfamily-detail'
+        view_name='plugins-api:netbox_routing-api:bgppeer-detail'
     )
 
     scope = BGPScopeSerializer(nested=True)
@@ -286,7 +287,7 @@ class BGPPeerSerializer(NetBoxModelSerializer):
 
 class BGPPeerAddressFamilySerializer(NetBoxModelSerializer):
     url = serializers.HyperlinkedIdentityField(
-        view_name='plugins-api:netbox_routing-api:bgpaddressfamily-detail'
+        view_name='plugins-api:netbox_routing-api:bgppeeraddressfamily-detail'
     )
     assigned_object_type = ContentTypeField(
         queryset=ContentType.objects.filter(BGPPEERAF_ASSIGNMENT_MODELS),
@@ -294,10 +295,10 @@ class BGPPeerAddressFamilySerializer(NetBoxModelSerializer):
         allow_null=True,
     )
     assigned_object = serializers.SerializerMethodField(read_only=True)
-    tenant = TenantSerializer(nested=True)
+    # tenant = TenantSerializer(nested=True)
 
     class Meta:
-        model = BGPPeer
+        model = BGPPeerAddressFamily
         fields = (
             'url',
             'id',
@@ -312,8 +313,15 @@ class BGPPeerAddressFamilySerializer(NetBoxModelSerializer):
             'prefixlist_out',
             'routemap_in',
             'routemap_out',
-            'tenant',
             'description',
             'comments',
         )
         brief_fields = ('url', 'id', 'display', 'scope', 'peer', 'remote_as', 'enabled')
+
+    @extend_schema_field(serializers.JSONField(allow_null=True))
+    def get_assigned_object(self, obj):
+        if obj.assigned_object is None:
+            return None
+        serializer = get_serializer_for_model(obj.assigned_object)
+        context = {'request': self.context['request']}
+        return serializer(obj.assigned_object, context=context, nested=True).data

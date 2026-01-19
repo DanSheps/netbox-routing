@@ -5,12 +5,7 @@ from netbox_routing.api._serializers.objects import (
     RouteMapEntrySerializer,
 )
 from netbox_routing.api._serializers.static import StaticRouteSerializer
-from netbox_routing.api._serializers.bgp import (
-    BGPRouterSerializer,
-    BGPScopeSerializer,
-    BGPAddressFamilySerializer,
-    BGPSettingSerializer,
-)
+from netbox_routing.api._serializers.bgp import *
 from netbox_routing.api._serializers.ospf import *
 from netbox_routing.api._serializers.eigrp import *
 
@@ -27,8 +22,9 @@ __all__ = (
     'PrefixListEntrySerializer',
     'RouteMapSerializer',
     'RouteMapEntrySerializer',
+    'BGPSettingSerializer',
     'BGPRouterSerializer',
     'BGPScopeSerializer',
     'BGPAddressFamilySerializer',
-    'BGPSettingSerializer',
+    'BGPPeerSerializer',
 )

@@ -3,30 +3,21 @@ from netbox.views.generic import (
     ObjectEditView,
     ObjectListView,
     ObjectDeleteView,
+    ObjectChildrenView,
 )
-from netbox_routing.filtersets import (
-    BGPRouterFilterSet,
-    BGPScopeFilterSet,
-    BGPAddressFamilyFilterSet,
-)
-from netbox_routing.forms import (
-    BGPRouterForm,
-    BGPScopeForm,
-    BGPRouterFilterForm,
-    BGPAddressFamilyForm,
-    BGPScopeFilterForm,
-    BGPAddressFamilyFilterForm,
-)
-from netbox_routing.models import BGPRouter, BGPScope, BGPAddressFamily
-from netbox_routing.tables.bgp import (
-    BGPRouterTable,
-    BGPScopeTable,
-    BGPAddressFamilyTable,
-)
-from utilities.views import register_model_view
 
+from utilities.views import register_model_view, ViewTab
+
+from netbox_routing.filtersets.bgp import *
+from netbox_routing.forms.bgp import *
+from netbox_routing.models.bgp import *
+from netbox_routing.tables.bgp import *
 
 __all__ = (
+    'BGPSettingListView',
+    'BGPSettingView',
+    'BGPSettingEditView',
+    'BGPSettingDeleteView',
     'BGPRouterListView',
     'BGPRouterView',
     'BGPRouterEditView',
@@ -40,6 +31,43 @@ __all__ = (
     'BGPAddressFamilyEditView',
     'BGPAddressFamilyDeleteView',
 )
+
+
+@register_model_view(BGPAddressFamily, name='settings')
+class BGPSettingViewMixin:
+    child_model = BGPSetting
+    table = BGPSettingTable
+    filterset = BGPSettingFilterSet
+    filterset_form = BGPSettingFilterForm
+    actions = ObjectChildrenView.actions
+
+
+#
+# BGP Settings
+#
+@register_model_view(BGPSetting, name='list', path='', detail=False)
+class BGPSettingListView(ObjectListView):
+    queryset = BGPSetting.objects.all()
+    table = BGPSettingTable
+    filterset = BGPSettingFilterSet
+    filterset_form = BGPSettingFilterForm
+
+
+@register_model_view(BGPSetting)
+class BGPSettingView(ObjectView):
+    queryset = BGPSetting.objects.all()
+
+
+@register_model_view(BGPSetting, name='add', detail=False)
+@register_model_view(BGPSetting, name='edit')
+class BGPSettingEditView(ObjectEditView):
+    queryset = BGPSetting.objects.all()
+    form = BGPSettingForm
+
+
+@register_model_view(BGPSetting, name='delete')
+class BGPSettingDeleteView(ObjectDeleteView):
+    queryset = BGPSetting.objects.all()
 
 
 #
@@ -69,6 +97,20 @@ class BGPRouterEditView(ObjectEditView):
 @register_model_view(BGPRouter, name='delete')
 class BGPRouterDeleteView(ObjectDeleteView):
     queryset = BGPRouter.objects.all()
+
+
+@register_model_view(BGPRouter, name='settings')
+class BGPRouterSettingsView(BGPSettingViewMixin, ObjectChildrenView):
+    queryset = BGPRouter.objects.all()
+    tab = ViewTab(
+        label='Settings',
+        badge=lambda obj: BGPRouterSettingsView.child_model.objects.filter(
+            router=obj
+        ).count(),
+    )
+
+    def get_children(self, request, parent):
+        return self.child_model.objects.filter(router=parent)
 
 
 #
@@ -127,3 +169,120 @@ class BGPAddressFamilyEditView(ObjectEditView):
 @register_model_view(BGPAddressFamily, name='delete')
 class BGPAddressFamilyDeleteView(ObjectDeleteView):
     queryset = BGPAddressFamily.objects.all()
+
+
+@register_model_view(BGPAddressFamily, name='settings')
+class BGPAddressFamilySettingsView(BGPSettingViewMixin, ObjectChildrenView):
+    queryset = BGPAddressFamily.objects.all()
+    tab = ViewTab(
+        label='Settings',
+        badge=lambda obj: BGPAddressFamilySettingsView.child_model.objects.filter(
+            address_family=obj
+        ).count(),
+    )
+
+    def get_children(self, request, parent):
+        return self.child_model.objects.filter(address_family=parent)
+
+
+#
+# BGP Peer Views
+#
+@register_model_view(BGPPeer, name='list', path='', detail=False)
+class BGPPeerListView(ObjectListView):
+    queryset = BGPPeer.objects.all()
+    table = BGPPeerTable
+    filterset = BGPPeerFilterSet
+    filterset_form = BGPPeerFilterForm
+
+
+@register_model_view(BGPPeer)
+class BGPPeerView(ObjectView):
+    queryset = BGPPeer.objects.all()
+
+
+@register_model_view(BGPPeer, name='add', detail=False)
+@register_model_view(BGPPeer, name='edit')
+class BGPPeerEditView(ObjectEditView):
+    queryset = BGPPeer.objects.all()
+    form = BGPPeerForm
+
+
+@register_model_view(BGPPeer, name='delete')
+class BGPPeerDeleteView(ObjectDeleteView):
+    queryset = BGPPeer.objects.all()
+
+
+@register_model_view(BGPPeer, name='settings')
+class BGPPeerSettingsView(BGPSettingViewMixin, ObjectChildrenView):
+    queryset = BGPPeer.objects.all()
+    tab = ViewTab(
+        label='Settings',
+        badge=lambda obj: BGPPeerSettingsView.child_model.objects.filter(
+            peer=obj
+        ).count(),
+    )
+
+    def get_children(self, request, parent):
+        return self.child_model.objects.filter(peer=parent)
+
+
+@register_model_view(BGPPeer, name='address-families')
+class BGPPeerAddressFamiliesView(ObjectChildrenView):
+    queryset = BGPPeer.objects.all()
+    child_model = BGPPeerAddressFamily
+    table = BGPPeerAddressFamilyTable
+    filterset = BGPPeerAddressFamilyFilterSet
+    filterset_form = BGPPeerAddressFamilyFilterForm
+    actions = ObjectChildrenView.actions
+    tab = ViewTab(
+        label='Address Families',
+        badge=lambda obj: BGPPeerAddressFamiliesView.child_model.objects.filter(
+            peer=obj
+        ).count(),
+    )
+
+    def get_children(self, request, parent):
+        return self.child_model.objects.filter(peer=parent)
+
+
+#
+# BGP Peer Address Family Views
+#
+@register_model_view(BGPPeerAddressFamily, name='list', path='', detail=False)
+class BGPPeerAddressFamilyListView(ObjectListView):
+    queryset = BGPPeerAddressFamily.objects.all()
+    table = BGPPeerAddressFamilyTable
+    filterset = BGPPeerAddressFamilyFilterSet
+    filterset_form = BGPPeerAddressFamilyFilterForm
+
+
+@register_model_view(BGPPeerAddressFamily)
+class BGPPeerAddressFamilyView(ObjectView):
+    queryset = BGPPeerAddressFamily.objects.all()
+
+
+@register_model_view(BGPPeerAddressFamily, name='add', detail=False)
+@register_model_view(BGPPeerAddressFamily, name='edit')
+class BGPPeerAddressFamilyEditView(ObjectEditView):
+    queryset = BGPPeerAddressFamily.objects.all()
+    form = BGPPeerAddressFamilyForm
+
+
+@register_model_view(BGPPeerAddressFamily, name='delete')
+class BGPPeerAddressFamilyDeleteView(ObjectDeleteView):
+    queryset = BGPPeerAddressFamily.objects.all()
+
+
+@register_model_view(BGPPeerAddressFamily, name='settings')
+class BGPPeerAddressFamilySettingsView(BGPSettingViewMixin, ObjectChildrenView):
+    queryset = BGPPeerAddressFamily.objects.all()
+    tab = ViewTab(
+        label='Settings',
+        badge=lambda obj: BGPPeerAddressFamilySettingsView.child_model.objects.filter(
+            peer_address_families=obj
+        ).count(),
+    )
+
+    def get_children(self, request, parent):
+        return self.child_model.objects.filter(peer_address_families=parent)

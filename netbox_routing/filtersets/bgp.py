@@ -4,17 +4,34 @@ from django.utils.translation import gettext as _
 
 from netbox.filtersets import NetBoxModelFilterSet
 from dcim.models import Device
-from ipam.models import ASN, VRF
-from netbox_routing.choices.bgp import BGPSettingChoices, BGPAddressFamilyChoices
-from netbox_routing.models import BGPRouter, BGPSetting, BGPAddressFamily, BGPScope
-
+from ipam.models import ASN, VRF, IPAddress
+from netbox_routing.models.bgp import *
 
 __all__ = (
+    'BGPSettingFilterSet',
     'BGPRouterFilterSet',
     'BGPScopeFilterSet',
     'BGPAddressFamilyFilterSet',
-    'BGPSettingFilterSet',
+    'BGPPeerFilterSet',
+    'BGPPeerTemplateFilterSet',
+    'BGPPeerAddressFamilyFilterSet',
 )
+
+
+class BGPSettingFilterSet(NetBoxModelFilterSet):
+    key = django_filters.MultipleChoiceFilter(
+        choices=BGPSettingChoices, null_value=None, label=_('Setting Name')
+    )
+
+    class Meta:
+        model = BGPSetting
+        fields = ('key',)
+
+    def search(self, queryset, name, value):
+        if not value.strip():
+            return queryset
+        qs_filter = Q(key__icontains=value)
+        return queryset.filter(qs_filter).distinct()
 
 
 class BGPRouterFilterSet(NetBoxModelFilterSet):
@@ -106,17 +123,134 @@ class BGPAddressFamilyFilterSet(NetBoxModelFilterSet):
         return queryset.filter(qs_filter).distinct()
 
 
-class BGPSettingFilterSet(NetBoxModelFilterSet):
-    key = django_filters.MultipleChoiceFilter(
-        choices=BGPSettingChoices, null_value=None, label=_('Setting Name')
+class BGPPeerFilterSet(NetBoxModelFilterSet):
+    scope_id = django_filters.ModelMultipleChoiceFilter(
+        field_name='scope',
+        queryset=BGPScope.objects.all(),
+        label=_('Scope (ID)'),
+    )
+    peer_id = django_filters.ModelMultipleChoiceFilter(
+        field_name='peer',
+        queryset=IPAddress.objects.all(),
+        label=_('Peer (ID)'),
+    )
+    peer = django_filters.ModelMultipleChoiceFilter(
+        field_name='peer__address',
+        queryset=IPAddress.objects.all(),
+        to_field_name='peer',
+        label=_('Peer (Name)'),
+    )
+    peer_group_id = django_filters.ModelMultipleChoiceFilter(
+        field_name='peer_group',
+        queryset=BGPPeerTemplate.objects.all(),
+        label=_('Peer Group (ID)'),
+    )
+    remote_as_id = django_filters.ModelMultipleChoiceFilter(
+        field_name='remote_as',
+        queryset=ASN.objects.all(),
+        label=_('Remote AS (ID)'),
+    )
+    remote_as = django_filters.ModelMultipleChoiceFilter(
+        field_name='remote_as__asn',
+        queryset=ASN.objects.all(),
+        to_field_name='remote_as',
+        label=_('Remote AS (ASN)'),
+    )
+    local_as_id = django_filters.ModelMultipleChoiceFilter(
+        field_name='local_as',
+        queryset=ASN.objects.all(),
+        label=_('Local AS (ID)'),
+    )
+    local_as = django_filters.ModelMultipleChoiceFilter(
+        field_name='local_as__asn',
+        queryset=ASN.objects.all(),
+        to_field_name='local_as',
+        label=_('Local AS (ASN)'),
     )
 
     class Meta:
-        model = BGPSetting
-        fields = ('key',)
+        model = BGPPeer
+        fields = ('scope_id', 'peer_id', 'remote_as_id', 'local_as_id')
 
     def search(self, queryset, name, value):
         if not value.strip():
             return queryset
-        qs_filter = Q(key__icontains=value)
+        qs_filter = Q(peer__address__icontains=value)
+        qs_filter |= Q(remote_as__asn__icontains=value)
+        qs_filter |= Q(local_as__asn__icontains=value)
+        return queryset.filter(qs_filter).distinct()
+
+
+class BGPPeerTemplateFilterSet(NetBoxModelFilterSet):
+    peer_id = django_filters.ModelMultipleChoiceFilter(
+        field_name='peers',
+        queryset=BGPScope.objects.all(),
+        label=_('Peer (ID)'),
+    )
+    address_family_id = django_filters.ModelMultipleChoiceFilter(
+        field_name='address_families',
+        queryset=BGPPeerAddressFamily.objects.all(),
+        label=_('Address Family (ID)'),
+    )
+    remote_as_id = django_filters.ModelMultipleChoiceFilter(
+        field_name='remote_as',
+        queryset=ASN.objects.all(),
+        label=_('Remote AS (ID)'),
+    )
+    remote_as = django_filters.ModelMultipleChoiceFilter(
+        field_name='remote_as__asn',
+        queryset=ASN.objects.all(),
+        to_field_name='remote_as',
+        label=_('Remote AS (ASN)'),
+    )
+
+    class Meta:
+        model = BGPPeerTemplate
+        fields = (
+            'peer_id',
+            'address_family_id',
+            'remote_as_id',
+            'remote_as',
+            'enabled',
+        )
+
+    def search(self, queryset, name, value):
+        if not value.strip():
+            return queryset
+        qs_filter = Q(name__icontains=value)
+        return queryset.filter(qs_filter).distinct()
+
+
+class BGPPeerAddressFamilyFilterSet(NetBoxModelFilterSet):
+    peer_id = django_filters.ModelMultipleChoiceFilter(
+        field_name='peer',
+        queryset=BGPScope.objects.all(),
+        label=_('Peer (ID)'),
+    )
+    peer_group_id = django_filters.ModelMultipleChoiceFilter(
+        field_name='peer_group',
+        queryset=BGPPeerTemplate.objects.all(),
+        label=_('Peer Group (ID)'),
+    )
+    address_family_id = django_filters.ModelMultipleChoiceFilter(
+        field_name='address_family',
+        queryset=BGPAddressFamily.objects.all(),
+        label=_('Address Family (ID)'),
+    )
+
+    class Meta:
+        model = BGPPeerAddressFamily
+        fields = (
+            'peer_id',
+            'peer_group_id',
+            'address_family',
+            'enabled',
+        )
+
+    def search(self, queryset, name, value):
+        if not value.strip():
+            return queryset
+        qs_filter = Q(peer__address__icontains=value)
+        qs_filter |= Q(remote_as__asn__icontains=value)
+        qs_filter |= Q(local_as__asn__icontains=value)
         return queryset.filter(qs_filter).distinct()

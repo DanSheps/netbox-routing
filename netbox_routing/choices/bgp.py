@@ -33,7 +33,7 @@ class BGPSettingChoices(ChoiceSet):
     CHOICES = [
         (RID, 'Router ID'),
         (SUMMARY, 'Auto summary'),
-        (ADDPATH_INSTALL, 'Additional Pathss (install)'),
+        (ADDPATH_INSTALL, 'Additional Paths (install)'),
         (ADDPATH_RECEIVE, 'Additional Paths (receive)'),
         (ADDPATH_SEND, 'Additional Paths (send)'),
         (ASDOT, 'AS Dot Notation'),

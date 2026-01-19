@@ -16,6 +16,7 @@ __all__ = (
     'BGPRouterFilterSet',
     'BGPScopeFilterSet',
     'BGPAddressFamilyFilterSet',
+    'BGPPeerFilterSet',
     'OSPFInstanceFilterSet',
     'OSPFAreaFilterSet',
     'OSPFInterfaceFilterSet',

@@ -5,6 +5,7 @@ from netbox.plugins import PluginMenu
 from .ospf import MENUITEMS as OSPF_MENU
 from .eigrp import eigrp
 from .static import MENUITEMS as STATIC_MENU
+from .bgp import BGP_MENU
 
 
 __all__ = ('menu',)
@@ -14,7 +15,7 @@ menu = PluginMenu(
     groups=(
         # ('Routing Objects', OBJECT_MENU),
         ('Static', STATIC_MENU),
-        # ('BGP', BGP_MENU),
+        ('BGP', BGP_MENU),
         ('OSPF', OSPF_MENU),
         ('EIGRP', eigrp),
     ),

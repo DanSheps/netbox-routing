@@ -35,6 +35,12 @@ class BGPSetting(PrimaryModel):
 
     class Meta:
         verbose_name = 'BGP Setting'
+        verbose_name_plural = 'BGP Settings'
+        ordering = (
+            'assigned_object_type',
+            'assigned_object_id',
+            'key',
+        )
 
     def __str__(self):
         return f'{self.assigned_object}: {self.key}'
@@ -84,6 +90,11 @@ class BGPRouter(PrimaryModel):
 
     class Meta:
         verbose_name = 'BGP Router'
+        verbose_name_plural = 'BGP Routers'
+        ordering = (
+            'device',
+            'asn',
+        )
 
     def __str__(self):
         return f'{self.device} ({self.asn})'
@@ -135,6 +146,8 @@ class BGPScope(PrimaryModel):
 
     class Meta:
         verbose_name = 'BGP Scope'
+        verbose_name_plural = 'BGP Scopes'
+        ordering = ('router', 'vrf')
 
     def __str__(self):
         return f'{self.router}: {self.vrf or "Global VRF"}'
@@ -146,7 +159,7 @@ class BGPScope(PrimaryModel):
 class BGPAddressFamily(PrimaryModel):
     scope = models.ForeignKey(
         verbose_name=_('Scope'),
-        to=BGPScope,
+        to='netbox_routing.BGPScope',
         on_delete=models.PROTECT,
         related_name='address_families',
     )
@@ -178,6 +191,8 @@ class BGPAddressFamily(PrimaryModel):
 
     class Meta:
         verbose_name = 'BGP Address Family'
+        verbose_name_plural = 'BGP Address Families'
+        ordering = ('scope', 'address_family')
 
     def __str__(self):
         return f'{self.scope} ({self.get_address_family_display()})'
@@ -190,7 +205,7 @@ class BGPSessionTemplate(PrimaryModel):
     name = models.CharField(verbose_name=_('Name'), max_length=255)
     router = models.ForeignKey(
         verbose_name=_('Router'),
-        to=BGPRouter,
+        to='netbox_routing.BGPRouter',
         on_delete=models.PROTECT,
         related_name='session_templates',
     )
@@ -246,12 +261,17 @@ class BGPSessionTemplate(PrimaryModel):
 
     class Meta:
         verbose_name = 'BGP Session Template'
+        verbose_name_plural = 'BGP Session Templates'
+        ordering = (
+            'router',
+            'name',
+        )
 
 
 class BGPPolicyTemplate(PrimaryModel):
     name = models.CharField(verbose_name=_('Name'), max_length=255)
     router = models.ForeignKey(
-        to=BGPRouter,
+        to='netbox_routing.BGPRouter',
         on_delete=models.PROTECT,
         related_name='policy_templates',
         blank=False,
@@ -318,6 +338,11 @@ class BGPPolicyTemplate(PrimaryModel):
 
     class Meta:
         verbose_name = 'BGP Policy Template'
+        verbose_name_plural = 'BGP Policy Templates'
+        ordering = (
+            'router',
+            'name',
+        )
 
 
 class BGPPeerTemplate(PrimaryModel):
@@ -339,24 +364,35 @@ class BGPPeerTemplate(PrimaryModel):
         blank=True,
         null=True,
     )
+    peers = GenericRelation(
+        verbose_name=_('Address Families'),
+        to='netbox_routing.BGPPeerAddressFamily',
+        related_query_name='peer_group',
+        related_name='peer_group',
+        content_type_field='assigned_object_type',
+        object_id_field='assigned_object_id',
+    )
     address_families = GenericRelation(
         verbose_name=_('Address Families'),
         to='netbox_routing.BGPPeerAddressFamily',
+        related_query_name='peer_group',
+        related_name='peer_group',
         content_type_field='assigned_object_type',
         object_id_field='assigned_object_id',
-        related_query_name='peertemplate',
     )
 
     clone_fields = ('name', 'remote_as', 'enabled')
 
     class Meta:
         verbose_name = 'BGP Peer Template'
+        verbose_name_plural = 'BGP Peer Templates'
+        ordering = ('name',)
 
 
 class BGPPeer(PrimaryModel):
     scope = models.ForeignKey(
         verbose_name=_('Scope'),
-        to=BGPScope,
+        to='netbox_routing.BGPScope',
         on_delete=models.PROTECT,
         related_name='peers',
         blank=True,
@@ -372,7 +408,7 @@ class BGPPeer(PrimaryModel):
     )
     peer_group = models.ForeignKey(
         verbose_name=_('Peer Group'),
-        to=BGPPeerTemplate,
+        to='netbox_routing.BGPPeerTemplate',
         on_delete=models.PROTECT,
         related_name='peers',
         blank=True,
@@ -380,7 +416,7 @@ class BGPPeer(PrimaryModel):
     )
     peer_session = models.ForeignKey(
         verbose_name=_('Peer Session'),
-        to=BGPSessionTemplate,
+        to='netbox_routing.BGPSessionTemplate',
         on_delete=models.PROTECT,
         related_name='peers',
         blank=True,
@@ -422,6 +458,14 @@ class BGPPeer(PrimaryModel):
         object_id_field='assigned_object_id',
         related_query_name='peer',
     )
+    settings = GenericRelation(
+        verbose_name=_('Settings'),
+        to='netbox_routing.BGPSetting',
+        related_name='peer',
+        related_query_name='peer',
+        content_type_field='assigned_object_type',
+        object_id_field='assigned_object_id',
+    )
 
     clone_fields = (
         'scope',
@@ -438,6 +482,11 @@ class BGPPeer(PrimaryModel):
 
     class Meta:
         verbose_name = 'BGP Peer'
+        verbose_name_plural = 'BGP Peers'
+        ordering = (
+            'scope',
+            'peer',
+        )
 
     def __str__(self):
         return f'{self.peer} ({self.remote_as})'
@@ -466,15 +515,15 @@ class BGPPeerAddressFamily(PrimaryModel):
     )
     address_family = models.ForeignKey(
         verbose_name=_('Address Family'),
-        to=BGPAddressFamily,
+        to='netbox_routing.BGPAddressFamily',
         on_delete=models.PROTECT,
-        related_name='address_families',
+        related_name='peer_address_families',
     )
     peer_policy = models.ForeignKey(
         verbose_name=_('Peer Policy'),
-        to=BGPPolicyTemplate,
+        to='netbox_routing.BGPPolicyTemplate',
         on_delete=models.PROTECT,
-        related_name='peer_afs',
+        related_name='peer_address_families',
         blank=True,
         null=True,
     )
@@ -484,7 +533,7 @@ class BGPPeerAddressFamily(PrimaryModel):
         verbose_name=_('Outbound Prefix List'),
         to='netbox_routing.PrefixList',
         on_delete=models.PROTECT,
-        related_name='peer_afs_out',
+        related_name='peer_address_families_out',
         blank=True,
         null=True,
     )
@@ -492,7 +541,7 @@ class BGPPeerAddressFamily(PrimaryModel):
         verbose_name=_('Inbound Prefix List'),
         to='netbox_routing.PrefixList',
         on_delete=models.PROTECT,
-        related_name='peer_afs_in',
+        related_name='peer_address_families_in',
         blank=True,
         null=True,
     )
@@ -500,7 +549,7 @@ class BGPPeerAddressFamily(PrimaryModel):
         verbose_name=_('Outbound Route Map'),
         to='netbox_routing.RouteMap',
         on_delete=models.PROTECT,
-        related_name='peer_afs_out',
+        related_name='peer_address_families_out',
         blank=True,
         null=True,
     )
@@ -508,7 +557,7 @@ class BGPPeerAddressFamily(PrimaryModel):
         verbose_name=_('Inbound Route Map'),
         to='netbox_routing.RouteMap',
         on_delete=models.PROTECT,
-        related_name='peer_afs_in',
+        related_name='peer_address_families_in',
         blank=True,
         null=True,
     )
@@ -516,19 +565,28 @@ class BGPPeerAddressFamily(PrimaryModel):
         verbose_name=_('Tenant'),
         to='tenancy.Tenant',
         on_delete=models.PROTECT,
-        related_name='bgp_peer_afs',
+        related_name='bgp_peer_address_families',
         blank=True,
         null=True,
+    )
+    settings = GenericRelation(
+        verbose_name=_('Settings'),
+        to='netbox_routing.BGPSetting',
+        related_name='peer_address_families',
+        related_query_name='peer_address_families',
+        content_type_field='assigned_object_type',
+        object_id_field='assigned_object_id',
     )
 
     clone_fields = (
         'address_family',
-        'peer_session',
+        'peer_policy',
         'enabled',
         'prefixlist_out',
         'prefixlist_in',
         'routemap_out',
         'routemap_in',
+        'tenant',
     )
     prerequisite_models = (
         'netbox_routing.BGPRouter',
@@ -537,3 +595,5 @@ class BGPPeerAddressFamily(PrimaryModel):
 
     class Meta:
         verbose_name = 'BGP Peer Address Family'
+        verbose_name_plural = 'BGP Peer Address Families'
+        ordering = ('assigned_object_type', 'assigned_object_id', 'address_family')
