@@ -25,15 +25,18 @@ A plugin for tracking all kinds of routing information
 
 # Requirements
 
-* Netbox 4.1+
-* Python 3.10+
+* Netbox 4.5+
+* Python 3.12+
 
 ## Compatibility Matrix
 
-|       | Netbox 3.2.x   | NetBox 4.1.x   | 
-|-------|----------------|----------------|
-| 0.1.x | Compatible     | Not Compatible |
-| 0.2.x | Not Compatible | Compatible     |
+|       | Netbox 3.2.x   | NetBox 4.1.x   | Netbox 4.2.x   | NetBox 4.3.x - 4.4.x | NetBox 4.5.x   |  
+|-------|----------------|----------------|----------------|----------------------|----------------|
+| 0.1.x | Compatible     | Not Compatible | Not Compatible | Not Compatible       | Not Compatible |
+| 0.2.x | Not Compatible | Compatible     | Not Compatible | Not Compatible       | Not Compatible |
+| 0.3.0 | Not Compatible | Not Compatible | Compatible     | Not Compatible       | Not Compatible |
+| 0.3.1 | Not Compatible | Not Compatible | Not Compatible | Compatible           | Not Compatible |
+| 0.3.2 | Not Compatible | Not Compatible | Not Compatible | Not Compatible       | Compatible     |
 
 ## Installation
 
