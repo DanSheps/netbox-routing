@@ -60,10 +60,19 @@ class OSPFInterfaceTable(NetBoxTable):
             'device',
             'area',
             'interface',
+            'network_type',
             'passive',
             'priority',
             'bfd',
             'authentication',
             'passphrase',
         )
-        default_columns = ('pk', 'id', 'instance', 'area', 'interface', 'passive')
+        default_columns = (
+            'pk',
+            'id',
+            'instance',
+            'area',
+            'interface',
+            'network_type',
+            'passive',
+        )
