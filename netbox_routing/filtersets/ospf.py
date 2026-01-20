@@ -157,6 +157,11 @@ class OSPFInterfaceFilterSet(NetBoxModelFilterSet):
         to_field_name='name',
         label='Area',
     )
+    network_type = django_filters.CharFilter(
+        field_name='network_type',
+        lookup_expr='iexact',
+        label='Network Type',
+    )
 
     class Meta:
         model = OSPFInterface
@@ -164,6 +169,7 @@ class OSPFInterfaceFilterSet(NetBoxModelFilterSet):
             'instance',
             'area',
             'interface',
+            'network_type',
             'passive',
             'bfd',
             'priority',

@@ -10,6 +10,7 @@ from utilities.forms import BOOLEAN_WITH_BLANK_CHOICES, add_blank_choice
 from utilities.forms.fields import TagFilterField, DynamicModelMultipleChoiceField
 
 from netbox_routing.models import OSPFInstance, OSPFArea, OSPFInterface
+from netbox_routing import choices
 
 
 __all__ = (
@@ -68,7 +69,7 @@ class OSPFInterfaceFilterForm(NetBoxModelFilterSetForm):
     model = OSPFInterface
     fieldsets = (
         FieldSet('q', 'filter_id', 'tag'),
-        FieldSet('instance_id', 'area_id', name=_('OSPF')),
+        FieldSet('instance_id', 'area_id', 'network_type', name=_('OSPF')),
         FieldSet('device_id', 'interface_id', 'vrf_id', name=_('Device')),
         FieldSet('priority', 'bfd', 'authentication', name=_('Attributes')),
     )
@@ -77,6 +78,11 @@ class OSPFInterfaceFilterForm(NetBoxModelFilterSetForm):
         required=False,
         selector=True,
         label=_('Device'),
+    )
+    network_type = forms.ChoiceField(
+        required=False,
+        label=_('Network Type'),
+        choices=choices.OSPFInterfaceTypeChoices,
     )
     vrf_id = DynamicModelMultipleChoiceField(
         queryset=VRF.objects.all(),

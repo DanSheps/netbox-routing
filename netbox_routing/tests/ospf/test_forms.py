@@ -109,6 +109,7 @@ class OSPFInterfaceTestCase(TestCase):
                 'interface': Interface.objects.first().pk,
                 'instance': OSPFInstance.objects.first().pk,
                 'area': OSPFArea.objects.first().pk,
+                'network_type': 'broadcast',
                 'passive': True,
             }
         )

@@ -81,6 +81,12 @@ class OSPFInterfaceImportForm(NetBoxModelImportForm):
         to_field_name="name",
         help_text=_("Name of interface"),
     )
+    network_type = CSVModelChoiceField(
+        queryset=OSPFInterface.objects.all(),
+        required=True,
+        to_field_name="network_type",
+        help_text=_("Network Type"),
+    )
 
     class Meta:
         model = OSPFInterface
@@ -89,6 +95,7 @@ class OSPFInterfaceImportForm(NetBoxModelImportForm):
             "instance",
             "area",
             "interface",
+            "network_type",
             "passive",
             "priority",
             "bfd",
