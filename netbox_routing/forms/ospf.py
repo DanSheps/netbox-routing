@@ -96,7 +96,7 @@ class OSPFInterfaceForm(NetBoxModelForm):
         choices=OSPFNetworkTypeChoices,
         required=True,
         label=_('Network Type'),
-    )    
+    )
     comments = CommentField()
 
     class Meta:
