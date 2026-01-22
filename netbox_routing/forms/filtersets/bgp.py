@@ -17,11 +17,32 @@ __all__ = (
     'BGPAddressFamilyFilterForm',
     'BGPPeerFilterForm',
     'BGPPeerAddressFamilyFilterForm',
+    'BGPPeerTemplateFilterForm',
+    'BGPPolicyTemplateFilterForm',
+    'BGPSessionTemplateFilterForm',
 )
 
 
 class BGPSettingFilterForm(NetBoxModelFilterSetForm):
     model = BGPSetting
+    fieldsets = (FieldSet('q', 'filter_id', 'tag'),)
+    tag = TagFilterField(model)
+
+
+class BGPPeerTemplateFilterForm(NetBoxModelFilterSetForm):
+    model = BGPPeerTemplate
+    fieldsets = (FieldSet('q', 'filter_id', 'tag'),)
+    tag = TagFilterField(model)
+
+
+class BGPPolicyTemplateFilterForm(NetBoxModelFilterSetForm):
+    model = BGPPolicyTemplate
+    fieldsets = (FieldSet('q', 'filter_id', 'tag'),)
+    tag = TagFilterField(model)
+
+
+class BGPSessionTemplateFilterForm(NetBoxModelFilterSetForm):
+    model = BGPSessionTemplate
     fieldsets = (FieldSet('q', 'filter_id', 'tag'),)
     tag = TagFilterField(model)
 

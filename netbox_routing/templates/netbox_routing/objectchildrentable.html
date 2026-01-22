@@ -1,0 +1,20 @@
+{% extends 'generic/object_children.html' %}
+
+{% block extra_controls %}
+    {% if 'bulk_edit' in actions %}
+        <a href="{% url url_bulk_edit %}?{{parent_name}}={{ object.pk }}&return_url={% url url_parent pk=object.pk %}"
+           class="btn btn-primary">
+            <i class="mdi mdi-plus-thick" aria-hidden="true"></i> Bulk Edit
+        </a>
+    {% endif %}
+    {% if 'bulk_delete' in actions %}
+        <a href="{% url url_bulk_delete %}?return_url={% url url_parent pk=object.pk %}"
+           class="btn btn-primary">
+            <i class="mdi mdi-plus-thick" aria-hidden="true"></i> Bulk Delete
+        </a>
+    {% endif %}
+    <a href="{% url url_add %}?{{parent_name}}={{ object.pk }}&return_url={% url url_parent pk=object.pk %}"
+       class="btn btn-primary">
+        <i class="mdi mdi-plus-thick" aria-hidden="true"></i> Add Entry
+    </a>
+{% endblock %}

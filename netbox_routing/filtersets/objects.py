@@ -1,15 +1,28 @@
 import django_filters
 import netaddr
 from django.db.models import Q
+from django.utils.translation import gettext as _
 
+from ipam.models import ASN
 from netbox.filtersets import NetBoxModelFilterSet
-from netbox_routing.models import PrefixList, PrefixListEntry, RouteMapEntry, RouteMap
+
+from netbox_routing.models.objects import *
+
+
+__all__ = (
+    'PrefixListFilterSet',
+    'PrefixListEntryFilterSet',
+    'RouteMapFilterSet',
+    'RouteMapEntryFilterSet',
+    'ASPathFilterSet',
+    'ASPathEntryFilterSet',
+)
 
 
 class PrefixListFilterSet(NetBoxModelFilterSet):
     class Meta:
         model = PrefixList
-        fields = ()
+        fields = ('family',)
 
     def search(self, queryset, name, value):
         if not value.strip():
@@ -72,4 +85,62 @@ class RouteMapEntryFilterSet(NetBoxModelFilterSet):
         if not value.strip():
             return queryset
         qs_filter = Q(route_map__name__icontains=value) | Q(type=value)
+        return queryset.filter(qs_filter).distinct()
+
+
+class ASPathFilterSet(NetBoxModelFilterSet):
+
+    class Meta:
+        model = ASPath
+        fields = ()
+
+    def search(self, queryset, name, value):
+        if not value.strip():
+            return queryset
+        qs_filter = Q(name__icontains=value)
+        return queryset.filter(qs_filter).distinct()
+
+
+class ASPathEntryFilterSet(NetBoxModelFilterSet):
+    aspath_id = django_filters.ModelMultipleChoiceFilter(
+        field_name='aspath',
+        queryset=ASPath.objects.all(),
+        label=_('AS-Path (ID)'),
+    )
+    aspath = django_filters.ModelMultipleChoiceFilter(
+        field_name='aspath__name',
+        queryset=ASPath.objects.all(),
+        to_field_name='name',
+        label=_('AS-Path (Name)'),
+    )
+    asn_id = django_filters.ModelMultipleChoiceFilter(
+        field_name='asn',
+        queryset=ASN.objects.all(),
+        label=_('ASN (ID)'),
+    )
+    aspath = django_filters.ModelMultipleChoiceFilter(
+        field_name='asn__asn',
+        queryset=ASN.objects.all(),
+        to_field_name='asn',
+        label=_('ASN (ASN)'),
+    )
+
+    class Meta:
+        model = ASPathEntry
+        fields = (
+            'aspath_id',
+            'aspath',
+            'action',
+            'asn_id',
+            'asn',
+        )
+
+    def search(self, queryset, name, value):
+        if not value.strip():
+            return queryset
+        qs_filter = (
+            Q(aspath__name__icontains=value)
+            | Q(asn__asn__icontains=value)
+            | Q(action=value)
+        )
         return queryset.filter(qs_filter).distinct()

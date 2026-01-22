@@ -7,32 +7,11 @@ from netbox.views.generic import (
     BulkDeleteView,
     BulkEditView,
 )
-from netbox_routing.filtersets import (
-    PrefixListFilterSet,
-    PrefixListEntryFilterSet,
-    RouteMapEntryFilterSet,
-    RouteMapFilterSet,
-)
-from netbox_routing.forms import (
-    PrefixListFilterForm,
-    PrefixListForm,
-    PrefixListEntryFilterForm,
-    PrefixListEntryForm,
-    RouteMapEntryForm,
-    RouteMapEntryFilterForm,
-    RouteMapForm,
-    RouteMapFilterForm,
-    PrefixListEntryBulkEditForm,
-    RouteMapEntryBulkEditForm,
-)
-from netbox_routing.models import PrefixList, PrefixListEntry, RouteMapEntry, RouteMap
-from netbox_routing.tables.objects import (
-    PrefixListTable,
-    PrefixListEntryTable,
-    RouteMapEntryTable,
-    RouteMapTable,
-)
 from utilities.views import register_model_view, ViewTab
+from netbox_routing.filtersets.objects import *
+from netbox_routing.forms.objects import *
+from netbox_routing.models.objects import *
+from netbox_routing.tables.objects import *
 
 
 #
@@ -54,18 +33,11 @@ class PrefixListView(ObjectView):
 
 @register_model_view(PrefixList, name='entries')
 class PrefixListEntriesView(ObjectChildrenView):
-    template_name = 'netbox_routing/objecttable.html'
+    template_name = 'netbox_routing/objectchildrentable.html'
     queryset = PrefixList.objects.all()
     child_model = PrefixListEntry
     table = PrefixListEntryTable
     filterset = PrefixListEntryFilterSet
-    actions = {
-        'add': {'add'},
-        'edit': {'change'},
-        'delete': {'delete'},
-        'bulk_edit': {'change'},
-        'bulk_delete': {'delete'},
-    }
     tab = ViewTab(
         label='Entries',
         badge=lambda obj: PrefixListEntry.objects.filter(prefix_list=obj).count(),
@@ -97,7 +69,7 @@ class PrefixListEditView(ObjectEditView):
 
 @register_model_view(PrefixList, name='delete')
 class PrefixListDeleteView(ObjectDeleteView):
-    pass
+    queryset = PrefixList.objects.all()
 
 
 #
@@ -128,7 +100,7 @@ class PrefixListEntryEditView(ObjectEditView):
 
 @register_model_view(PrefixListEntry, name='delete')
 class PrefixListEntryDeleteView(ObjectDeleteView):
-    pass
+    queryset = PrefixListEntry.objects.all()
 
 
 @register_model_view(PrefixListEntry, name='bulk_edit', detail=False)
@@ -165,18 +137,11 @@ class RouteMapView(ObjectView):
 
 @register_model_view(RouteMap, name='entries')
 class RouteMapEntriesView(ObjectChildrenView):
-    template_name = 'netbox_routing/objecttable.html'
+    template_name = 'netbox_routing/objectchildrentable.html'
     queryset = RouteMap.objects.all()
     child_model = RouteMapEntry
     table = RouteMapEntryTable
     filterset = RouteMapEntryFilterSet
-    actions = {
-        'add': {'add'},
-        'edit': {'change'},
-        'delete': {'delete'},
-        'bulk_edit': {'change'},
-        'bulk_delete': {'delete'},
-    }
     tab = ViewTab(
         label='Entries',
         badge=lambda obj: RouteMapEntry.objects.filter(route_map=obj).count(),
@@ -208,7 +173,7 @@ class RouteMapEditView(ObjectEditView):
 
 @register_model_view(RouteMap, name='delete')
 class RouteMapDeleteView(ObjectDeleteView):
-    pass
+    queryset = RouteMap.objects.all()
 
 
 #
@@ -237,7 +202,7 @@ class RouteMapEntryEditView(ObjectEditView):
 
 @register_model_view(RouteMapEntry, name='delete')
 class RouteMapEntryDeleteView(ObjectDeleteView):
-    pass
+    queryset = RouteMapEntry.objects.all()
 
 
 @register_model_view(RouteMapEntry, name='bulk_edit', detail=False)
@@ -253,3 +218,106 @@ class RouteMapEntryBulkDeleteView(BulkDeleteView):
     queryset = RouteMapEntry.objects.all()
     filterset = RouteMapEntryFilterSet
     table = RouteMapEntryTable
+
+
+#
+# AS Path
+#
+@register_model_view(ASPath, name='list', path='', detail=False)
+class ASPathListView(ObjectListView):
+    queryset = ASPath.objects.all()
+    table = ASPathTable
+    filterset = ASPathFilterSet
+    filterset_form = ASPathFilterForm
+
+
+@register_model_view(ASPath)
+class ASPathView(ObjectView):
+    queryset = ASPath.objects.all()
+    template_name = 'netbox_routing/aspath.html'
+
+
+@register_model_view(ASPath, name='entries')
+class ASPathEntriesView(ObjectChildrenView):
+    template_name = 'netbox_routing/objectchildrentable.html'
+    queryset = ASPath.objects.all()
+    child_model = ASPathEntry
+    table = ASPathEntryTable
+    filterset = ASPathEntryFilterSet
+    tab = ViewTab(
+        label='Entries',
+        badge=lambda obj: ASPathEntry.objects.filter(aspath=obj).count(),
+    )
+
+    def get_children(self, request, parent):
+        return self.child_model.objects.filter(aspath=parent)
+
+    def get_extra_context(self, request, instance):
+        print(self.actions)
+
+        return {
+            'url_parent': 'plugins:netbox_routing:aspath_entries',
+            'url_add': 'plugins:netbox_routing:aspathentry_add',
+            'url_bulk_edit': 'plugins:netbox_routing:aspathentry_bulk_edit',
+            'url_bulk_delete': 'plugins:netbox_routing:aspathentry_bulk_delete',
+            'parent_name': 'aspath',
+            'parent_view': 'aspath',
+            'parent_view_path': 'entries',
+            'view': 'aspathentry',
+        }
+
+
+@register_model_view(ASPath, name='add', detail=False)
+@register_model_view(ASPath, name='edit')
+class ASPathEditView(ObjectEditView):
+    queryset = ASPath.objects.all()
+    form = ASPathForm
+
+
+@register_model_view(ASPath, name='delete')
+class ASPathDeleteView(ObjectDeleteView):
+    queryset = ASPath.objects.all()
+
+
+#
+# Route Map Entry
+#
+@register_model_view(ASPathEntry, name='list', path='', detail=False)
+class ASPathEntryListView(ObjectListView):
+    queryset = ASPathEntry.objects.all()
+    table = ASPathEntryTable
+    filterset = ASPathEntryFilterSet
+    filterset_form = ASPathEntryFilterForm
+
+
+@register_model_view(ASPathEntry)
+class ASPathEntryView(ObjectView):
+    queryset = ASPathEntry.objects.all()
+    template_name = 'netbox_routing/aspathentry.html'
+
+
+@register_model_view(ASPathEntry, name='add', detail=False)
+@register_model_view(ASPathEntry, name='edit')
+class ASPathEntryEditView(ObjectEditView):
+    queryset = ASPathEntry.objects.all()
+    form = ASPathEntryForm
+
+
+@register_model_view(ASPathEntry, name='delete')
+class ASPathEntryDeleteView(ObjectDeleteView):
+    queryset = ASPathEntry.objects.all()
+
+
+@register_model_view(ASPathEntry, name='bulk_edit', detail=False)
+class ASPathEntryBulkEditView(BulkEditView):
+    queryset = ASPathEntry.objects.all()
+    filterset = ASPathEntryFilterSet
+    table = ASPathEntryTable
+    form = ASPathEntryBulkEditForm
+
+
+@register_model_view(ASPathEntry, name='bulk_delete', detail=False)
+class ASPathEntryBulkDeleteView(BulkDeleteView):
+    queryset = ASPathEntry.objects.all()
+    filterset = ASPathEntryFilterSet
+    table = ASPathEntryTable

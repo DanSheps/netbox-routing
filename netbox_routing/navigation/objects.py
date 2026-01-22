@@ -1,6 +1,6 @@
 from netbox.plugins import PluginMenuButton, PluginMenuItem
 
-__all__ = ('MENUITEMS',)
+__all__ = ('OBJECT_MENU',)
 
 
 COL_ADD = 'mdi mdi-plus'
@@ -18,11 +18,26 @@ prefixlist = PluginMenuItem(
             icon_class=COL_ADD,
             permissions=['netbox_routing.add_prefixlist'],
         ),
+        # PluginMenuButton(
+        #     link='plugins:netbox_routing:prefixlist_bulk_import',
+        #     title='Import',
+        #     icon_class=COL_IMPORT,
+        #     permissions=['netbox_routing.add_prefixlist'],
+        # ),
+    ),
+)
+
+
+prefixlist_entry = PluginMenuItem(
+    link='plugins:netbox_routing:prefixlistentry_list',
+    link_text='Prefix List Entries',
+    permissions=['netbox_routing.view_prefixlistentry'],
+    buttons=(
         PluginMenuButton(
-            link='plugins:netbox_routing:prefixlist_bulk_import',
-            title='Import',
-            icon_class=COL_IMPORT,
-            permissions=['netbox_routing.add_prefixlist'],
+            link='plugins:netbox_routing:prefixlistentry_add',
+            title='Add',
+            icon_class=COL_ADD,
+            permissions=['netbox_routing.add_prefixlistentry'],
         ),
     ),
 )
@@ -37,13 +52,59 @@ routemap = PluginMenuItem(
             icon_class=COL_ADD,
             permissions=['netbox_routing.add_routemap'],
         ),
+    ),
+)
+routemap_entry = PluginMenuItem(
+    link='plugins:netbox_routing:routemapentry_list',
+    link_text='Route Map Entries',
+    permissions=['netbox_routing.view_routemapentry'],
+    buttons=(
         PluginMenuButton(
-            link='plugins:netbox_routing:routemap_bulk_import',
-            title='Import',
-            icon_class=COL_IMPORT,
-            permissions=['netbox_routing.add_routemap'],
+            link='plugins:netbox_routing:routemapentry_add',
+            title='Add',
+            icon_class=COL_ADD,
+            permissions=['netbox_routing.add_routemapentry'],
         ),
     ),
 )
+aspath = PluginMenuItem(
+    link='plugins:netbox_routing:aspath_list',
+    link_text='AS Path',
+    permissions=['netbox_routing.view_aspath'],
+    buttons=(
+        PluginMenuButton(
+            link='plugins:netbox_routing:aspath_add',
+            title='Add',
+            icon_class=COL_ADD,
+            permissions=['netbox_routing.add_aspath'],
+        ),
+    ),
+)
+aspath_entry = PluginMenuItem(
+    link='plugins:netbox_routing:aspathentry_list',
+    link_text='AS Path Entries',
+    permissions=['netbox_routing.view_aspathentry'],
+    buttons=(
+        PluginMenuButton(
+            link='plugins:netbox_routing:aspathentry_add',
+            title='Add',
+            icon_class=COL_ADD,
+            permissions=['netbox_routing.add_aspathentry'],
+        ),
+        # PluginMenuButton(
+        #     link='plugins:netbox_routing:aspathentry_bulk_import',
+        #     title='Import',
+        #     icon_class=COL_IMPORT,
+        #     permissions=['netbox_routing.add_aspathentry'],
+        # ),
+    ),
+)
 
-MENUITEMS = (prefixlist, routemap)
+OBJECT_MENU = (
+    prefixlist,
+    prefixlist_entry,
+    routemap,
+    routemap_entry,
+    aspath,
+    aspath_entry,
+)

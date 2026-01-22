@@ -7,24 +7,19 @@
 <div class="row">
   <div class="col col-md-6">
     <div class="card">
-      <h5 class="card-header">BGP Router</h5>
-      <table class="table table-hover attr-table">
-        <tr>
-          <th scope="row">Device</th>
-          <td>
-            {{ object.assigned_object|linkify }}
-          </td>
-        </tr>
-        <tr>
-          <th scope="row">AS Number</th>
-          <td>
-            {{ object.asn|linkify }}
-          </td>
-        </tr>
-      </table>
-    </div>
-    {% include 'netbox_routing/inc/settings.html' %}
-    {% plugin_left_page object %}
+      <h5 class="card-header">Community List</h5>
+      <div class="card-body">
+        <table class="table table-hover attr-table">
+          <tr>
+            <th scope="row">Name</th>
+            <td>
+              {{ object.name }}
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div> 
+      {% plugin_left_page object %}
   </div>
   <div class="col col-md-6">
     {% include 'inc/panels/related_objects.html' %}

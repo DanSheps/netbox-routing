@@ -20,12 +20,14 @@ __all__ = (
     'RouteMapEntry',
     'PrefixList',
     'PrefixListEntry',
+    'ASPath',
+    'ASPathEntry',
 )
 
 
 class PermitDenyChoiceMixin:
-    def get_type_color(self):
-        return ActionChoices.colors.get(self.type)
+    def get_action_color(self):
+        return ActionChoices.colors.get(self.action)
 
 
 class RouteMap(PrimaryModel):
@@ -50,7 +52,7 @@ class RouteMap(PrimaryModel):
         return f'{self.name}'
 
     def get_absolute_url(self):
-        return reverse('plugins:netbox_routing:routemap', args=[self.pk])
+        return reverse('plugins:netbox_routing:routemap', kwargs={'pk': self.pk})
 
 
 class RouteMapEntry(PermitDenyChoiceMixin, PrimaryModel):
@@ -77,7 +79,7 @@ class RouteMapEntry(PermitDenyChoiceMixin, PrimaryModel):
 
     clone_fields = (
         'route_map',
-        'type',
+        'action',
     )
     prerequisite_models = ('netbox_routing.RouteMap',)
 
@@ -101,7 +103,7 @@ class RouteMapEntry(PermitDenyChoiceMixin, PrimaryModel):
 
 class PrefixList(PrimaryModel):
     name = models.CharField(max_length=255)
-    family = models.CharField(max_length=10, choices=IPAddressFamilyChoices)
+    family = models.PositiveSmallIntegerField(choices=IPAddressFamilyChoices, default=4)
 
     clone_fields = ()
     prerequisite_models = ()
@@ -194,3 +196,68 @@ class PrefixListEntry(PermitDenyChoiceMixin, PrimaryModel):
             raise ValidationError(
                 'Prefix\'s length cannot be longer then greater or equals value'
             )
+
+
+class ASPath(PrimaryModel):
+    name = models.CharField(max_length=255)
+
+    clone_fields = ()
+    prerequisite_models = ()
+
+    class Meta:
+        ordering = [
+            'name',
+        ]
+        constraints = (
+            models.UniqueConstraint(
+                Lower('name'),
+                name='%(app_label)s_%(class)s_unique_name',
+                violation_error_message="Name must be unique.",
+            ),
+        )
+
+    def __str__(self):
+        return f'{self.name}'
+
+    def get_absolute_url(self):
+        return reverse('plugins:netbox_routing:aspath', args=[self.pk])
+
+
+class ASPathEntry(PermitDenyChoiceMixin, PrimaryModel):
+    aspath = models.ForeignKey(
+        to="netbox_routing.ASPath",
+        on_delete=models.PROTECT,
+        related_name='entries',
+        verbose_name=_('AS-Path'),
+    )
+    sequence = models.PositiveSmallIntegerField()
+    action = models.CharField(max_length=6, choices=ActionChoices)
+    asn = models.ForeignKey(
+        to="ipam.ASN",
+        on_delete=models.PROTECT,
+        related_name='entries',
+        verbose_name=_('ASN'),
+    )
+
+    clone_fields = (
+        'aspath',
+        'action',
+    )
+    prerequisite_models = ('netbox_routing.PrefixList',)
+
+    class Meta:
+        ordering = ['aspath', 'sequence']
+        constraints = (
+            models.UniqueConstraint(
+                'aspath',
+                'sequence',
+                name='%(app_label)s_%(class)s_unique_aspath_sequence',
+                violation_error_message="Prefix List sequence must be unique.",
+            ),
+        )
+
+    def __str__(self):
+        return f'{self.aspath.name} {self.sequence}'
+
+    def get_absolute_url(self):
+        return reverse('plugins:netbox_routing:aspathentry', args=[self.pk])

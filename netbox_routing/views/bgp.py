@@ -1,3 +1,4 @@
+from netbox.object_actions import CloneObject, EditObject, DeleteObject
 from netbox.views.generic import (
     ObjectView,
     ObjectEditView,
@@ -71,6 +72,84 @@ class BGPSettingDeleteView(ObjectDeleteView):
 
 
 #
+# BGP Templates
+#
+@register_model_view(BGPPeerTemplate, name='list', path='', detail=False)
+class BGPPeerTemplateListView(ObjectListView):
+    queryset = BGPPeerTemplate.objects.all()
+    table = BGPPeerTemplateTable
+    filterset = BGPPeerTemplateFilterSet
+    filterset_form = BGPPeerTemplateFilterForm
+
+
+@register_model_view(BGPPeerTemplate)
+class BGPPeerTemplateView(ObjectView):
+    queryset = BGPPeerTemplate.objects.all()
+
+
+@register_model_view(BGPPeerTemplate, name='add', detail=False)
+@register_model_view(BGPPeerTemplate, name='edit')
+class BGPPeerTemplateEditView(ObjectEditView):
+    queryset = BGPPeerTemplate.objects.all()
+    form = BGPPeerTemplateForm
+
+
+@register_model_view(BGPPeerTemplate, name='delete')
+class BGPPeerTemplateDeleteView(ObjectDeleteView):
+    queryset = BGPPeerTemplate.objects.all()
+
+
+@register_model_view(BGPPolicyTemplate, name='list', path='', detail=False)
+class BGPPolicyTemplateListView(ObjectListView):
+    queryset = BGPPolicyTemplate.objects.all()
+    table = BGPPolicyTemplateTable
+    filterset = BGPPolicyTemplateFilterSet
+    filterset_form = BGPPolicyTemplateFilterForm
+
+
+@register_model_view(BGPPolicyTemplate)
+class BGPPolicyTemplateView(ObjectView):
+    queryset = BGPPolicyTemplate.objects.all()
+
+
+@register_model_view(BGPPolicyTemplate, name='add', detail=False)
+@register_model_view(BGPPolicyTemplate, name='edit')
+class BGPPolicyTemplateEditView(ObjectEditView):
+    queryset = BGPPolicyTemplate.objects.all()
+    form = BGPPolicyTemplateForm
+
+
+@register_model_view(BGPPolicyTemplate, name='delete')
+class BGPPolicyTemplateDeleteView(ObjectDeleteView):
+    queryset = BGPPolicyTemplate.objects.all()
+
+
+@register_model_view(BGPSessionTemplate, name='list', path='', detail=False)
+class BGPSessionTemplateListView(ObjectListView):
+    queryset = BGPSessionTemplate.objects.all()
+    table = BGPSessionTemplateTable
+    filterset = BGPSessionTemplateFilterSet
+    filterset_form = BGPSessionTemplateFilterForm
+
+
+@register_model_view(BGPSessionTemplate)
+class BGPSessionTemplateView(ObjectView):
+    queryset = BGPSessionTemplate.objects.all()
+
+
+@register_model_view(BGPSessionTemplate, name='add', detail=False)
+@register_model_view(BGPSessionTemplate, name='edit')
+class BGPSessionTemplateEditView(ObjectEditView):
+    queryset = BGPSessionTemplate.objects.all()
+    form = BGPSessionTemplateForm
+
+
+@register_model_view(BGPSessionTemplate, name='delete')
+class BGPSessionTemplateDeleteView(ObjectDeleteView):
+    queryset = BGPSessionTemplate.objects.all()
+
+
+#
 # BGP Router Views
 #
 @register_model_view(BGPRouter, name='list', path='', detail=False)
@@ -111,6 +190,57 @@ class BGPRouterSettingsView(BGPSettingViewMixin, ObjectChildrenView):
 
     def get_children(self, request, parent):
         return self.child_model.objects.filter(router=parent)
+
+
+@register_model_view(BGPRouter, name='peer_templates')
+class BGPRouterPeerTemplatesView(ObjectChildrenView):
+    queryset = BGPRouter.objects.all()
+    child_model = BGPPeerTemplate
+    table = BGPPeerTemplateTable
+    filterset = BGPPeerTemplateFilterSet
+    filterset_form = BGPPeerTemplateFilterForm
+    actions = (CloneObject, EditObject, DeleteObject)
+    tab = ViewTab(
+        label='Peer Templates',
+        badge=lambda obj: obj.peer_templates.count(),
+    )
+
+    def get_children(self, request, parent):
+        return self.child_model.objects.filter(routers=parent)
+
+
+@register_model_view(BGPRouter, name='policy_templates')
+class BGPRouterPolicyTemplatesView(ObjectChildrenView):
+    queryset = BGPRouter.objects.all()
+    child_model = BGPPolicyTemplate
+    table = BGPPolicyTemplateTable
+    filterset = BGPPolicyTemplateFilterSet
+    filterset_form = BGPPolicyTemplateFilterForm
+    actions = (CloneObject, EditObject, DeleteObject)
+    tab = ViewTab(
+        label='Policy Templates',
+        badge=lambda obj: obj.policy_templates.count(),
+    )
+
+    def get_children(self, request, parent):
+        return self.child_model.objects.filter(routers=parent)
+
+
+@register_model_view(BGPRouter, name='session_templates')
+class BGPRouterSessionTemplatesView(ObjectChildrenView):
+    queryset = BGPRouter.objects.all()
+    child_model = BGPSessionTemplate
+    table = BGPSessionTemplateTable
+    filterset = BGPSessionTemplateFilterSet
+    filterset_form = BGPSessionTemplateFilterForm
+    actions = (CloneObject, EditObject, DeleteObject)
+    tab = ViewTab(
+        label='Session Templates',
+        badge=lambda obj: obj.session_templates.count(),
+    )
+
+    def get_children(self, request, parent):
+        return self.child_model.objects.filter(routers=parent)
 
 
 #

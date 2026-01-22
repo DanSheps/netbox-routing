@@ -11,7 +11,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('netbox_routing', '0019_prefixlist_changes'),
+        ('netbox_routing', '0019_prefixlist_routemap_changes'),
     ]
 
     operations = [
@@ -63,6 +63,7 @@ class Migration(migrations.Migration):
                         blank=True,
                         null=True,
                         on_delete=django.db.models.deletion.SET_NULL,
+                        related_name='communities',
                         to='ipam.role',
                     ),
                 ),
@@ -112,12 +113,6 @@ class Migration(migrations.Migration):
                 ('description', models.CharField(blank=True, max_length=200)),
                 ('comments', models.TextField(blank=True)),
                 ('name', models.CharField(max_length=255)),
-                (
-                    'communities',
-                    models.ManyToManyField(
-                        related_name='community_lists', to='netbox_routing.community'
-                    ),
-                ),
                 (
                     'owner',
                     models.ForeignKey(

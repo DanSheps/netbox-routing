@@ -9,8 +9,10 @@ __all__ = (
     'BGPAddressFamilyViewSet',
     'BGPSettingViewSet',
     'BGPPeerViewSet',
-    'BGPPeerTemplateViewSet',
     'BGPPeerAddressFamilyViewSet',
+    'BGPPeerTemplateViewSet',
+    'BGPPolicyTemplateViewSet',
+    'BGPSessionTemplateViewSet',
 )
 
 
@@ -48,6 +50,18 @@ class BGPPeerTemplateViewSet(NetBoxModelViewSet):
     queryset = BGPPeerTemplate.objects.all()
     serializer_class = BGPPeerTemplateSerializer
     filterset_class = filtersets.BGPPeerTemplateFilterSet
+
+
+class BGPPolicyTemplateViewSet(NetBoxModelViewSet):
+    queryset = BGPPolicyTemplate.objects.all()
+    serializer_class = BGPPolicyTemplateSerializer
+    filterset_class = filtersets.BGPPolicyTemplateFilterSet
+
+
+class BGPSessionTemplateViewSet(NetBoxModelViewSet):
+    queryset = BGPSessionTemplate.objects.all()
+    serializer_class = BGPSessionTemplateSerializer
+    filterset_class = filtersets.BGPSessionTemplateFilterSet
 
 
 class BGPPeerAddressFamilyViewSet(NetBoxModelViewSet):

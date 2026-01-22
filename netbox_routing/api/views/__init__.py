@@ -1,12 +1,8 @@
+from .community import *
 from .static import StaticRouteViewSet
 from .ospf import OSPFInstanceViewSet, OSPFAreaViewSet, OSPFInterfaceViewSet
 from .bgp import *
-from .objects import (
-    PrefixListViewSet,
-    PrefixListEntryViewSet,
-    RouteMapViewSet,
-    RouteMapEntryViewSet,
-)
+from .objects import *
 from .eigrp import (
     EIGRPRouterViewSet,
     EIGRPAddressFamilyViewSet,
@@ -22,6 +18,8 @@ __all__ = (
     'BGPAddressFamilyViewSet',
     'BGPPeerViewSet',
     'BGPPeerTemplateViewSet',
+    'BGPPolicyTemplateViewSet',
+    'BGPSessionTemplateViewSet',
     'BGPPeerAddressFamilyViewSet',
     'EIGRPRouterViewSet',
     'EIGRPAddressFamilyViewSet',
@@ -34,4 +32,9 @@ __all__ = (
     'PrefixListEntryViewSet',
     'RouteMapViewSet',
     'RouteMapEntryViewSet',
+    'CommunityViewSet',
+    'CommunityListViewSet',
+    'CommunityListEntryViewSet',
+    'ASPathViewSet',
+    'ASPathEntryViewSet',
 )

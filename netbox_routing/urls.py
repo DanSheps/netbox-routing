@@ -55,6 +55,30 @@ urlpatterns = [
     # BGP
     path('bgp/setting/', include(get_model_urls(app_name, 'bgpsetting', detail=False))),
     path('bgp/setting/<int:pk>/', include(get_model_urls(app_name, 'bgpsetting'))),
+    path(
+        'bgp/peer-template/',
+        include(get_model_urls(app_name, 'bgppeertemplate', detail=False)),
+    ),
+    path(
+        'bgp/peer-template/<int:pk>/',
+        include(get_model_urls(app_name, 'bgppeertemplate')),
+    ),
+    path(
+        'bgp/policy-template/',
+        include(get_model_urls(app_name, 'bgppolicytemplate', detail=False)),
+    ),
+    path(
+        'bgp/policy-template/<int:pk>/',
+        include(get_model_urls(app_name, 'bgppolicytemplate')),
+    ),
+    path(
+        'bgp/session-template/',
+        include(get_model_urls(app_name, 'bgpsessiontemplate', detail=False)),
+    ),
+    path(
+        'bgp/session-template/<int:pk>/',
+        include(get_model_urls(app_name, 'bgpsessiontemplate')),
+    ),
     path('bgp/router/', include(get_model_urls(app_name, 'bgprouter', detail=False))),
     path('bgp/router/<int:pk>/', include(get_model_urls(app_name, 'bgprouter'))),
     path('bgp/scope/', include(get_model_urls(app_name, 'bgpscope', detail=False))),
@@ -78,6 +102,28 @@ urlpatterns = [
     path(
         'bgp/peer-address-family/<int:pk>/',
         include(get_model_urls(app_name, 'bgppeeraddressfamily')),
+    ),
+    # Objects: Community
+    path(
+        'objects/community-list/',
+        include(get_model_urls(app_name, 'communitylist', detail=False)),
+    ),
+    path(
+        'objects/community-list/<int:pk>/',
+        include(get_model_urls(app_name, 'communitylist')),
+    ),
+    path(
+        'objects/community/',
+        include(get_model_urls(app_name, 'community', detail=False)),
+    ),
+    path('objects/community/<int:pk>/', include(get_model_urls(app_name, 'community'))),
+    path(
+        'objects/community-list-entry/',
+        include(get_model_urls(app_name, 'communitylistentry', detail=False)),
+    ),
+    path(
+        'objects/community-list-entry/<int:pk>/',
+        include(get_model_urls(app_name, 'communitylistentry')),
     ),
     # Objects: Prefix List
     path(
@@ -108,5 +154,19 @@ urlpatterns = [
     path(
         'objects/route-map-entry/<int:pk>/',
         include(get_model_urls(app_name, 'routemapentry')),
+    ),
+    # Objects: AS Path
+    path(
+        'objects/as-path/',
+        include(get_model_urls(app_name, 'aspath', detail=False)),
+    ),
+    path('objects/as-path/<int:pk>/', include(get_model_urls(app_name, 'aspath'))),
+    path(
+        'objects/as-path-entry/',
+        include(get_model_urls(app_name, 'aspathentry', detail=False)),
+    ),
+    path(
+        'objects/as-path-entry/<int:pk>/',
+        include(get_model_urls(app_name, 'aspathentry')),
     ),
 ]

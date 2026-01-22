@@ -1,13 +1,18 @@
 from django.utils.translation import gettext as _
 
 from netbox.forms import NetBoxModelBulkEditForm
-from netbox_routing.models import PrefixList, PrefixListEntry, RouteMapEntry, RouteMap
 from utilities.forms.fields import DynamicModelChoiceField
-
-
-__all__ = ('PrefixListEntryBulkEditForm', 'RouteMapEntryBulkEditForm')
-
 from utilities.forms.rendering import FieldSet
+
+from netbox_routing.models.objects import *
+
+
+__all__ = (
+    'PrefixListEntryBulkEditForm',
+    'RouteMapEntryBulkEditForm',
+    'ASPathBulkEditForm',
+    'ASPathEntryBulkEditForm',
+)
 
 
 class PrefixListEntryBulkEditForm(NetBoxModelBulkEditForm):
@@ -33,4 +38,24 @@ class RouteMapEntryBulkEditForm(NetBoxModelBulkEditForm):
 
     model = RouteMapEntry
     fieldsets = (FieldSet('route_map'),)
+    nullable_fields = ()
+
+
+class ASPathBulkEditForm(NetBoxModelBulkEditForm):
+
+    model = ASPath
+    fieldsets = ()
+    nullable_fields = ()
+
+
+class ASPathEntryBulkEditForm(NetBoxModelBulkEditForm):
+    aspath = DynamicModelChoiceField(
+        queryset=ASPath.objects.all(),
+        label=_('AS Path'),
+        required=False,
+        selector=True,
+    )
+
+    model = ASPathEntry
+    fieldsets = (FieldSet('aspath'),)
     nullable_fields = ()

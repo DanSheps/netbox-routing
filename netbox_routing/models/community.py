@@ -9,6 +9,7 @@ from netbox_routing.choices import ActionChoices, CommunityStatusChoices
 __all__ = (
     'CommunityList',
     'Community',
+    'CommunityListEntry',
 )
 
 
@@ -16,11 +17,6 @@ class CommunityList(PrimaryModel):
     name = models.CharField(
         verbose_name=_('List'),
         max_length=255,
-    )
-    communities = models.ManyToManyField(
-        verbose_name=_('Communities'),
-        to='netbox_routing.Community',
-        related_name='community_lists',
     )
     tenant = models.ForeignKey(
         verbose_name=_('Tenant'),
@@ -59,7 +55,12 @@ class Community(PrimaryModel):
         default=CommunityStatusChoices.STATUS_ACTIVE,
     )
     role = models.ForeignKey(
-        to='ipam.Role', on_delete=models.SET_NULL, null=True, blank=True
+        verbose_name=_('Role'),
+        to='ipam.Role',
+        on_delete=models.SET_NULL,
+        related_name='communities',
+        null=True,
+        blank=True,
     )
     tenant = models.ForeignKey(
         verbose_name=_('Tenant'),

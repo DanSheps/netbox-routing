@@ -1,5 +1,5 @@
 from .bgp import *
-from .communities import *
+from .community import *
 from .eigrp import *
 from .objects import PrefixList, PrefixListEntry, RouteMap, RouteMapEntry
 from .ospf import OSPFArea, OSPFInstance, OSPFInterface
@@ -19,6 +19,7 @@ __all__ = (
     # Communities
     'Community',
     'CommunityList',
+    'CommunityListEntry',
     # EIGRP
     'EIGRPRouter',
     'EIGRPAddressFamily',

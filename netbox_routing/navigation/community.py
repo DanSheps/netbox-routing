@@ -1,6 +1,6 @@
 from netbox.plugins import PluginMenuButton, PluginMenuItem
 
-__all__ = ('BGP_MENU',)
+__all__ = ('COMMUNITY_MENU',)
 
 
 COL_ADD = 'mdi mdi-plus'
@@ -10,15 +10,9 @@ COL_IMPORT = 'mdi mdi-upload'
 def build_menus():
     menus = []
     menu_items = (
-        ('bgpsetting', 'Settings'),
-        ('bgppeertemplate', 'Peer Templates'),
-        ('bgppolicytemplate', 'Policy Templates'),
-        ('bgpsessiontemplate', 'Session Templates'),
-        ('bgprouter', 'Routers'),
-        ('bgpscope', 'Scopes'),
-        ('bgpaddressfamily', 'Address Families'),
-        ('bgppeer', 'Peers'),
-        ('bgppeeraddressfamily', 'Peer Address Families'),
+        ('communitylist', 'Community List'),
+        ('community', 'Community'),
+        ('communitylistentry', 'Community List Entry'),
     )
     for model, name in menu_items:
         menu = PluginMenuItem(
@@ -40,4 +34,4 @@ def build_menus():
     return tuple(menus)
 
 
-BGP_MENU = build_menus()
+COMMUNITY_MENU = build_menus()

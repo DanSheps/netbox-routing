@@ -14,8 +14,76 @@ __all__ = (
     'BGPAddressFamilyFilterSet',
     'BGPPeerFilterSet',
     'BGPPeerTemplateFilterSet',
+    'BGPPolicyTemplateFilterSet',
+    'BGPSessionTemplateFilterSet',
     'BGPPeerAddressFamilyFilterSet',
 )
+
+
+class BGPPeerTemplateFilterSet(NetBoxModelFilterSet):
+    peer_id = django_filters.ModelMultipleChoiceFilter(
+        field_name='peers',
+        queryset=BGPScope.objects.all(),
+        label=_('Peer (ID)'),
+    )
+    address_family_id = django_filters.ModelMultipleChoiceFilter(
+        field_name='address_families',
+        queryset=BGPPeerAddressFamily.objects.all(),
+        label=_('Address Family (ID)'),
+    )
+    remote_as_id = django_filters.ModelMultipleChoiceFilter(
+        field_name='remote_as',
+        queryset=ASN.objects.all(),
+        label=_('Remote AS (ID)'),
+    )
+    remote_as = django_filters.ModelMultipleChoiceFilter(
+        field_name='remote_as__asn',
+        queryset=ASN.objects.all(),
+        to_field_name='remote_as',
+        label=_('Remote AS (ASN)'),
+    )
+
+    class Meta:
+        model = BGPPeerTemplate
+        fields = (
+            'peer_id',
+            'address_family_id',
+            'remote_as_id',
+            'remote_as',
+            'enabled',
+        )
+
+    def search(self, queryset, name, value):
+        if not value.strip():
+            return queryset
+        qs_filter = Q(name__icontains=value)
+        return queryset.filter(qs_filter).distinct()
+
+
+class BGPPolicyTemplateFilterSet(NetBoxModelFilterSet):
+
+    class Meta:
+        model = BGPPolicyTemplate
+        fields = ('name',)
+
+    def search(self, queryset, name, value):
+        if not value.strip():
+            return queryset
+        qs_filter = Q(name__icontains=value)
+        return queryset.filter(qs_filter).distinct()
+
+
+class BGPSessionTemplateFilterSet(NetBoxModelFilterSet):
+
+    class Meta:
+        model = BGPSessionTemplate
+        fields = ('name',)
+
+    def search(self, queryset, name, value):
+        if not value.strip():
+            return queryset
+        qs_filter = Q(name__icontains=value)
+        return queryset.filter(qs_filter).distinct()
 
 
 class BGPSettingFilterSet(NetBoxModelFilterSet):
@@ -35,17 +103,17 @@ class BGPSettingFilterSet(NetBoxModelFilterSet):
 
 
 class BGPRouterFilterSet(NetBoxModelFilterSet):
-    device_id = django_filters.ModelMultipleChoiceFilter(
-        field_name='device',
-        queryset=Device.objects.all(),
-        label=_('Device (ID)'),
-    )
-    device = django_filters.ModelMultipleChoiceFilter(
-        field_name='device__name',
-        queryset=Device.objects.all(),
-        to_field_name='name',
-        label=_('Device'),
-    )
+    # device_id = django_filters.ModelMultipleChoiceFilter(
+    #    field_name='device',
+    #    queryset=Device.objects.all(),
+    #    label=_('Device (ID)'),
+    # )
+    # device = django_filters.ModelMultipleChoiceFilter(
+    #    field_name='device__name',
+    #    queryset=Device.objects.all(),
+    #    to_field_name='name',
+    #    label=_('Device'),
+    # )
     asn_id = django_filters.ModelMultipleChoiceFilter(
         field_name='asn',
         queryset=ASN.objects.all(),
@@ -60,7 +128,7 @@ class BGPRouterFilterSet(NetBoxModelFilterSet):
 
     class Meta:
         model = BGPRouter
-        fields = ('device_id', 'device', 'asn_id', 'asn')
+        fields = ('asn_id', 'asn')
 
     def search(self, queryset, name, value):
         if not value.strip():
@@ -178,46 +246,6 @@ class BGPPeerFilterSet(NetBoxModelFilterSet):
         qs_filter = Q(peer__address__icontains=value)
         qs_filter |= Q(remote_as__asn__icontains=value)
         qs_filter |= Q(local_as__asn__icontains=value)
-        return queryset.filter(qs_filter).distinct()
-
-
-class BGPPeerTemplateFilterSet(NetBoxModelFilterSet):
-    peer_id = django_filters.ModelMultipleChoiceFilter(
-        field_name='peers',
-        queryset=BGPScope.objects.all(),
-        label=_('Peer (ID)'),
-    )
-    address_family_id = django_filters.ModelMultipleChoiceFilter(
-        field_name='address_families',
-        queryset=BGPPeerAddressFamily.objects.all(),
-        label=_('Address Family (ID)'),
-    )
-    remote_as_id = django_filters.ModelMultipleChoiceFilter(
-        field_name='remote_as',
-        queryset=ASN.objects.all(),
-        label=_('Remote AS (ID)'),
-    )
-    remote_as = django_filters.ModelMultipleChoiceFilter(
-        field_name='remote_as__asn',
-        queryset=ASN.objects.all(),
-        to_field_name='remote_as',
-        label=_('Remote AS (ASN)'),
-    )
-
-    class Meta:
-        model = BGPPeerTemplate
-        fields = (
-            'peer_id',
-            'address_family_id',
-            'remote_as_id',
-            'remote_as',
-            'enabled',
-        )
-
-    def search(self, queryset, name, value):
-        if not value.strip():
-            return queryset
-        qs_filter = Q(name__icontains=value)
         return queryset.filter(qs_filter).distinct()
 
 
