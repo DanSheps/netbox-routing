@@ -9,7 +9,6 @@ from .ospf import *
 from .bgp import *
 from .eigrp import *
 
-
 __all__ = (
     'StaticRouteFilterSet',
     'BGPSettingFilterSet',

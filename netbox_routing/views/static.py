@@ -21,7 +21,6 @@ from netbox_routing.forms.bulk_import import StaticRouteImportForm
 from netbox_routing.models import StaticRoute
 from netbox_routing.tables.static import StaticRouteTable
 
-
 __all__ = (
     'StaticRouteListView',
     'StaticRouteView',

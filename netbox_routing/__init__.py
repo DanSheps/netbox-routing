@@ -1,7 +1,6 @@
 from netbox.plugins import PluginConfig
 from importlib.metadata import metadata
 
-
 plugin = metadata('netbox_routing')
 
 

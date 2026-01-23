@@ -7,7 +7,7 @@ from .objects import (
     RouteMapForm,
     RouteMapEntryForm,
 )
-from .ospf import OSPFAreaForm, OSPFInstanceForm, OSPFInterfaceForm
+from netbox_routing.forms.ospf import OSPFAreaForm, OSPFInstanceForm, OSPFInterfaceForm
 from .bgp import BGPRouterForm, BGPScopeForm, BGPAddressFamilyForm
 from .static import StaticRouteForm
 from .eigrp import *

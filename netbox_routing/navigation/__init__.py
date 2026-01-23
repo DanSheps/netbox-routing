@@ -6,7 +6,6 @@ from .ospf import MENUITEMS as OSPF_MENU
 from .eigrp import eigrp
 from .static import MENUITEMS as STATIC_MENU
 
-
 __all__ = ('menu',)
 
 menu = PluginMenu(
