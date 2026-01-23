@@ -8,7 +8,6 @@ from .static import MENUITEMS as STATIC_MENU
 from .bgp import BGP_MENU
 from .community import COMMUNITY_MENU
 
-
 __all__ = ('menu',)
 
 menu = PluginMenu(

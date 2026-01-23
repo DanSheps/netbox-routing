@@ -3,7 +3,6 @@ from rest_framework import serializers
 from netbox.api.serializers import NetBoxModelSerializer
 from netbox_routing.models.objects import *
 
-
 __all__ = (
     'PrefixListSerializer',
     'PrefixListEntrySerializer',
