@@ -31,7 +31,7 @@ class PermitDenyChoiceMixin:
 
 
 class RouteMap(PrimaryModel):
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=100)
 
     clone_fields = ()
     prerequisite_models = ()
@@ -102,7 +102,7 @@ class RouteMapEntry(PermitDenyChoiceMixin, PrimaryModel):
 
 
 class PrefixList(PrimaryModel):
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=100)
     family = models.PositiveSmallIntegerField(choices=IPAddressFamilyChoices, default=4)
 
     clone_fields = ()
@@ -199,7 +199,7 @@ class PrefixListEntry(PermitDenyChoiceMixin, PrimaryModel):
 
 
 class ASPath(PrimaryModel):
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=100)
 
     clone_fields = ()
     prerequisite_models = ()
@@ -232,11 +232,8 @@ class ASPathEntry(PermitDenyChoiceMixin, PrimaryModel):
     )
     sequence = models.PositiveSmallIntegerField()
     action = models.CharField(max_length=6, choices=ActionChoices)
-    asn = models.ForeignKey(
-        to="ipam.ASN",
-        on_delete=models.PROTECT,
-        related_name='entries',
-        verbose_name=_('ASN'),
+    pattern = models.CharField(
+        max_length=200,
     )
 
     clone_fields = (

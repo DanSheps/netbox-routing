@@ -6,9 +6,12 @@ from netbox_routing.models.objects import *
 
 
 class PrefixListTable(NetBoxTable):
+    name = tables.Column(linkify=True, verbose_name=_('Name'))
+    family = tables.Column(linkify=True, verbose_name=_('Family'))
+
     class Meta(NetBoxTable.Meta):
         model = PrefixList
-        fields = ('pk', 'id', 'name')
+        fields = ('pk', 'id', 'name', 'family')
         default_columns = ('pk', 'id', 'name')
 
 
@@ -32,6 +35,8 @@ class PrefixListEntryTable(NetBoxTable):
 
 
 class RouteMapTable(NetBoxTable):
+    name = tables.Column(linkify=True, verbose_name=_('Name'))
+
     class Meta(NetBoxTable.Meta):
         model = RouteMap
         fields = ('pk', 'id', 'name')
@@ -49,6 +54,8 @@ class RouteMapEntryTable(NetBoxTable):
 
 
 class ASPathTable(NetBoxTable):
+    name = tables.Column(linkify=True, verbose_name=_('Name'))
+
     class Meta(NetBoxTable.Meta):
         model = ASPath
         fields = ('pk', 'id', 'name')

@@ -1,4 +1,5 @@
 from django.db import models
+from taggit.managers import TaggableManager
 
 from ipam.fields import IPNetworkField
 from netbox.models import NetBoxModel
@@ -24,6 +25,12 @@ class ASPathList(AbsoluteURLMixin, NetBoxModel):
 
     def __str__(self):
         return self.name
+
+
+class TagMixin:
+    tags = TaggableManager(
+        through='extras.TaggedItem', ordering=('weight', 'name'), related_name='+'
+    )
 
 
 class ASPathListRule(AbsoluteURLMixin, NetBoxModel):
@@ -65,12 +72,6 @@ class BGPPeerGroup(AbsoluteURLMixin, NetBoxModel):
 
     name = models.CharField(max_length=100)
     description = models.CharField(max_length=200, blank=True)
-    import_policies = models.ManyToManyField(
-        RoutingPolicy, blank=True, related_name='group_import_policies'
-    )
-    export_policies = models.ManyToManyField(
-        RoutingPolicy, blank=True, related_name='group_export_policies'
-    )
     comments = models.TextField(blank=True)
 
     class Meta:
@@ -271,12 +272,6 @@ class BGPSession(AbsoluteURLMixin, NetBoxModel):
     peer_group = models.ForeignKey(
         BGPPeerGroup, on_delete=models.SET_NULL, blank=True, null=True
     )
-    import_policies = models.ManyToManyField(
-        RoutingPolicy, blank=True, related_name='session_import_policies'
-    )
-    export_policies = models.ManyToManyField(
-        RoutingPolicy, blank=True, related_name='session_export_policies'
-    )
     prefix_list_in = models.ForeignKey(
         to=PrefixList,
         blank=True,
@@ -335,23 +330,6 @@ class RoutingPolicyRule(AbsoluteURLMixin, NetBoxModel):
     action = models.CharField(max_length=30)
     description = models.CharField(max_length=500, blank=True)
     continue_entry = models.PositiveIntegerField(blank=True, null=True)
-    match_community = models.ManyToManyField(to=Community, blank=True, related_name='+')
-    match_community_list = models.ManyToManyField(
-        to=CommunityList, blank=True, related_name='cmrules'
-    )
-    match_aspath_list = models.ManyToManyField(
-        to=ASPathList, blank=True, related_name='aspathrules'
-    )
-    match_ip_address = models.ManyToManyField(
-        to=PrefixList,
-        blank=True,
-        related_name='plrules',
-    )
-    match_ipv6_address = models.ManyToManyField(
-        to=PrefixList,
-        blank=True,
-        related_name='plrules6',
-    )
     match_custom = models.JSONField(
         blank=True,
         null=True,
@@ -370,4 +348,202 @@ class RoutingPolicyRule(AbsoluteURLMixin, NetBoxModel):
         unique_together = ('routing_policy', 'index')
         ordering = ['routing_policy', 'index']
         app_label = 'netbox_bgp'
+        managed = False
+
+
+class BGPPeerGroup_ImportPolicies(models.Model):
+
+    bgppeergroup = models.ForeignKey(
+        to='BGPPeerGroup',
+        on_delete=models.CASCADE,
+        related_name="import_policies",
+        related_query_name="import_policies",
+    )
+
+    routingpolicy = models.ForeignKey(
+        to='RoutingPolicy',
+        on_delete=models.CASCADE,
+        related_name="+",
+        related_query_name="+",
+    )
+
+    class Meta:
+        app_label = 'netbox_bgp'
+        db_table = 'netbox_bgp_bgppeergroup_import_policies'
+        managed = False
+
+
+class BGPPeerGroup_ExportPolicies(models.Model):
+
+    bgppeergroup = models.ForeignKey(
+        to='BGPPeerGroup',
+        on_delete=models.CASCADE,
+        related_name="export_policies",
+        related_query_name="export_policies",
+    )
+
+    routingpolicy = models.ForeignKey(
+        to='RoutingPolicy',
+        on_delete=models.CASCADE,
+        related_name="group_export_policies",
+        related_query_name="group_export_policies",
+    )
+
+    class Meta:
+        app_label = 'netbox_bgp'
+        db_table = 'netbox_bgp_bgppeergroup_export_policies'
+        managed = False
+
+
+class BGPSession_ImportPolicies(models.Model):
+
+    bgpsession = models.ForeignKey(
+        to='BGPSession',
+        on_delete=models.CASCADE,
+        related_name="import_policies",
+        related_query_name="import_policies",
+    )
+
+    routingpolicy = models.ForeignKey(
+        to='RoutingPolicy',
+        on_delete=models.CASCADE,
+        related_name="group_import_policies",
+        related_query_name="group_import_policies",
+    )
+
+    class Meta:
+        app_label = 'netbox_bgp'
+        db_table = 'netbox_bgp_bgpsession_import_policies'
+        managed = False
+
+
+class BGPSession_ExportPolicies(models.Model):
+
+    bgpsession = models.ForeignKey(
+        to='BGPSession',
+        on_delete=models.CASCADE,
+        related_name="export_policies",
+        related_query_name="export_policies",
+    )
+
+    routingpolicy = models.ForeignKey(
+        to='RoutingPolicy',
+        on_delete=models.CASCADE,
+        related_name="session_export_policies",
+        related_query_name="session_export_policies",
+    )
+
+    class Meta:
+        app_label = 'netbox_bgp'
+        db_table = 'netbox_bgp_bgpsession_export_policies'
+        managed = False
+
+
+class RoutingPolicyRule_Match_Community(models.Model):
+
+    routingpolicyrule = models.ForeignKey(
+        to='RoutingPolicyRule',
+        on_delete=models.CASCADE,
+        related_name="match_community",
+        related_query_name="match_community",
+    )
+
+    community = models.ForeignKey(
+        to='Community',
+        on_delete=models.CASCADE,
+        related_name="+",
+        related_query_name="+",
+    )
+
+    class Meta:
+        app_label = 'netbox_bgp'
+        db_table = 'netbox_bgp_routingpolicyrule_match_community'
+        managed = False
+
+
+class RoutingPolicyRule_Match_CommunityList(models.Model):
+
+    routingpolicyrule = models.ForeignKey(
+        to='RoutingPolicyRule',
+        on_delete=models.CASCADE,
+        related_name="match_community_list",
+        related_query_name="match_community_list",
+    )
+
+    communitylist = models.ForeignKey(
+        to='CommunityList',
+        on_delete=models.CASCADE,
+        related_name="+",
+        related_query_name="+",
+    )
+
+    class Meta:
+        app_label = 'netbox_bgp'
+        db_table = 'netbox_bgp_routingpolicyrule_match_community_list'
+        managed = False
+
+
+class RoutingPolicyRule_Match_ASPathList(models.Model):
+
+    routingpolicyrule = models.ForeignKey(
+        to='RoutingPolicyRule',
+        on_delete=models.CASCADE,
+        related_name="match_aspath_list",
+        related_query_name="match_aspath_list",
+    )
+
+    aspathlist = models.ForeignKey(
+        to='ASPathList',
+        on_delete=models.CASCADE,
+        related_name="+",
+        related_query_name="+",
+    )
+
+    class Meta:
+        app_label = 'netbox_bgp'
+        db_table = 'netbox_bgp_routingpolicyrule_match_aspath_list'
+        managed = False
+
+
+class RoutingPolicyRule_Match_IPAddress(models.Model):
+
+    routingpolicyrule = models.ForeignKey(
+        to='RoutingPolicyRule',
+        on_delete=models.CASCADE,
+        related_name="match_ip_address",
+        related_query_name="match_ip_address",
+    )
+
+    prefixlist = models.ForeignKey(
+        to='PrefixList',
+        on_delete=models.CASCADE,
+        related_name="+",
+        related_query_name="+",
+    )
+
+    class Meta:
+        app_label = 'netbox_bgp'
+        db_table = 'netbox_bgp_routingpolicyrule_match_ip_address'
+        managed = False
+
+
+class RoutingPolicyRule_Match_IPV6Address(models.Model):
+
+    routingpolicyrule = models.ForeignKey(
+        to='RoutingPolicyRule',
+        on_delete=models.CASCADE,
+        related_name="match_ipv6_address",
+        related_query_name="match_ipv6_address",
+    )
+
+    prefixlist = models.ForeignKey(
+        to='PrefixList',
+        on_delete=models.CASCADE,
+        related_name="+",
+        related_query_name="+",
+    )
+
+    class Meta:
+        app_label = 'netbox_bgp'
+        db_table = 'netbox_bgp_routingpolicyrule_match_ipv6_address'
         managed = False

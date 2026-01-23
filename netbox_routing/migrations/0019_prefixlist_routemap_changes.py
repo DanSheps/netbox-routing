@@ -75,7 +75,7 @@ class Migration(migrations.Migration):
                 ),
                 ('description', models.CharField(blank=True, max_length=200)),
                 ('comments', models.TextField(blank=True)),
-                ('name', models.CharField(max_length=255)),
+                ('name', models.CharField(max_length=100)),
                 (
                     'owner',
                     models.ForeignKey(
@@ -121,14 +121,6 @@ class Migration(migrations.Migration):
                 ('sequence', models.PositiveSmallIntegerField()),
                 ('action', models.CharField(max_length=6)),
                 (
-                    'asn',
-                    models.ForeignKey(
-                        on_delete=django.db.models.deletion.PROTECT,
-                        related_name='entries',
-                        to='ipam.asn',
-                    ),
-                ),
-                (
                     'aspath',
                     models.ForeignKey(
                         on_delete=django.db.models.deletion.PROTECT,
@@ -145,6 +137,7 @@ class Migration(migrations.Migration):
                         to='users.owner',
                     ),
                 ),
+                ('pattern', models.CharField(max_length=200)),
                 (
                     'tags',
                     taggit.managers.TaggableManager(
@@ -159,6 +152,16 @@ class Migration(migrations.Migration):
                 netbox.models.deletion.DeleteMixin,
                 models.Model,
             ),
+        ),
+        migrations.AlterField(
+            model_name='prefixlist',
+            name='name',
+            field=models.CharField(max_length=100),
+        ),
+        migrations.AlterField(
+            model_name='routemap',
+            name='name',
+            field=models.CharField(max_length=100),
         ),
         migrations.AddConstraint(
             model_name='aspath',

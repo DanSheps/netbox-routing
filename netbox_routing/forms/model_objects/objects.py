@@ -45,7 +45,7 @@ class ASPathEntryForm(PrimaryModelForm):
             'aspath',
             'sequence',
             'action',
-            'asn',
+            'pattern',
             'description',
             'comments',
             'tags',

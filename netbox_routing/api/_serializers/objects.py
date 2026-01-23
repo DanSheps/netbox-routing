@@ -1,6 +1,5 @@
 from rest_framework import serializers
 
-from ipam.api.serializers_.asns import ASNSerializer
 from netbox.api.serializers import NetBoxModelSerializer
 from netbox_routing.models.objects import *
 
@@ -134,7 +133,6 @@ class ASPathEntrySerializer(NetBoxModelSerializer):
         view_name='plugins-api:netbox_routing-api:aspathentry-detail'
     )
     aspath = ASPathSerializer(nested=True)
-    asn = ASNSerializer(nested=True)
 
     class Meta:
         model = ASPathEntry
@@ -145,7 +143,7 @@ class ASPathEntrySerializer(NetBoxModelSerializer):
             'aspath',
             'sequence',
             'action',
-            'asn',
+            'pattern',
             'description',
             'comments',
         )
@@ -156,5 +154,5 @@ class ASPathEntrySerializer(NetBoxModelSerializer):
             'aspath',
             'sequence',
             'action',
-            'asn',
+            'pattern',
         )

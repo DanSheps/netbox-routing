@@ -133,7 +133,11 @@ class BGPRouterFilterSet(NetBoxModelFilterSet):
     def search(self, queryset, name, value):
         if not value.strip():
             return queryset
-        qs_filter = Q(device__name__icontains=value) | Q(asn__asn__icontains=value)
+        qs_filter = (
+            Q(name__icontains=value)
+            | Q(device__name__icontains=value)
+            | Q(asn__asn__icontains=value)
+        )
         return queryset.filter(qs_filter).distinct()
 
 
@@ -243,7 +247,8 @@ class BGPPeerFilterSet(NetBoxModelFilterSet):
     def search(self, queryset, name, value):
         if not value.strip():
             return queryset
-        qs_filter = Q(peer__address__icontains=value)
+        qs_filter = Q(name__icontains=value)
+        qs_filter |= Q(peer__address__icontains=value)
         qs_filter |= Q(remote_as__asn__icontains=value)
         qs_filter |= Q(local_as__asn__icontains=value)
         return queryset.filter(qs_filter).distinct()

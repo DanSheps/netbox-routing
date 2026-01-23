@@ -35,7 +35,7 @@ class Migration(migrations.Migration):
                 ),
                 ('description', models.CharField(blank=True, max_length=200)),
                 ('comments', models.TextField(blank=True)),
-                ('name', models.CharField(max_length=255)),
+                ('name', models.CharField(max_length=100)),
                 ('enabled', models.BooleanField(blank=True, null=True)),
                 ('bfd', models.CharField(blank=True, max_length=50, null=True)),
                 ('password', models.CharField(blank=True, max_length=255, null=True)),
@@ -123,7 +123,7 @@ class Migration(migrations.Migration):
                 ),
                 ('description', models.CharField(blank=True, max_length=200)),
                 ('comments', models.TextField(blank=True)),
-                ('name', models.CharField(max_length=255)),
+                ('name', models.CharField(max_length=100)),
                 ('enabled', models.BooleanField(blank=True, null=True)),
                 (
                     'owner',
@@ -225,7 +225,7 @@ class Migration(migrations.Migration):
                 ),
                 ('description', models.CharField(blank=True, max_length=200)),
                 ('comments', models.TextField(blank=True)),
-                ('name', models.CharField(max_length=255)),
+                ('name', models.CharField(max_length=100)),
                 ('enabled', models.BooleanField(blank=True, null=True)),
                 (
                     'owner',
@@ -334,6 +334,12 @@ class Migration(migrations.Migration):
                     ),
                 ),
                 (
+                    'name',
+                    models.CharField(
+                        max_length=100,
+                    ),
+                ),
+                (
                     'peer_templates',
                     models.ManyToManyField(
                         related_name='routers', to='netbox_routing.bgppeertemplate'
@@ -380,7 +386,12 @@ class Migration(migrations.Migration):
             options={
                 'verbose_name': 'BGP Router',
                 'verbose_name_plural': 'BGP Routers',
-                'ordering': ('assigned_object_type', 'assigned_object_id', 'asn'),
+                'ordering': (
+                    'assigned_object_type',
+                    'assigned_object_id',
+                    'asn',
+                    'name',
+                ),
             },
             bases=(netbox.models.deletion.DeleteMixin, models.Model),
         ),
@@ -698,6 +709,12 @@ class Migration(migrations.Migration):
                     ),
                 ),
                 (
+                    'name',
+                    models.CharField(
+                        max_length=100,
+                    ),
+                ),
+                (
                     'owner',
                     models.ForeignKey(
                         blank=True,
@@ -708,9 +725,19 @@ class Migration(migrations.Migration):
                 ),
                 (
                     'peer',
-                    models.OneToOneField(
+                    models.ForeignKey(
                         on_delete=django.db.models.deletion.PROTECT,
-                        related_name='peers',
+                        related_name='remote_peers',
+                        to='ipam.ipaddress',
+                    ),
+                ),
+                (
+                    'source',
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.PROTECT,
+                        related_name='source_peers',
                         to='ipam.ipaddress',
                     ),
                 ),
@@ -774,7 +801,7 @@ class Migration(migrations.Migration):
             options={
                 'verbose_name': 'BGP Peer',
                 'verbose_name_plural': 'BGP Peers',
-                'ordering': ('scope', 'peer'),
+                'ordering': ('scope', 'peer', 'name'),
             },
             bases=(netbox.models.deletion.DeleteMixin, models.Model),
         ),
@@ -918,9 +945,29 @@ class Migration(migrations.Migration):
             ),
         ),
         migrations.AddConstraint(
+            model_name='bgprouter',
+            constraint=models.UniqueConstraint(
+                condition=models.Q(
+                    ('assigned_object_type__isnull', True),
+                    ('assigned_object_id__isnull', True),
+                ),
+                fields=('asn', 'name'),
+                name='netbox_routing_bgprouter_asn_name',
+            ),
+        ),
+        migrations.AddConstraint(
             model_name='bgppeer',
             constraint=models.UniqueConstraint(
-                fields=('scope', 'peer'), name='netbox_routing_bgppeer_scope_peer'
+                fields=('scope', 'peer', 'name'),
+                name='netbox_routing_bgppeer_scope_peer_name',
+            ),
+        ),
+        migrations.AddConstraint(
+            model_name='bgppeer',
+            constraint=models.UniqueConstraint(
+                condition=models.Q(('scope__isnull', True)),
+                fields=('peer', 'name'),
+                name='netbox_routing_bgppeer_peer_name',
             ),
         ),
         migrations.AddConstraint(
@@ -928,6 +975,15 @@ class Migration(migrations.Migration):
             constraint=models.UniqueConstraint(
                 fields=('assigned_object_type', 'assigned_object_id', 'key'),
                 name='netbox_routing_bgpsettings_unique',
+            ),
+        ),
+        migrations.AddConstraint(
+            model_name='bgprouter',
+            constraint=models.CheckConstraint(
+                condition=models.Q(
+                    ('asn__isnull', False), ('name__isnull', False), _connector='OR'
+                ),
+                name='netbox_routing_bgprouter_identifier',
             ),
         ),
     ]

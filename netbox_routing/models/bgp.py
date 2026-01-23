@@ -57,7 +57,7 @@ class BGPSetting(PrimaryModel):
 
 
 class BGPSessionTemplate(PrimaryModel):
-    name = models.CharField(verbose_name=_('Name'), max_length=255)
+    name = models.CharField(verbose_name=_('Name'), max_length=100)
     parent = models.ForeignKey(
         verbose_name=_('Parent'),
         to='netbox_routing.BGPSessionTemplate',
@@ -133,7 +133,7 @@ class BGPSessionTemplate(PrimaryModel):
 
 
 class BGPPolicyTemplate(PrimaryModel):
-    name = models.CharField(verbose_name=_('Name'), max_length=255)
+    name = models.CharField(verbose_name=_('Name'), max_length=100)
     parents = models.ManyToManyField(
         verbose_name=_('Parent Policies'),
         to='netbox_routing.BGPPolicyTemplate',
@@ -208,7 +208,7 @@ class BGPPolicyTemplate(PrimaryModel):
 
 
 class BGPPeerTemplate(PrimaryModel):
-    name = models.CharField(verbose_name=_('Name'), max_length=255)
+    name = models.CharField(verbose_name=_('Name'), max_length=100)
     remote_as = models.ForeignKey(
         verbose_name=_('Remote AS'),
         to='ipam.ASN',
@@ -225,14 +225,6 @@ class BGPPeerTemplate(PrimaryModel):
         related_name='bgp_peer_templates',
         blank=True,
         null=True,
-    )
-    peers = GenericRelation(
-        verbose_name=_('Address Families'),
-        to='netbox_routing.BGPPeer',
-        related_query_name='peer_group',
-        related_name='peer_group',
-        content_type_field='assigned_object_type',
-        object_id_field='assigned_object_id',
     )
     address_families = GenericRelation(
         verbose_name=_('Address Families'),
@@ -261,6 +253,7 @@ class BGPPeerTemplate(PrimaryModel):
 
 
 class BGPRouter(PrimaryModel):
+    name = models.CharField(verbose_name=_('Name'), max_length=100)
     assigned_object_type = models.ForeignKey(
         verbose_name=_('Assigned Object Type'),
         to=ContentType,
@@ -337,16 +330,40 @@ class BGPRouter(PrimaryModel):
             'assigned_object_type',
             'assigned_object_id',
             'asn',
+            'name',
         )
         constraints = [
             models.UniqueConstraint(
-                fields=('assigned_object_type', 'assigned_object_id', 'asn'),
+                fields=(
+                    'assigned_object_type',
+                    'assigned_object_id',
+                    'asn',
+                ),
                 name='%(app_label)s_%(class)s_assigned_object_asn',
+            ),
+            models.UniqueConstraint(
+                fields=(
+                    'asn',
+                    'name',
+                ),
+                name='%(app_label)s_%(class)s_asn_name',
+                condition=Q(assigned_object_type__isnull=True)
+                & Q(assigned_object_id__isnull=True),
+            ),
+            models.CheckConstraint(
+                name='%(app_label)s_%(class)s_identifier',
+                condition=models.Q(asn__isnull=False) | models.Q(name__isnull=False),
             ),
         ]
 
     def __str__(self):
-        return f'{self.assigned_object} ({self.asn})'
+        if self.name:
+            if self.assigned_object:
+                return f'{self.name} ({self.assigned_object}:{self.asn})'
+            return f'{self.name} ({self.asn})'
+        elif self.assigned_object:
+            return f'{self.assigned_object}:{self.asn}'
+        return f'{self.asn}'
 
     def get_absolute_url(self):
         return reverse('plugins:netbox_routing:bgprouter', args=[self.pk])
@@ -468,6 +485,10 @@ class BGPAddressFamily(PrimaryModel):
 
 
 class BGPPeer(PrimaryModel):
+    name = models.CharField(
+        verbose_name=_('Name'),
+        max_length=100,
+    )
     scope = models.ForeignKey(
         verbose_name=_('Scope'),
         to='netbox_routing.BGPScope',
@@ -476,13 +497,21 @@ class BGPPeer(PrimaryModel):
         blank=True,
         null=True,
     )
-    peer = models.OneToOneField(
+    peer = models.ForeignKey(
         verbose_name=_('Peer Address'),
         to='ipam.IPAddress',
         on_delete=models.PROTECT,
-        related_name='peers',
+        related_name='remote_peers',
         blank=False,
         null=False,
+    )
+    source = models.ForeignKey(
+        verbose_name=_('Source Address'),
+        to='ipam.IPAddress',
+        on_delete=models.PROTECT,
+        related_name='source_peers',
+        blank=True,
+        null=True,
     )
     peer_group = models.ForeignKey(
         verbose_name=_('Peer Group'),
@@ -564,11 +593,20 @@ class BGPPeer(PrimaryModel):
         ordering = (
             'scope',
             'peer',
+            'name',
         )
         constraints = [
             models.UniqueConstraint(
-                fields=('scope', 'peer'),
-                name='%(app_label)s_%(class)s_scope_peer',
+                fields=('scope', 'peer', 'name'),
+                name='%(app_label)s_%(class)s_scope_peer_name',
+            ),
+            models.UniqueConstraint(
+                fields=(
+                    'peer',
+                    'name',
+                ),
+                name='%(app_label)s_%(class)s_peer_name',
+                condition=Q(scope__isnull=True),
             ),
         ]
 

@@ -112,7 +112,7 @@ class Migration(migrations.Migration):
                 ),
                 ('description', models.CharField(blank=True, max_length=200)),
                 ('comments', models.TextField(blank=True)),
-                ('name', models.CharField(max_length=255)),
+                ('name', models.CharField(max_length=100)),
                 (
                     'owner',
                     models.ForeignKey(
@@ -205,5 +205,11 @@ class Migration(migrations.Migration):
                 'ordering': ('community_list', 'community'),
             },
             bases=(netbox.models.deletion.DeleteMixin, models.Model),
+        ),
+        migrations.AddConstraint(
+            model_name='community',
+            constraint=models.UniqueConstraint(
+                fields=('community',), name='netbox_routing_community_community'
+            ),
         ),
     ]

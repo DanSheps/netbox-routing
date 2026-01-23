@@ -3,7 +3,6 @@ import netaddr
 from django.db.models import Q
 from django.utils.translation import gettext as _
 
-from ipam.models import ASN
 from netbox.filtersets import NetBoxModelFilterSet
 
 from netbox_routing.models.objects import *
@@ -113,17 +112,6 @@ class ASPathEntryFilterSet(NetBoxModelFilterSet):
         to_field_name='name',
         label=_('AS-Path (Name)'),
     )
-    asn_id = django_filters.ModelMultipleChoiceFilter(
-        field_name='asn',
-        queryset=ASN.objects.all(),
-        label=_('ASN (ID)'),
-    )
-    aspath = django_filters.ModelMultipleChoiceFilter(
-        field_name='asn__asn',
-        queryset=ASN.objects.all(),
-        to_field_name='asn',
-        label=_('ASN (ASN)'),
-    )
 
     class Meta:
         model = ASPathEntry
@@ -131,8 +119,6 @@ class ASPathEntryFilterSet(NetBoxModelFilterSet):
             'aspath_id',
             'aspath',
             'action',
-            'asn_id',
-            'asn',
         )
 
     def search(self, queryset, name, value):
@@ -140,7 +126,7 @@ class ASPathEntryFilterSet(NetBoxModelFilterSet):
             return queryset
         qs_filter = (
             Q(aspath__name__icontains=value)
-            | Q(asn__asn__icontains=value)
+            | Q(pattern__icontains=value)
             | Q(action=value)
         )
         return queryset.filter(qs_filter).distinct()

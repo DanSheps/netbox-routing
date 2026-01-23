@@ -16,7 +16,7 @@ __all__ = (
 class CommunityList(PrimaryModel):
     name = models.CharField(
         verbose_name=_('List'),
-        max_length=255,
+        max_length=100,
     )
     tenant = models.ForeignKey(
         verbose_name=_('Tenant'),
@@ -75,6 +75,12 @@ class Community(PrimaryModel):
         verbose_name = _('Community')
         verbose_name_plural = 'Communities'
         ordering = ['community']
+        constraints = [
+            models.UniqueConstraint(
+                fields=('community',),
+                name='%(app_label)s_%(class)s_community',
+            ),
+        ]
 
     def __str__(self):
         return f'{self.community}'

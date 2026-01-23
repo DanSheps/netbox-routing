@@ -463,6 +463,9 @@ class BGPRouterForm(BGPSettingMixin, TenancyForm, PrimaryModelForm):
 
     fieldsets = [
         FieldSet(
+            'name',
+        ),
+        FieldSet(
             TabbedGroups(
                 FieldSet(
                     'region', 'site_group', 'site', 'location', name=_('Locations')
@@ -490,6 +493,7 @@ class BGPRouterForm(BGPSettingMixin, TenancyForm, PrimaryModelForm):
     class Meta:
         model = BGPRouter
         fields = [
+            'name',
             'region',
             'site_group',
             'site',
@@ -662,6 +666,9 @@ class BGPPeerForm(BGPSettingMixin, TenancyForm, PrimaryModelForm):
     )
 
     fieldsets = (
+        FieldSet(
+            'name',
+        ),
         FieldSet('scope', 'peer', name=_('Peer')),
         FieldSet('remote_as', 'local_as', name=_('ASNs')),
         FieldSet('enabled', 'bfd', 'password', name=_('Peer Settings')),
@@ -671,6 +678,7 @@ class BGPPeerForm(BGPSettingMixin, TenancyForm, PrimaryModelForm):
     class Meta:
         model = BGPPeer
         fields = [
+            'name',
             'scope',
             'peer',
             'remote_as',
