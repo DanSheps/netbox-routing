@@ -6,7 +6,6 @@ from utilities.forms.rendering import FieldSet
 
 from netbox_routing.models.objects import *
 
-
 __all__ = (
     'PrefixListEntryBulkEditForm',
     'RouteMapEntryBulkEditForm',

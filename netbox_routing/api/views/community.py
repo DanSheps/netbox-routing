@@ -3,7 +3,6 @@ from netbox_routing import filtersets
 from netbox_routing.api._serializers.community import *
 from netbox_routing.models.community import *
 
-
 __all__ = (
     'CommunityListViewSet',
     'CommunityViewSet',

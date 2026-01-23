@@ -11,7 +11,6 @@ from utilities.forms.fields import (
 from netbox_routing.models.community import Community, CommunityList
 from netbox_routing.models.objects import *
 
-
 __all__ = (
     'PrefixListForm',
     'PrefixListEntryForm',

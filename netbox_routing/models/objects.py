@@ -14,7 +14,6 @@ from ipam.fields import IPNetworkField
 from netbox.models import PrimaryModel
 from netbox_routing.choices import ActionChoices
 
-
 __all__ = (
     'RouteMap',
     'RouteMapEntry',

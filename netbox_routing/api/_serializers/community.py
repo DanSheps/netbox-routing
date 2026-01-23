@@ -5,7 +5,6 @@ from tenancy.api.serializers_.tenants import TenantSerializer
 
 from netbox_routing.models.community import *
 
-
 __all__ = (
     'CommunityListSerializer',
     'CommunitySerializer',

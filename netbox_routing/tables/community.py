@@ -4,7 +4,6 @@ from django.utils.translation import gettext_lazy as _
 from netbox.tables import NetBoxTable
 from netbox_routing.models.community import *
 
-
 __all__ = (
     'CommunityTable',
     'CommunityListTable',

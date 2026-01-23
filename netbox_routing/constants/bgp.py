@@ -1,6 +1,5 @@
 from django.db.models import Q
 
-
 __all__ = (
     'BGPROUTER_ASSIGNMENT_MODEL',
     'BGPSETTING_ASSIGNMENT_MODELS',

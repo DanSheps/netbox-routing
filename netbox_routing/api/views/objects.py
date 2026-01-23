@@ -3,7 +3,6 @@ from netbox_routing import filtersets
 from netbox_routing.api._serializers.objects import *
 from netbox_routing.models.objects import *
 
-
 __all__ = (
     'PrefixListViewSet',
     'PrefixListEntryViewSet',

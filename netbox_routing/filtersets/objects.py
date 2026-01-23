@@ -7,7 +7,6 @@ from netbox.filtersets import NetBoxModelFilterSet
 
 from netbox_routing.models.objects import *
 
-
 __all__ = (
     'PrefixListFilterSet',
     'PrefixListEntryFilterSet',

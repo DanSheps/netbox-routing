@@ -11,7 +11,6 @@ from utilities.forms.rendering import FieldSet
 
 from netbox_routing.models.community import *
 
-
 __all__ = (
     'CommunityListFilterForm',
     'CommunityListEntryFilterForm',
