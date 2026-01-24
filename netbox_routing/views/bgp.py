@@ -23,6 +23,24 @@ __all__ = (
     'BGPSettingDeleteView',
     'BGPSettingBulkEditView',
     'BGPSettingBulkDeleteView',
+    'BGPPeerTemplateListView',
+    'BGPPeerTemplateView',
+    'BGPPeerTemplateEditView',
+    'BGPPeerTemplateDeleteView',
+    'BGPPeerTemplateBulkEditView',
+    'BGPPeerTemplateBulkDeleteView',
+    'BGPPolicyTemplateListView',
+    'BGPPolicyTemplateView',
+    'BGPPolicyTemplateEditView',
+    'BGPPolicyTemplateDeleteView',
+    'BGPPolicyTemplateBulkEditView',
+    'BGPPolicyTemplateBulkDeleteView',
+    'BGPSessionTemplateListView',
+    'BGPSessionTemplateView',
+    'BGPSessionTemplateEditView',
+    'BGPSessionTemplateDeleteView',
+    'BGPSessionTemplateBulkEditView',
+    'BGPSessionTemplateBulkDeleteView',
     'BGPRouterListView',
     'BGPRouterView',
     'BGPRouterEditView',
@@ -59,9 +77,9 @@ class BGPSettingViewMixin:
 @register_model_view(BGPSetting, name='list', path='', detail=False)
 class BGPSettingListView(ObjectListView):
     queryset = BGPSetting.objects.all()
-    table = BGPSettingTable
     filterset = BGPSettingFilterSet
     filterset_form = BGPSettingFilterForm
+    table = BGPSettingTable
 
 
 @register_model_view(BGPSetting)
@@ -102,9 +120,9 @@ class BGPSettingBulkDeleteView(BulkDeleteView):
 @register_model_view(BGPPeerTemplate, name='list', path='', detail=False)
 class BGPPeerTemplateListView(ObjectListView):
     queryset = BGPPeerTemplate.objects.all()
-    table = BGPPeerTemplateTable
     filterset = BGPPeerTemplateFilterSet
     filterset_form = BGPPeerTemplateFilterForm
+    table = BGPPeerTemplateTable
 
 
 @register_model_view(BGPPeerTemplate)
@@ -124,12 +142,27 @@ class BGPPeerTemplateDeleteView(ObjectDeleteView):
     queryset = BGPPeerTemplate.objects.all()
 
 
+@register_model_view(BGPPeerTemplate, name='bulk_edit', detail=False)
+class BGPPeerTemplateBulkEditView(BulkEditView):
+    queryset = BGPPeerTemplate.objects.all()
+    filterset = BGPPeerTemplateFilterSet
+    form = BGPPeerTemplateBulkEditForm
+    table = BGPPeerTemplateTable
+
+
+@register_model_view(BGPPeerTemplate, name='bulk_delete', detail=False)
+class BGPPeerTemplateBulkDeleteView(BulkDeleteView):
+    queryset = BGPPeerTemplate.objects.all()
+    filterset = BGPPeerTemplateFilterSet
+    table = BGPPeerTemplateTable
+
+
 @register_model_view(BGPPolicyTemplate, name='list', path='', detail=False)
 class BGPPolicyTemplateListView(ObjectListView):
     queryset = BGPPolicyTemplate.objects.all()
-    table = BGPPolicyTemplateTable
     filterset = BGPPolicyTemplateFilterSet
     filterset_form = BGPPolicyTemplateFilterForm
+    table = BGPPolicyTemplateTable
 
 
 @register_model_view(BGPPolicyTemplate)
@@ -149,12 +182,27 @@ class BGPPolicyTemplateDeleteView(ObjectDeleteView):
     queryset = BGPPolicyTemplate.objects.all()
 
 
+@register_model_view(BGPPolicyTemplate, name='bulk_edit', detail=False)
+class BGPPolicyTemplateBulkEditView(BulkEditView):
+    queryset = BGPPolicyTemplate.objects.all()
+    filterset = BGPPolicyTemplateFilterSet
+    form = BGPPolicyTemplateBulkEditForm
+    table = BGPPolicyTemplateTable
+
+
+@register_model_view(BGPPolicyTemplate, name='bulk_delete', detail=False)
+class BGPPolicyTemplateBulkDeleteView(BulkDeleteView):
+    queryset = BGPPolicyTemplate.objects.all()
+    filterset = BGPPolicyTemplateFilterSet
+    table = BGPPolicyTemplateTable
+
+
 @register_model_view(BGPSessionTemplate, name='list', path='', detail=False)
 class BGPSessionTemplateListView(ObjectListView):
     queryset = BGPSessionTemplate.objects.all()
-    table = BGPSessionTemplateTable
     filterset = BGPSessionTemplateFilterSet
     filterset_form = BGPSessionTemplateFilterForm
+    table = BGPSessionTemplateTable
 
 
 @register_model_view(BGPSessionTemplate)
@@ -174,15 +222,30 @@ class BGPSessionTemplateDeleteView(ObjectDeleteView):
     queryset = BGPSessionTemplate.objects.all()
 
 
+@register_model_view(BGPSessionTemplate, name='bulk_edit', detail=False)
+class BGPSessionTemplateBulkEditView(BulkEditView):
+    queryset = BGPSessionTemplate.objects.all()
+    filterset = BGPSessionTemplateFilterSet
+    form = BGPSessionTemplateBulkEditForm
+    table = BGPSessionTemplateTable
+
+
+@register_model_view(BGPSessionTemplate, name='bulk_delete', detail=False)
+class BGPSessionTemplateBulkDeleteView(BulkDeleteView):
+    queryset = BGPSessionTemplate.objects.all()
+    filterset = BGPSessionTemplateFilterSet
+    table = BGPSessionTemplateTable
+
+
 #
 # BGP Router Views
 #
 @register_model_view(BGPRouter, name='list', path='', detail=False)
 class BGPRouterListView(ObjectListView):
     queryset = BGPRouter.objects.all()
-    table = BGPRouterTable
     filterset = BGPRouterFilterSet
     filterset_form = BGPRouterFilterForm
+    table = BGPRouterTable
 
 
 @register_model_view(BGPRouter)
@@ -236,9 +299,9 @@ class BGPRouterSettingsView(BGPSettingViewMixin, ObjectChildrenView):
 class BGPRouterPeerTemplatesView(ObjectChildrenView):
     queryset = BGPRouter.objects.all()
     child_model = BGPPeerTemplate
-    table = BGPPeerTemplateTable
     filterset = BGPPeerTemplateFilterSet
     filterset_form = BGPPeerTemplateFilterForm
+    table = BGPPeerTemplateTable
     actions = (CloneObject, EditObject, DeleteObject)
     tab = ViewTab(
         label='Peer Templates',
@@ -253,9 +316,9 @@ class BGPRouterPeerTemplatesView(ObjectChildrenView):
 class BGPRouterPolicyTemplatesView(ObjectChildrenView):
     queryset = BGPRouter.objects.all()
     child_model = BGPPolicyTemplate
-    table = BGPPolicyTemplateTable
     filterset = BGPPolicyTemplateFilterSet
     filterset_form = BGPPolicyTemplateFilterForm
+    table = BGPPolicyTemplateTable
     actions = (CloneObject, EditObject, DeleteObject)
     tab = ViewTab(
         label='Policy Templates',
@@ -270,9 +333,9 @@ class BGPRouterPolicyTemplatesView(ObjectChildrenView):
 class BGPRouterSessionTemplatesView(ObjectChildrenView):
     queryset = BGPRouter.objects.all()
     child_model = BGPSessionTemplate
-    table = BGPSessionTemplateTable
     filterset = BGPSessionTemplateFilterSet
     filterset_form = BGPSessionTemplateFilterForm
+    table = BGPSessionTemplateTable
     actions = (CloneObject, EditObject, DeleteObject)
     tab = ViewTab(
         label='Session Templates',
@@ -446,9 +509,9 @@ class BGPPeerSettingsView(BGPSettingViewMixin, ObjectChildrenView):
 class BGPPeerAddressFamiliesView(ObjectChildrenView):
     queryset = BGPPeer.objects.all()
     child_model = BGPPeerAddressFamily
-    table = BGPPeerAddressFamilyTable
     filterset = BGPPeerAddressFamilyFilterSet
     filterset_form = BGPPeerAddressFamilyFilterForm
+    table = BGPPeerAddressFamilyTable
     actions = ObjectChildrenView.actions
     tab = ViewTab(
         label='Address Families',
