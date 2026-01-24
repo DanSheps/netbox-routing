@@ -7,11 +7,24 @@ from utilities.forms.rendering import FieldSet
 from netbox_routing.models.objects import *
 
 __all__ = (
+    'PrefixListBulkEditForm',
     'PrefixListEntryBulkEditForm',
+    'RouteMapBulkEditForm',
     'RouteMapEntryBulkEditForm',
     'ASPathBulkEditForm',
     'ASPathEntryBulkEditForm',
 )
+
+
+class PrefixListBulkEditForm(NetBoxModelBulkEditForm):
+
+    model = PrefixList
+    fieldsets = (
+        FieldSet(
+            'description',
+        ),
+    )
+    nullable_fields = ('description',)
 
 
 class PrefixListEntryBulkEditForm(NetBoxModelBulkEditForm):
@@ -23,8 +36,24 @@ class PrefixListEntryBulkEditForm(NetBoxModelBulkEditForm):
     )
 
     model = PrefixListEntry
-    fieldsets = (FieldSet('prefix_list'),)
-    nullable_fields = ()
+    fieldsets = (
+        FieldSet(
+            'prefix_list',
+            'description',
+        ),
+    )
+    nullable_fields = ('description',)
+
+
+class RouteMapBulkEditForm(NetBoxModelBulkEditForm):
+
+    model = RouteMap
+    fieldsets = (
+        FieldSet(
+            'description',
+        ),
+    )
+    nullable_fields = ('description',)
 
 
 class RouteMapEntryBulkEditForm(NetBoxModelBulkEditForm):
@@ -36,15 +65,24 @@ class RouteMapEntryBulkEditForm(NetBoxModelBulkEditForm):
     )
 
     model = RouteMapEntry
-    fieldsets = (FieldSet('route_map'),)
-    nullable_fields = ()
+    fieldsets = (
+        FieldSet(
+            'route_map',
+            'description',
+        ),
+    )
+    nullable_fields = ('description',)
 
 
 class ASPathBulkEditForm(NetBoxModelBulkEditForm):
 
     model = ASPath
-    fieldsets = ()
-    nullable_fields = ()
+    fieldsets = (
+        FieldSet(
+            'description',
+        ),
+    )
+    nullable_fields = ('description',)
 
 
 class ASPathEntryBulkEditForm(NetBoxModelBulkEditForm):
@@ -56,5 +94,10 @@ class ASPathEntryBulkEditForm(NetBoxModelBulkEditForm):
     )
 
     model = ASPathEntry
-    fieldsets = (FieldSet('aspath'),)
-    nullable_fields = ()
+    fieldsets = (
+        FieldSet(
+            'aspath',
+            'description',
+        ),
+    )
+    nullable_fields = ('description',)

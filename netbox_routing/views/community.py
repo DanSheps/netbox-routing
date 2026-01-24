@@ -4,6 +4,8 @@ from netbox.views.generic import (
     ObjectEditView,
     ObjectDeleteView,
     ObjectChildrenView,
+    BulkEditView,
+    BulkDeleteView,
 )
 from utilities.views import register_model_view, ViewTab
 
@@ -18,14 +20,20 @@ __all__ = (
     'CommunityListEditView',
     'CommunityListDeleteView',
     'CommunityListEntriesView',
+    'CommunityListBulkEditView',
+    'CommunityListBulkDeleteView',
     'CommunityListView',
     'CommunityDetailView',
     'CommunityEditView',
     'CommunityDeleteView',
+    'CommunityBulkEditView',
+    'CommunityBulkDeleteView',
     'CommunityListEntryListView',
     'CommunityListEntryDetailView',
     'CommunityListEntryEditView',
     'CommunityListEntryDeleteView',
+    'CommunityListEntryBulkEditView',
+    'CommunityListEntryBulkDeleteView',
 )
 
 
@@ -77,6 +85,21 @@ class CommunityListEntriesView(ObjectChildrenView):
         return self.child_model.objects.filter(community_list=parent)
 
 
+@register_model_view(CommunityList, name='bulk_edit', detail=False)
+class CommunityListBulkEditView(BulkEditView):
+    queryset = CommunityList.objects.all()
+    filterset = CommunityListFilterForm
+    form = CommunityListBulkEditForm
+    table = CommunityListTable
+
+
+@register_model_view(CommunityList, name='bulk_delete', detail=False)
+class CommunityListBulkDeleteView(BulkDeleteView):
+    queryset = CommunityList.objects.all()
+    filterset = CommunityListFilterForm
+    table = CommunityListTable
+
+
 #
 # Community
 #
@@ -108,6 +131,21 @@ class CommunityDeleteView(ObjectDeleteView):
     queryset = Community.objects.all()
 
 
+@register_model_view(Community, name='bulk_edit', detail=False)
+class CommunityBulkEditView(BulkEditView):
+    queryset = Community.objects.all()
+    filterset = CommunityFilterForm
+    form = CommunityBulkEditForm
+    table = CommunityTable
+
+
+@register_model_view(Community, name='bulk_delete', detail=False)
+class CommunityBulkDeleteView(BulkDeleteView):
+    queryset = Community.objects.all()
+    filterset = CommunityFilterForm
+    table = CommunityTable
+
+
 #
 # Community List Entry
 #
@@ -137,3 +175,18 @@ class CommunityListEntryEditView(ObjectEditView):
 @register_model_view(CommunityListEntry, name='delete')
 class CommunityListEntryDeleteView(ObjectDeleteView):
     queryset = CommunityListEntry.objects.all()
+
+
+@register_model_view(CommunityListEntry, name='bulk_edit', detail=False)
+class CommunityListEntryBulkEditView(BulkEditView):
+    queryset = CommunityListEntry.objects.all()
+    filterset = CommunityListEntryFilterForm
+    form = CommunityListEntryBulkEditForm
+    table = CommunityListEntryTable
+
+
+@register_model_view(CommunityListEntry, name='bulk_delete', detail=False)
+class CommunityListEntryBulkDeleteView(BulkDeleteView):
+    queryset = CommunityListEntry.objects.all()
+    filterset = CommunityListEntryFilterForm
+    table = CommunityListEntryTable

@@ -226,15 +226,42 @@ class RouteMapEntryBulkDeleteView(BulkDeleteView):
 @register_model_view(ASPath, name='list', path='', detail=False)
 class ASPathListView(ObjectListView):
     queryset = ASPath.objects.all()
-    table = ASPathTable
     filterset = ASPathFilterSet
     filterset_form = ASPathFilterForm
+    table = ASPathTable
 
 
 @register_model_view(ASPath)
 class ASPathView(ObjectView):
     queryset = ASPath.objects.all()
     template_name = 'netbox_routing/aspath.html'
+
+
+@register_model_view(ASPath, name='add', detail=False)
+@register_model_view(ASPath, name='edit')
+class ASPathEditView(ObjectEditView):
+    queryset = ASPath.objects.all()
+    form = ASPathForm
+
+
+@register_model_view(ASPath, name='delete')
+class ASPathDeleteView(ObjectDeleteView):
+    queryset = ASPath.objects.all()
+
+
+@register_model_view(ASPath, name='bulk_edit', detail=False)
+class ASPathBulkEditView(BulkEditView):
+    queryset = ASPath.objects.all()
+    filterset = ASPathFilterSet
+    form = ASPathBulkEditForm
+    table = ASPathTable
+
+
+@register_model_view(ASPath, name='bulk_delete', detail=False)
+class ASPathBulkDeleteView(BulkDeleteView):
+    queryset = ASPath.objects.all()
+    filterset = ASPathFilterSet
+    table = ASPathTable
 
 
 @register_model_view(ASPath, name='entries')
@@ -265,18 +292,6 @@ class ASPathEntriesView(ObjectChildrenView):
             'parent_view_path': 'entries',
             'view': 'aspathentry',
         }
-
-
-@register_model_view(ASPath, name='add', detail=False)
-@register_model_view(ASPath, name='edit')
-class ASPathEditView(ObjectEditView):
-    queryset = ASPath.objects.all()
-    form = ASPathForm
-
-
-@register_model_view(ASPath, name='delete')
-class ASPathDeleteView(ObjectDeleteView):
-    queryset = ASPath.objects.all()
 
 
 #

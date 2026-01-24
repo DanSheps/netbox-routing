@@ -5,6 +5,8 @@ from netbox.views.generic import (
     ObjectListView,
     ObjectDeleteView,
     ObjectChildrenView,
+    BulkEditView,
+    BulkDeleteView,
 )
 
 from utilities.views import register_model_view, ViewTab
@@ -19,18 +21,26 @@ __all__ = (
     'BGPSettingView',
     'BGPSettingEditView',
     'BGPSettingDeleteView',
+    'BGPSettingBulkEditView',
+    'BGPSettingBulkDeleteView',
     'BGPRouterListView',
     'BGPRouterView',
     'BGPRouterEditView',
     'BGPRouterDeleteView',
+    'BGPRouterBulkEditView',
+    'BGPRouterBulkDeleteView',
     'BGPScopeListView',
     'BGPScopeView',
     'BGPScopeEditView',
     'BGPScopeDeleteView',
+    'BGPScopeBulkEditView',
+    'BGPScopeBulkDeleteView',
     'BGPAddressFamilyListView',
     'BGPAddressFamilyView',
     'BGPAddressFamilyEditView',
     'BGPAddressFamilyDeleteView',
+    'BGPAddressFamilyBulkEditView',
+    'BGPAddressFamilyBulkDeleteView',
 )
 
 
@@ -69,6 +79,21 @@ class BGPSettingEditView(ObjectEditView):
 @register_model_view(BGPSetting, name='delete')
 class BGPSettingDeleteView(ObjectDeleteView):
     queryset = BGPSetting.objects.all()
+
+
+@register_model_view(BGPSetting, name='bulk_edit', detail=False)
+class BGPSettingBulkEditView(BulkEditView):
+    queryset = BGPSetting.objects.all()
+    filterset = BGPSettingFilterSet
+    form = BGPSettingBulkEditForm
+    table = BGPSettingTable
+
+
+@register_model_view(BGPSetting, name='bulk_delete', detail=False)
+class BGPSettingBulkDeleteView(BulkDeleteView):
+    queryset = BGPSetting.objects.all()
+    filterset = BGPSettingFilterSet
+    table = BGPSettingTable
 
 
 #
@@ -178,6 +203,21 @@ class BGPRouterDeleteView(ObjectDeleteView):
     queryset = BGPRouter.objects.all()
 
 
+@register_model_view(BGPRouter, name='bulk_edit', detail=False)
+class BGPRouterBulkEditView(BulkEditView):
+    queryset = BGPRouter.objects.all()
+    filterset = BGPRouterFilterSet
+    form = BGPRouterBulkEditForm
+    table = BGPRouterTable
+
+
+@register_model_view(BGPRouter, name='bulk_delete', detail=False)
+class BGPRouterBulkDeleteView(BulkDeleteView):
+    queryset = BGPRouter.objects.all()
+    filterset = BGPRouterFilterSet
+    table = BGPRouterTable
+
+
 @register_model_view(BGPRouter, name='settings')
 class BGPRouterSettingsView(BGPSettingViewMixin, ObjectChildrenView):
     queryset = BGPRouter.objects.all()
@@ -249,9 +289,9 @@ class BGPRouterSessionTemplatesView(ObjectChildrenView):
 @register_model_view(BGPScope, name='list', path='', detail=False)
 class BGPScopeListView(ObjectListView):
     queryset = BGPScope.objects.all()
-    table = BGPScopeTable
     filterset = BGPScopeFilterSet
     filterset_form = BGPScopeFilterForm
+    table = BGPScopeTable
 
 
 @register_model_view(BGPScope)
@@ -272,15 +312,30 @@ class BGPScopeDeleteView(ObjectDeleteView):
     queryset = BGPScope.objects.all()
 
 
+@register_model_view(BGPScope, name='bulk_edit', detail=False)
+class BGPScopeBulkEditView(BulkEditView):
+    queryset = BGPScope.objects.all()
+    filterset = BGPScopeFilterSet
+    form = BGPScopeBulkEditForm
+    table = BGPScopeTable
+
+
+@register_model_view(BGPScope, name='bulk_delete', detail=False)
+class BGPScopeBulkDeleteView(BulkDeleteView):
+    queryset = BGPScope.objects.all()
+    filterset = BGPScopeFilterSet
+    table = BGPScopeTable
+
+
 #
 # BGP Scope Views
 #
 @register_model_view(BGPAddressFamily, name='list', path='', detail=False)
 class BGPAddressFamilyListView(ObjectListView):
     queryset = BGPAddressFamily.objects.all()
-    table = BGPAddressFamilyTable
     filterset = BGPAddressFamilyFilterSet
     filterset_form = BGPAddressFamilyFilterForm
+    table = BGPAddressFamilyTable
 
 
 @register_model_view(BGPAddressFamily)
@@ -299,6 +354,21 @@ class BGPAddressFamilyEditView(ObjectEditView):
 @register_model_view(BGPAddressFamily, name='delete')
 class BGPAddressFamilyDeleteView(ObjectDeleteView):
     queryset = BGPAddressFamily.objects.all()
+
+
+@register_model_view(BGPAddressFamily, name='bulk_edit', detail=False)
+class BGPAddressFamilyBulkEditView(BulkEditView):
+    queryset = BGPAddressFamily.objects.all()
+    filterset = BGPAddressFamilyFilterSet
+    form = BGPAddressFamilyBulkEditForm
+    table = BGPAddressFamilyTable
+
+
+@register_model_view(BGPAddressFamily, name='bulk_delete', detail=False)
+class BGPAddressFamilyBulkDeleteView(BulkDeleteView):
+    queryset = BGPAddressFamily.objects.all()
+    filterset = BGPAddressFamilyFilterSet
+    table = BGPAddressFamilyTable
 
 
 @register_model_view(BGPAddressFamily, name='settings')
@@ -321,9 +391,9 @@ class BGPAddressFamilySettingsView(BGPSettingViewMixin, ObjectChildrenView):
 @register_model_view(BGPPeer, name='list', path='', detail=False)
 class BGPPeerListView(ObjectListView):
     queryset = BGPPeer.objects.all()
-    table = BGPPeerTable
     filterset = BGPPeerFilterSet
     filterset_form = BGPPeerFilterForm
+    table = BGPPeerTable
 
 
 @register_model_view(BGPPeer)
@@ -341,6 +411,21 @@ class BGPPeerEditView(ObjectEditView):
 @register_model_view(BGPPeer, name='delete')
 class BGPPeerDeleteView(ObjectDeleteView):
     queryset = BGPPeer.objects.all()
+
+
+@register_model_view(BGPPeer, name='bulk_edit', detail=False)
+class BGPPeerBulkEditView(BulkEditView):
+    queryset = BGPPeer.objects.all()
+    filterset = BGPPeerFilterSet
+    form = BGPPeerBulkEditForm
+    table = BGPPeerTable
+
+
+@register_model_view(BGPPeer, name='bulk_delete', detail=False)
+class BGPPeerBulkDeleteView(BulkDeleteView):
+    queryset = BGPPeer.objects.all()
+    filterset = BGPPeerFilterSet
+    table = BGPPeerTable
 
 
 @register_model_view(BGPPeer, name='settings')
@@ -382,9 +467,9 @@ class BGPPeerAddressFamiliesView(ObjectChildrenView):
 @register_model_view(BGPPeerAddressFamily, name='list', path='', detail=False)
 class BGPPeerAddressFamilyListView(ObjectListView):
     queryset = BGPPeerAddressFamily.objects.all()
-    table = BGPPeerAddressFamilyTable
     filterset = BGPPeerAddressFamilyFilterSet
     filterset_form = BGPPeerAddressFamilyFilterForm
+    table = BGPPeerAddressFamilyTable
 
 
 @register_model_view(BGPPeerAddressFamily)
@@ -402,6 +487,21 @@ class BGPPeerAddressFamilyEditView(ObjectEditView):
 @register_model_view(BGPPeerAddressFamily, name='delete')
 class BGPPeerAddressFamilyDeleteView(ObjectDeleteView):
     queryset = BGPPeerAddressFamily.objects.all()
+
+
+@register_model_view(BGPPeerAddressFamily, name='bulk_edit', detail=False)
+class BGPPeerAddressFamilyBulkEditView(BulkEditView):
+    queryset = BGPPeerAddressFamily.objects.all()
+    filterset = BGPPeerAddressFamilyFilterSet
+    form = BGPPeerAddressFamilyBulkEditForm
+    table = BGPPeerAddressFamilyTable
+
+
+@register_model_view(BGPPeerAddressFamily, name='bulk_delete', detail=False)
+class BGPPeerAddressFamilyBulkDeleteView(BulkDeleteView):
+    queryset = BGPPeerAddressFamily.objects.all()
+    filterset = BGPPeerAddressFamilyFilterSet
+    table = BGPPeerAddressFamilyTable
 
 
 @register_model_view(BGPPeerAddressFamily, name='settings')
