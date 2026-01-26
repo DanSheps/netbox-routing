@@ -1,7 +1,7 @@
 from .bgp import *
 from .community import *
 from .eigrp import *
-from .objects import PrefixList, PrefixListEntry, RouteMap, RouteMapEntry
+from .objects import *
 from .ospf import OSPFArea, OSPFInstance, OSPFInterface
 from .static import StaticRoute
 
@@ -29,6 +29,9 @@ __all__ = (
     'OSPFArea',
     'OSPFInstance',
     'OSPFInterface',
+    # Objects -> AS Path
+    'ASPath',
+    'ASPathEntry',
     # Objects -> Prefix Lists
     'PrefixList',
     'PrefixListEntry',
