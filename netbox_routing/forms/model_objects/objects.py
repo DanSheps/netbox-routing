@@ -66,9 +66,14 @@ class PrefixListForm(PrimaryModelForm):
         )
 
     def clean_family(self):
-        family = int(self.cleaned_data['family'])
-        self.cleaned_data['family'] = family
-        return family
+        family = self.cleaned_data.get('family')
+        if not family:
+            raise forms.ValidationError(_('Family must be specified'))
+        try:
+            self.cleaned_data['family'] = int(family)
+        except ValueError:
+            raise forms.ValidationError(_('Family must be an integer'))
+        return self.cleaned_data['family']
 
 
 class PrefixListEntryForm(PrimaryModelForm):

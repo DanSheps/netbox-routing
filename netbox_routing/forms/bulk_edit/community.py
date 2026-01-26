@@ -42,7 +42,7 @@ class CommunityBulkEditForm(TenantBulkEditMixin, PrimaryModelBulkEditForm):
 
 
 class CommunityListBulkEditForm(TenantBulkEditMixin, PrimaryModelBulkEditForm):
-    model = Community
+    model = CommunityList
     fieldsets = (
         FieldSet(
             'description',
@@ -68,7 +68,7 @@ class CommunityListEntryBulkEditForm(PrimaryModelBulkEditForm):
         required=False,
         selector=True,
     )
-    model = Community
+    model = CommunityListEntry
     fieldsets = (
         FieldSet(
             'community_list',

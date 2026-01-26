@@ -81,7 +81,7 @@ class CommunityListEntryFilterSet(NetBoxModelFilterSet):
     community = django_filters.ModelMultipleChoiceFilter(
         field_name='community__community',
         queryset=Community.objects.all(),
-        to_field_name='name',
+        to_field_name='community',
         label=_('Community (Community)'),
     )
 

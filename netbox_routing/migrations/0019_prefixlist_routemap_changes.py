@@ -54,6 +54,24 @@ class Migration(migrations.Migration):
                 ],
             ),
         ),
+        migrations.AlterField(
+            model_name='prefixlistentry',
+            name='prefix_list',
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.PROTECT,
+                related_name='prefix_list_entries',
+                to='netbox_routing.prefixlist',
+            ),
+        ),
+        migrations.AlterField(
+            model_name='routemapentry',
+            name='route_map',
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.PROTECT,
+                related_name='route_map_entries',
+                to='netbox_routing.routemap',
+            ),
+        ),
         migrations.CreateModel(
             name='ASPath',
             fields=[
@@ -123,8 +141,8 @@ class Migration(migrations.Migration):
                 (
                     'aspath',
                     models.ForeignKey(
-                        on_delete=django.db.models.deletion.PROTECT,
-                        related_name='entries',
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name='aspath_entries',
                         to='netbox_routing.aspath',
                     ),
                 ),
@@ -174,10 +192,33 @@ class Migration(migrations.Migration):
         migrations.AddConstraint(
             model_name='aspathentry',
             constraint=models.UniqueConstraint(
-                models.F('aspath'),
-                models.F('sequence'),
+                fields=('aspath', 'sequence'),
                 name='netbox_routing_aspathentry_unique_aspath_sequence',
                 violation_error_message='Prefix List sequence must be unique.',
+            ),
+        ),
+        migrations.RemoveConstraint(
+            model_name='prefixlistentry',
+            name='netbox_routing_prefixlistentry_unique_prefixlist_sequence',
+        ),
+        migrations.RemoveConstraint(
+            model_name='routemapentry',
+            name='netbox_routing_routemapentry_unique_routemap_sequence',
+        ),
+        migrations.AddConstraint(
+            model_name='prefixlistentry',
+            constraint=models.UniqueConstraint(
+                fields=('prefix_list', 'sequence'),
+                name='netbox_routing_prefixlistentry_unique_prefixlist_sequence',
+                violation_error_message='Prefix List sequence must be unique.',
+            ),
+        ),
+        migrations.AddConstraint(
+            model_name='routemapentry',
+            constraint=models.UniqueConstraint(
+                fields=('route_map', 'sequence'),
+                name='netbox_routing_routemapentry_unique_routemap_sequence',
+                violation_error_message='Route Map sequence must be unique.',
             ),
         ),
     ]

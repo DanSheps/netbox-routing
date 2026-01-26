@@ -17,6 +17,15 @@ __all__ = (
     'EIGRPAddressFamilyType',
     'EIGRPNetworkType',
     'EIGRPInterfaceType',
+    'CommunityType',
+    'CommunityListType',
+    'CommunityListEntryType',
+    'ASPathType',
+    'ASPathEntryType',
+    'PrefixListType',
+    'PrefixListEntryType',
+    'RouteMapType',
+    'RouteMapEntryType',
 )
 
 
@@ -125,3 +134,89 @@ class EIGRPInterfaceType(PrimaryObjectType):
     bfd: bool | None
     authentication: str | None
     passphrase: str | None
+
+
+@strawberry_django.type(models.Community, fields='__all__', filters=CommunityFilter)
+class CommunityType(PrimaryObjectType):
+
+    community: str
+    status: str
+    role: Annotated["RoleType", strawberry.lazy('ipam.graphql.types')] | None
+    tenant: Annotated["TenantType", strawberry.lazy('tenancy.graphql.types')] | None
+
+
+@strawberry_django.type(
+    models.CommunityList, fields='__all__', filters=CommunityListFilter
+)
+class CommunityListType(PrimaryObjectType):
+
+    name: str
+    tenant: Annotated["TenantType", strawberry.lazy('tenancy.graphql.types')] | None
+
+
+@strawberry_django.type(
+    models.CommunityListEntry, fields='__all__', filters=CommunityListEntryFilter
+)
+class CommunityListEntryType(PrimaryObjectType):
+
+    community_list: Annotated[
+        "CommunityListType", strawberry.lazy('netbox_routing.graphql.types')
+    ]
+    community: Annotated[
+        "CommunityType", strawberry.lazy('netbox_routing.graphql.types')
+    ]
+
+
+@strawberry_django.type(models.ASPath, fields='__all__', filters=ASPathFilter)
+class ASPathType(PrimaryObjectType):
+
+    name: str
+
+
+@strawberry_django.type(models.ASPathEntry, fields='__all__', filters=ASPathEntryFilter)
+class ASPathEntryType(PrimaryObjectType):
+
+    aspath: Annotated["ASPathType", strawberry.lazy('netbox_routing.graphql.types')]
+    action: str
+    sequence: int
+    pattern: str | None
+
+
+@strawberry_django.type(models.PrefixList, fields='__all__', filters=PrefixListFilter)
+class PrefixListType(PrimaryObjectType):
+
+    name: str
+
+
+@strawberry_django.type(
+    models.PrefixListEntry, fields='__all__', filters=PrefixListEntryFilter
+)
+class PrefixListEntryType(PrimaryObjectType):
+
+    prefix_list: Annotated[
+        "PrefixListType", strawberry.lazy('netbox_routing.graphql.types')
+    ]
+    action: str
+    sequence: int
+    prefix: str | None
+    le: int | None
+    ge: int | None
+
+
+@strawberry_django.type(models.RouteMap, fields='__all__', filters=RouteMapFilter)
+class RouteMapType(PrimaryObjectType):
+    name: str
+
+
+@strawberry_django.type(
+    models.RouteMapEntry, fields='__all__', filters=RouteMapEntryFilter
+)
+class RouteMapEntryType(PrimaryObjectType):
+
+    route_map: Annotated[
+        "RouteMapType", strawberry.lazy('netbox_routing.graphql.types')
+    ]
+    action: str
+    sequence: int
+    # match: Dict | None
+    # set: Dict | None

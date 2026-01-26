@@ -1,5 +1,6 @@
 from rest_framework import serializers
 
+from ipam.api.serializers_.roles import RoleSerializer
 from netbox.api.serializers import NetBoxModelSerializer
 from tenancy.api.serializers_.tenants import TenantSerializer
 
@@ -16,7 +17,8 @@ class CommunitySerializer(NetBoxModelSerializer):
     url = serializers.HyperlinkedIdentityField(
         view_name='plugins-api:netbox_routing-api:community-detail'
     )
-    tenant = TenantSerializer(read_only=True)
+    role = RoleSerializer(nested=True, required=False)
+    tenant = TenantSerializer(nested=True, required=False)
 
     class Meta:
         model = Community
@@ -25,6 +27,8 @@ class CommunitySerializer(NetBoxModelSerializer):
             'id',
             'display',
             'community',
+            'role',
+            'status',
             'tenant',
             'description',
             'comments',
@@ -36,7 +40,7 @@ class CommunityListSerializer(NetBoxModelSerializer):
     url = serializers.HyperlinkedIdentityField(
         view_name='plugins-api:netbox_routing-api:communitylist-detail'
     )
-    tenant = TenantSerializer(read_only=True)
+    tenant = TenantSerializer(nested=True, required=False)
 
     class Meta:
         model = CommunityList

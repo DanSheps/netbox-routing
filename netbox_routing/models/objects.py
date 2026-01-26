@@ -57,9 +57,9 @@ class ASPath(PrimaryModel):
 
 class ASPathEntry(PermitDenyChoiceMixin, PrimaryModel):
     aspath = models.ForeignKey(
-        to="netbox_routing.ASPath",
-        on_delete=models.PROTECT,
-        related_name='entries',
+        to=ASPath,
+        on_delete=models.CASCADE,
+        related_name='aspath_entries',
         verbose_name=_('AS-Path'),
     )
     sequence = models.PositiveSmallIntegerField()
@@ -72,21 +72,26 @@ class ASPathEntry(PermitDenyChoiceMixin, PrimaryModel):
         'aspath',
         'action',
     )
-    prerequisite_models = ('netbox_routing.PrefixList',)
+    prerequisite_models = ('netbox_routing.ASPath',)
 
     class Meta:
         ordering = ['aspath', 'sequence']
         constraints = (
             models.UniqueConstraint(
-                'aspath',
-                'sequence',
+                fields=(
+                    'aspath',
+                    'sequence',
+                ),
                 name='%(app_label)s_%(class)s_unique_aspath_sequence',
                 violation_error_message="Prefix List sequence must be unique.",
             ),
         )
 
     def __str__(self):
-        return f'{self.aspath.name} {self.sequence}'
+        # Workaround for bug with nulled aspath entry.
+        if hasattr(self, 'aspath'):
+            return f'{self.aspath.name} {self.action} {self.sequence}'
+        return super().__str__()
 
     def get_absolute_url(self):
         return reverse('plugins:netbox_routing:aspathentry', args=[self.pk])
@@ -120,9 +125,9 @@ class PrefixList(PrimaryModel):
 
 class PrefixListEntry(PermitDenyChoiceMixin, PrimaryModel):
     prefix_list = models.ForeignKey(
-        to="netbox_routing.PrefixList",
-        on_delete=models.PROTECT,
-        related_name='entries',
+        to=PrefixList,
+        on_delete=models.CASCADE,
+        related_name='prefix_list_entries',
         verbose_name='Prefix List',
     )
     sequence = models.PositiveSmallIntegerField()
@@ -151,15 +156,17 @@ class PrefixListEntry(PermitDenyChoiceMixin, PrimaryModel):
         ordering = ['prefix_list', 'sequence']
         constraints = (
             models.UniqueConstraint(
-                'prefix_list',
-                'sequence',
+                fields=(
+                    'prefix_list',
+                    'sequence',
+                ),
                 name='%(app_label)s_%(class)s_unique_prefixlist_sequence',
                 violation_error_message="Prefix List sequence must be unique.",
             ),
         )
 
     def __str__(self):
-        return f'{self.prefix_list.name} {self.sequence}'
+        return f'{self.prefix_list.name} {self.action} {self.sequence}'
 
     def get_absolute_url(self):
         return reverse('plugins:netbox_routing:prefixlistentry', args=[self.pk])
@@ -222,9 +229,9 @@ class RouteMap(PrimaryModel):
 
 class RouteMapEntry(PermitDenyChoiceMixin, PrimaryModel):
     route_map = models.ForeignKey(
-        to="netbox_routing.RouteMap",
-        on_delete=models.PROTECT,
-        related_name='entries',
+        to=RouteMap,
+        on_delete=models.CASCADE,
+        related_name='route_map_entries',
         verbose_name='Route Map',
     )
     action = models.CharField(max_length=6, choices=ActionChoices)
@@ -252,15 +259,17 @@ class RouteMapEntry(PermitDenyChoiceMixin, PrimaryModel):
         ordering = ['route_map', 'sequence']
         constraints = (
             models.UniqueConstraint(
-                'route_map',
-                'sequence',
+                fields=(
+                    'route_map',
+                    'sequence',
+                ),
                 name='%(app_label)s_%(class)s_unique_routemap_sequence',
                 violation_error_message="Route Map sequence must be unique.",
             ),
         )
 
     def __str__(self):
-        return f'{self.route_map.name} {self.sequence}'
+        return f'{self.route_map.name} {self.action} {self.sequence}'
 
     def get_absolute_url(self):
         return reverse('plugins:netbox_routing:routemapentry', args=[self.pk])

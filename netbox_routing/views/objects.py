@@ -72,6 +72,21 @@ class PrefixListDeleteView(ObjectDeleteView):
     queryset = PrefixList.objects.all()
 
 
+@register_model_view(PrefixList, name='bulk_edit', detail=False)
+class PrefixListBulkEditView(BulkEditView):
+    queryset = PrefixList.objects.all()
+    filterset = PrefixListFilterSet
+    form = PrefixListBulkEditForm
+    table = PrefixListTable
+
+
+@register_model_view(PrefixList, name='bulk_delete', detail=False)
+class PrefixListBulkDeleteView(BulkDeleteView):
+    queryset = PrefixList.objects.all()
+    filterset = PrefixListFilterSet
+    table = PrefixListTable
+
+
 #
 # Prefix List Entry
 #
@@ -174,6 +189,21 @@ class RouteMapEditView(ObjectEditView):
 @register_model_view(RouteMap, name='delete')
 class RouteMapDeleteView(ObjectDeleteView):
     queryset = RouteMap.objects.all()
+
+
+@register_model_view(RouteMap, name='bulk_edit', detail=False)
+class RouteMapBulkEditView(BulkEditView):
+    queryset = RouteMap.objects.all()
+    filterset = RouteMapFilterSet
+    form = RouteMapBulkEditForm
+    table = RouteMapTable
+
+
+@register_model_view(RouteMap, name='bulk_delete', detail=False)
+class RouteMapBulkDeleteView(BulkDeleteView):
+    queryset = RouteMap.objects.all()
+    filterset = RouteMapFilterSet
+    table = RouteMapTable
 
 
 #

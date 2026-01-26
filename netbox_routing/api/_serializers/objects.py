@@ -103,10 +103,21 @@ class RouteMapEntrySerializer(NetBoxModelSerializer):
             'route_map',
             'sequence',
             'action',
+            'match',
+            'set',
             'description',
             'comments',
         )
-        brief_fields = ('url', 'id', 'display', 'route_map', 'sequence', 'action')
+        brief_fields = (
+            'url',
+            'id',
+            'display',
+            'route_map',
+            'sequence',
+            'action',
+            'match',
+            'set',
+        )
 
 
 class ASPathSerializer(NetBoxModelSerializer):

@@ -1,6 +1,6 @@
 from django.utils.translation import gettext as _
 
-from netbox.forms import NetBoxModelBulkEditForm
+from netbox.forms import PrimaryModelBulkEditForm
 from utilities.forms.fields import DynamicModelChoiceField
 from utilities.forms.rendering import FieldSet
 
@@ -16,7 +16,7 @@ __all__ = (
 )
 
 
-class PrefixListBulkEditForm(NetBoxModelBulkEditForm):
+class PrefixListBulkEditForm(PrimaryModelBulkEditForm):
 
     model = PrefixList
     fieldsets = (
@@ -27,7 +27,7 @@ class PrefixListBulkEditForm(NetBoxModelBulkEditForm):
     nullable_fields = ('description',)
 
 
-class PrefixListEntryBulkEditForm(NetBoxModelBulkEditForm):
+class PrefixListEntryBulkEditForm(PrimaryModelBulkEditForm):
     prefix_list = DynamicModelChoiceField(
         queryset=PrefixList.objects.all(),
         label=_('Prefix List'),
@@ -45,7 +45,7 @@ class PrefixListEntryBulkEditForm(NetBoxModelBulkEditForm):
     nullable_fields = ('description',)
 
 
-class RouteMapBulkEditForm(NetBoxModelBulkEditForm):
+class RouteMapBulkEditForm(PrimaryModelBulkEditForm):
 
     model = RouteMap
     fieldsets = (
@@ -56,7 +56,7 @@ class RouteMapBulkEditForm(NetBoxModelBulkEditForm):
     nullable_fields = ('description',)
 
 
-class RouteMapEntryBulkEditForm(NetBoxModelBulkEditForm):
+class RouteMapEntryBulkEditForm(PrimaryModelBulkEditForm):
     route_map = DynamicModelChoiceField(
         queryset=RouteMap.objects.all(),
         label=_('Route Map'),
@@ -74,7 +74,7 @@ class RouteMapEntryBulkEditForm(NetBoxModelBulkEditForm):
     nullable_fields = ('description',)
 
 
-class ASPathBulkEditForm(NetBoxModelBulkEditForm):
+class ASPathBulkEditForm(PrimaryModelBulkEditForm):
 
     model = ASPath
     fieldsets = (
@@ -85,7 +85,7 @@ class ASPathBulkEditForm(NetBoxModelBulkEditForm):
     nullable_fields = ('description',)
 
 
-class ASPathEntryBulkEditForm(NetBoxModelBulkEditForm):
+class ASPathEntryBulkEditForm(PrimaryModelBulkEditForm):
     aspath = DynamicModelChoiceField(
         queryset=ASPath.objects.all(),
         label=_('AS Path'),

@@ -6,6 +6,9 @@ from strawberry import ID
 from strawberry_django import FilterLookup
 
 from netbox.graphql.filters import PrimaryModelFilter
+from ipam.graphql.filters import RoleFilter
+from tenancy.graphql.filter_mixins import TenancyFilterMixin
+
 from netbox_routing import models
 from netbox_routing.graphql.filter_mixins import (
     DeviceMixin,
@@ -23,6 +26,15 @@ __all__ = (
     'EIGRPAddressFamilyFilter',
     'EIGRPNetworkFilter',
     'EIGRPInterfaceFilter',
+    'CommunityFilter',
+    'CommunityListFilter',
+    'CommunityListEntryFilter',
+    'ASPathFilter',
+    'ASPathEntryFilter',
+    'PrefixListFilter',
+    'PrefixListEntryFilter',
+    'RouteMapFilter',
+    'RouteMapEntryFilter',
 )
 
 
@@ -111,3 +123,92 @@ class EIGRPInterfaceFilter(InterfaceMixin, PrimaryModelFilter):
         | None
     ) = strawberry_django.filter_field()
     address_family_id: ID | None = strawberry_django.filter_field()
+
+
+@strawberry_django.filter(models.Community, lookups=True)
+class CommunityFilter(TenancyFilterMixin, PrimaryModelFilter):
+    role: (
+        Annotated[
+            'RoleFilter',
+            strawberry.lazy('ipam.graphql.filters'),
+        ]
+        | None
+    ) = strawberry_django.filter_field()
+    role_id: ID | None = strawberry_django.filter_field()
+
+
+@strawberry_django.filter(models.CommunityList, lookups=True)
+class CommunityListFilter(TenancyFilterMixin, PrimaryModelFilter):
+    pass
+
+
+@strawberry_django.filter(models.CommunityListEntry, lookups=True)
+class CommunityListEntryFilter(PrimaryModelFilter):
+    community_list: (
+        Annotated[
+            'CommunityListFilter',
+            strawberry.lazy('netbox_routing.graphql.filters'),
+        ]
+        | None
+    ) = strawberry_django.filter_field()
+    community_list_id: ID | None = strawberry_django.filter_field()
+
+    community: (
+        Annotated[
+            'CommunityFilter',
+            strawberry.lazy('netbox_routing.graphql.filters'),
+        ]
+        | None
+    ) = strawberry_django.filter_field()
+    community_id: ID | None = strawberry_django.filter_field()
+
+
+@strawberry_django.filter(models.ASPath, lookups=True)
+class ASPathFilter(PrimaryModelFilter):
+    pass
+
+
+@strawberry_django.filter(models.ASPathEntry, lookups=True)
+class ASPathEntryFilter(PrimaryModelFilter):
+    aspath: (
+        Annotated[
+            'ASPathFilter',
+            strawberry.lazy('netbox_routing.graphql.filters'),
+        ]
+        | None
+    ) = strawberry_django.filter_field()
+    aspath_id: ID | None = strawberry_django.filter_field()
+
+
+@strawberry_django.filter(models.PrefixList, lookups=True)
+class PrefixListFilter(PrimaryModelFilter):
+    pass
+
+
+@strawberry_django.filter(models.PrefixListEntry, lookups=True)
+class PrefixListEntryFilter(PrimaryModelFilter):
+    prefix_list: (
+        Annotated[
+            'PrefixListFilter',
+            strawberry.lazy('netbox_routing.graphql.filters'),
+        ]
+        | None
+    ) = strawberry_django.filter_field()
+    prefix_list_id: ID | None = strawberry_django.filter_field()
+
+
+@strawberry_django.filter(models.RouteMap, lookups=True)
+class RouteMapFilter(PrimaryModelFilter):
+    pass
+
+
+@strawberry_django.filter(models.RouteMapEntry, lookups=True)
+class RouteMapEntryFilter(PrimaryModelFilter):
+    route_map: (
+        Annotated[
+            'RouteMapFilter',
+            strawberry.lazy('netbox_routing.graphql.filters'),
+        ]
+        | None
+    ) = strawberry_django.filter_field()
+    route_map_id: ID | None = strawberry_django.filter_field()
