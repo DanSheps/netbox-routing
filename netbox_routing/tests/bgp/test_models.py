@@ -2,8 +2,9 @@ from django.core.exceptions import ValidationError
 from django.db import IntegrityError
 from django.test import TestCase
 
-from netbox_routing.tests.bgp.base import *
 from netbox_routing.models.bgp import *
+from netbox_routing.tests.base import *
+from netbox_routing.tests.bgp.base import *
 
 __all__ = ('BGPRouterTestCase',)
 

@@ -1,4 +1,6 @@
+import netaddr
 from utilities.testing import ViewTestCases
+from ipam.models import IPAddress, VRF, ASN
 
 from netbox_routing.models.bgp import *
 from netbox_routing.tests.base import *
@@ -151,7 +153,7 @@ class BGPPeerTestCase(
             '10.0.0.5/24',
             '10.0.0.6/24',
         ):
-            peer = IPAddress.objects.create(address=IPNetwork(seq))
+            peer = IPAddress.objects.create(address=netaddr.IPNetwork(seq))
             items.append(
                 cls.model(
                     name=f'BGP Peer: {seq}',
@@ -161,7 +163,7 @@ class BGPPeerTestCase(
             )
         cls.model.objects.bulk_create(items)
 
-        peer = IPAddress.objects.create(address=IPNetwork('10.0.0.7/24'))
+        peer = IPAddress.objects.create(address=netaddr.IPNetwork('10.0.0.7/24'))
         cls.form_data = {
             'name': 'BGP Peer: 10.0.0.7/24',
             'scope': cls.scope.pk,
