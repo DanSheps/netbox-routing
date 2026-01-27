@@ -58,7 +58,7 @@ class Migration(migrations.Migration):
             model_name='prefixlistentry',
             name='prefix_list',
             field=models.ForeignKey(
-                on_delete=django.db.models.deletion.PROTECT,
+                on_delete=django.db.models.deletion.CASCADE,
                 related_name='prefix_list_entries',
                 to='netbox_routing.prefixlist',
             ),
@@ -67,7 +67,7 @@ class Migration(migrations.Migration):
             model_name='routemapentry',
             name='route_map',
             field=models.ForeignKey(
-                on_delete=django.db.models.deletion.PROTECT,
+                on_delete=django.db.models.deletion.CASCADE,
                 related_name='route_map_entries',
                 to='netbox_routing.routemap',
             ),

@@ -1,12 +1,10 @@
-# from django.core.exceptions import ValidationError
 from django.core.exceptions import ValidationError
 from django.db import IntegrityError
 from django.test import TestCase
 
 from ipam.models import Role
 
-# from utilities.testing import create_test_device
-
+from netbox_routing.choices import ActionChoices
 from netbox_routing.models.community import *
 
 __all__ = (
@@ -157,6 +155,8 @@ class CommunityListEntryTestCase(TestCase):
 
     def test_community_list_entry(self):
         for community in self.communities:
-            cle = CommunityListEntry(community_list=self.cl, community=community)
+            cle = CommunityListEntry(
+                community_list=self.cl, action=ActionChoices.PERMIT, community=community
+            )
             cle.full_clean()
             cle.save()

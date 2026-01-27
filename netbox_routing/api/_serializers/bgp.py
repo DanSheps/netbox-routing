@@ -5,6 +5,7 @@ from ipam.api.serializers_.asns import ASNSerializer
 from ipam.api.serializers_.ip import IPAddressSerializer
 from ipam.api.serializers_.vrfs import VRFSerializer
 from netbox.api.fields import ContentTypeField
+from netbox.api.gfk_fields import GFKSerializerField
 from netbox.api.serializers import NetBoxModelSerializer
 from tenancy.api.serializers_.tenants import TenantSerializer
 from utilities.api import get_serializer_for_model
@@ -29,7 +30,7 @@ class BGPSettingSerializer(NetBoxModelSerializer):
         view_name='plugins-api:netbox_routing-api:bgpsetting-detail'
     )
 
-    assigned_object = serializers.SerializerMethodField(read_only=True)
+    assigned_object = GFKSerializerField(read_only=True)
 
     class Meta:
         model = BGPSetting
@@ -67,8 +68,9 @@ class BGPSessionTemplateSerializer(NetBoxModelSerializer):
         view_name='plugins-api:netbox_routing-api:bgpscope-detail'
     )
 
-    asn = ASNSerializer(nested=True)
-    tenant = TenantSerializer(nested=True)
+    remote_as = ASNSerializer(nested=True, required=False)
+    local_as = ASNSerializer(nested=True, required=False)
+    tenant = TenantSerializer(nested=True, required=False)
 
     class Meta:
         model = BGPSessionTemplate
@@ -92,7 +94,6 @@ class BGPSessionTemplateSerializer(NetBoxModelSerializer):
             'id',
             'display',
             'name',
-            'router',
             'parent',
         )
 
@@ -102,7 +103,7 @@ class BGPPolicyTemplateSerializer(NetBoxModelSerializer):
         view_name='plugins-api:netbox_routing-api:bgpscope-detail'
     )
 
-    tenant = TenantSerializer(nested=True)
+    tenant = TenantSerializer(nested=True, required=False)
 
     class Meta:
         model = BGPPolicyTemplate
@@ -125,7 +126,6 @@ class BGPPolicyTemplateSerializer(NetBoxModelSerializer):
             'id',
             'display',
             'name',
-            'router',
         )
 
 
@@ -134,8 +134,8 @@ class BGPPeerTemplateSerializer(NetBoxModelSerializer):
         view_name='plugins-api:netbox_routing-api:bgpaddressfamily-detail'
     )
 
-    remote_as = ASNSerializer(nested=True)
-    tenant = TenantSerializer(nested=True)
+    remote_as = ASNSerializer(nested=True, required=False)
+    tenant = TenantSerializer(nested=True, required=False)
 
     class Meta:
         model = BGPPeerTemplate
@@ -164,13 +164,19 @@ class BGPRouterSerializer(NetBoxModelSerializer):
         view_name='plugins-api:netbox_routing-api:bgprouter-detail'
     )
 
-    assigned_object = serializers.SerializerMethodField(read_only=True)
+    assigned_object = GFKSerializerField(read_only=True)
     asn = ASNSerializer(nested=True)
-    settings = BGPSettingSerializer(many=True)
-    tenant = TenantSerializer(nested=True)
-    peer_templates = BGPSessionTemplateSerializer(many=True, nested=True)
-    policy_templates = BGPSessionTemplateSerializer(many=True, nested=True)
-    session_templates = BGPSessionTemplateSerializer(many=True, nested=True)
+    settings = BGPSettingSerializer(many=True, required=False)
+    tenant = TenantSerializer(nested=True, required=False)
+    peer_templates = BGPSessionTemplateSerializer(
+        many=True, nested=True, required=False
+    )
+    policy_templates = BGPSessionTemplateSerializer(
+        many=True, nested=True, required=False
+    )
+    session_templates = BGPSessionTemplateSerializer(
+        many=True, nested=True, required=False
+    )
 
     class Meta:
         model = BGPRouter
@@ -178,6 +184,7 @@ class BGPRouterSerializer(NetBoxModelSerializer):
             'url',
             'id',
             'display',
+            'name',
             'asn',
             'assigned_object',
             'assigned_object_type',
@@ -190,13 +197,7 @@ class BGPRouterSerializer(NetBoxModelSerializer):
             'description',
             'comments',
         )
-        brief_fields = (
-            'url',
-            'id',
-            'display',
-            'device',
-            'asn',
-        )
+        brief_fields = ('url', 'id', 'display', 'asn', 'assigned_object', 'name')
 
     @extend_schema_field(serializers.JSONField(allow_null=True))
     def get_assigned_object(self, obj):
@@ -214,8 +215,8 @@ class BGPScopeSerializer(NetBoxModelSerializer):
 
     router = BGPRouterSerializer(nested=True)
     vrf = VRFSerializer(nested=True)
-    settings = BGPSettingSerializer(many=True)
-    tenant = TenantSerializer(nested=True)
+    settings = BGPSettingSerializer(many=True, required=False)
+    tenant = TenantSerializer(nested=True, required=False)
 
     class Meta:
         model = BGPScope
@@ -245,7 +246,7 @@ class BGPAddressFamilySerializer(NetBoxModelSerializer):
     )
 
     scope = BGPScopeSerializer(nested=True)
-    settings = BGPSettingSerializer(many=True)
+    settings = BGPSettingSerializer(many=True, required=False)
 
     class Meta:
         model = BGPAddressFamily
@@ -275,9 +276,10 @@ class BGPPeerSerializer(NetBoxModelSerializer):
 
     scope = BGPScopeSerializer(nested=True)
     peer = IPAddressSerializer(nested=True)
-    remote_as = ASNSerializer(nested=True)
-    local_as = ASNSerializer(nested=True)
-    tenant = TenantSerializer(nested=True)
+    source = IPAddressSerializer(nested=True, required=False)
+    remote_as = ASNSerializer(nested=True, required=False)
+    local_as = ASNSerializer(nested=True, required=False)
+    tenant = TenantSerializer(nested=True, required=False)
 
     class Meta:
         model = BGPPeer
@@ -287,6 +289,8 @@ class BGPPeerSerializer(NetBoxModelSerializer):
             'display',
             'scope',
             'peer',
+            'source',
+            'name',
             'remote_as',
             'local_as',
             'enabled',
@@ -296,7 +300,16 @@ class BGPPeerSerializer(NetBoxModelSerializer):
             'description',
             'comments',
         )
-        brief_fields = ('url', 'id', 'display', 'scope', 'peer', 'remote_as', 'enabled')
+        brief_fields = (
+            'url',
+            'id',
+            'display',
+            'name',
+            'scope',
+            'peer',
+            'remote_as',
+            'enabled',
+        )
 
 
 class BGPPeerAddressFamilySerializer(NetBoxModelSerializer):
@@ -308,7 +321,7 @@ class BGPPeerAddressFamilySerializer(NetBoxModelSerializer):
         required=False,
         allow_null=True,
     )
-    assigned_object = serializers.SerializerMethodField(read_only=True)
+    assigned_object = GFKSerializerField(read_only=True)
     # tenant = TenantSerializer(nested=True)
 
     class Meta:
@@ -330,7 +343,14 @@ class BGPPeerAddressFamilySerializer(NetBoxModelSerializer):
             'description',
             'comments',
         )
-        brief_fields = ('url', 'id', 'display', 'scope', 'peer', 'remote_as', 'enabled')
+        brief_fields = (
+            'url',
+            'id',
+            'display',
+            'assigned_object',
+            'address_family',
+            'enabled',
+        )
 
     @extend_schema_field(serializers.JSONField(allow_null=True))
     def get_assigned_object(self, obj):

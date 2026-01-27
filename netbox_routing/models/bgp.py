@@ -1,7 +1,7 @@
 from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
-from django.db.models import ManyToManyField, Q
+from django.db.models import ManyToManyField
 from django.urls import reverse
 from django.utils.translation import gettext as _
 
@@ -340,15 +340,16 @@ class BGPRouter(PrimaryModel):
                     'asn',
                 ),
                 name='%(app_label)s_%(class)s_assigned_object_asn',
+                nulls_distinct=False,
             ),
             models.UniqueConstraint(
                 fields=(
-                    'asn',
+                    'assigned_object_type',
+                    'assigned_object_id',
                     'name',
                 ),
-                name='%(app_label)s_%(class)s_asn_name',
-                condition=Q(assigned_object_type__isnull=True)
-                & Q(assigned_object_id__isnull=True),
+                name='%(app_label)s_%(class)s_assigned_object_name',
+                nulls_distinct=False,
             ),
             models.CheckConstraint(
                 name='%(app_label)s_%(class)s_identifier',
@@ -418,11 +419,7 @@ class BGPScope(PrimaryModel):
             models.UniqueConstraint(
                 fields=('router', 'vrf'),
                 name='%(app_label)s_%(class)s_router_vrf',
-            ),
-            models.UniqueConstraint(
-                fields=('router',),
-                name='%(app_label)s_%(class)s_router',
-                condition=Q(vrf__isnull=True),
+                nulls_distinct=False,
             ),
         ]
 
@@ -599,14 +596,7 @@ class BGPPeer(PrimaryModel):
             models.UniqueConstraint(
                 fields=('scope', 'peer', 'name'),
                 name='%(app_label)s_%(class)s_scope_peer_name',
-            ),
-            models.UniqueConstraint(
-                fields=(
-                    'peer',
-                    'name',
-                ),
-                name='%(app_label)s_%(class)s_peer_name',
-                condition=Q(scope__isnull=True),
+                nulls_distinct=False,
             ),
         ]
 

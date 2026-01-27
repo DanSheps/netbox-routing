@@ -566,7 +566,7 @@ class BGPRouterForm(BGPSettingMixin, TenancyForm, PrimaryModelForm):
         elif selected_objects:
             self.instance.assigned_object = self.cleaned_data[selected_objects[0]]
         else:
-            raise ValidationError(_('A BGP Router must specify an assigned object.'))
+            self.instance.assigned_object = None
 
     def save(self, *args, **kwargs):
         return super().save(*args, **kwargs)
@@ -654,7 +654,7 @@ class BGPPeerForm(BGPSettingMixin, TenancyForm, PrimaryModelForm):
     )
     remote_as = DynamicModelChoiceField(
         queryset=ASN.objects.all(),
-        required=True,
+        required=False,
         selector=True,
         label=_('Remote AS'),
     )

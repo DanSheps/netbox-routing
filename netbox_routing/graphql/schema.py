@@ -93,6 +93,56 @@ class RouteMapEntryQuery:
     route_map_entry_list: List[RouteMapEntryType] = strawberry_django.field()
 
 
+@strawberry.type(name="Query")
+class BGPPeerTemplateQuery:
+    bgp_peer_template: BGPPeerTemplateType = strawberry_django.field()
+    bgp_peer_template_list: List[BGPPeerTemplateType] = strawberry_django.field()
+
+
+@strawberry.type(name="Query")
+class BGPPolicyTemplateQuery:
+    bgp_policy_template: BGPPolicyTemplateType = strawberry_django.field()
+    bgp_policy_template_list: List[BGPPolicyTemplateType] = strawberry_django.field()
+
+
+@strawberry.type(name="Query")
+class BGPSessionTemplateQuery:
+    bgp_session_template: BGPSessionTemplateType = strawberry_django.field()
+    bgp_session_template_list: List[BGPSessionTemplateType] = strawberry_django.field()
+
+
+@strawberry.type(name="Query")
+class BGPRouterQuery:
+    bgp_router: BGPRouterType = strawberry_django.field()
+    bgp_router_list: List[BGPRouterType] = strawberry_django.field()
+
+
+@strawberry.type(name="Query")
+class BGPScopeQuery:
+    bgp_scope: BGPScopeType = strawberry_django.field()
+    bgp_scope_list: List[BGPScopeType] = strawberry_django.field()
+
+
+@strawberry.type(name="Query")
+class BGPAddressFamilyQuery:
+    bgp_address_family: BGPAddressFamilyType = strawberry_django.field()
+    bgp_address_family_list: List[BGPAddressFamilyType] = strawberry_django.field()
+
+
+@strawberry.type(name="Query")
+class BGPPeerQuery:
+    bgp_peer: BGPPeerType = strawberry_django.field()
+    bgp_peer_list: List[BGPPeerType] = strawberry_django.field()
+
+
+@strawberry.type(name="Query")
+class BGPPeerAddressFamilyQuery:
+    bgp_peer_address_family: BGPPeerAddressFamilyType = strawberry_django.field()
+    bgp_peer_address_family_list: List[BGPPeerAddressFamilyType] = (
+        strawberry_django.field()
+    )
+
+
 schema = [
     StaticRouteQuery,
     OSPFQuery,
@@ -106,4 +156,12 @@ schema = [
     PrefixListEntryQuery,
     RouteMapQuery,
     RouteMapEntryQuery,
+    BGPPeerTemplateQuery,
+    BGPPolicyTemplateQuery,
+    BGPSessionTemplateQuery,
+    BGPRouterQuery,
+    BGPScopeQuery,
+    BGPAddressFamilyQuery,
+    BGPPeerQuery,
+    BGPPeerAddressFamilyQuery,
 ]

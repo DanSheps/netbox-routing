@@ -913,15 +913,9 @@ class Migration(migrations.Migration):
         migrations.AddConstraint(
             model_name='bgpscope',
             constraint=models.UniqueConstraint(
-                fields=('router', 'vrf'), name='netbox_routing_bgpscope_router_vrf'
-            ),
-        ),
-        migrations.AddConstraint(
-            model_name='bgpscope',
-            constraint=models.UniqueConstraint(
-                condition=models.Q(('vrf__isnull', True)),
-                fields=('router',),
-                name='netbox_routing_bgpscope_router',
+                fields=('router', 'vrf'),
+                name='netbox_routing_bgpscope_router_vrf',
+                nulls_distinct=False,
             ),
         ),
         migrations.AddConstraint(
@@ -942,17 +936,15 @@ class Migration(migrations.Migration):
             constraint=models.UniqueConstraint(
                 fields=('assigned_object_type', 'assigned_object_id', 'asn'),
                 name='netbox_routing_bgprouter_assigned_object_asn',
+                nulls_distinct=False,
             ),
         ),
         migrations.AddConstraint(
             model_name='bgprouter',
             constraint=models.UniqueConstraint(
-                condition=models.Q(
-                    ('assigned_object_type__isnull', True),
-                    ('assigned_object_id__isnull', True),
-                ),
-                fields=('asn', 'name'),
-                name='netbox_routing_bgprouter_asn_name',
+                fields=('assigned_object_type', 'assigned_object_id', 'name'),
+                name='netbox_routing_bgprouter_assigned_object_name',
+                nulls_distinct=False,
             ),
         ),
         migrations.AddConstraint(
@@ -960,14 +952,7 @@ class Migration(migrations.Migration):
             constraint=models.UniqueConstraint(
                 fields=('scope', 'peer', 'name'),
                 name='netbox_routing_bgppeer_scope_peer_name',
-            ),
-        ),
-        migrations.AddConstraint(
-            model_name='bgppeer',
-            constraint=models.UniqueConstraint(
-                condition=models.Q(('scope__isnull', True)),
-                fields=('peer', 'name'),
-                name='netbox_routing_bgppeer_peer_name',
+                nulls_distinct=False,
             ),
         ),
         migrations.AddConstraint(

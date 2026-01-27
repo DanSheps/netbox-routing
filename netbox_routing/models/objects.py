@@ -8,7 +8,6 @@ from django.urls import reverse
 
 from django.db import models
 from django.core.exceptions import ValidationError
-from netaddr import IPNetwork
 
 from ipam.choices import IPAddressFamilyChoices
 from ipam.fields import IPNetworkField
@@ -174,8 +173,6 @@ class PrefixListEntry(PermitDenyChoiceMixin, PrimaryModel):
     def clean(self):
         super().clean()
         if self.prefix:
-            if not isinstance(self.prefix, IPNetwork):
-                self.prefix = IPNetwork(self.prefix)
             boundary = 32 if self.prefix.version == 4 else 128
 
             if self.le is not None and self.le > boundary:
