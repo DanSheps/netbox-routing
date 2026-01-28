@@ -13,6 +13,13 @@ preview = true
 [lint.per-file-ignores]
 "template_code.py" = ["E501"]
 "netbox_routing/graphql/filter_mixins.py" = ["F821"]
+"netbox_routing/graphql/bgp/types.py" = ["F821"]
+"netbox_routing/graphql/community/types.py" = ["F821"]
+"netbox_routing/graphql/eigrp/types.py" = ["F821"]
+"netbox_routing/graphql/objects/types.py" = ["F821"]
+"netbox_routing/graphql/ospf/types.py" = ["F821"]
+"netbox_routing/graphql/static/types.py" = ["F821"]
+"netbox_routing/graphql/types_mixin.py" = ["F821"]
 
 [format]
 quote-style = "single"

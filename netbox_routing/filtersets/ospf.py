@@ -11,7 +11,6 @@ from netbox.filtersets import NetBoxModelFilterSet
 from netbox_routing.choices.ospf import OSPFAreaTypeChoices
 from netbox_routing.models import OSPFArea, OSPFInstance, OSPFInterface
 
-
 __all__ = ('OSPFAreaFilterSet', 'OSPFInstanceFilterSet', 'OSPFInterfaceFilterSet')
 
 

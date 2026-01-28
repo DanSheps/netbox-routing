@@ -1,10 +1,16 @@
 from rest_framework import serializers
 
 from netbox.api.serializers import NetBoxModelSerializer
-from netbox_routing.models import PrefixList, PrefixListEntry, RouteMap, RouteMapEntry
+from netbox_routing.models.objects import *
 
-
-__all__ = 'StaticRouteSerializer'
+__all__ = (
+    'PrefixListSerializer',
+    'PrefixListEntrySerializer',
+    'RouteMapSerializer',
+    'RouteMapEntrySerializer',
+    'ASPathSerializer',
+    'ASPathEntrySerializer',
+)
 
 
 class PrefixListSerializer(NetBoxModelSerializer):
@@ -44,7 +50,7 @@ class PrefixListEntrySerializer(NetBoxModelSerializer):
             'display',
             'prefix_list',
             'sequence',
-            'type',
+            'action',
             'prefix',
             'le',
             'ge',
@@ -57,7 +63,7 @@ class PrefixListEntrySerializer(NetBoxModelSerializer):
             'display',
             'prefix_list',
             'sequence',
-            'type',
+            'action',
             'prefix',
             'le',
             'ge',
@@ -96,8 +102,67 @@ class RouteMapEntrySerializer(NetBoxModelSerializer):
             'display',
             'route_map',
             'sequence',
-            'type',
+            'action',
+            'match',
+            'set',
             'description',
             'comments',
         )
-        brief_fields = ('url', 'id', 'display', 'route_map', 'sequence', 'type')
+        brief_fields = (
+            'url',
+            'id',
+            'display',
+            'route_map',
+            'sequence',
+            'action',
+            'match',
+            'set',
+        )
+
+
+class ASPathSerializer(NetBoxModelSerializer):
+    url = serializers.HyperlinkedIdentityField(
+        view_name='plugins-api:netbox_routing-api:aspath-detail'
+    )
+
+    class Meta:
+        model = ASPath
+        fields = (
+            'url',
+            'id',
+            'display',
+            'name',
+            'description',
+            'comments',
+        )
+        brief_fields = ('url', 'id', 'display', 'name')
+
+
+class ASPathEntrySerializer(NetBoxModelSerializer):
+    url = serializers.HyperlinkedIdentityField(
+        view_name='plugins-api:netbox_routing-api:aspathentry-detail'
+    )
+    aspath = ASPathSerializer(nested=True)
+
+    class Meta:
+        model = ASPathEntry
+        fields = (
+            'url',
+            'id',
+            'display',
+            'aspath',
+            'sequence',
+            'action',
+            'pattern',
+            'description',
+            'comments',
+        )
+        brief_fields = (
+            'url',
+            'id',
+            'display',
+            'aspath',
+            'sequence',
+            'action',
+            'pattern',
+        )
