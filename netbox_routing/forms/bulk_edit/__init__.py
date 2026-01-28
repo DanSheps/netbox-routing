@@ -18,4 +18,6 @@ __all__ = (
     # Route Objects
     'PrefixListEntryBulkEditForm',
     'RouteMapEntryBulkEditForm',
+    'ASPathBulkEditForm',
+    'ASPathEntryBulkEditForm',
 )

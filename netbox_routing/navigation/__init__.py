@@ -1,19 +1,21 @@
 from netbox.plugins import PluginMenu
 
 # from .bgp import MENUITEMS as BGP_MENU
-# from .objects import MENUITEMS as OBJECT_MENU
+from .objects import OBJECT_MENU
 from .ospf import MENUITEMS as OSPF_MENU
 from .eigrp import eigrp
 from .static import MENUITEMS as STATIC_MENU
+from .bgp import BGP_MENU
+from .community import COMMUNITY_MENU
 
 __all__ = ('menu',)
 
 menu = PluginMenu(
     label='Netbox Routing',
     groups=(
-        # ('Routing Objects', OBJECT_MENU),
+        ('Routing Objects', COMMUNITY_MENU + OBJECT_MENU),
         ('Static', STATIC_MENU),
-        # ('BGP', BGP_MENU),
+        ('BGP', BGP_MENU),
         ('OSPF', OSPF_MENU),
         ('EIGRP', eigrp),
     ),

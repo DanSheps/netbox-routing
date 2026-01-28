@@ -14,7 +14,6 @@ from utilities.forms.widgets import HTMXSelect
 
 from netbox_routing.models import *
 
-
 __all__ = (
     'EIGRPRouterForm',
     'EIGRPAddressFamilyForm',
