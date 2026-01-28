@@ -3,7 +3,33 @@ from typing import List
 import strawberry
 import strawberry_django
 
-from .types import *
+from .bgp.types import (
+    BGPPeerTemplateType,
+    BGPPolicyTemplateType,
+    BGPSessionTemplateType,
+    BGPRouterType,
+    BGPScopeType,
+    BGPAddressFamilyType,
+    BGPPeerType,
+    BGPPeerAddressFamilyType,
+)
+from .community.types import CommunityType, CommunityListType, CommunityListEntryType
+from .eigrp.types import (
+    EIGRPRouterType,
+    EIGRPAddressFamilyType,
+    EIGRPNetworkType,
+    EIGRPInterfaceType,
+)
+from .objects.types import (
+    ASPathType,
+    ASPathEntryType,
+    PrefixListType,
+    PrefixListEntryType,
+    RouteMapType,
+    RouteMapEntryType,
+)
+from .ospf.types import OSPFInstanceType, OSPFAreaType, OSPFInterfaceType
+from .static.types import StaticRouteType
 
 
 @strawberry.type(name="Query")
