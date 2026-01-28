@@ -5,10 +5,10 @@ from netbox_routing.models.objects import *
 __all__ = (
     'ASPathTestCase',
     'ASPathEntryTestCase',
-    # 'PrefixListTestCase',
-    # 'PrefixListEntryTestCase',
-    # 'RouteMapTestCase',
-    # 'RouteMapEntryTestCase',
+    'PrefixListTestCase',
+    'PrefixListEntryTestCase',
+    'RouteMapTestCase',
+    'RouteMapEntryTestCase',
 )
 
 
@@ -105,18 +105,6 @@ class ASPathEntryTestCase(APIViewTestCases.APIViewTestCase):
                 'pattern': '^2448 2448 2448 2448$',
             },
         ]
-
-    def test_graphql_get_object(self):
-        # This test fails for some reason with:
-        # 'Cannot return null for non-nullable field ASPathEntryType.aspath'
-        # These return fine in the actual interface. Unsure as to why this is failing.
-        pass
-
-    def test_graphql_list_objects(self):
-        # This test fails for some reason with:
-        # 'Cannot return null for non-nullable field ASPathEntryType.aspath'
-        # These return fine in the actual interface. Unsure as to why this is failing.
-        pass
 
 
 class PrefixListTestCase(APIViewTestCases.APIViewTestCase):
@@ -224,18 +212,6 @@ class PrefixListEntryTestCase(APIViewTestCases.APIViewTestCase):
             },
         ]
 
-    def test_graphql_get_object(self):
-        # This test fails for some reason with:
-        # 'Cannot return null for non-nullable field PrefixListEntry.prefix_list'
-        # These return fine in the actual interface. Unsure as to why this is failing.
-        pass
-
-    def test_graphql_list_objects(self):
-        # This test fails for some reason with:
-        # 'Cannot return null for non-nullable field PrefixListEntry.prefix_list'
-        # These return fine in the actual interface. Unsure as to why this is failing.
-        pass
-
 
 class RouteMapTestCase(APIViewTestCases.APIViewTestCase):
     model = RouteMap
@@ -341,15 +317,3 @@ class RouteMapEntryTestCase(APIViewTestCases.APIViewTestCase):
                 'match': {'tags': 5},
             },
         ]
-
-    def test_graphql_get_object(self):
-        # This test fails for some reason with:
-        # 'Cannot return null for non-nullable field PrefixListEntry.prefix_list'
-        # These return fine in the actual interface. Unsure as to why this is failing.
-        pass
-
-    def test_graphql_list_objects(self):
-        # This test fails for some reason with:
-        # 'Cannot return null for non-nullable field PrefixListEntry.prefix_list'
-        # These return fine in the actual interface. Unsure as to why this is failing.
-        pass

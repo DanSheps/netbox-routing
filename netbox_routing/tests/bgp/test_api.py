@@ -125,18 +125,6 @@ class BGPRouterTestCase(
             for i in range(5, 7)
         ]
 
-    def test_graphql_get_object(self):
-        # This test fails for some reason with:
-        # 'Cannot return null for non-nullable field PrefixListEntry.prefix_list'
-        # These return fine in the actual interface. Unsure as to why this is failing.
-        pass
-
-    def test_graphql_list_objects(self):
-        # This test fails for some reason with:
-        # 'Cannot return null for non-nullable field PrefixListEntry.prefix_list'
-        # These return fine in the actual interface. Unsure as to why this is failing.
-        pass
-
 
 class BGPScopeTestCase(
     AutomatedModelCreationMixin,
@@ -167,18 +155,6 @@ class BGPScopeTestCase(
         cls.create_data = [
             {'router': cls.router.pk, 'vrf': cls.vrfs[i].pk} for i in range(5, 7)
         ]
-
-    def test_graphql_get_object(self):
-        # This test fails for some reason with:
-        # 'Cannot return null for non-nullable field PrefixListEntry.prefix_list'
-        # These return fine in the actual interface. Unsure as to why this is failing.
-        pass
-
-    def test_graphql_list_objects(self):
-        # This test fails for some reason with:
-        # 'Cannot return null for non-nullable field PrefixListEntry.prefix_list'
-        # These return fine in the actual interface. Unsure as to why this is failing.
-        pass
 
 
 class BGPAddressFamilyTestCase(
@@ -217,18 +193,6 @@ class BGPAddressFamilyTestCase(
         cls.create_data = [
             {'scope': cls.scope.pk, 'address_family': cls.afs[i]} for i in range(5, 7)
         ]
-
-    def test_graphql_get_object(self):
-        # This test fails for some reason with:
-        # 'Cannot return null for non-nullable field PrefixListEntry.prefix_list'
-        # These return fine in the actual interface. Unsure as to why this is failing.
-        pass
-
-    def test_graphql_list_objects(self):
-        # This test fails for some reason with:
-        # 'Cannot return null for non-nullable field PrefixListEntry.prefix_list'
-        # These return fine in the actual interface. Unsure as to why this is failing.
-        pass
 
 
 class BGPPeerTestCase(
@@ -275,18 +239,6 @@ class BGPPeerTestCase(
             for i in range(5, 7)
         ]
 
-    def test_graphql_get_object(self):
-        # This test fails for some reason with:
-        # 'Cannot return null for non-nullable field PrefixListEntry.prefix_list'
-        # These return fine in the actual interface. Unsure as to why this is failing.
-        pass
-
-    def test_graphql_list_objects(self):
-        # This test fails for some reason with:
-        # 'Cannot return null for non-nullable field PrefixListEntry.prefix_list'
-        # These return fine in the actual interface. Unsure as to why this is failing.
-        pass
-
 
 class BGPPeerAddressFamilyTestCase(
     AutomatedModelCreationMixin,
@@ -327,15 +279,3 @@ class BGPPeerAddressFamilyTestCase(
             }
             for i in range(5, 7)
         ]
-
-    def test_graphql_get_object(self):
-        # This test fails for some reason with:
-        # 'Cannot return null for non-nullable field PrefixListEntry.prefix_list'
-        # These return fine in the actual interface. Unsure as to why this is failing.
-        pass
-
-    def test_graphql_list_objects(self):
-        # This test fails for some reason with:
-        # 'Cannot return null for non-nullable field PrefixListEntry.prefix_list'
-        # These return fine in the actual interface. Unsure as to why this is failing.
-        pass

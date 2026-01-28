@@ -601,7 +601,9 @@ class BGPPeer(PrimaryModel):
         ]
 
     def __str__(self):
-        return f'{self.peer} ({self.remote_as})'
+        if self.remote_as:
+            return f'{self.peer} ({self.remote_as})'
+        return f'{self.peer}'
 
     def get_absolute_url(self):
         from django.urls import reverse

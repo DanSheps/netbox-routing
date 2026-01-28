@@ -30,7 +30,14 @@ class ASPathType(PrimaryObjectType):
     name: str
 
 
-@strawberry_django.type(models.ASPathEntry, fields='__all__', filters=ASPathEntryFilter)
+@strawberry_django.type(
+    models.ASPathEntry,
+    fields='__all__',
+    filters=ASPathEntryFilter,
+    select_related=[
+        'aspath',
+    ],
+)
 class ASPathEntryType(PrimaryObjectType):
 
     aspath: Annotated["ASPathType", strawberry.lazy('netbox_routing.graphql.types')]
@@ -46,7 +53,12 @@ class PrefixListType(PrimaryObjectType):
 
 
 @strawberry_django.type(
-    models.PrefixListEntry, fields='__all__', filters=PrefixListEntryFilter
+    models.PrefixListEntry,
+    fields='__all__',
+    filters=PrefixListEntryFilter,
+    select_related=[
+        'prefix_list',
+    ],
 )
 class PrefixListEntryType(PrimaryObjectType):
 
@@ -66,7 +78,12 @@ class RouteMapType(PrimaryObjectType):
 
 
 @strawberry_django.type(
-    models.RouteMapEntry, fields='__all__', filters=RouteMapEntryFilter
+    models.RouteMapEntry,
+    fields='__all__',
+    filters=RouteMapEntryFilter,
+    select_related=[
+        'route_map',
+    ],
 )
 class RouteMapEntryType(PrimaryObjectType):
 
