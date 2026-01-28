@@ -7,7 +7,6 @@ from utilities.forms.fields import CSVModelChoiceField
 
 from netbox_routing.models import OSPFInstance, OSPFArea, OSPFInterface
 
-
 __all__ = (
     "OSPFInstanceImportForm",
     "OSPFAreaImportForm",

@@ -7,7 +7,6 @@ from netbox_routing.api.serializers import (
 )
 from netbox_routing.models import OSPFInstance, OSPFArea, OSPFInterface
 
-
 __all__ = (
     'OSPFInstanceViewSet',
     'OSPFAreaViewSet',

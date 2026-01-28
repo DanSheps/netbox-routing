@@ -10,7 +10,6 @@ from netbox_routing import choices
 from netbox_routing.choices.ospf import OSPFAreaTypeChoices
 from netbox_routing.fields.ip import IPAddressField
 
-
 __all__ = (
     'OSPFInstance',
     'OSPFArea',

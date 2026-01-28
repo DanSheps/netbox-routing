@@ -1,6 +1,7 @@
 from netbox_routing.tests.eigrp.test_models import *
 from netbox_routing.tests.ospf.test_models import *
 from netbox_routing.tests.static.test_models import *
+from netbox_routing.tests.community.test_models import *
 
 __all__ = (
     'StaticRouteTestCase',
@@ -11,4 +12,7 @@ __all__ = (
     'EIGRPAddressFamilyTestCase',
     'EIGRPNetworkTestCase',
     'EIGRPInterfaceTestCase',
+    'CommunityTestCase',
+    'CommunityListTestCase',
+    'CommunityListEntryTestCase',
 )

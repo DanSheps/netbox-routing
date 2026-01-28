@@ -15,7 +15,6 @@ from utilities.views import register_model_view, ViewTab
 
 from netbox_routing.models import *
 
-
 __all__ = (
     'EIGRPRouterListView',
     'EIGRPRouterView',

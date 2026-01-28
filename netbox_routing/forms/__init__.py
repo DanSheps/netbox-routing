@@ -7,10 +7,10 @@ from .objects import (
     RouteMapForm,
     RouteMapEntryForm,
 )
-from .ospf import OSPFAreaForm, OSPFInstanceForm, OSPFInterfaceForm
-from .bgp import BGPRouterForm, BGPScopeForm, BGPAddressFamilyForm
-from .static import StaticRouteForm
-from .eigrp import *
+from netbox_routing.forms.model_objects.ospf import *
+from netbox_routing.forms.model_objects.bgp import *
+from netbox_routing.forms.model_objects.static import StaticRouteForm
+from netbox_routing.forms.model_objects.eigrp import *
 
 __all__ = (
     # Static Routes
@@ -47,6 +47,7 @@ __all__ = (
     'EIGRPInterfaceFilterForm',
     'EIGRPInterfaceImportForm',
     # BGP
+    'BGPSettingForm',
     'BGPRouterForm',
     'BGPScopeForm',
     'BGPAddressFamilyForm',

@@ -4,17 +4,15 @@ import strawberry
 import strawberry_django
 from strawberry import ID
 
-from netbox.graphql.filters import PrimaryModelFilter
 
-
-class DeviceMixin(PrimaryModelFilter):
+class DeviceMixin:
     device: (
         Annotated['DeviceFilter', strawberry.lazy('dcim.graphql.filters')] | None
     ) = strawberry_django.filter_field()
     device_id: ID | None = strawberry_django.filter_field()
 
 
-class InterfaceMixin(DeviceMixin, PrimaryModelFilter):
+class InterfaceMixin(DeviceMixin):
     device: (
         Annotated['DeviceFilter', strawberry.lazy('dcim.graphql.filters')] | None
     ) = strawberry_django.filter_field()
@@ -31,7 +29,7 @@ class VRFMixin:
     )
 
 
-class NetworkPrefixMixin(PrimaryModelFilter):
+class NetworkPrefixMixin:
     network: (
         Annotated['PrefixFilter', strawberry.lazy('ipam.graphql.filters')] | None
     ) = strawberry_django.filter_field()

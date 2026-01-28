@@ -1,14 +1,9 @@
+from .community import *
 from .static import StaticRouteFilterSet
-from .objects import (
-    PrefixListFilterSet,
-    PrefixListEntryFilterSet,
-    RouteMapFilterSet,
-    RouteMapEntryFilterSet,
-)
+from .objects import *
 from .ospf import *
 from .bgp import *
 from .eigrp import *
-
 
 __all__ = (
     'StaticRouteFilterSet',
@@ -16,6 +11,7 @@ __all__ = (
     'BGPRouterFilterSet',
     'BGPScopeFilterSet',
     'BGPAddressFamilyFilterSet',
+    'BGPPeerFilterSet',
     'OSPFInstanceFilterSet',
     'OSPFAreaFilterSet',
     'OSPFInterfaceFilterSet',
@@ -27,4 +23,9 @@ __all__ = (
     'PrefixListEntryFilterSet',
     'RouteMapFilterSet',
     'RouteMapEntryFilterSet',
+    'CommunityListFilterSet',
+    'CommunityListEntryFilterSet',
+    'CommunityFilterSet',
+    'ASPathFilterSet',
+    'ASPathEntryFilterSet',
 )
