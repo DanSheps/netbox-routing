@@ -5,7 +5,6 @@ from utilities.testing import APIViewTestCases, create_test_device
 from netbox_routing.models import StaticRoute
 from netbox_routing.tests.base import IPAddressFieldMixin
 
-
 __all__ = ('StaticRouteTestCase',)
 
 

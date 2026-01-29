@@ -3,7 +3,6 @@ from .objects import *
 from .ospf import *
 from .eigrp import *
 
-
 __all__ = (
     # Staticroute
     'StaticRouteBulkEditForm',
@@ -19,4 +18,6 @@ __all__ = (
     # Route Objects
     'PrefixListEntryBulkEditForm',
     'RouteMapEntryBulkEditForm',
+    'ASPathBulkEditForm',
+    'ASPathEntryBulkEditForm',
 )

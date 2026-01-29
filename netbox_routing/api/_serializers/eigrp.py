@@ -11,7 +11,6 @@ from netbox_routing.models import (
     EIGRPInterface,
 )
 
-
 __all__ = (
     'EIGRPRouterSerializer',
     'EIGRPAddressFamilySerializer',

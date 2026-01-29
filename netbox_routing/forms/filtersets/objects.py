@@ -1,5 +1,5 @@
 from netbox.forms import NetBoxModelFilterSetForm
-from netbox_routing.models import PrefixList, PrefixListEntry, RouteMap, RouteMapEntry
+from netbox_routing.models.objects import *
 
 
 class PrefixListFilterForm(NetBoxModelFilterSetForm):
@@ -16,3 +16,11 @@ class RouteMapFilterForm(NetBoxModelFilterSetForm):
 
 class RouteMapEntryFilterForm(NetBoxModelFilterSetForm):
     model = RouteMapEntry
+
+
+class ASPathFilterForm(NetBoxModelFilterSetForm):
+    model = ASPath
+
+
+class ASPathEntryFilterForm(NetBoxModelFilterSetForm):
+    model = ASPathEntry

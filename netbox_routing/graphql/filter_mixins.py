@@ -4,17 +4,15 @@ import strawberry
 import strawberry_django
 from strawberry import ID
 
-from core.graphql.filter_mixins import BaseObjectTypeFilterMixin
 
-
-class DeviceMixin(BaseObjectTypeFilterMixin):
+class DeviceMixin:
     device: (
         Annotated['DeviceFilter', strawberry.lazy('dcim.graphql.filters')] | None
     ) = strawberry_django.filter_field()
     device_id: ID | None = strawberry_django.filter_field()
 
 
-class InterfaceMixin(DeviceMixin, BaseObjectTypeFilterMixin):
+class InterfaceMixin(DeviceMixin):
     device: (
         Annotated['DeviceFilter', strawberry.lazy('dcim.graphql.filters')] | None
     ) = strawberry_django.filter_field()
@@ -31,7 +29,7 @@ class VRFMixin:
     )
 
 
-class NetworkPrefixMixin(BaseObjectTypeFilterMixin):
+class NetworkPrefixMixin:
     network: (
         Annotated['PrefixFilter', strawberry.lazy('ipam.graphql.filters')] | None
     ) = strawberry_django.filter_field()

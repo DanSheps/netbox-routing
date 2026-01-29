@@ -7,7 +7,6 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('ipam', '0069_gfk_indexes'),
         ('netbox_routing', '0006_bgp'),
     ]
 
