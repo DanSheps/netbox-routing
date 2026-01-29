@@ -73,6 +73,13 @@ class OSPFInstanceFilterSet(NetBoxModelFilterSet):
 
 
 class OSPFAreaFilterSet(NetBoxModelFilterSet):
+    device_id = django_filters.ModelMultipleChoiceFilter(
+        field_name='interfaces__interface__device__id',
+        queryset=Device.objects.all(),
+        to_field_name='id',
+        label=_('Device (ID)'),
+    )
+
     area_id = MultiValueCharFilter(
         method='filter_aid',
         label=_('Area ID'),

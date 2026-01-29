@@ -1,6 +1,10 @@
 from .bgp import *
 from .community import *
+from .eigrp import EIGRPRouterIndex, EIGRPAddressFamilyIndex
+from .ospf import OSPFInstanceIndex, OSPFAreaIndex
 from .objects import *
+from .static import StaticRouteIndex
+
 
 __all__ = (
     'ASPathIndex',
@@ -16,8 +20,13 @@ __all__ = (
     'CommunityIndex',
     'CommunityListIndex',
     'CommunityListEntryIndex',
+    'EIGRPRouterIndex',
+    'EIGRPAddressFamilyIndex',
+    'OSPFInstanceIndex',
+    'OSPFAreaIndex',
     'PrefixListIndex',
     'PrefixListEntryIndex',
     'RouteMapIndex',
     'RouteMapEntryIndex',
+    'StaticRouteIndex',
 )
