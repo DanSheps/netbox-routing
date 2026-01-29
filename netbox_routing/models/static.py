@@ -7,7 +7,6 @@ from ipam.fields import IPNetworkField
 from netbox.models import PrimaryModel
 from netbox_routing.fields.ip import IPAddressField
 
-
 __all__ = ('StaticRoute',)
 
 

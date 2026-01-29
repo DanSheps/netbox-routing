@@ -6,7 +6,6 @@ from ipam.api.serializers_.vrfs import VRFSerializer
 from netbox.api.serializers import NetBoxModelSerializer
 from netbox_routing.models import OSPFInstance, OSPFArea, OSPFInterface
 
-
 __all__ = (
     'OSPFInstanceSerializer',
     'OSPFAreaSerializer',

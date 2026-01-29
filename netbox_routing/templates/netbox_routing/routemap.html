@@ -2,6 +2,14 @@
 {% load humanize %}
 {% load helpers %}
 {% load plugins %}
+{% load entries %}
+
+{% block extra_controls %}
+    <a href="{% get_entry_url 'add' object return_url %}"
+       class="btn btn-primary">
+        <i class="mdi mdi-plus-thick" aria-hidden="true"></i> Bulk Edit
+    </a>
+{% endblock %}
 
 {% block content %}
 <div class="row">

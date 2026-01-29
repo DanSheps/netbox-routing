@@ -1,45 +1,240 @@
+from netbox.object_actions import CloneObject, EditObject, DeleteObject
 from netbox.views.generic import (
     ObjectView,
     ObjectEditView,
     ObjectListView,
     ObjectDeleteView,
+    ObjectChildrenView,
+    BulkEditView,
+    BulkDeleteView,
 )
-from netbox_routing.filtersets import (
-    BGPRouterFilterSet,
-    BGPScopeFilterSet,
-    BGPAddressFamilyFilterSet,
-)
-from netbox_routing.forms import (
-    BGPRouterForm,
-    BGPScopeForm,
-    BGPRouterFilterForm,
-    BGPAddressFamilyForm,
-    BGPScopeFilterForm,
-    BGPAddressFamilyFilterForm,
-)
-from netbox_routing.models import BGPRouter, BGPScope, BGPAddressFamily
-from netbox_routing.tables.bgp import (
-    BGPRouterTable,
-    BGPScopeTable,
-    BGPAddressFamilyTable,
-)
-from utilities.views import register_model_view
 
+from utilities.views import register_model_view, ViewTab
+
+from netbox_routing.filtersets.bgp import *
+from netbox_routing.forms.bgp import *
+from netbox_routing.models.bgp import *
+from netbox_routing.tables.bgp import *
 
 __all__ = (
+    'BGPSettingListView',
+    'BGPSettingView',
+    'BGPSettingEditView',
+    'BGPSettingDeleteView',
+    'BGPSettingBulkEditView',
+    'BGPSettingBulkDeleteView',
+    'BGPPeerTemplateListView',
+    'BGPPeerTemplateView',
+    'BGPPeerTemplateEditView',
+    'BGPPeerTemplateDeleteView',
+    'BGPPeerTemplateBulkEditView',
+    'BGPPeerTemplateBulkDeleteView',
+    'BGPPolicyTemplateListView',
+    'BGPPolicyTemplateView',
+    'BGPPolicyTemplateEditView',
+    'BGPPolicyTemplateDeleteView',
+    'BGPPolicyTemplateBulkEditView',
+    'BGPPolicyTemplateBulkDeleteView',
+    'BGPSessionTemplateListView',
+    'BGPSessionTemplateView',
+    'BGPSessionTemplateEditView',
+    'BGPSessionTemplateDeleteView',
+    'BGPSessionTemplateBulkEditView',
+    'BGPSessionTemplateBulkDeleteView',
     'BGPRouterListView',
     'BGPRouterView',
     'BGPRouterEditView',
     'BGPRouterDeleteView',
+    'BGPRouterBulkEditView',
+    'BGPRouterBulkDeleteView',
     'BGPScopeListView',
     'BGPScopeView',
     'BGPScopeEditView',
     'BGPScopeDeleteView',
+    'BGPScopeBulkEditView',
+    'BGPScopeBulkDeleteView',
     'BGPAddressFamilyListView',
     'BGPAddressFamilyView',
     'BGPAddressFamilyEditView',
     'BGPAddressFamilyDeleteView',
+    'BGPAddressFamilyBulkEditView',
+    'BGPAddressFamilyBulkDeleteView',
 )
+
+
+@register_model_view(BGPAddressFamily, name='settings')
+class BGPSettingViewMixin:
+    child_model = BGPSetting
+    table = BGPSettingTable
+    filterset = BGPSettingFilterSet
+    filterset_form = BGPSettingFilterForm
+    actions = ObjectChildrenView.actions
+
+
+#
+# BGP Settings
+#
+@register_model_view(BGPSetting, name='list', path='', detail=False)
+class BGPSettingListView(ObjectListView):
+    queryset = BGPSetting.objects.all()
+    filterset = BGPSettingFilterSet
+    filterset_form = BGPSettingFilterForm
+    table = BGPSettingTable
+
+
+@register_model_view(BGPSetting)
+class BGPSettingView(ObjectView):
+    queryset = BGPSetting.objects.all()
+
+
+@register_model_view(BGPSetting, name='add', detail=False)
+@register_model_view(BGPSetting, name='edit')
+class BGPSettingEditView(ObjectEditView):
+    queryset = BGPSetting.objects.all()
+    form = BGPSettingForm
+
+
+@register_model_view(BGPSetting, name='delete')
+class BGPSettingDeleteView(ObjectDeleteView):
+    queryset = BGPSetting.objects.all()
+
+
+@register_model_view(BGPSetting, name='bulk_edit', detail=False)
+class BGPSettingBulkEditView(BulkEditView):
+    queryset = BGPSetting.objects.all()
+    filterset = BGPSettingFilterSet
+    form = BGPSettingBulkEditForm
+    table = BGPSettingTable
+
+
+@register_model_view(BGPSetting, name='bulk_delete', detail=False)
+class BGPSettingBulkDeleteView(BulkDeleteView):
+    queryset = BGPSetting.objects.all()
+    filterset = BGPSettingFilterSet
+    table = BGPSettingTable
+
+
+#
+# BGP Templates
+#
+@register_model_view(BGPPeerTemplate, name='list', path='', detail=False)
+class BGPPeerTemplateListView(ObjectListView):
+    queryset = BGPPeerTemplate.objects.all()
+    filterset = BGPPeerTemplateFilterSet
+    filterset_form = BGPPeerTemplateFilterForm
+    table = BGPPeerTemplateTable
+
+
+@register_model_view(BGPPeerTemplate)
+class BGPPeerTemplateView(ObjectView):
+    queryset = BGPPeerTemplate.objects.all()
+
+
+@register_model_view(BGPPeerTemplate, name='add', detail=False)
+@register_model_view(BGPPeerTemplate, name='edit')
+class BGPPeerTemplateEditView(ObjectEditView):
+    queryset = BGPPeerTemplate.objects.all()
+    form = BGPPeerTemplateForm
+
+
+@register_model_view(BGPPeerTemplate, name='delete')
+class BGPPeerTemplateDeleteView(ObjectDeleteView):
+    queryset = BGPPeerTemplate.objects.all()
+
+
+@register_model_view(BGPPeerTemplate, name='bulk_edit', detail=False)
+class BGPPeerTemplateBulkEditView(BulkEditView):
+    queryset = BGPPeerTemplate.objects.all()
+    filterset = BGPPeerTemplateFilterSet
+    form = BGPPeerTemplateBulkEditForm
+    table = BGPPeerTemplateTable
+
+
+@register_model_view(BGPPeerTemplate, name='bulk_delete', detail=False)
+class BGPPeerTemplateBulkDeleteView(BulkDeleteView):
+    queryset = BGPPeerTemplate.objects.all()
+    filterset = BGPPeerTemplateFilterSet
+    table = BGPPeerTemplateTable
+
+
+@register_model_view(BGPPolicyTemplate, name='list', path='', detail=False)
+class BGPPolicyTemplateListView(ObjectListView):
+    queryset = BGPPolicyTemplate.objects.all()
+    filterset = BGPPolicyTemplateFilterSet
+    filterset_form = BGPPolicyTemplateFilterForm
+    table = BGPPolicyTemplateTable
+
+
+@register_model_view(BGPPolicyTemplate)
+class BGPPolicyTemplateView(ObjectView):
+    queryset = BGPPolicyTemplate.objects.all()
+
+
+@register_model_view(BGPPolicyTemplate, name='add', detail=False)
+@register_model_view(BGPPolicyTemplate, name='edit')
+class BGPPolicyTemplateEditView(ObjectEditView):
+    queryset = BGPPolicyTemplate.objects.all()
+    form = BGPPolicyTemplateForm
+
+
+@register_model_view(BGPPolicyTemplate, name='delete')
+class BGPPolicyTemplateDeleteView(ObjectDeleteView):
+    queryset = BGPPolicyTemplate.objects.all()
+
+
+@register_model_view(BGPPolicyTemplate, name='bulk_edit', detail=False)
+class BGPPolicyTemplateBulkEditView(BulkEditView):
+    queryset = BGPPolicyTemplate.objects.all()
+    filterset = BGPPolicyTemplateFilterSet
+    form = BGPPolicyTemplateBulkEditForm
+    table = BGPPolicyTemplateTable
+
+
+@register_model_view(BGPPolicyTemplate, name='bulk_delete', detail=False)
+class BGPPolicyTemplateBulkDeleteView(BulkDeleteView):
+    queryset = BGPPolicyTemplate.objects.all()
+    filterset = BGPPolicyTemplateFilterSet
+    table = BGPPolicyTemplateTable
+
+
+@register_model_view(BGPSessionTemplate, name='list', path='', detail=False)
+class BGPSessionTemplateListView(ObjectListView):
+    queryset = BGPSessionTemplate.objects.all()
+    filterset = BGPSessionTemplateFilterSet
+    filterset_form = BGPSessionTemplateFilterForm
+    table = BGPSessionTemplateTable
+
+
+@register_model_view(BGPSessionTemplate)
+class BGPSessionTemplateView(ObjectView):
+    queryset = BGPSessionTemplate.objects.all()
+
+
+@register_model_view(BGPSessionTemplate, name='add', detail=False)
+@register_model_view(BGPSessionTemplate, name='edit')
+class BGPSessionTemplateEditView(ObjectEditView):
+    queryset = BGPSessionTemplate.objects.all()
+    form = BGPSessionTemplateForm
+
+
+@register_model_view(BGPSessionTemplate, name='delete')
+class BGPSessionTemplateDeleteView(ObjectDeleteView):
+    queryset = BGPSessionTemplate.objects.all()
+
+
+@register_model_view(BGPSessionTemplate, name='bulk_edit', detail=False)
+class BGPSessionTemplateBulkEditView(BulkEditView):
+    queryset = BGPSessionTemplate.objects.all()
+    filterset = BGPSessionTemplateFilterSet
+    form = BGPSessionTemplateBulkEditForm
+    table = BGPSessionTemplateTable
+
+
+@register_model_view(BGPSessionTemplate, name='bulk_delete', detail=False)
+class BGPSessionTemplateBulkDeleteView(BulkDeleteView):
+    queryset = BGPSessionTemplate.objects.all()
+    filterset = BGPSessionTemplateFilterSet
+    table = BGPSessionTemplateTable
 
 
 #
@@ -48,9 +243,9 @@ __all__ = (
 @register_model_view(BGPRouter, name='list', path='', detail=False)
 class BGPRouterListView(ObjectListView):
     queryset = BGPRouter.objects.all()
-    table = BGPRouterTable
     filterset = BGPRouterFilterSet
     filterset_form = BGPRouterFilterForm
+    table = BGPRouterTable
 
 
 @register_model_view(BGPRouter)
@@ -71,15 +266,95 @@ class BGPRouterDeleteView(ObjectDeleteView):
     queryset = BGPRouter.objects.all()
 
 
+@register_model_view(BGPRouter, name='bulk_edit', detail=False)
+class BGPRouterBulkEditView(BulkEditView):
+    queryset = BGPRouter.objects.all()
+    filterset = BGPRouterFilterSet
+    form = BGPRouterBulkEditForm
+    table = BGPRouterTable
+
+
+@register_model_view(BGPRouter, name='bulk_delete', detail=False)
+class BGPRouterBulkDeleteView(BulkDeleteView):
+    queryset = BGPRouter.objects.all()
+    filterset = BGPRouterFilterSet
+    table = BGPRouterTable
+
+
+@register_model_view(BGPRouter, name='settings')
+class BGPRouterSettingsView(BGPSettingViewMixin, ObjectChildrenView):
+    queryset = BGPRouter.objects.all()
+    tab = ViewTab(
+        label='Settings',
+        badge=lambda obj: BGPRouterSettingsView.child_model.objects.filter(
+            router=obj
+        ).count(),
+    )
+
+    def get_children(self, request, parent):
+        return self.child_model.objects.filter(router=parent)
+
+
+@register_model_view(BGPRouter, name='peer_templates')
+class BGPRouterPeerTemplatesView(ObjectChildrenView):
+    queryset = BGPRouter.objects.all()
+    child_model = BGPPeerTemplate
+    filterset = BGPPeerTemplateFilterSet
+    filterset_form = BGPPeerTemplateFilterForm
+    table = BGPPeerTemplateTable
+    actions = (CloneObject, EditObject, DeleteObject)
+    tab = ViewTab(
+        label='Peer Templates',
+        badge=lambda obj: obj.peer_templates.count(),
+    )
+
+    def get_children(self, request, parent):
+        return self.child_model.objects.filter(routers=parent)
+
+
+@register_model_view(BGPRouter, name='policy_templates')
+class BGPRouterPolicyTemplatesView(ObjectChildrenView):
+    queryset = BGPRouter.objects.all()
+    child_model = BGPPolicyTemplate
+    filterset = BGPPolicyTemplateFilterSet
+    filterset_form = BGPPolicyTemplateFilterForm
+    table = BGPPolicyTemplateTable
+    actions = (CloneObject, EditObject, DeleteObject)
+    tab = ViewTab(
+        label='Policy Templates',
+        badge=lambda obj: obj.policy_templates.count(),
+    )
+
+    def get_children(self, request, parent):
+        return self.child_model.objects.filter(routers=parent)
+
+
+@register_model_view(BGPRouter, name='session_templates')
+class BGPRouterSessionTemplatesView(ObjectChildrenView):
+    queryset = BGPRouter.objects.all()
+    child_model = BGPSessionTemplate
+    filterset = BGPSessionTemplateFilterSet
+    filterset_form = BGPSessionTemplateFilterForm
+    table = BGPSessionTemplateTable
+    actions = (CloneObject, EditObject, DeleteObject)
+    tab = ViewTab(
+        label='Session Templates',
+        badge=lambda obj: obj.session_templates.count(),
+    )
+
+    def get_children(self, request, parent):
+        return self.child_model.objects.filter(routers=parent)
+
+
 #
 # BGP Scope Views
 #
 @register_model_view(BGPScope, name='list', path='', detail=False)
 class BGPScopeListView(ObjectListView):
     queryset = BGPScope.objects.all()
-    table = BGPScopeTable
     filterset = BGPScopeFilterSet
     filterset_form = BGPScopeFilterForm
+    table = BGPScopeTable
 
 
 @register_model_view(BGPScope)
@@ -100,15 +375,30 @@ class BGPScopeDeleteView(ObjectDeleteView):
     queryset = BGPScope.objects.all()
 
 
+@register_model_view(BGPScope, name='bulk_edit', detail=False)
+class BGPScopeBulkEditView(BulkEditView):
+    queryset = BGPScope.objects.all()
+    filterset = BGPScopeFilterSet
+    form = BGPScopeBulkEditForm
+    table = BGPScopeTable
+
+
+@register_model_view(BGPScope, name='bulk_delete', detail=False)
+class BGPScopeBulkDeleteView(BulkDeleteView):
+    queryset = BGPScope.objects.all()
+    filterset = BGPScopeFilterSet
+    table = BGPScopeTable
+
+
 #
 # BGP Scope Views
 #
 @register_model_view(BGPAddressFamily, name='list', path='', detail=False)
 class BGPAddressFamilyListView(ObjectListView):
     queryset = BGPAddressFamily.objects.all()
-    table = BGPAddressFamilyTable
     filterset = BGPAddressFamilyFilterSet
     filterset_form = BGPAddressFamilyFilterForm
+    table = BGPAddressFamilyTable
 
 
 @register_model_view(BGPAddressFamily)
@@ -127,3 +417,165 @@ class BGPAddressFamilyEditView(ObjectEditView):
 @register_model_view(BGPAddressFamily, name='delete')
 class BGPAddressFamilyDeleteView(ObjectDeleteView):
     queryset = BGPAddressFamily.objects.all()
+
+
+@register_model_view(BGPAddressFamily, name='bulk_edit', detail=False)
+class BGPAddressFamilyBulkEditView(BulkEditView):
+    queryset = BGPAddressFamily.objects.all()
+    filterset = BGPAddressFamilyFilterSet
+    form = BGPAddressFamilyBulkEditForm
+    table = BGPAddressFamilyTable
+
+
+@register_model_view(BGPAddressFamily, name='bulk_delete', detail=False)
+class BGPAddressFamilyBulkDeleteView(BulkDeleteView):
+    queryset = BGPAddressFamily.objects.all()
+    filterset = BGPAddressFamilyFilterSet
+    table = BGPAddressFamilyTable
+
+
+@register_model_view(BGPAddressFamily, name='settings')
+class BGPAddressFamilySettingsView(BGPSettingViewMixin, ObjectChildrenView):
+    queryset = BGPAddressFamily.objects.all()
+    tab = ViewTab(
+        label='Settings',
+        badge=lambda obj: BGPAddressFamilySettingsView.child_model.objects.filter(
+            address_family=obj
+        ).count(),
+    )
+
+    def get_children(self, request, parent):
+        return self.child_model.objects.filter(address_family=parent)
+
+
+#
+# BGP Peer Views
+#
+@register_model_view(BGPPeer, name='list', path='', detail=False)
+class BGPPeerListView(ObjectListView):
+    queryset = BGPPeer.objects.all()
+    filterset = BGPPeerFilterSet
+    filterset_form = BGPPeerFilterForm
+    table = BGPPeerTable
+
+
+@register_model_view(BGPPeer)
+class BGPPeerView(ObjectView):
+    queryset = BGPPeer.objects.all()
+
+
+@register_model_view(BGPPeer, name='add', detail=False)
+@register_model_view(BGPPeer, name='edit')
+class BGPPeerEditView(ObjectEditView):
+    queryset = BGPPeer.objects.all()
+    form = BGPPeerForm
+
+
+@register_model_view(BGPPeer, name='delete')
+class BGPPeerDeleteView(ObjectDeleteView):
+    queryset = BGPPeer.objects.all()
+
+
+@register_model_view(BGPPeer, name='bulk_edit', detail=False)
+class BGPPeerBulkEditView(BulkEditView):
+    queryset = BGPPeer.objects.all()
+    filterset = BGPPeerFilterSet
+    form = BGPPeerBulkEditForm
+    table = BGPPeerTable
+
+
+@register_model_view(BGPPeer, name='bulk_delete', detail=False)
+class BGPPeerBulkDeleteView(BulkDeleteView):
+    queryset = BGPPeer.objects.all()
+    filterset = BGPPeerFilterSet
+    table = BGPPeerTable
+
+
+@register_model_view(BGPPeer, name='settings')
+class BGPPeerSettingsView(BGPSettingViewMixin, ObjectChildrenView):
+    queryset = BGPPeer.objects.all()
+    tab = ViewTab(
+        label='Settings',
+        badge=lambda obj: BGPPeerSettingsView.child_model.objects.filter(
+            peer=obj
+        ).count(),
+    )
+
+    def get_children(self, request, parent):
+        return self.child_model.objects.filter(peer=parent)
+
+
+@register_model_view(BGPPeer, name='address-families')
+class BGPPeerAddressFamiliesView(ObjectChildrenView):
+    queryset = BGPPeer.objects.all()
+    child_model = BGPPeerAddressFamily
+    filterset = BGPPeerAddressFamilyFilterSet
+    filterset_form = BGPPeerAddressFamilyFilterForm
+    table = BGPPeerAddressFamilyTable
+    actions = ObjectChildrenView.actions
+    tab = ViewTab(
+        label='Address Families',
+        badge=lambda obj: BGPPeerAddressFamiliesView.child_model.objects.filter(
+            peer=obj
+        ).count(),
+    )
+
+    def get_children(self, request, parent):
+        return self.child_model.objects.filter(peer=parent)
+
+
+#
+# BGP Peer Address Family Views
+#
+@register_model_view(BGPPeerAddressFamily, name='list', path='', detail=False)
+class BGPPeerAddressFamilyListView(ObjectListView):
+    queryset = BGPPeerAddressFamily.objects.all()
+    filterset = BGPPeerAddressFamilyFilterSet
+    filterset_form = BGPPeerAddressFamilyFilterForm
+    table = BGPPeerAddressFamilyTable
+
+
+@register_model_view(BGPPeerAddressFamily)
+class BGPPeerAddressFamilyView(ObjectView):
+    queryset = BGPPeerAddressFamily.objects.all()
+
+
+@register_model_view(BGPPeerAddressFamily, name='add', detail=False)
+@register_model_view(BGPPeerAddressFamily, name='edit')
+class BGPPeerAddressFamilyEditView(ObjectEditView):
+    queryset = BGPPeerAddressFamily.objects.all()
+    form = BGPPeerAddressFamilyForm
+
+
+@register_model_view(BGPPeerAddressFamily, name='delete')
+class BGPPeerAddressFamilyDeleteView(ObjectDeleteView):
+    queryset = BGPPeerAddressFamily.objects.all()
+
+
+@register_model_view(BGPPeerAddressFamily, name='bulk_edit', detail=False)
+class BGPPeerAddressFamilyBulkEditView(BulkEditView):
+    queryset = BGPPeerAddressFamily.objects.all()
+    filterset = BGPPeerAddressFamilyFilterSet
+    form = BGPPeerAddressFamilyBulkEditForm
+    table = BGPPeerAddressFamilyTable
+
+
+@register_model_view(BGPPeerAddressFamily, name='bulk_delete', detail=False)
+class BGPPeerAddressFamilyBulkDeleteView(BulkDeleteView):
+    queryset = BGPPeerAddressFamily.objects.all()
+    filterset = BGPPeerAddressFamilyFilterSet
+    table = BGPPeerAddressFamilyTable
+
+
+@register_model_view(BGPPeerAddressFamily, name='settings')
+class BGPPeerAddressFamilySettingsView(BGPSettingViewMixin, ObjectChildrenView):
+    queryset = BGPPeerAddressFamily.objects.all()
+    tab = ViewTab(
+        label='Settings',
+        badge=lambda obj: BGPPeerAddressFamilySettingsView.child_model.objects.filter(
+            peer_address_families=obj
+        ).count(),
+    )
+
+    def get_children(self, request, parent):
+        return self.child_model.objects.filter(peer_address_families=parent)
