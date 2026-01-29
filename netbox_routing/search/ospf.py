@@ -27,3 +27,4 @@ class OSPFAreaIndex(SearchIndex):
         ('area_id', 100),
         ('comments', 5000),
     )
+
