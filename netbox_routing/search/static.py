@@ -1,10 +1,7 @@
 from netbox.search import SearchIndex, register_search
 from netbox_routing.models.static import StaticRoute
 
-
-__all__ = (
-    'StaticRouteIndex',
-)
+__all__ = ('StaticRouteIndex',)
 
 
 @register_search
@@ -17,4 +14,3 @@ class StaticRouteIndex(SearchIndex):
         ('comments', 5000),
     )
     display_attrs = ('prefix', 'next_hop', 'vrf')
-
