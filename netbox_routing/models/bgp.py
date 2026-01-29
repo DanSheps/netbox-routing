@@ -8,9 +8,10 @@ from django.utils.translation import gettext as _
 from netbox.models import PrimaryModel
 from netbox_routing.choices.bgp import *
 from netbox_routing.constants.bgp import *
+from netbox_routing.models.base import SearchAttributeMixin
 
 
-class BGPSetting(PrimaryModel):
+class BGPSetting(SearchAttributeMixin, PrimaryModel):
     assigned_object_type = models.ForeignKey(
         verbose_name=_('Assigned Object Type'),
         to=ContentType,
@@ -252,7 +253,7 @@ class BGPPeerTemplate(PrimaryModel):
         return f'{self.name}'
 
 
-class BGPRouter(PrimaryModel):
+class BGPRouter(SearchAttributeMixin, PrimaryModel):
     name = models.CharField(verbose_name=_('Name'), max_length=100)
     assigned_object_type = models.ForeignKey(
         verbose_name=_('Assigned Object Type'),
@@ -611,7 +612,7 @@ class BGPPeer(PrimaryModel):
         return reverse('plugins:netbox_routing:bgppeer', args=[self.pk])
 
 
-class BGPPeerAddressFamily(PrimaryModel):
+class BGPPeerAddressFamily(SearchAttributeMixin, PrimaryModel):
     assigned_object_type = models.ForeignKey(
         verbose_name=_('Assigned Object Type'),
         to=ContentType,
@@ -717,3 +718,6 @@ class BGPPeerAddressFamily(PrimaryModel):
                 name='%(app_label)s_%(class)s_assigned_object_address_family',
             ),
         ]
+
+    def __str__(self):
+        return f'{self.assigned_object} ({self.address_family})'
