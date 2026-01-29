@@ -15,7 +15,7 @@ class BGPPeerTemplateIndex(SearchIndex):
 
 @register_search
 class BGPPolicyTemplateIndex(SearchIndex):
-    model = BGPPeerTemplate
+    model = BGPPolicyTemplate
     fields = (
         ('name', 100),
         ('description', 4000),
@@ -26,7 +26,7 @@ class BGPPolicyTemplateIndex(SearchIndex):
 
 @register_search
 class BGPSessionTemplateIndex(SearchIndex):
-    model = BGPPeerTemplate
+    model = BGPSessionTemplate
     fields = (
         ('name', 100),
         ('parent', 200),
