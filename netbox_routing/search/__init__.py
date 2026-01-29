@@ -5,7 +5,6 @@ from .objects import *
 from .ospf import OSPFInstanceIndex, OSPFAreaIndex
 from .static import StaticRouteIndex
 
-
 __all__ = (
     'ASPathIndex',
     'ASPathEntryIndex',
