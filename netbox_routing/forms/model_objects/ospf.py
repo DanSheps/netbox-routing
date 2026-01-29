@@ -10,7 +10,6 @@ from utilities.forms.fields import DynamicModelChoiceField, CommentField
 
 from netbox_routing.models import OSPFArea, OSPFInstance, OSPFInterface
 
-
 __all__ = (
     'OSPFAreaForm',
     'OSPFInstanceForm',
