@@ -37,7 +37,7 @@ class OSPFInstance(PrimaryModel):
         null=True,
     )
 
-    clone_fields = ('device',)
+    clone_fields = ('name', 'router_id', 'process_id', 'device', 'vrf')
     prerequisite_models = ('dcim.Device',)
 
     class Meta:
@@ -61,7 +61,7 @@ class OSPFArea(PrimaryModel):
         default='standard',
     )
     prerequisite_models = ()
-    clone_fields = ()
+    clone_fields = ('area_id', 'area_type')
 
     class Meta:
         ordering = ['area_id']
@@ -122,8 +122,11 @@ class OSPFInterface(PrimaryModel):
     passphrase = models.CharField(max_length=200, blank=True, null=True)
 
     clone_fields = (
+        'device',
         'instance',
         'area',
+        'interface',
+        'passive',
         'priority',
         'bfd',
         'authentication',
