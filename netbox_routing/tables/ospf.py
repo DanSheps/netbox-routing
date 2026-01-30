@@ -4,7 +4,6 @@ from django.utils.translation import gettext_lazy as _
 from netbox.tables import NetBoxTable
 from netbox_routing.models import OSPFArea, OSPFInstance, OSPFInterface
 
-
 __all__ = (
     'OSPFAreaTable',
     'OSPFInstanceTable',

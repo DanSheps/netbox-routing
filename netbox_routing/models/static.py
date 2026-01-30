@@ -7,7 +7,6 @@ from ipam.fields import IPNetworkField
 from netbox.models import PrimaryModel
 from netbox_routing.fields.ip import IPAddressField
 
-
 __all__ = ('StaticRoute',)
 
 
@@ -52,7 +51,16 @@ class StaticRoute(PrimaryModel):
         null=True,
     )
 
-    clone_fields = ('vrf', 'metric', 'permanent')
+    clone_fields = (
+        'name',
+        'devices',
+        'prefix',
+        'next_hop',
+        'vrf',
+        'metric',
+        'permanent',
+    )
+
     prerequisite_models = ('dcim.Device',)
 
     class Meta:

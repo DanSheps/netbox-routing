@@ -23,7 +23,6 @@ from utilities.views import register_model_view, ViewTab
 
 from netbox_routing.models import OSPFArea, OSPFInstance, OSPFInterface
 
-
 __all__ = (
     'OSPFInstanceListView',
     'OSPFInstanceView',

@@ -11,7 +11,6 @@ from utilities.forms.rendering import FieldSet
 
 from netbox_routing.models import OSPFArea, OSPFInstance, OSPFInterface
 
-
 __all__ = (
     'OSPFAreaForm',
     'OSPFInstanceForm',

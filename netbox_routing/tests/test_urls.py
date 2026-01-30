@@ -9,6 +9,53 @@ class URLTestCase(TestCase):
     def setUpTestData(cls):
         cls.patterns = sorted(
             [
+                'aspath',
+                'aspath_add',
+                'aspath_changelog',
+                'aspath_bulk_delete',
+                'aspath_bulk_edit',
+                'aspath_delete',
+                'aspath_edit',
+                'aspath_entries',
+                'aspath_journal',
+                'aspath_list',
+                'aspathentry',
+                'aspathentry_add',
+                'aspathentry_bulk_delete',
+                'aspathentry_bulk_edit',
+                'aspathentry_changelog',
+                'aspathentry_delete',
+                'aspathentry_edit',
+                'aspathentry_journal',
+                'aspathentry_list',
+                'community',
+                'community_add',
+                'community_changelog',
+                'community_bulk_delete',
+                'community_bulk_edit',
+                'community_delete',
+                'community_edit',
+                'community_journal',
+                'community_list',
+                'communitylist',
+                'communitylist_add',
+                'communitylist_changelog',
+                'communitylist_delete',
+                'communitylist_edit',
+                'communitylist_bulk_delete',
+                'communitylist_bulk_edit',
+                'communitylist_entries',
+                'communitylist_journal',
+                'communitylist_list',
+                'communitylistentry',
+                'communitylistentry_add',
+                'communitylistentry_changelog',
+                'communitylistentry_bulk_delete',
+                'communitylistentry_bulk_edit',
+                'communitylistentry_delete',
+                'communitylistentry_edit',
+                'communitylistentry_journal',
+                'communitylistentry_list',
                 'staticroute_list',
                 'staticroute_add',
                 'staticroute_bulk_edit',
@@ -104,13 +151,22 @@ class URLTestCase(TestCase):
                 'bgprouter_list',
                 'bgprouter_add',
                 'bgprouter',
+                'bgprouter_bulk_edit',
+                'bgprouter_bulk_delete',
                 'bgprouter_edit',
                 'bgprouter_delete',
                 'bgprouter_changelog',
                 'bgprouter_journal',
+                'bgprouter_peer_templates',
+                'bgprouter_policy_templates',
+                'bgprouter_session_templates',
+                'bgprouter_settings',
+                'bgpsessiontemplate_journal',
                 'bgpscope_list',
                 'bgpscope_add',
                 'bgpscope',
+                'bgpscope_bulk_edit',
+                'bgpscope_bulk_delete',
                 'bgpscope_edit',
                 'bgpscope_delete',
                 'bgpscope_changelog',
@@ -118,17 +174,79 @@ class URLTestCase(TestCase):
                 'bgpaddressfamily_list',
                 'bgpaddressfamily_add',
                 'bgpaddressfamily',
+                'bgpaddressfamily_bulk_edit',
+                'bgpaddressfamily_bulk_delete',
                 'bgpaddressfamily_edit',
                 'bgpaddressfamily_delete',
                 'bgpaddressfamily_changelog',
                 'bgpaddressfamily_journal',
+                'bgpaddressfamily_settings',
+                'bgppeer',
+                'bgppeer_add',
+                'bgppeer_address-families',
+                'bgppeer_changelog',
+                'bgppeer_bulk_delete',
+                'bgppeer_bulk_edit',
+                'bgppeer_delete',
+                'bgppeer_edit',
+                'bgppeer_journal',
+                'bgppeer_list',
+                'bgppeer_settings',
+                'bgppeeraddressfamily',
+                'bgppeeraddressfamily_add',
+                'bgppeeraddressfamily_changelog',
+                'bgppeeraddressfamily_bulk_delete',
+                'bgppeeraddressfamily_bulk_edit',
+                'bgppeeraddressfamily_delete',
+                'bgppeeraddressfamily_edit',
+                'bgppeeraddressfamily_journal',
+                'bgppeeraddressfamily_list',
+                'bgppeeraddressfamily_settings',
+                'bgppeertemplate',
+                'bgppeertemplate_add',
+                'bgppeertemplate_changelog',
+                'bgppeertemplate_bulk_delete',
+                'bgppeertemplate_bulk_edit',
+                'bgppeertemplate_delete',
+                'bgppeertemplate_edit',
+                'bgppeertemplate_journal',
+                'bgppeertemplate_list',
+                'bgppolicytemplate',
+                'bgppolicytemplate_add',
+                'bgppolicytemplate_changelog',
+                'bgppolicytemplate_bulk_delete',
+                'bgppolicytemplate_bulk_edit',
+                'bgppolicytemplate_delete',
+                'bgppolicytemplate_edit',
+                'bgppolicytemplate_journal',
+                'bgppolicytemplate_list',
+                'bgpsessiontemplate',
+                'bgpsessiontemplate_add',
+                'bgpsessiontemplate_changelog',
+                'bgpsessiontemplate_bulk_delete',
+                'bgpsessiontemplate_bulk_edit',
+                'bgpsessiontemplate_delete',
+                'bgpsessiontemplate_edit',
+                'bgpsessiontemplate_journal',
+                'bgpsessiontemplate_list',
+                'bgpsetting',
+                'bgpsetting_add',
+                'bgpsetting_changelog',
+                'bgpsetting_bulk_delete',
+                'bgpsetting_bulk_edit',
+                'bgpsetting_delete',
+                'bgpsetting_edit',
+                'bgpsetting_journal',
+                'bgpsetting_list',
                 'prefixlist_list',
                 'prefixlist_add',
                 # 'prefixlist_bulk_import',
                 'prefixlist',
-                'prefixlist_edit',
                 'prefixlist_entries',
+                'prefixlist_edit',
                 'prefixlist_delete',
+                'prefixlist_bulk_edit',
+                'prefixlist_bulk_delete',
                 'prefixlist_changelog',
                 'prefixlist_journal',
                 'prefixlistentry_list',
@@ -148,6 +266,8 @@ class URLTestCase(TestCase):
                 'routemap_entries',
                 'routemap_edit',
                 'routemap_delete',
+                'routemap_bulk_edit',
+                'routemap_bulk_delete',
                 'routemap_changelog',
                 'routemap_journal',
                 'routemapentry_list',
@@ -163,15 +283,22 @@ class URLTestCase(TestCase):
             ]
         )
 
-    def customAssertListEquals(self, list1, list2, msg=None):
+    def customAssertListEquals(self, list1, list2, labels=None, msg=None):
         list1_diff = list(set(list1) - set(list2))
         list2_diff = list(set(list2) - set(list1))
 
+        if labels:
+            first_list, second_list = labels
+        else:
+            first_list = second_list = ''
+
         differing = []
         if list1_diff:
-            differing.append(f'First list has extra items {list1_diff}')
+            differing.append(f'First list ({first_list}) has extra items {list1_diff}')
         if list2_diff:
-            differing.append(f'Second list has extra items {list2_diff}')
+            differing.append(
+                f'Second list ({second_list}) has extra items {list2_diff}'
+            )
 
         diffMsg = '\n'.join(differing)
         msg = self._formatMessage(msg, standardMsg=diffMsg)
@@ -193,4 +320,6 @@ class URLTestCase(TestCase):
         patterns = __import__('netbox_routing.urls', {}, {}, [""]).urlpatterns
         names = sorted(URLTestCase.get_names(patterns))
 
-        self.customAssertListEquals(sorted(names), sorted(self.patterns))
+        self.customAssertListEquals(
+            sorted(names), sorted(self.patterns), ('URLs', 'Expected URLs')
+        )
