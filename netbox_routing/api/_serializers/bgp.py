@@ -45,6 +45,7 @@ class BGPSettingSerializer(NetBoxModelSerializer):
             'value',
             'description',
             'comments',
+            'custom_fields',
         )
         brief_fields = (
             'url',
