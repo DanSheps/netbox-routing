@@ -12,6 +12,9 @@ __all__ = (
 
 
 class OSPFInstanceTable(NetBoxTable):
+    device = tables.Column(verbose_name=_('Device'), linkify=True)
+    vrf = tables.Column(verbose_name=_('VRF'), linkify=True)
+
     class Meta(NetBoxTable.Meta):
         model = OSPFInstance
         fields = (
@@ -34,6 +37,8 @@ class OSPFInstanceTable(NetBoxTable):
 
 
 class OSPFAreaTable(NetBoxTable):
+    area_id = tables.Column(verbose_name=_('Area ID'), linkify=True)
+
     class Meta(NetBoxTable.Meta):
         model = OSPFArea
         fields = ('pk', 'id', 'area_id', 'area_type')
