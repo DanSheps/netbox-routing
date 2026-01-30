@@ -1,9 +1,12 @@
 name-template: 'v$RESOLVED_VERSION'
 tag-template: 'v$RESOLVED_VERSION'
 categories:
-  - title: '🚀 Features'
+  - title: '✨ Features'
     labels:
       - 'type: feature'
+
+  - title: '🍻 Enhancements'
+    labels:
       - 'type: enhancement'
   - title: '🐛 Bug Fixes'
     labels:
@@ -26,6 +29,6 @@ version-resolver:
       - 'type: documentation'
   default: patch
 template: |
-  ## Changes
+  ## What's Changed
 
   $CHANGES
