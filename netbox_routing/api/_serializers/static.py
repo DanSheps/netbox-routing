@@ -34,6 +34,7 @@ class StaticRouteSerializer(NetBoxModelSerializer):
             'permanent',
             'description',
             'comments',
+            'custom_fields',
         )
         brief_fields = (
             'url',

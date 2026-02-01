@@ -27,6 +27,7 @@ class PrefixListSerializer(NetBoxModelSerializer):
             'name',
             'description',
             'comments',
+            'custom_fields',
         )
         brief_fields = (
             'url',
