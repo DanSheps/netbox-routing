@@ -24,6 +24,7 @@ version-resolver:
   patch:
     labels:
       - 'type: enhancement'
+      - 'type: improvement'
       - 'type: bug'
       - 'type: housekeeping'
       - 'type: documentation'
