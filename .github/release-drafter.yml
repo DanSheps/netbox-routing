@@ -4,10 +4,12 @@ categories:
   - title: '✨ Features'
     labels:
       - 'type: feature'
-
   - title: '🍻 Enhancements'
     labels:
       - 'type: enhancement'
+  - title: '🍻 Improvements'
+    labels:
+      - 'type: improvement'
   - title: '🐛 Bug Fixes'
     labels:
       - 'type: bug'
@@ -24,7 +26,6 @@ version-resolver:
   patch:
     labels:
       - 'type: enhancement'
-      - 'type: improvement'
       - 'type: bug'
       - 'type: housekeeping'
       - 'type: documentation'
