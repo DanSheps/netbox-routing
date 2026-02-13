@@ -536,6 +536,13 @@ class BGPPeer(PrimaryModel):
         null=True,
     )
     enabled = models.BooleanField(verbose_name=_('Enabled'), blank=True, null=True)
+    status = models.CharField(
+        verbose_name=_('Status'),
+        max_length=10,
+        choices=BGPStatusChoices,
+        null=True,
+        blank=True,
+    )
     local_as = models.ForeignKey(
         verbose_name=_('Local AS'),
         to='ipam.ASN',

@@ -249,6 +249,7 @@ class BGPPeerType(BGPSettingsMixin, PrimaryObjectType):
 
     name: str
     enabled: bool | None
+    status: str | None
     scope: (
         Annotated["BGPScopeType", strawberry.lazy('netbox_routing.graphql.types')]
         | None

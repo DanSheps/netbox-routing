@@ -6,6 +6,8 @@ from netbox.filtersets import NetBoxModelFilterSet
 from tenancy.filtersets import TenancyFilterSet
 from ipam.models import Role
 
+from utilities.filtersets import register_filterset
+
 from netbox_routing.models.community import *
 
 __all__ = (
@@ -15,6 +17,7 @@ __all__ = (
 )
 
 
+@register_filterset
 class CommunityFilterSet(TenancyFilterSet, NetBoxModelFilterSet):
     role_id = django_filters.ModelMultipleChoiceFilter(
         field_name='role',
@@ -48,6 +51,7 @@ class CommunityFilterSet(TenancyFilterSet, NetBoxModelFilterSet):
         return queryset.filter(qs_filter).distinct()
 
 
+@register_filterset
 class CommunityListFilterSet(TenancyFilterSet, NetBoxModelFilterSet):
 
     class Meta:
@@ -61,6 +65,7 @@ class CommunityListFilterSet(TenancyFilterSet, NetBoxModelFilterSet):
         return queryset.filter(qs_filter).distinct()
 
 
+@register_filterset
 class CommunityListEntryFilterSet(NetBoxModelFilterSet):
     community_list_id = django_filters.ModelMultipleChoiceFilter(
         field_name='community_list',

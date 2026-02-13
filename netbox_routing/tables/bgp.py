@@ -184,7 +184,7 @@ class BGPPeerTable(TenancyColumnsMixin, NetBoxTable):
             'peer_group',
             'peer_session',
             'remote_as',
-            'enabled',
+            'status',
             'local_as',
             'bfd',
             'password',
@@ -200,6 +200,7 @@ class BGPPeerTable(TenancyColumnsMixin, NetBoxTable):
             'peer',
             'remote_as',
             'enabled',
+            'status',
         )
 
 
