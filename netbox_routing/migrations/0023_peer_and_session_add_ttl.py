@@ -14,7 +14,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='bgppeer',
             name='ttl',
-            field=models.SmallIntegerField(
+            field=models.PositiveSmallIntegerField(
                 blank=True,
                 null=True,
                 validators=[
@@ -26,7 +26,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='bgpsessiontemplate',
             name='ttl',
-            field=models.SmallIntegerField(
+            field=models.PositiveSmallIntegerField(
                 blank=True,
                 null=True,
                 validators=[

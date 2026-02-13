@@ -85,7 +85,7 @@ class BGPSessionTemplate(PrimaryModel):
         blank=True,
         null=True,
     )
-    ttl = models.SmallIntegerField(
+    ttl = models.PositiveSmallIntegerField(
         verbose_name=_('TTL'),
         blank=True,
         null=True,
@@ -560,7 +560,7 @@ class BGPPeer(PrimaryModel):
         null=True,
     )
     bfd = models.BooleanField(verbose_name=_('BFD'), blank=True, null=True)
-    ttl = models.SmallIntegerField(
+    ttl = models.PositiveSmallIntegerField(
         verbose_name=_('TTL'),
         blank=True,
         null=True,
