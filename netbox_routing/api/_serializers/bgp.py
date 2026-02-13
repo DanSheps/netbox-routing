@@ -295,7 +295,6 @@ class BGPPeerSerializer(NetBoxModelSerializer):
             'remote_as',
             'local_as',
             'status',
-            'ttl',
             'enabled',
             'bfd',
             'password',
