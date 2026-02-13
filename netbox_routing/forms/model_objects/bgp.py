@@ -366,7 +366,7 @@ class BGPSessionTemplateForm(TenancyForm, PrimaryModelForm):
             'remote_as',
             'local_as',
         ),
-        FieldSet('pasword', 'bfd', 'enabled', name=_('Setings')),
+        FieldSet('pasword', 'bfd', 'ttl', 'enabled', name=_('Setings')),
         FieldSet('tenant_group', 'tenant', name=_('Tenancy')),
     )
 
@@ -379,6 +379,7 @@ class BGPSessionTemplateForm(TenancyForm, PrimaryModelForm):
             'remote_as',
             'local_as',
             'bfd',
+            'ttl',
             'password',
             'tenant_group',
             'tenant',
@@ -671,7 +672,7 @@ class BGPPeerForm(BGPSettingMixin, TenancyForm, PrimaryModelForm):
         ),
         FieldSet('scope', 'peer', 'status', name=_('Peer')),
         FieldSet('remote_as', 'local_as', name=_('ASNs')),
-        FieldSet('enabled', 'bfd', 'password', name=_('Peer Settings')),
+        FieldSet('enabled', 'bfd', 'password', 'ttl', name=_('Peer Settings')),
         FieldSet('tenant_group', 'tenant', name=_('Tenancy')),
     )
 
@@ -686,6 +687,7 @@ class BGPPeerForm(BGPSettingMixin, TenancyForm, PrimaryModelForm):
             'tenant',
             'enabled',
             'status',
+            'ttl',
             'bfd',
             'password',
             'tenant_group',

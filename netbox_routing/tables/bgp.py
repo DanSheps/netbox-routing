@@ -106,6 +106,7 @@ class BGPSessionTemplateTable(TenancyColumnsMixin, NetBoxTable):
             'local_as',
             'remote_as',
             'bfd',
+            'ttl',
             'password',
             'tenant',
         )
@@ -190,6 +191,7 @@ class BGPPeerTable(TenancyColumnsMixin, NetBoxTable):
             'password',
             'tenant_group',
             'tenant',
+            'ttl',
             'address_families',
         )
         default_columns = (
