@@ -85,7 +85,6 @@ class BGPSessionTemplateSerializer(NetBoxModelSerializer):
             'remote_as',
             'local_as',
             'bfd',
-            'ttl',
             'password',
             'tenant',
             'description',
