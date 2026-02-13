@@ -211,6 +211,7 @@ class BGPPeerTestCase(
         'peer',
         'remote_as',
         'scope',
+        'status',
         'url',
     ]
 

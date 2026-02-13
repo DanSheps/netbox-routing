@@ -154,6 +154,8 @@ class BGPPeerFilterForm(
             'peer_group_id',
             'remote_as_id',
             'local_as_id',
+            'status',
+            'enabled',
         ),
     )
     tag = TagFilterField(model)

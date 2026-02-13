@@ -294,6 +294,7 @@ class BGPPeerSerializer(NetBoxModelSerializer):
             'name',
             'remote_as',
             'local_as',
+            'status',
             'enabled',
             'bfd',
             'password',
@@ -310,6 +311,7 @@ class BGPPeerSerializer(NetBoxModelSerializer):
             'peer',
             'remote_as',
             'enabled',
+            'status',
         )
 
 

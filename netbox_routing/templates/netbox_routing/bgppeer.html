@@ -33,6 +33,12 @@
             {{ object.local_as|linkify }}
           </td>
         </tr>
+        <tr>
+          <th scope="row">Status</th>
+          <td>
+            {{ object.status }}
+          </td>
+        </tr>
       </table>
     </div>
     {% include 'netbox_routing/inc/settings.html' %}

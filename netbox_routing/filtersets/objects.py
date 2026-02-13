@@ -4,6 +4,7 @@ from django.db.models import Q
 from django.utils.translation import gettext as _
 
 from netbox.filtersets import NetBoxModelFilterSet
+from utilities.filtersets import register_filterset
 
 from netbox_routing.models.objects import *
 
@@ -17,6 +18,7 @@ __all__ = (
 )
 
 
+@register_filterset
 class PrefixListFilterSet(NetBoxModelFilterSet):
     class Meta:
         model = PrefixList
@@ -76,6 +78,7 @@ class PrefixListEntryFilterSet(NetBoxModelFilterSet):
             return queryset.none()
 
 
+@register_filterset
 class RouteMapFilterSet(NetBoxModelFilterSet):
 
     class Meta:
@@ -89,6 +92,7 @@ class RouteMapFilterSet(NetBoxModelFilterSet):
         return queryset.filter(qs_filter).distinct()
 
 
+@register_filterset
 class RouteMapEntryFilterSet(NetBoxModelFilterSet):
     route_map_id = django_filters.ModelMultipleChoiceFilter(
         field_name='route_map',
@@ -128,6 +132,7 @@ class ASPathFilterSet(NetBoxModelFilterSet):
         return queryset.filter(qs_filter).distinct()
 
 
+@register_filterset
 class ASPathEntryFilterSet(NetBoxModelFilterSet):
     aspath_id = django_filters.ModelMultipleChoiceFilter(
         field_name='aspath',

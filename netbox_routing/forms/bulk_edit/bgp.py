@@ -291,6 +291,7 @@ class BGPPeerBulkEditForm(
         FieldSet(
             'scope',
             'peer',
+            'status',
             'enabled',
             'source',
             'remote_as',
@@ -309,6 +310,8 @@ class BGPPeerBulkEditForm(
         'peer_group',
         'peer_session',
         'local_as',
+        'status',
+        'enabled',
         'password',
         'tenant',
     )

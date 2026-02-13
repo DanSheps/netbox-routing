@@ -5,9 +5,12 @@ from django.db.models import Q
 from dcim.models import Device
 from ipam.models import VRF
 from netbox.filtersets import NetBoxModelFilterSet
+from utilities.filtersets import register_filterset
+
 from netbox_routing.models import StaticRoute
 
 
+@register_filterset
 class StaticRouteFilterSet(NetBoxModelFilterSet):
 
     device = django_filters.ModelMultipleChoiceFilter(
