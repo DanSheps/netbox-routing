@@ -212,6 +212,7 @@ class BGPPeerTestCase(
         'remote_as',
         'scope',
         'status',
+        'ttl',
         'url',
     ]
 

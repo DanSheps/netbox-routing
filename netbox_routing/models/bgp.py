@@ -1,5 +1,6 @@
 from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
 from django.contrib.contenttypes.models import ContentType
+from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 from django.db.models import ManyToManyField
 from django.urls import reverse
@@ -84,6 +85,12 @@ class BGPSessionTemplate(PrimaryModel):
         blank=True,
         null=True,
     )
+    ttl = models.SmallIntegerField(
+        verbose_name=_('TTL'),
+        blank=True,
+        null=True,
+        validators=[MinValueValidator(0), MaxValueValidator(255)],
+    )
     bfd = models.CharField(
         verbose_name=_('BFD'),
         max_length=50,
@@ -113,6 +120,7 @@ class BGPSessionTemplate(PrimaryModel):
         'remote_as',
         'local_as',
         'bfd',
+        'ttl',
         'password',
         'tenant',
     )
@@ -552,6 +560,12 @@ class BGPPeer(PrimaryModel):
         null=True,
     )
     bfd = models.BooleanField(verbose_name=_('BFD'), blank=True, null=True)
+    ttl = models.SmallIntegerField(
+        verbose_name=_('TTL'),
+        blank=True,
+        null=True,
+        validators=[MinValueValidator(0), MaxValueValidator(255)],
+    )
     password = models.CharField(
         verbose_name=_('Password'), max_length=255, blank=True, null=True
     )
