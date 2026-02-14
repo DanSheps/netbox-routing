@@ -4,6 +4,7 @@ from .bgp import (
     BGPScopeFilterForm,
     BGPAddressFamilyFilterForm,
     BGPSettingFilterForm,
+    BFDProfileFilterForm,
 )
 from .ospf import OSPFAreaFilterForm, OSPFInstanceFilterForm, OSPFInterfaceFilterForm
 from .objects import (
@@ -22,6 +23,8 @@ __all__ = (
     'BGPScopeFilterForm',
     'BGPAddressFamilyFilterForm',
     'BGPSettingFilterForm',
+    # BFD
+    'BFDProfileFilterForm',
     # EIGRP
     'EIGRPRouterFilterForm',
     'EIGRPAddressFamilyFilterForm',

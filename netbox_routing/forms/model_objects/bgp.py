@@ -1,4 +1,5 @@
 from django import forms
+from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ValidationError
 from django.forms import fields
 from django.utils.translation import gettext as _
@@ -12,8 +13,10 @@ from utilities.forms.fields import (
     DynamicModelMultipleChoiceField,
 )
 from utilities.forms.rendering import FieldSet, TabbedGroups
+from virtualization.models import Cluster, VirtualMachine, ClusterGroup
 
-from netbox_routing.models import PrefixList, RouteMap
+from netbox_routing.choices.bgp import *
+from netbox_routing.models.objects import *
 from netbox_routing.models.bgp import *
 
 __all__ = (
@@ -26,9 +29,8 @@ __all__ = (
     'BGPPeerTemplateForm',
     'BGPPolicyTemplateForm',
     'BGPSessionTemplateForm',
+    'BFDProfileForm',
 )
-
-from virtualization.models import Cluster, VirtualMachine, ClusterGroup
 
 
 class BGPSettingMixin:
@@ -818,3 +820,37 @@ class BGPPeerAddressFamilyForm(BGPSettingMixin, TenancyForm, PrimaryModelForm):
 
     def save(self, *args, **kwargs):
         return super().save(*args, **kwargs)
+
+
+class BFDProfileForm(TenancyForm, PrimaryModelForm):
+
+    fieldsets = (
+        FieldSet(
+            'name',
+            'description',
+        ),
+        FieldSet(
+            'min_tx_int',
+            'min_tx_int',
+            'multiplier',
+            'hold',
+            name=_('BFD Parameters'),
+        ),
+        FieldSet('tenant_group', 'tenant', name=_('Tenancy')),
+    )
+
+    class Meta:
+        model = BFDProfile
+        fields = [
+            'name',
+            'min_tx_int',
+            'min_rx_int',
+            'multiplier',
+            'hold',
+            'description',
+            'comments',
+            'tenant_group',
+            'tenant',
+            'tags',
+            'owner',
+        ]

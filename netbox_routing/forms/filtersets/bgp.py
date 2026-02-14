@@ -8,6 +8,7 @@ from tenancy.forms import TenancyFilterForm
 from utilities.forms.fields import TagFilterField, DynamicModelMultipleChoiceField
 from utilities.forms.rendering import FieldSet
 
+from netbox_routing.choices.bgp import *
 from netbox_routing.models.bgp import *
 
 __all__ = (
@@ -20,6 +21,7 @@ __all__ = (
     'BGPPeerTemplateFilterForm',
     'BGPPolicyTemplateFilterForm',
     'BGPSessionTemplateFilterForm',
+    'BFDProfileFilterForm',
 )
 
 
@@ -194,6 +196,22 @@ class BGPPeerAddressFamilyFilterForm(
             'peer_group_id',
             'address_family_id',
             'enabled',
+        ),
+    )
+    tag = TagFilterField(model)
+
+
+class BFDProfileFilterForm(
+    TenancyFilterForm,
+    # ContactModelFilterForm,
+    NetBoxModelFilterSetForm,
+):
+    model = BFDProfile
+    fieldsets = (
+        FieldSet(
+            'q',
+            'filter_id',
+            'tag',
         ),
     )
     tag = TagFilterField(model)
