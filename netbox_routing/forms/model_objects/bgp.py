@@ -459,7 +459,7 @@ class BGPRouterForm(BGPSettingMixin, TenancyForm, PrimaryModelForm):
         queryset=BGPPeerTemplate.objects.all(),
         required=False,
         selector=False,
-        label=_('Session Templates'),
+        label=_('Peer Templates'),
     )
 
     fieldsets = [
