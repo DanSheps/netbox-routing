@@ -142,7 +142,10 @@ class BGPSessionTemplateType(BGPSettingsMixin, PrimaryObjectType):
     local_as: (
         Annotated["ASNType", strawberry.lazy('ipam.graphql.types')] | None
     )  # noqa: F821
-    bfd: bool | None
+    bfd: (
+        Annotated["BFDProfileType", strawberry.lazy('netbox_routing.graphql.types')]
+        | None
+    )
     ttl: int | None
     password: str | None
     tenant: Annotated["TenantType", strawberry.lazy('tenancy.graphql.types')] | None
@@ -281,7 +284,10 @@ class BGPPeerType(BGPSettingsMixin, PrimaryObjectType):
     local_as: (
         Annotated["ASNType", strawberry.lazy('ipam.graphql.types')] | None
     )  # noqa: F821
-    bfd: bool | None
+    bfd: (
+        Annotated["BFDProfileType", strawberry.lazy('netbox_routing.graphql.types')]
+        | None
+    )
     ttl: int | None
     password: str | None
     address_families: (
