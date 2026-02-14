@@ -341,7 +341,10 @@ class BFDProfileTestCase(
 
     def test_model(self):
         instance = self.model(
-            name='Test BFD Profile 1',
+            name='Test BFD Profile X',
+            min_rx_int=60,
+            min_tx_int=60,
+            multiplier=3,
         )
         instance.full_clean()
         instance.save()
@@ -350,7 +353,7 @@ class BFDProfileTestCase(
 
     def test_unique_together(self):
         instance = self.model(
-            name='Test BFD Profile 1',
+            name='Test BFD Profile X',
             min_rx_int=60,
             min_tx_int=60,
             multiplier=3,
@@ -359,7 +362,7 @@ class BFDProfileTestCase(
         instance.save()
 
         instance = self.model(
-            name='Test BFD Profile 1',
+            name='Test BFD Profile X',
             min_rx_int=60,
             min_tx_int=60,
             multiplier=3,
