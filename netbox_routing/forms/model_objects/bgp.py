@@ -830,7 +830,7 @@ class BFDProfileForm(TenancyForm, PrimaryModelForm):
             'description',
         ),
         FieldSet(
-            'min_tx_int',
+            'min_rx_int',
             'min_tx_int',
             'multiplier',
             'hold',

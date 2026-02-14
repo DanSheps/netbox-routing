@@ -769,11 +769,11 @@ class BFDProfile(PrimaryModel):
     name = models.CharField(verbose_name=_('Name'), max_length=100)
     min_tx_int = models.PositiveIntegerField(
         verbose_name=_('Min TX Interval'),
-        validators=[MinValueValidator(50), MaxValueValidator(60000)],
+        validators=[MinValueValidator(60), MaxValueValidator(60000)],
     )
     min_rx_int = models.PositiveIntegerField(
         verbose_name=_('Min RX Interval'),
-        validators=[MinValueValidator(50), MaxValueValidator(60000)],
+        validators=[MinValueValidator(60), MaxValueValidator(60000)],
     )
     multiplier = models.PositiveSmallIntegerField(
         verbose_name=_('Multiplier'),
@@ -783,7 +783,7 @@ class BFDProfile(PrimaryModel):
         verbose_name=_('Hold Time'),
         blank=True,
         null=True,
-        validators=[MinValueValidator(50), MaxValueValidator(60000)],
+        validators=[MinValueValidator(60), MaxValueValidator(60000)],
     )
     tenant = models.ForeignKey(
         verbose_name=_('Tenant'),

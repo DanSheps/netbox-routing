@@ -101,6 +101,10 @@ class Migration(migrations.Migration):
                     models.PositiveIntegerField(
                         blank=True,
                         null=True,
+                        validators=[
+                            django.core.validators.MinValueValidator(60),
+                            django.core.validators.MaxValueValidator(60000),
+                        ],
                     ),
                 ),
                 (
@@ -164,7 +168,7 @@ class Migration(migrations.Migration):
                 blank=True,
                 null=True,
                 on_delete=django.db.models.deletion.PROTECT,
-                related_name='bgp_peer_session_templates',
+                related_name='bgp_session_templates',
                 to='netbox_routing.bfdprofile',
             ),
         ),
@@ -181,7 +185,7 @@ class Migration(migrations.Migration):
             field=models.PositiveIntegerField(
                 default=0,
                 validators=[
-                    django.core.validators.MinValueValidator(50),
+                    django.core.validators.MinValueValidator(60),
                     django.core.validators.MaxValueValidator(60000),
                 ],
             ),
@@ -193,7 +197,7 @@ class Migration(migrations.Migration):
             field=models.PositiveIntegerField(
                 default=0,
                 validators=[
-                    django.core.validators.MinValueValidator(50),
+                    django.core.validators.MinValueValidator(60),
                     django.core.validators.MaxValueValidator(60000),
                 ],
             ),
