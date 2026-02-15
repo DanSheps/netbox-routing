@@ -188,12 +188,12 @@ class PrefixListEntry(PermitDenyChoiceMixin, PrimaryModel):
                     }
                 )
 
-            if self.ge is not None and self.prefix.prefix.prefixlen >= self.ge:
+            if self.ge is not None and self.prefix.prefixlen >= self.ge:
                 raise ValidationError(
                     'Prefix\'s length cannot be longer then greater or equals value'
                 )
 
-            if self.le is not None and self.prefix.prefix.prefixlen >= self.le:
+            if self.le is not None and self.prefix.prefixlen >= self.le:
                 raise ValidationError(
                     'Prefix\'s length cannot be longer then greater or equals value'
                 )
