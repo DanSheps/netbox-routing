@@ -51,6 +51,9 @@ urlpatterns = [
     path(
         'eigrp/interface/<int:pk>/', include(get_model_urls(app_name, 'eigrpinterface'))
     ),
+    # BFD
+    path('bfd/profile/', include(get_model_urls(app_name, 'bfdprofile', detail=False))),
+    path('bfd/profile/<int:pk>/', include(get_model_urls(app_name, 'bfdprofile'))),
     # BGP
     path('bgp/setting/', include(get_model_urls(app_name, 'bgpsetting', detail=False))),
     path('bgp/setting/<int:pk>/', include(get_model_urls(app_name, 'bgpsetting'))),

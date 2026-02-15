@@ -12,6 +12,7 @@ from .bgp.types import (
     BGPAddressFamilyType,
     BGPPeerType,
     BGPPeerAddressFamilyType,
+    BFDProfileType,
 )
 from .community.types import CommunityType, CommunityListType, CommunityListEntryType
 from .eigrp.types import (
@@ -169,6 +170,12 @@ class BGPPeerAddressFamilyQuery:
     )
 
 
+@strawberry.type(name="Query")
+class BFDProfileQuery:
+    bfd_profile: BFDProfileType = strawberry_django.field()
+    bfd_profile_list: List[BFDProfileType] = strawberry_django.field()
+
+
 schema = [
     StaticRouteQuery,
     OSPFQuery,
@@ -190,4 +197,5 @@ schema = [
     BGPAddressFamilyQuery,
     BGPPeerQuery,
     BGPPeerAddressFamilyQuery,
+    BFDProfileQuery,
 ]

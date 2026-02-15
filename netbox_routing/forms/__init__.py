@@ -55,6 +55,10 @@ __all__ = (
     'BGPScopeFilterForm',
     'BGPAddressFamilyFilterForm',
     'BGPSettingFilterForm',
+    # BFD
+    'BFDProfileForm',
+    'BFDProfileBulkEditForm',
+    'BFDProfileFilterForm',
     # Objects
     'PrefixListForm',
     'PrefixListEntryForm',

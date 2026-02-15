@@ -1,0 +1,59 @@
+{% extends 'generic/object.html' %}
+{% load humanize %}
+{% load helpers %}
+{% load plugins %}
+
+{% block content %}
+<div class="row">
+  <div class="col col-md-6">
+    <div class="card">
+      <h5 class="card-header">BGP Peer</h5>
+      <table class="table table-hover attr-table">
+        <tr>
+          <th scope="row">Name</th>
+          <td>
+            {{ object.name }}
+          </td>
+        </tr>
+        <tr>
+          <th scope="row">Min RX</th>
+          <td>
+            {{ object.min_rx_int|placeholder }}
+          </td>
+        </tr>
+        <tr>
+          <th scope="row">Min TX</th>
+          <td>
+            {{ object.min_tx_int|placeholder }}
+          </td>
+        </tr>
+        <tr>
+          <th scope="row">Multiplier</th>
+          <td>
+            {{ object.multiplier|placeholder }}
+          </td>
+        </tr>
+        <tr>
+          <th scope="row">Hold Time</th>
+          <td>
+            {{ object.hold|placeholder }}
+          </td>
+        </tr>
+      </table>
+    </div>
+    {% plugin_left_page object %}
+  </div>
+  <div class="col col-md-6">
+    {% include 'inc/panels/related_objects.html' %}
+    {% include 'inc/panels/custom_fields.html' %}
+    {% include 'inc/panels/comments.html' %}
+    {% include 'inc/panels/tags.html' %}
+    {% plugin_right_page object %}
+  </div>
+</div>
+<div class="row">
+    <div class="col col-md-12">
+        {% plugin_full_width_page object %}
+    </div>
+</div>
+{% endblock %}

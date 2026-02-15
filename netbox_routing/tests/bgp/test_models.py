@@ -328,3 +328,47 @@ class BGPSessionTemplateTestCase(
             instance.full_clean()
         with self.assertRaises(IntegrityError):
             instance.save()
+
+
+class BFDProfileTestCase(
+    TestCase,
+):
+    model = BFDProfile
+
+    @classmethod
+    def setUpTestData(cls):
+        super().setUpTestData()
+
+    def test_model(self):
+        instance = self.model(
+            name='Test BFD Profile X',
+            min_rx_int=60,
+            min_tx_int=60,
+            multiplier=3,
+        )
+        instance.full_clean()
+        instance.save()
+        self.assertIsInstance(instance, self.model)
+        self.assertEqual(instance.__str__(), instance.name)
+
+    def test_unique_together(self):
+        instance = self.model(
+            name='Test BFD Profile X',
+            min_rx_int=60,
+            min_tx_int=60,
+            multiplier=3,
+        )
+        instance.full_clean()
+        instance.save()
+
+        instance = self.model(
+            name='Test BFD Profile X',
+            min_rx_int=60,
+            min_tx_int=60,
+            multiplier=3,
+        )
+
+        with self.assertRaises(ValidationError):
+            instance.full_clean()
+        with self.assertRaises(IntegrityError):
+            instance.save()

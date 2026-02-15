@@ -7,6 +7,7 @@ from dcim.models import Device
 from ipam.models import ASN, VRF, IPAddress
 from utilities.filtersets import register_filterset
 
+from netbox_routing.choices.bgp import *
 from netbox_routing.models.bgp import *
 
 __all__ = (
@@ -19,6 +20,7 @@ __all__ = (
     'BGPPolicyTemplateFilterSet',
     'BGPSessionTemplateFilterSet',
     'BGPPeerAddressFamilyFilterSet',
+    'BFDProfileFilterSet',
 )
 
 
@@ -297,4 +299,18 @@ class BGPPeerAddressFamilyFilterSet(NetBoxModelFilterSet):
         qs_filter = Q(peer__address__icontains=value)
         qs_filter |= Q(remote_as__asn__icontains=value)
         qs_filter |= Q(local_as__asn__icontains=value)
+        return queryset.filter(qs_filter).distinct()
+
+
+@register_filterset
+class BFDProfileFilterSet(NetBoxModelFilterSet):
+
+    class Meta:
+        model = BFDProfile
+        fields = ('name',)
+
+    def search(self, queryset, name, value):
+        if not value.strip():
+            return queryset
+        qs_filter = Q(name__icontains=value)
         return queryset.filter(qs_filter).distinct()

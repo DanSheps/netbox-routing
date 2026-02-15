@@ -280,3 +280,43 @@ class BGPPeerAddressFamilyTestCase(
             }
             for i in range(5, 7)
         ]
+
+
+class BFDProfileTestCase(
+    APIViewTestCases.APIViewTestCase,
+):
+    model = BFDProfile
+    view_namespace = "plugins-api:netbox_routing"
+    brief_fields = [
+        'display',
+        'id',
+        'name',
+        'url',
+    ]
+
+    bulk_update_data = {'description': 'Description'}
+
+    @classmethod
+    def setUpTestData(cls):
+        super().setUpTestData()
+        profiles = []
+        for i in range(1, 4):
+            profiles.append(
+                BFDProfile(
+                    name=f'Test BFD Profile {i}',
+                    min_rx_int=60,
+                    min_tx_int=60,
+                    multiplier=3,
+                )
+            )
+        BFDProfile.objects.bulk_create(profiles)
+
+        cls.create_data = [
+            {
+                'name': f'Test BFD Profile {i}',
+                'min_rx_int': 60,
+                'min_tx_int': 60,
+                'multiplier': 3,
+            }
+            for i in range(4, 6)
+        ]
