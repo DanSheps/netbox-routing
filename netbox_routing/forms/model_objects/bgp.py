@@ -356,7 +356,7 @@ class BGPSessionTemplateForm(TenancyForm, PrimaryModelForm):
         queryset=ASN.objects.all(),
         required=False,
         selector=True,
-        label=_('Remote ASN'),
+        label=_('Local ASN'),
     )
 
     fieldsets = (
