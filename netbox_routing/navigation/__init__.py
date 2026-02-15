@@ -1,6 +1,6 @@
 from netbox.plugins import PluginMenu
 
-# from .bgp import MENUITEMS as BGP_MENU
+from .bfd import BFD_MENU
 from .objects import OBJECT_MENU
 from .ospf import MENUITEMS as OSPF_MENU
 from .eigrp import eigrp
@@ -14,6 +14,7 @@ menu = PluginMenu(
     label='Netbox Routing',
     groups=(
         ('Routing Objects', COMMUNITY_MENU + OBJECT_MENU),
+        ('BFD', BFD_MENU),
         ('Static', STATIC_MENU),
         ('BGP', BGP_MENU),
         ('OSPF', OSPF_MENU),

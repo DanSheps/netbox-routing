@@ -11,6 +11,7 @@ from utilities.forms.fields import (
 )
 from utilities.forms.rendering import FieldSet
 
+from netbox_routing.choices.bgp import *
 from netbox_routing.models.bgp import *
 
 __all__ = (
@@ -23,6 +24,7 @@ __all__ = (
     'BGPSessionTemplateBulkEditForm',
     'BGPPeerBulkEditForm',
     'BGPPeerAddressFamilyBulkEditForm',
+    'BFDProfileBulkEditForm',
 )
 
 
@@ -350,5 +352,26 @@ class BGPPeerAddressFamilyBulkEditForm(
         'prefixlist_in',
         'routemap_out',
         'routemap_in',
+        'tenant',
+    )
+
+
+class BFDProfileBulkEditForm(TenantBulkEditMixin, PrimaryModelBulkEditForm):
+    model = BFDProfile
+    fieldsets = (
+        FieldSet(
+            'description',
+        ),
+        FieldSet(
+            'min_tx_int',
+            'min_rx_int',
+            'multiplier',
+            'hold',
+        ),
+        FieldSet('tenant', name=_('Tenancy')),
+    )
+    nullable_fields = (
+        'hold',
+        'description',
         'tenant',
     )

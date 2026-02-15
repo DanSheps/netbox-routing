@@ -11,6 +11,19 @@ from netbox_routing.choices.bgp import *
 from netbox_routing.constants.bgp import *
 from netbox_routing.models.base import SearchAttributeMixin
 
+__all__ = (
+    'BGPSetting',
+    'BGPPeerTemplate',
+    'BGPPolicyTemplate',
+    'BGPSessionTemplate',
+    'BGPRouter',
+    'BGPScope',
+    'BGPAddressFamily',
+    'BGPPeer',
+    'BGPPeerAddressFamily',
+    'BFDProfile',
+)
+
 
 class BGPSetting(SearchAttributeMixin, PrimaryModel):
     assigned_object_type = models.ForeignKey(
@@ -91,10 +104,11 @@ class BGPSessionTemplate(PrimaryModel):
         null=True,
         validators=[MinValueValidator(0), MaxValueValidator(255)],
     )
-    bfd = models.CharField(
-        verbose_name=_('BFD'),
-        max_length=50,
-        choices=BFDChoices,
+    bfd = models.ForeignKey(
+        verbose_name=_('BFD PRofile'),
+        to='netbox_routing.BFDProfile',
+        on_delete=models.PROTECT,
+        related_name='bgp_session_templates',
         blank=True,
         null=True,
     )
@@ -559,7 +573,14 @@ class BGPPeer(PrimaryModel):
         blank=True,
         null=True,
     )
-    bfd = models.BooleanField(verbose_name=_('BFD'), blank=True, null=True)
+    bfd = models.ForeignKey(
+        verbose_name=_('BFD PRofile'),
+        to='netbox_routing.BFDProfile',
+        on_delete=models.PROTECT,
+        related_name='bgp_peers',
+        blank=True,
+        null=True,
+    )
     ttl = models.PositiveSmallIntegerField(
         verbose_name=_('TTL'),
         blank=True,
@@ -742,3 +763,53 @@ class BGPPeerAddressFamily(SearchAttributeMixin, PrimaryModel):
 
     def __str__(self):
         return f'{self.assigned_object} ({self.address_family})'
+
+
+class BFDProfile(PrimaryModel):
+    name = models.CharField(verbose_name=_('Name'), max_length=100)
+    min_tx_int = models.PositiveIntegerField(
+        verbose_name=_('Min TX Interval'),
+        validators=[MinValueValidator(60), MaxValueValidator(60000)],
+    )
+    min_rx_int = models.PositiveIntegerField(
+        verbose_name=_('Min RX Interval'),
+        validators=[MinValueValidator(60), MaxValueValidator(60000)],
+    )
+    multiplier = models.PositiveSmallIntegerField(
+        verbose_name=_('Multiplier'),
+        validators=[MinValueValidator(0), MaxValueValidator(255)],
+    )
+    hold = models.PositiveIntegerField(
+        verbose_name=_('Hold Time'),
+        blank=True,
+        null=True,
+        validators=[MinValueValidator(60), MaxValueValidator(60000)],
+    )
+    tenant = models.ForeignKey(
+        verbose_name=_('Tenant'),
+        to='tenancy.Tenant',
+        on_delete=models.PROTECT,
+        related_name='bfd_profiles',
+        blank=True,
+        null=True,
+    )
+
+    clone_fields = ('tenant',)
+    prerequisite_models = (
+        'netbox_routing.BGPRouter',
+        'netbox_routing.BGPScope',
+    )
+
+    class Meta:
+        verbose_name = 'BFD Profile'
+        verbose_name_plural = 'BFD Profiles'
+        ordering = ('name',)
+        constraints = [
+            models.UniqueConstraint(
+                fields=('name',),
+                name='%(app_label)s_%(class)s_name',
+            ),
+        ]
+
+    def __str__(self):
+        return f'{self.name}'

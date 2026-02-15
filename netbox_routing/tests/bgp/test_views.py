@@ -279,3 +279,41 @@ class BGPSessionTemplateTestCase(
         super().setUpTestData()
 
         cls.form_data = {'name': f'{cls.model._meta.verbose_name} 5'}
+
+
+class BFDProfileTestCase(
+    BulkEditMixin,
+    PluginBaseURLMixin,
+    ViewTestCases.GetObjectViewTestCase,
+    ViewTestCases.GetObjectChangelogViewTestCase,
+    ViewTestCases.CreateObjectViewTestCase,
+    ViewTestCases.EditObjectViewTestCase,
+    ViewTestCases.DeleteObjectViewTestCase,
+    ViewTestCases.ListObjectsViewTestCase,
+    ViewTestCases.BulkEditObjectsViewTestCase,
+    ViewTestCases.BulkDeleteObjectsViewTestCase,
+):
+    # ViewTestCases.BulkImportObjectsViewTestCase,
+    model = BFDProfile
+
+    @classmethod
+    def setUpTestData(cls):
+        super().setUpTestData()
+        profiles = []
+        for i in range(1, 4):
+            profiles.append(
+                BFDProfile(
+                    name=f'Test BFD Profile {i}',
+                    min_rx_int=60,
+                    min_tx_int=60,
+                    multiplier=3,
+                )
+            )
+        BFDProfile.objects.bulk_create(profiles)
+
+        cls.form_data = {
+            'name': f'{cls.model._meta.verbose_name} 5',
+            'min_rx_int': 60,
+            'min_tx_int': 60,
+            'multiplier': 3,
+        }

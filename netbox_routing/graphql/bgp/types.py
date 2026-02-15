@@ -16,6 +16,7 @@ from netbox_routing.graphql.bgp.filters import (
     BGPAddressFamilyFilter,
     BGPPeerFilter,
     BGPPeerAddressFamilyFilter,
+    BFDProfileFilter,
 )
 from netbox_routing.graphql.objects.types import PrefixListType, RouteMapType
 
@@ -28,6 +29,7 @@ __all__ = (
     'BGPAddressFamilyType',
     'BGPPeerType',
     'BGPPeerAddressFamilyType',
+    'BFDProfileType',
 )
 
 from netbox_routing.graphql.types_mixin import BGPSettingsMixin
@@ -140,7 +142,10 @@ class BGPSessionTemplateType(BGPSettingsMixin, PrimaryObjectType):
     local_as: (
         Annotated["ASNType", strawberry.lazy('ipam.graphql.types')] | None
     )  # noqa: F821
-    bfd: bool | None
+    bfd: (
+        Annotated["BFDProfileType", strawberry.lazy('netbox_routing.graphql.types')]
+        | None
+    )
     ttl: int | None
     password: str | None
     tenant: Annotated["TenantType", strawberry.lazy('tenancy.graphql.types')] | None
@@ -279,7 +284,10 @@ class BGPPeerType(BGPSettingsMixin, PrimaryObjectType):
     local_as: (
         Annotated["ASNType", strawberry.lazy('ipam.graphql.types')] | None
     )  # noqa: F821
-    bfd: bool | None
+    bfd: (
+        Annotated["BFDProfileType", strawberry.lazy('netbox_routing.graphql.types')]
+        | None
+    )
     ttl: int | None
     password: str | None
     address_families: (
@@ -353,3 +361,17 @@ class BGPPeerAddressFamilyType(BGPSettingsMixin, PrimaryObjectType):
     tenant: (
         Annotated["TenantType", strawberry.lazy('tenancy.graphql.types')] | None
     )  # noqa: F821
+
+
+@strawberry_django.type(
+    models.BFDProfile,
+    fields='__all__',
+    filters=BFDProfileFilter,
+)
+class BFDProfileType(PrimaryObjectType):
+    name: str
+    min_tx_int: int
+    min_rx_int: int
+    multiplier: int
+    hold: int | None
+    tenant: Annotated["TenantType", strawberry.lazy('tenancy.graphql.types')] | None

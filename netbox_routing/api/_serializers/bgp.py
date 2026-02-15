@@ -1,3 +1,4 @@
+from django.contrib.contenttypes.models import ContentType
 from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
 
@@ -10,6 +11,7 @@ from netbox.api.serializers import NetBoxModelSerializer
 from tenancy.api.serializers_.tenants import TenantSerializer
 from utilities.api import get_serializer_for_model
 
+from netbox_routing.constants.bgp import *
 from netbox_routing.models.bgp import *
 
 __all__ = (
@@ -22,6 +24,7 @@ __all__ = (
     'BGPPolicyTemplateSerializer',
     'BGPSessionTemplateSerializer',
     'BGPPeerAddressFamilySerializer',
+    'BFDProfileSerializer',
 )
 
 
@@ -364,3 +367,32 @@ class BGPPeerAddressFamilySerializer(NetBoxModelSerializer):
         serializer = get_serializer_for_model(obj.assigned_object)
         context = {'request': self.context['request']}
         return serializer(obj.assigned_object, context=context, nested=True).data
+
+
+class BFDProfileSerializer(NetBoxModelSerializer):
+    url = serializers.HyperlinkedIdentityField(
+        view_name='plugins-api:netbox_routing-api:bfdprofile-detail'
+    )
+    tenant = TenantSerializer(nested=True, required=False)
+
+    class Meta:
+        model = BFDProfile
+        fields = (
+            'url',
+            'id',
+            'display',
+            'description',
+            'comments',
+            'name',
+            'min_rx_int',
+            'min_tx_int',
+            'multiplier',
+            'hold',
+            'tenant',
+        )
+        brief_fields = (
+            'url',
+            'id',
+            'display',
+            'name',
+        )
