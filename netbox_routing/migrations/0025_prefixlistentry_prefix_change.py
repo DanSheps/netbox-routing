@@ -15,7 +15,7 @@ def forward_migrate(apps, schema_editor):
     CustomPrefix = apps.get_model('netbox_routing', 'CustomPrefix')
     Prefix = apps.get_model('ipam', 'Prefix')
 
-    pfx_ct = ContentType.objects.get(app_label='ipam', model='prefix')
+    pfx_ct = ContentType.objects.get_for_model(Prefix)
     cpfx_ct = ContentType.objects.get_for_model(CustomPrefix)
 
     for ple in PrefixListEntry.objects.all():
