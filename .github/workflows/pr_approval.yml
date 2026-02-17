@@ -3,6 +3,12 @@ on:
   pull_request:
     types:
       - opened
+      - auto_merge_enabled
+      - auto_merge_disabled
+      - assigned
+      - unassigned
+      - reopened
+      - synchronize
     branches:
       - "main"
 

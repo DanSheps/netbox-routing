@@ -37,8 +37,13 @@ A plugin for tracking all kinds of routing information
 | 0.3.0 | Not Compatible | Not Compatible | Compatible     | Not Compatible       | Not Compatible |
 | 0.3.1 | Not Compatible | Not Compatible | Not Compatible | Compatible           | Not Compatible |
 | 0.3.2 | Not Compatible | Not Compatible | Not Compatible | Not Compatible       | Compatible     |
+| 0.4.x | Not Compatible | Not Compatible | Not Compatible | Not Compatible       | Compatible     |
 
 ## Installation
+
+Install the python module
+
+`pip install netbox-routing`
 
 To install, simply include this plugin in the plugins configuration section of netbox.
 
@@ -48,6 +53,23 @@ Example:
         'netbox_routing'
     ],
 ```
+
+> [!NOTE]
+> If you utilize netbox-bgp this plugin is not compatible, however there is now a migration tool built in.
+> 
+> You will need to remove `netbox-bgp` from the plugin list, and make sure `netbox-routing` is installed.
+
+Once installed, run the migrations:
+
+`python netbox/manage.py migrate`
+
+Run the static collections:
+
+`python netbox/manage.py collectstatic --no-input`
+
+If migrating from `netbox-bgp` run migrate-netbox-bgp:
+
+`python netbox/manage.py migrate-netbox-bgp`
 
 ## Configuration
 

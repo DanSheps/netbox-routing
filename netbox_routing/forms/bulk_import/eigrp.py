@@ -7,7 +7,6 @@ from utilities.forms.fields import CSVModelChoiceField
 
 from netbox_routing.models import *
 
-
 __all__ = (
     'EIGRPRouterImportForm',
     'EIGRPAddressFamilyImportForm',
