@@ -9,6 +9,8 @@ from utilities.forms.fields import (
     DynamicModelChoiceField,
     DynamicModelMultipleChoiceField,
 )
+from utilities.forms.rendering import TabbedGroups, FieldSet
+from utilities.querysets import RestrictedQuerySet
 
 from netbox_routing.models.community import Community, CommunityList
 from netbox_routing.models.objects import *
@@ -22,10 +24,6 @@ __all__ = (
     'ASPathEntryForm',
     'CustomPrefixForm',
 )
-
-from utilities.forms.rendering import TabbedGroups, FieldSet
-
-from utilities.querysets import RestrictedQuerySet
 
 
 class ASPathForm(PrimaryModelForm):
@@ -241,6 +239,29 @@ class RouteMapEntryForm(PrimaryModelForm):
         required=False,
         selector=True,
         label=_('Match AS-Path'),
+    )
+
+    fieldsets = (
+        FieldSet(
+            'route_map',
+            'sequence',
+            'action',
+        ),
+        FieldSet(
+            TabbedGroups(
+                FieldSet('continue_entry', name=_('Flow Control')),
+                FieldSet(
+                    'match_ipv4',
+                    'match_ipv6',
+                    'match_community_list',
+                    'match_community',
+                    'match_aspath',
+                    'match',
+                    name=_('Match'),
+                ),
+                FieldSet('set', name=_('Set')),
+            ),
+        ),
     )
 
     class Meta:
