@@ -127,6 +127,15 @@ urlpatterns = [
         'objects/community-list-entry/<int:pk>/',
         include(get_model_urls(app_name, 'communitylistentry')),
     ),
+    # Objects: Custom Prefix
+    path(
+        'objects/custom-prefix/',
+        include(get_model_urls(app_name, 'customprefix', detail=False)),
+    ),
+    path(
+        'objects/custom-prefix/<int:pk>/',
+        include(get_model_urls(app_name, 'customprefix')),
+    ),
     # Objects: Prefix List
     path(
         'objects/prefix-list/',

@@ -1,3 +1,4 @@
+from ipam.models import Prefix
 from utilities.testing import APIViewTestCases
 
 from netbox_routing.models.objects import *
@@ -151,11 +152,12 @@ class PrefixListEntryTestCase(APIViewTestCases.APIViewTestCase):
     graphql_base_name = 'prefixlist_entry'
     brief_fields = [
         'action',
+        'assigned_prefix_id',
+        'assigned_prefix_type',
         'display',
         'ge',
         'id',
         'le',
-        'prefix',
         'prefix_list',
         'sequence',
         'url',
@@ -165,6 +167,20 @@ class PrefixListEntryTestCase(APIViewTestCases.APIViewTestCase):
 
     @classmethod
     def setUpTestData(cls):
+        prefixes = (
+            Prefix(prefix='10.0.0.0/24'),
+            Prefix(prefix='10.0.1.0/24'),
+            Prefix(prefix='10.0.2.0/24'),
+            Prefix(prefix='10.0.3.0/24'),
+        )
+        Prefix.objects.bulk_create(prefixes)
+
+        custom_prefixes = (
+            CustomPrefix(prefix='10.0.0.0/24'),
+            CustomPrefix(prefix='10.0.4.0/24'),
+        )
+        CustomPrefix.objects.bulk_create(custom_prefixes)
+
         cls.prefix_list = (
             PrefixList(
                 name='Prefix List 1',
@@ -180,19 +196,19 @@ class PrefixListEntryTestCase(APIViewTestCases.APIViewTestCase):
                 prefix_list=cls.prefix_list[0],
                 action='permit',
                 sequence=1,
-                prefix='10.0.0.0/24',
+                assigned_prefix=prefixes[0],
             ),
             cls.model(
                 prefix_list=cls.prefix_list[0],
                 action='permit',
                 sequence=2,
-                prefix='10.0.1.0/24',
+                assigned_prefix=prefixes[1],
             ),
             cls.model(
                 prefix_list=cls.prefix_list[1],
                 action='permit',
                 sequence=1,
-                prefix='10.0.0.0/24',
+                assigned_prefix=custom_prefixes[0],
             ),
         )
         cls.model.objects.bulk_create(cls.prefix_list_entry)
@@ -202,13 +218,15 @@ class PrefixListEntryTestCase(APIViewTestCases.APIViewTestCase):
                 'prefix_list': cls.prefix_list[0].pk,
                 'action': 'permit',
                 'sequence': 3,
-                'prefix': '10.0.2.0/24',
+                'assigned_prefix_type': 'ipam.prefix',
+                'assigned_prefix_id': prefixes[0].pk,
             },
             {
                 'prefix_list': cls.prefix_list[0].pk,
                 'action': 'permit',
                 'sequence': 4,
-                'prefix': '10.0.3.0/24',
+                'assigned_prefix_type': 'netbox_routing.customprefix',
+                'assigned_prefix_id': custom_prefixes[1].pk,
             },
         ]
 

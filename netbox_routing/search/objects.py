@@ -1,4 +1,4 @@
-from netbox.search import SearchIndex, register_search
+from netbox.search import SearchIndex, register_search, ObjectFieldValue
 from netbox_routing.models.objects import *
 
 
@@ -44,14 +44,23 @@ class PrefixListEntryIndex(SearchIndex):
     model = PrefixListEntry
     fields = (
         ('prefix_list', 100),
-        ('prefix', 150),
         ('description', 4000),
         ('comments', 5000),
     )
     display_attrs = (
         'prefix_list',
-        'prefix',
+        'assigned_prefix',
     )
+
+    @classmethod
+    def to_cache(cls, instance, custom_fields=None):
+        values = super().to_cache(instance, custom_fields)
+        if hasattr(instance, 'assigned_prefix'):
+            type_ = cls.get_field_type(instance.assigned_prefix, 'prefix')
+            value = cls.get_field_value(instance.assigned_prefix, 'prefix')
+            values.append(ObjectFieldValue('assigned_prefix', type_, 100, value))
+
+        return values
 
 
 @register_search

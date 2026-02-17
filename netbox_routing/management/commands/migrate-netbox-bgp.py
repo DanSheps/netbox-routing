@@ -263,7 +263,7 @@ class Command(BaseCommand):
                         entry = PrefixList.objects.get(name=item.name)
                         if not mapping['prefix_list'].get(item.pk):
                             mapping['prefix_list'][item.pk] = entry
-                    except PrefixListEntry.DoesNotExist:
+                    except PrefixList.DoesNotExist:
                         entry = PrefixList(
                             name=item.name,
                             family=family,
@@ -276,9 +276,17 @@ class Command(BaseCommand):
 
                 for item in netbox_bgp.PrefixListRule.objects.all():
                     prefix_list = mapping['prefix_list'][item.prefix_list.pk]
-                    prefix = item.prefix_custom
+                    prefix = None
                     if item.prefix:
-                        prefix = item.prefix.prefix
+                        prefix = item.prefix
+                    elif item.prefix_custom:
+                        try:
+                            prefix = CustomPrefix.objects.get(prefix=item.prefix_custom)
+                        except CustomPrefix.DoesNotExist:
+                            prefix = CustomPrefix(prefix=item.prefix_custom)
+                            prefix.clean()
+                            prefix.save()
+
                     try:
                         entry = PrefixListEntry.objects.get(
                             prefix_list=prefix_list, sequence=item.index

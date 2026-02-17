@@ -3,6 +3,7 @@ from django.core.exceptions import ValidationError
 from django.db import IntegrityError
 from django.test import TestCase
 
+from ipam.models import Prefix
 from netbox_routing.models.objects import *
 
 __all__ = (
@@ -131,11 +132,21 @@ class PrefixListEntryTestCase(TestCase):
             (3, '10.0.3.0/24'),
             (4, '10.0.4.0/24'),
         ):
+            if seq in [
+                1,
+                3,
+            ]:
+                prefix = CustomPrefix(prefix=pattern)
+            else:
+                prefix = Prefix(prefix=pattern)
+            prefix.full_clean()
+            prefix.save()
+
             ple = PrefixListEntry(
                 prefix_list=self.prefix_list,
                 action='permit',
                 sequence=seq,
-                prefix=pattern,
+                assigned_prefix=prefix,
             )
             ple.full_clean()
             ple.save()

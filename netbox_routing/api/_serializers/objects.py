@@ -1,15 +1,20 @@
+from django.contrib.contenttypes.models import ContentType
 from rest_framework import serializers
 
+from netbox.api.fields import ContentTypeField
+from netbox.api.gfk_fields import GFKSerializerField
 from netbox.api.serializers import NetBoxModelSerializer
+from netbox_routing.constants.objects import PREFIX_ASSIGNMENT_MODELS
 from netbox_routing.models.objects import *
 
 __all__ = (
+    'ASPathSerializer',
+    'ASPathEntrySerializer',
+    'CustomPrefixSerializer',
     'PrefixListSerializer',
     'PrefixListEntrySerializer',
     'RouteMapSerializer',
     'RouteMapEntrySerializer',
-    'ASPathSerializer',
-    'ASPathEntrySerializer',
 )
 
 
@@ -42,6 +47,16 @@ class PrefixListEntrySerializer(NetBoxModelSerializer):
         view_name='plugins-api:netbox_routing-api:prefixlistentry-detail'
     )
     prefix_list = PrefixListSerializer(nested=True)
+    assigned_prefix_type = ContentTypeField(
+        queryset=ContentType.objects.filter(PREFIX_ASSIGNMENT_MODELS),
+        allow_null=True,
+        required=False,
+        default=None,
+    )
+    assigned_prefix_id = serializers.IntegerField(
+        allow_null=True, required=False, default=None
+    )
+    assigned_prefix = GFKSerializerField(read_only=True)
 
     class Meta:
         model = PrefixListEntry
@@ -52,7 +67,9 @@ class PrefixListEntrySerializer(NetBoxModelSerializer):
             'prefix_list',
             'sequence',
             'action',
-            'prefix',
+            'assigned_prefix_type',
+            'assigned_prefix_id',
+            'assigned_prefix',
             'le',
             'ge',
             'description',
@@ -65,9 +82,33 @@ class PrefixListEntrySerializer(NetBoxModelSerializer):
             'prefix_list',
             'sequence',
             'action',
-            'prefix',
+            'assigned_prefix_type',
+            'assigned_prefix_id',
             'le',
             'ge',
+        )
+
+
+class CustomPrefixSerializer(NetBoxModelSerializer):
+    url = serializers.HyperlinkedIdentityField(
+        view_name='plugins-api:netbox_routing-api:customprefix-detail'
+    )
+
+    class Meta:
+        model = CustomPrefix
+        fields = (
+            'url',
+            'id',
+            'display',
+            'prefix',
+            'description',
+            'comments',
+        )
+        brief_fields = (
+            'url',
+            'id',
+            'display',
+            'prefix',
         )
 
 
