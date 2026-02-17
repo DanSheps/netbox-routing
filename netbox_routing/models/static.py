@@ -4,7 +4,6 @@ from django.urls import reverse
 from django.utils.translation import gettext as _
 from django.core.exceptions import ValidationError
 
-from dcim.models.device_components import Interface
 from ipam.fields import IPNetworkField
 from netbox.models import PrimaryModel
 from netbox_routing.fields.ip import IPAddressField
