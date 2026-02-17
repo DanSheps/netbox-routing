@@ -2,6 +2,7 @@ from django.test import TestCase
 
 from ipam.models import Prefix
 from netbox_routing.models.objects import *
+from netbox_routing.models.community import *
 
 from netbox_routing.choices import ActionChoices
 from netbox_routing.forms.objects import *

@@ -1,6 +1,5 @@
 from django.test import TestCase
 
-from ipam.models import Role
 from tenancy.models import Tenant
 
 from netbox_routing.choices import ActionChoices
