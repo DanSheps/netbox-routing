@@ -1,7 +1,9 @@
 from django import forms
+from django.core.exceptions import ValidationError
 from django.db.models import Model
 from django.utils.translation import gettext as _
 
+from ipam.models import Prefix
 from netbox.forms import PrimaryModelForm
 from utilities.forms.fields import (
     DynamicModelChoiceField,
@@ -18,7 +20,10 @@ __all__ = (
     'RouteMapEntryForm',
     'ASPathForm',
     'ASPathEntryForm',
+    'CustomPrefixForm',
 )
+
+from utilities.forms.rendering import TabbedGroups, FieldSet
 
 from utilities.querysets import RestrictedQuerySet
 
@@ -77,6 +82,43 @@ class PrefixListForm(PrimaryModelForm):
 
 
 class PrefixListEntryForm(PrimaryModelForm):
+    ipam_prefix = DynamicModelChoiceField(
+        queryset=Prefix.objects.all(),
+        required=False,
+        selector=True,
+        label=_('Prefix'),
+    )
+    custom_prefix = DynamicModelChoiceField(
+        queryset=CustomPrefix.objects.all(),
+        required=False,
+        selector=True,
+        quick_add=True,
+        label=_('Custom Prefix'),
+    )
+
+    fieldsets = (
+        FieldSet(
+            'prefix_list',
+            'sequence',
+            'action',
+        ),
+        FieldSet(
+            TabbedGroups(
+                FieldSet('ipam_prefix', name=_('Prefix')),
+                FieldSet('custom_prefix', name=_('Custom Prefix')),
+            ),
+            name=_('Prefix'),
+        ),
+        FieldSet(
+            'le',
+            'ge',
+            name=_('Filtering'),
+        ),
+        FieldSet(
+            'description',
+        ),
+        FieldSet('tenant_group', 'tenant', name=_('Tenancy')),
+    )
 
     class Meta:
         model = PrefixListEntry
@@ -84,9 +126,64 @@ class PrefixListEntryForm(PrimaryModelForm):
             'prefix_list',
             'sequence',
             'action',
-            'prefix',
+            'ipam_prefix',
+            'custom_prefix',
             'le',
             'ge',
+            'description',
+            'comments',
+            'tags',
+            'owner',
+        )
+
+    def __init__(self, *args, **kwargs):
+
+        # Initialize helper selectors
+        instance = kwargs.get('instance')
+        initial = kwargs.get('initial', {}).copy()
+        if instance:
+            if type(instance.assigned_prefix) is Prefix:
+                initial['ipam_prefix'] = instance.assigned_prefix
+            elif type(instance.assigned_prefix) is CustomPrefix:
+                initial['custom_prefix'] = instance.assigned_prefix
+        kwargs['initial'] = initial
+        super().__init__(*args, **kwargs)
+
+    def clean(self):
+        super().clean()
+        # Handle object assignment
+        selected_objects = [
+            field
+            for field in ('ipam_prefix', 'custom_prefix')
+            if self.cleaned_data[field]
+        ]
+        if len(selected_objects) > 1:
+            raise forms.ValidationError(
+                {
+                    selected_objects[1]: _(
+                        "You can only assign a prefix or a custom prefix."
+                    )
+                }
+            )
+        elif selected_objects:
+            self.instance.assigned_prefix = self.cleaned_data[selected_objects[0]]
+        else:
+            raise ValidationError(_('A Prefix or Custom Prefix must be specified'))
+
+
+class CustomPrefixForm(PrimaryModelForm):
+
+    fieldsets = (
+        FieldSet(
+            'prefix',
+            'description',
+        ),
+    )
+
+    class Meta:
+        model = CustomPrefix
+        fields = (
+            'prefix',
             'description',
             'comments',
             'tags',

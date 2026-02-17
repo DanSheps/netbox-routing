@@ -1,3 +1,4 @@
+from netbox import object_actions
 from netbox.views.generic import (
     ObjectListView,
     ObjectView,
@@ -131,6 +132,38 @@ class PrefixListEntryBulkDeleteView(BulkDeleteView):
     queryset = PrefixListEntry.objects.all()
     filterset = PrefixListEntryFilterSet
     table = PrefixListEntryTable
+
+
+#
+# Custom Prefix
+#
+
+
+@register_model_view(CustomPrefix, name='list', path='', detail=False)
+class CustomPrefixListView(ObjectListView):
+    queryset = CustomPrefix.objects.all()
+    table = CustomPrefixTable
+    filterset = CustomPrefixFilterSet
+    filterset_form = CustomPrefixFilterForm
+    actions = (object_actions.AddObject,)
+
+
+@register_model_view(CustomPrefix)
+class CustomPrefixView(ObjectView):
+    queryset = CustomPrefix.objects.all()
+    template_name = 'netbox_routing/customprefix.html'
+
+
+@register_model_view(CustomPrefix, name='add', detail=False)
+@register_model_view(CustomPrefix, name='edit')
+class CustomPrefixEditView(ObjectEditView):
+    queryset = CustomPrefix.objects.all()
+    form = CustomPrefixForm
+
+
+@register_model_view(CustomPrefix, name='delete')
+class CustomPrefixDeleteView(ObjectDeleteView):
+    queryset = CustomPrefix.objects.all()
 
 
 #

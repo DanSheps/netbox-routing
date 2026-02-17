@@ -1,3 +1,5 @@
+from django.utils.translation import gettext_lazy as _
+
 from netbox.plugins import PluginConfig
 from importlib.metadata import metadata
 
@@ -19,13 +21,15 @@ class NetboxRouting(PluginConfig):
     graphql_schema = 'graphql.schema.schema'
 
     def ready(self):
-        super().ready()
         from netbox_routing.templatetags.entries import get_entry_url  # noqa: F401
 
         from netbox_routing.fields.generic import NetBoxGenericRelation
         from dcim.models import Region, SiteGroup, Site, Location, Device
+        from ipam.models import Prefix
         from virtualization.models import ClusterGroup, Cluster, VirtualMachine
-        from netbox_routing.models import BGPRouter
+        from netbox_routing.models import BGPRouter, PrefixListEntry
+
+        super().ready()
 
         # Add Generic Relations to appropriate models
         models = (
@@ -46,6 +50,15 @@ class NetboxRouting(PluginConfig):
                 related_name=name,
                 related_query_name=name,
             ).contribute_to_class(model, 'bgp_router')
+
+        NetBoxGenericRelation(
+            verbose_name=_('Prefix List Entries'),
+            to=PrefixListEntry,
+            related_name='prefixes',
+            related_query_name='prefixes',
+            content_type_field='assigned_prefix_type',
+            object_id_field='assigned_prefix_id',
+        ).contribute_to_class(Prefix, 'prefix_list_entries')
 
 
 config = NetboxRouting

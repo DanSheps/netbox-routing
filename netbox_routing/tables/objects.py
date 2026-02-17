@@ -4,6 +4,16 @@ from django.utils.translation import gettext_lazy as _
 from netbox.tables import NetBoxTable, columns
 from netbox_routing.models.objects import *
 
+__all__ = (
+    'ASPathTable',
+    'ASPathEntryTable',
+    'CustomPrefixTable',
+    'PrefixListTable',
+    'PrefixListEntryTable',
+    'RouteMapTable',
+    'RouteMapEntryTable',
+)
+
 
 class PrefixListTable(NetBoxTable):
     name = tables.Column(linkify=True, verbose_name=_('Name'))
@@ -21,16 +31,41 @@ class PrefixListEntryTable(NetBoxTable):
 
     class Meta(NetBoxTable.Meta):
         model = PrefixListEntry
-        fields = ('pk', 'id', 'prefix_list', 'sequence', 'action', 'prefix', 'le', 'ge')
+        fields = (
+            'pk',
+            'id',
+            'prefix_list',
+            'sequence',
+            'action',
+            'assigned_prefix',
+            'le',
+            'ge',
+        )
         default_columns = (
             'pk',
             'id',
             'prefix_list',
             'sequence',
             'action',
-            'prefix',
+            'assigned_prefix',
             'le',
             'ge',
+        )
+
+
+class CustomPrefixTable(NetBoxTable):
+
+    class Meta(NetBoxTable.Meta):
+        model = CustomPrefix
+        fields = (
+            'pk',
+            'id',
+            'prefix',
+        )
+        default_columns = (
+            'pk',
+            'id',
+            'prefix',
         )
 
 
