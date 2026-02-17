@@ -100,5 +100,5 @@ class StaticRoute(PrimaryModel):
         super().clean()
         if not self.interface_next_hop and not self.next_hop:
             raise ValidationError({
-                "next_hop" : "A route requires set either an IP next hop or an Interface next hop."
+                "next_hop": "A route requires set either an IP next hop or an Interface next hop."
             })
