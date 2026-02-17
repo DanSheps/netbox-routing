@@ -129,6 +129,7 @@ class OSPFInterfaceForm(NetBoxModelForm):
         ),
         FieldSet(
             'interface',
+            'network_type',
             'priority',
             'passive',
             'bfd',
