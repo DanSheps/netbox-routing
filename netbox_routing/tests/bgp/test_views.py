@@ -272,6 +272,7 @@ class BGPSessionTemplateTestCase(
 ):
     # ViewTestCases.BulkImportObjectsViewTestCase,
     model = BGPSessionTemplate
+    routing_required_fields = ('name',)
 
     @classmethod
     def setUpTestData(cls):
