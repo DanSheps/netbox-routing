@@ -33,7 +33,7 @@ class StaticRoute(PrimaryModel):
         verbose_name='Interface Next Hop',
         help_text='Forwarding interface, for routes without IP address as next hop',
         blank=True,
-        null=True
+        null=True,
     )
     name = models.CharField(
         max_length=50,
@@ -88,9 +88,9 @@ class StaticRoute(PrimaryModel):
         )
 
     def __str__(self):
-        next_hop = ('VRF' if self.vrf else '')
-        next_hop += (str(self.next_hop) if self.next_hop else '')
-        next_hop += (' via ' + self.interface_next_hop if self.interface_next_hop else '')
+        next_hop = 'VRF' if self.vrf else ''
+        next_hop += str(self.next_hop) if self.next_hop else ''
+        next_hop += ' via ' + self.interface_next_hop if self.interface_next_hop else ''
         return f'{self.prefix} next-hop {next_hop}'
 
     def get_absolute_url(self):
@@ -99,6 +99,8 @@ class StaticRoute(PrimaryModel):
     def clean(self):
         super().clean()
         if not self.interface_next_hop and not self.next_hop:
-            raise ValidationError({
-                "next_hop": "A route requires set either an IP next hop or an Interface next hop."
-            })
+            raise ValidationError(
+                {
+                    "next_hop": "A route requires set either an IP next hop or an Interface next hop."
+                }
+            )

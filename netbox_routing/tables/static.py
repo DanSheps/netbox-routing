@@ -32,4 +32,13 @@ class StaticRouteTable(NetBoxTable):
             'description',
             'comments',
         )
-        default_columns = ('pk', 'id', 'devices', 'vrf', 'prefix', 'next_hop', 'interface_next_hop', 'name')
+        default_columns = (
+            'pk',
+            'id',
+            'devices',
+            'vrf',
+            'prefix',
+            'next_hop',
+            'interface_next_hop',
+            'name',
+        )
