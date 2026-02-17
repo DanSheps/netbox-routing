@@ -14,7 +14,6 @@ from utilities.forms.rendering import FieldSet
 
 from netbox_routing.models import StaticRoute
 
-
 __all__ = ('StaticRouteBulkEditForm',)
 
 

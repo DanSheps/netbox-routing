@@ -11,7 +11,6 @@ from netbox_routing.models import (
     EIGRPInterface,
 )
 
-
 __all__ = (
     'EIGRPRouterSerializer',
     'EIGRPAddressFamilySerializer',
@@ -38,6 +37,7 @@ class EIGRPRouterSerializer(NetBoxModelSerializer):
             'device',
             'description',
             'comments',
+            'custom_fields',
         )
         brief_fields = (
             'url',

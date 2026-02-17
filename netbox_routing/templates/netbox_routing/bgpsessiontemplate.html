@@ -1,0 +1,78 @@
+{% extends 'generic/object.html' %}
+{% load humanize %}
+{% load helpers %}
+{% load plugins %}
+
+{% block content %}
+<div class="row">
+  <div class="col col-md-6">
+    <div class="card">
+      <h5 class="card-header">BGP Session Template</h5>
+      <table class="table table-hover attr-table">
+        <tr>
+          <th scope="row">Name</th>
+          <td>
+            {{ object.name }}
+          </td>
+        </tr>
+        <tr>
+          <th scope="row">Parent Template</th>
+          <td>
+            {{ object.parent|linkify }}
+          </td>
+        </tr>
+        <tr>
+          <th scope="row">Remote AS</th>
+          <td>
+            {{ object.remote_as|linkify }}
+          </td>
+        </tr>
+        <tr>
+          <th scope="row">Local AS</th>
+          <td>
+            {{ object.local_as|linkify }}
+          </td>
+        </tr>
+        <tr>
+          <th scope="row">Enabled</th>
+          <td>
+            {{ object.enabled }}
+          </td>
+        </tr>
+        <tr>
+          <th scope="row">BFD</th>
+          <td>
+            {{ object.bfd }}
+          </td>
+        </tr>
+        <tr>
+          <th scope="row">Password</th>
+          <td>
+            {{ object.password }}
+          </td>
+        </tr>
+        <tr>
+          <th scope="row">Tenant</th>
+          <td>
+            {{ object.tenant|linkify }}
+          </td>
+        </tr>
+      </table>
+    </div>
+    {% include 'netbox_routing/inc/settings.html' %}
+    {% plugin_left_page object %}
+  </div>
+  <div class="col col-md-6">
+    {% include 'inc/panels/related_objects.html' %}
+    {% include 'inc/panels/custom_fields.html' %}
+    {% include 'inc/panels/comments.html' %}
+    {% include 'inc/panels/tags.html' %}
+    {% plugin_right_page object %}
+  </div>
+</div>
+<div class="row">
+    <div class="col col-md-12">
+        {% plugin_full_width_page object %}
+    </div>
+</div>
+{% endblock %}

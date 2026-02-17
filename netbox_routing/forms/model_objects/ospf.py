@@ -8,10 +8,10 @@ from ipam.models import VRF
 from netbox.forms import NetBoxModelForm
 from utilities.forms import BOOLEAN_WITH_BLANK_CHOICES
 from utilities.forms.fields import DynamicModelChoiceField, CommentField
+from utilities.forms.rendering import FieldSet
 
 from netbox_routing.choices import OSPFNetworkTypeChoices
 from netbox_routing.models import OSPFArea, OSPFInstance, OSPFInterface
-
 
 __all__ = (
     'OSPFAreaForm',
@@ -34,6 +34,23 @@ class OSPFInstanceForm(NetBoxModelForm):
         label=_('VRF'),
     )
     comments = CommentField()
+
+    fieldsets = (
+        FieldSet(
+            'name',
+            'description',
+        ),
+        FieldSet(
+            'device',
+            name=_('Device'),
+        ),
+        FieldSet(
+            'process_id',
+            'router_id',
+            'vrf',
+            name=_('Instance'),
+        ),
+    )
 
     class Meta:
         model = OSPFInstance
@@ -98,6 +115,31 @@ class OSPFInterfaceForm(NetBoxModelForm):
         label=_('Network Type'),
     )
     comments = CommentField()
+
+    fieldsets = (
+        FieldSet(
+            'area',
+            'description',
+            name=_('Session'),
+        ),
+        FieldSet(
+            'device',
+            'instance',
+            name=_('Instance'),
+        ),
+        FieldSet(
+            'interface',
+            'priority',
+            'passive',
+            'bfd',
+            name=_('Interface'),
+        ),
+        FieldSet(
+            'authentication',
+            'passphrase',
+            name=_('Authentication'),
+        ),
+    )
 
     class Meta:
         model = OSPFInterface

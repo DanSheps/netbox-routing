@@ -6,15 +6,16 @@ from django.utils.translation import gettext as _
 from dcim.models import Device, Interface
 from ipam.models import VRF
 from utilities.filters import MultiValueCharFilter
+from utilities.filtersets import register_filterset
 
 from netbox.filtersets import NetBoxModelFilterSet
 from netbox_routing.choices.ospf import OSPFAreaTypeChoices
 from netbox_routing.models import OSPFArea, OSPFInstance, OSPFInterface
 
-
 __all__ = ('OSPFAreaFilterSet', 'OSPFInstanceFilterSet', 'OSPFInterfaceFilterSet')
 
 
+@register_filterset
 class OSPFInstanceFilterSet(NetBoxModelFilterSet):
     device_id = django_filters.ModelMultipleChoiceFilter(
         field_name='device',
@@ -73,7 +74,15 @@ class OSPFInstanceFilterSet(NetBoxModelFilterSet):
             return queryset.none()
 
 
+@register_filterset
 class OSPFAreaFilterSet(NetBoxModelFilterSet):
+    device_id = django_filters.ModelMultipleChoiceFilter(
+        field_name='interfaces__interface__device__id',
+        queryset=Device.objects.all(),
+        to_field_name='id',
+        label=_('Device (ID)'),
+    )
+
     area_id = MultiValueCharFilter(
         method='filter_aid',
         label=_('Area ID'),
@@ -101,6 +110,7 @@ class OSPFAreaFilterSet(NetBoxModelFilterSet):
             return queryset.none()
 
 
+@register_filterset
 class OSPFInterfaceFilterSet(NetBoxModelFilterSet):
     instance_id = django_filters.ModelMultipleChoiceFilter(
         field_name='instance',

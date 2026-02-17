@@ -1,12 +1,16 @@
 from netbox.api.viewsets import NetBoxModelViewSet
 from netbox_routing import filtersets
-from netbox_routing.api.serializers import (
-    PrefixListSerializer,
-    PrefixListEntrySerializer,
-    RouteMapSerializer,
-    RouteMapEntrySerializer,
+from netbox_routing.api._serializers.objects import *
+from netbox_routing.models.objects import *
+
+__all__ = (
+    'PrefixListViewSet',
+    'PrefixListEntryViewSet',
+    'RouteMapViewSet',
+    'RouteMapEntryViewSet',
+    'ASPathViewSet',
+    'ASPathEntryViewSet',
 )
-from netbox_routing.models import PrefixList, PrefixListEntry, RouteMap, RouteMapEntry
 
 
 class PrefixListViewSet(NetBoxModelViewSet):
@@ -21,6 +25,12 @@ class PrefixListEntryViewSet(NetBoxModelViewSet):
     filterset_class = filtersets.PrefixListEntryFilterSet
 
 
+class CustomPrefixViewSet(NetBoxModelViewSet):
+    queryset = CustomPrefix.objects.all()
+    serializer_class = CustomPrefixSerializer
+    filterset_class = filtersets.CustomPrefixFilterSet
+
+
 class RouteMapViewSet(NetBoxModelViewSet):
     queryset = RouteMap.objects.all()
     serializer_class = RouteMapSerializer
@@ -31,3 +41,15 @@ class RouteMapEntryViewSet(NetBoxModelViewSet):
     queryset = RouteMapEntry.objects.all()
     serializer_class = RouteMapEntrySerializer
     filterset_class = filtersets.RouteMapEntryFilterSet
+
+
+class ASPathViewSet(NetBoxModelViewSet):
+    queryset = ASPath.objects.all()
+    serializer_class = ASPathSerializer
+    filterset_class = filtersets.ASPathFilterSet
+
+
+class ASPathEntryViewSet(NetBoxModelViewSet):
+    queryset = ASPathEntry.objects.all()
+    serializer_class = ASPathEntrySerializer
+    filterset_class = filtersets.ASPathEntryFilterSet

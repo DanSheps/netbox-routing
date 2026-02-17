@@ -1,10 +1,21 @@
+from django.contrib.contenttypes.models import ContentType
 from rest_framework import serializers
 
+from netbox.api.fields import ContentTypeField
+from netbox.api.gfk_fields import GFKSerializerField
 from netbox.api.serializers import NetBoxModelSerializer
-from netbox_routing.models import PrefixList, PrefixListEntry, RouteMap, RouteMapEntry
+from netbox_routing.constants.objects import PREFIX_ASSIGNMENT_MODELS
+from netbox_routing.models.objects import *
 
-
-__all__ = 'StaticRouteSerializer'
+__all__ = (
+    'ASPathSerializer',
+    'ASPathEntrySerializer',
+    'CustomPrefixSerializer',
+    'PrefixListSerializer',
+    'PrefixListEntrySerializer',
+    'RouteMapSerializer',
+    'RouteMapEntrySerializer',
+)
 
 
 class PrefixListSerializer(NetBoxModelSerializer):
@@ -21,6 +32,7 @@ class PrefixListSerializer(NetBoxModelSerializer):
             'name',
             'description',
             'comments',
+            'custom_fields',
         )
         brief_fields = (
             'url',
@@ -35,6 +47,16 @@ class PrefixListEntrySerializer(NetBoxModelSerializer):
         view_name='plugins-api:netbox_routing-api:prefixlistentry-detail'
     )
     prefix_list = PrefixListSerializer(nested=True)
+    assigned_prefix_type = ContentTypeField(
+        queryset=ContentType.objects.filter(PREFIX_ASSIGNMENT_MODELS),
+        allow_null=True,
+        required=False,
+        default=None,
+    )
+    assigned_prefix_id = serializers.IntegerField(
+        allow_null=True, required=False, default=None
+    )
+    assigned_prefix = GFKSerializerField(read_only=True)
 
     class Meta:
         model = PrefixListEntry
@@ -44,8 +66,10 @@ class PrefixListEntrySerializer(NetBoxModelSerializer):
             'display',
             'prefix_list',
             'sequence',
-            'type',
-            'prefix',
+            'action',
+            'assigned_prefix_type',
+            'assigned_prefix_id',
+            'assigned_prefix',
             'le',
             'ge',
             'description',
@@ -57,10 +81,34 @@ class PrefixListEntrySerializer(NetBoxModelSerializer):
             'display',
             'prefix_list',
             'sequence',
-            'type',
-            'prefix',
+            'action',
+            'assigned_prefix_type',
+            'assigned_prefix_id',
             'le',
             'ge',
+        )
+
+
+class CustomPrefixSerializer(NetBoxModelSerializer):
+    url = serializers.HyperlinkedIdentityField(
+        view_name='plugins-api:netbox_routing-api:customprefix-detail'
+    )
+
+    class Meta:
+        model = CustomPrefix
+        fields = (
+            'url',
+            'id',
+            'display',
+            'prefix',
+            'description',
+            'comments',
+        )
+        brief_fields = (
+            'url',
+            'id',
+            'display',
+            'prefix',
         )
 
 
@@ -96,8 +144,67 @@ class RouteMapEntrySerializer(NetBoxModelSerializer):
             'display',
             'route_map',
             'sequence',
-            'type',
+            'action',
+            'match',
+            'set',
             'description',
             'comments',
         )
-        brief_fields = ('url', 'id', 'display', 'route_map', 'sequence', 'type')
+        brief_fields = (
+            'url',
+            'id',
+            'display',
+            'route_map',
+            'sequence',
+            'action',
+            'match',
+            'set',
+        )
+
+
+class ASPathSerializer(NetBoxModelSerializer):
+    url = serializers.HyperlinkedIdentityField(
+        view_name='plugins-api:netbox_routing-api:aspath-detail'
+    )
+
+    class Meta:
+        model = ASPath
+        fields = (
+            'url',
+            'id',
+            'display',
+            'name',
+            'description',
+            'comments',
+        )
+        brief_fields = ('url', 'id', 'display', 'name')
+
+
+class ASPathEntrySerializer(NetBoxModelSerializer):
+    url = serializers.HyperlinkedIdentityField(
+        view_name='plugins-api:netbox_routing-api:aspathentry-detail'
+    )
+    aspath = ASPathSerializer(nested=True)
+
+    class Meta:
+        model = ASPathEntry
+        fields = (
+            'url',
+            'id',
+            'display',
+            'aspath',
+            'sequence',
+            'action',
+            'pattern',
+            'description',
+            'comments',
+        )
+        brief_fields = (
+            'url',
+            'id',
+            'display',
+            'aspath',
+            'sequence',
+            'action',
+            'pattern',
+        )

@@ -7,7 +7,6 @@ from utilities.forms.fields import CSVModelChoiceField
 
 from netbox_routing.models import StaticRoute
 
-
 __all__ = ("StaticRouteImportForm",)
 
 

@@ -8,6 +8,7 @@ from django.utils.translation import gettext as _
 from dcim.models import Device, Interface
 from ipam.models import Prefix
 from utilities.filters import MultiValueCharFilter
+from utilities.filtersets import register_filterset
 
 from netbox.filtersets import NetBoxModelFilterSet
 from netbox_routing.models import (
@@ -34,6 +35,7 @@ class RouterMixin:
             return queryset.none()
 
 
+@register_filterset
 class EIGRPRouterFilterSet(RouterMixin, NetBoxModelFilterSet):
     device_id = django_filters.ModelMultipleChoiceFilter(
         field_name='device',

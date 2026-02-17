@@ -10,8 +10,6 @@ import utilities.json
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('dcim', '0172_larger_power_draw_values'),
-        ('extras', '0092_delete_jobresult'),
         ('netbox_routing', '0004_alter_prefixlistentry_ge_alter_prefixlistentry_le'),
     ]
 

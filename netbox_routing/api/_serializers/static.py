@@ -7,7 +7,6 @@ from netbox.api.serializers import NetBoxModelSerializer
 from netbox_routing.api.field_serializers import IPAddressField
 from netbox_routing.models import StaticRoute
 
-
 __all__ = 'StaticRouteSerializer'
 
 
@@ -35,6 +34,7 @@ class StaticRouteSerializer(NetBoxModelSerializer):
             'permanent',
             'description',
             'comments',
+            'custom_fields',
         )
         brief_fields = (
             'url',

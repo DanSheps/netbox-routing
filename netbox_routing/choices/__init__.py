@@ -1,3 +1,3 @@
 from .base import *
 from .bgp import *
-from .ospf import *
+from .objects import *
