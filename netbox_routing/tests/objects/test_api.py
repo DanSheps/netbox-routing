@@ -275,10 +275,8 @@ class RouteMapEntryTestCase(APIViewTestCases.APIViewTestCase):
         'action',
         'display',
         'id',
-        'match',
         'route_map',
         'sequence',
-        'set',
         'url',
     ]
 

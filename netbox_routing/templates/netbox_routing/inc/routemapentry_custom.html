@@ -1,0 +1,21 @@
+{% load humanize %}
+{% load helpers %}
+{% load i18n %}
+<div class="card">
+  <h2 class="card-header d-flex justify-content-between">
+    {% trans "Custom Match" %}
+    <div class="card-actions">
+      {% copy_content "match" %}
+    </div>
+  </h2>
+  <pre class="card-body" id="match">{{ object.match }}</pre>
+</div>
+<div class="card">
+  <h2 class="card-header d-flex justify-content-between">
+    {% trans "Custom Set" %}
+    <div class="card-actions">
+      {% copy_content "set" %}
+    </div>
+  </h2>
+  <pre class="card-body" id="set">{{ object.set }}</pre>
+</div>
