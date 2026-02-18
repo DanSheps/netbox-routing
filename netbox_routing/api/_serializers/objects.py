@@ -184,10 +184,12 @@ class RouteMapEntrySerializer(NetBoxModelSerializer):
         view_name='plugins-api:netbox_routing-api:prefixlistentry-detail'
     )
     route_map = RouteMapSerializer(nested=True)
-    match_prefix_list = PrefixListSerializer(nested=True, many=True)
-    match_community_list = CommunityListSerializer(nested=True, many=True)
-    match_community = CommunitySerializer(nested=True, many=True)
-    match_aspath = ASPathSerializer(nested=True, many=True)
+    match_prefix_list = PrefixListSerializer(nested=True, many=True, required=False)
+    match_community_list = CommunityListSerializer(
+        nested=True, many=True, required=False
+    )
+    match_community = CommunitySerializer(nested=True, many=True, required=False)
+    match_aspath = ASPathSerializer(nested=True, many=True, required=False)
 
     class Meta:
         model = RouteMapEntry
@@ -213,4 +215,5 @@ class RouteMapEntrySerializer(NetBoxModelSerializer):
             'display',
             'route_map',
             'sequence',
+            'action',
         )
