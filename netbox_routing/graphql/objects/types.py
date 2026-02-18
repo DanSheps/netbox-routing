@@ -6,6 +6,7 @@ import strawberry_django
 from netbox.graphql.types import PrimaryObjectType
 from netbox_routing import models
 from netbox_routing.graphql.objects.filters import *
+from netbox_routing.graphql.community.types import *
 
 __all__ = (
     'ASPathType',
@@ -98,8 +99,18 @@ class RouteMapEntryType(PrimaryObjectType):
     ]
     action: str
     sequence: int
-    # match: Dict | None
-    # set: Dict | None
+    match_prefix_list: Annotated[
+        "PrefixListType", strawberry.lazy('netbox_routing.graphql.types')
+    ]
+    match_community_list: Annotated[
+        "CommunityListType", strawberry.lazy('netbox_routing.graphql.types')
+    ]
+    match_community: Annotated[
+        "CommunityType", strawberry.lazy('netbox_routing.graphql.types')
+    ]
+    match_aspath: Annotated[
+        "ASPathType", strawberry.lazy('netbox_routing.graphql.types')
+    ]
 
 
 @strawberry_django.type(

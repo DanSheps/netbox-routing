@@ -3,6 +3,7 @@ from django.db.models import Q
 from django.utils.translation import gettext as _
 
 from netbox.filtersets import NetBoxModelFilterSet
+from netbox_routing.models import RouteMapEntry
 from tenancy.filtersets import TenancyFilterSet
 from ipam.models import Role
 
@@ -30,6 +31,11 @@ class CommunityFilterSet(TenancyFilterSet, NetBoxModelFilterSet):
         to_field_name='name',
         label=_('Role (Name)'),
     )
+    route_map_entry_id = django_filters.ModelMultipleChoiceFilter(
+        field_name='route_map_entries',
+        queryset=RouteMapEntry.objects.all(),
+        label=_('Route Map Entry (ID)'),
+    )
 
     class Meta:
         model = Community
@@ -53,6 +59,11 @@ class CommunityFilterSet(TenancyFilterSet, NetBoxModelFilterSet):
 
 @register_filterset
 class CommunityListFilterSet(TenancyFilterSet, NetBoxModelFilterSet):
+    route_map_entry_id = django_filters.ModelMultipleChoiceFilter(
+        field_name='route_map_entries',
+        queryset=RouteMapEntry.objects.all(),
+        label=_('Route Map Entry (ID)'),
+    )
 
     class Meta:
         model = CommunityList
