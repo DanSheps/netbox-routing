@@ -116,6 +116,14 @@ class OSPFInterface(PrimaryModel):
     passive = models.BooleanField(verbose_name='Passive', blank=True, null=True)
     priority = models.IntegerField(blank=True, null=True)
     bfd = models.BooleanField(blank=True, null=True, verbose_name='BFD')
+    network_type = models.CharField(
+        verbose_name=_('Network Type'),
+        help_text=_('OSPF Interface Network Type'),
+        choices=choices.OSPFNetworkTypeChoices,
+        default=choices.OSPFNetworkTypeChoices.BROADCAST,
+        blank=False,
+        null=False,
+    )
     authentication = models.CharField(
         max_length=50, choices=choices.AuthenticationChoices, blank=True, null=True
     )
