@@ -1,6 +1,6 @@
 name: Auto approve
 on:
-  pull_request:
+  pull_request_target:
     types:
       - opened
       - auto_merge_enabled
@@ -8,7 +8,6 @@ on:
       - assigned
       - unassigned
       - reopened
-      - synchronize
     branches:
       - "main"
 
