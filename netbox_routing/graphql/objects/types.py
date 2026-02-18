@@ -99,18 +99,21 @@ class RouteMapEntryType(PrimaryObjectType):
     ]
     action: str
     sequence: int
-    match_prefix_list: Annotated[
-        "PrefixListType", strawberry.lazy('netbox_routing.graphql.types')
-    ]
-    match_community_list: Annotated[
-        "CommunityListType", strawberry.lazy('netbox_routing.graphql.types')
-    ]
-    match_community: Annotated[
-        "CommunityType", strawberry.lazy('netbox_routing.graphql.types')
-    ]
-    match_aspath: Annotated[
-        "ASPathType", strawberry.lazy('netbox_routing.graphql.types')
-    ]
+    match_prefix_list: (
+        Annotated["PrefixListType", strawberry.lazy('netbox_routing.graphql.types')]
+        | None
+    )
+    match_community_list: (
+        Annotated["CommunityListType", strawberry.lazy('netbox_routing.graphql.types')]
+        | None
+    )
+    match_community: (
+        Annotated["CommunityType", strawberry.lazy('netbox_routing.graphql.types')]
+        | None
+    )
+    match_aspath: (
+        Annotated["ASPathType", strawberry.lazy('netbox_routing.graphql.types')] | None
+    )
 
 
 @strawberry_django.type(

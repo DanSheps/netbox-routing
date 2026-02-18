@@ -271,3 +271,15 @@ class RouteMapEntryForm(PrimaryModelForm):
             'tags',
             'owner',
         )
+
+    def save(self, commit=True):
+        result = super().save(commit)
+
+        self.instance.match_community.set(self.cleaned_data['match_community'])
+        self.instance.match_community_list.set(
+            self.cleaned_data['match_community_list']
+        )
+        self.instance.match_prefix_list.set(self.cleaned_data['match_prefix_list'])
+        self.instance.match_aspath.set(self.cleaned_data['match_aspath'])
+
+        return result

@@ -227,13 +227,23 @@ class RouteMapEntryTestCase(TestCase):
                 'route_map': self.route_map,
                 'sequence': 1,
                 'action': ActionChoices.PERMIT,
-                'match_community': self.community,
+                'match_community': [
+                    self.community.pk,
+                ],
+                'match_prefix_list': [],
+                'match_community_list': [],
+                'match_aspath': [],
                 'match': {},
             }
         )
         self.assertTrue(form.is_valid())
         self.assertTrue(form.save())
-        self.assertEqual(form.instance.match.get('community'), self.community.pk)
+        self.assertEqual(
+            list(form.instance.match_community.all()),
+            [
+                self.community,
+            ],
+        )
 
     def test_form_invalid(self):
         form = RouteMapEntryForm(
