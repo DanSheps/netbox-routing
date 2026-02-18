@@ -276,7 +276,9 @@ class BGPPeerTemplate(PrimaryModel):
 
 
 class BGPRouter(SearchAttributeMixin, PrimaryModel):
-    name = models.CharField(verbose_name=_('Name'), max_length=100)
+    name = models.CharField(
+        verbose_name=_('Name'), max_length=100, blank=True, null=True
+    )
     assigned_object_type = models.ForeignKey(
         verbose_name=_('Assigned Object Type'),
         to=ContentType,
@@ -508,6 +510,8 @@ class BGPPeer(PrimaryModel):
     name = models.CharField(
         verbose_name=_('Name'),
         max_length=100,
+        blank=True,
+        null=True,
     )
     scope = models.ForeignKey(
         verbose_name=_('Scope'),

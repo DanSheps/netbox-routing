@@ -127,10 +127,10 @@ class Migration(migrations.Migration):
                 blank=True,
                 limit_choices_to=models.Q(
                     models.Q(
-                        models.Q(('app_label', 'ipam'), ('model', 'Prefix')),
+                        models.Q(('app_label', 'ipam'), ('model', 'prefix')),
                         models.Q(
                             ('app_label', 'netbox_routing'),
-                            ('model', 'PrefixListPrefix'),
+                            ('model', 'customprefix'),
                         ),
                         _connector='OR',
                     )

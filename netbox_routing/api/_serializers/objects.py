@@ -6,6 +6,7 @@ from netbox.api.gfk_fields import GFKSerializerField
 from netbox.api.serializers import NetBoxModelSerializer
 from netbox_routing.constants.objects import PREFIX_ASSIGNMENT_MODELS
 from netbox_routing.models.objects import *
+from netbox_routing.api._serializers.community import *
 
 __all__ = (
     'ASPathSerializer',
@@ -16,6 +17,54 @@ __all__ = (
     'RouteMapSerializer',
     'RouteMapEntrySerializer',
 )
+
+
+class ASPathSerializer(NetBoxModelSerializer):
+    url = serializers.HyperlinkedIdentityField(
+        view_name='plugins-api:netbox_routing-api:aspath-detail'
+    )
+
+    class Meta:
+        model = ASPath
+        fields = (
+            'url',
+            'id',
+            'display',
+            'name',
+            'description',
+            'comments',
+        )
+        brief_fields = ('url', 'id', 'display', 'name')
+
+
+class ASPathEntrySerializer(NetBoxModelSerializer):
+    url = serializers.HyperlinkedIdentityField(
+        view_name='plugins-api:netbox_routing-api:aspathentry-detail'
+    )
+    aspath = ASPathSerializer(nested=True)
+
+    class Meta:
+        model = ASPathEntry
+        fields = (
+            'url',
+            'id',
+            'display',
+            'aspath',
+            'sequence',
+            'action',
+            'pattern',
+            'description',
+            'comments',
+        )
+        brief_fields = (
+            'url',
+            'id',
+            'display',
+            'aspath',
+            'sequence',
+            'action',
+            'pattern',
+        )
 
 
 class PrefixListSerializer(NetBoxModelSerializer):
@@ -135,6 +184,12 @@ class RouteMapEntrySerializer(NetBoxModelSerializer):
         view_name='plugins-api:netbox_routing-api:prefixlistentry-detail'
     )
     route_map = RouteMapSerializer(nested=True)
+    match_prefix_list = PrefixListSerializer(nested=True, many=True, required=False)
+    match_community_list = CommunityListSerializer(
+        nested=True, many=True, required=False
+    )
+    match_community = CommunitySerializer(nested=True, many=True, required=False)
+    match_aspath = ASPathSerializer(nested=True, many=True, required=False)
 
     class Meta:
         model = RouteMapEntry
@@ -145,6 +200,10 @@ class RouteMapEntrySerializer(NetBoxModelSerializer):
             'route_map',
             'sequence',
             'action',
+            'match_prefix_list',
+            'match_community_list',
+            'match_community',
+            'match_aspath',
             'match',
             'set',
             'description',
@@ -157,54 +216,4 @@ class RouteMapEntrySerializer(NetBoxModelSerializer):
             'route_map',
             'sequence',
             'action',
-            'match',
-            'set',
-        )
-
-
-class ASPathSerializer(NetBoxModelSerializer):
-    url = serializers.HyperlinkedIdentityField(
-        view_name='plugins-api:netbox_routing-api:aspath-detail'
-    )
-
-    class Meta:
-        model = ASPath
-        fields = (
-            'url',
-            'id',
-            'display',
-            'name',
-            'description',
-            'comments',
-        )
-        brief_fields = ('url', 'id', 'display', 'name')
-
-
-class ASPathEntrySerializer(NetBoxModelSerializer):
-    url = serializers.HyperlinkedIdentityField(
-        view_name='plugins-api:netbox_routing-api:aspathentry-detail'
-    )
-    aspath = ASPathSerializer(nested=True)
-
-    class Meta:
-        model = ASPathEntry
-        fields = (
-            'url',
-            'id',
-            'display',
-            'aspath',
-            'sequence',
-            'action',
-            'pattern',
-            'description',
-            'comments',
-        )
-        brief_fields = (
-            'url',
-            'id',
-            'display',
-            'aspath',
-            'sequence',
-            'action',
-            'pattern',
         )

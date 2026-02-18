@@ -162,7 +162,7 @@ class BGPSessionTemplateType(BGPSettingsMixin, PrimaryObjectType):
 )
 class BGPRouterType(BGPSettingsMixin, PrimaryObjectType):
 
-    name: str
+    name: str | None
     assigned_object_type: (
         Annotated["ContentTypeType", strawberry.lazy('netbox.graphql.types')] | None
     )  # noqa: F821
@@ -253,7 +253,7 @@ class BGPAddressFamilyType(BGPSettingsMixin, PrimaryObjectType):
 )
 class BGPPeerType(BGPSettingsMixin, PrimaryObjectType):
 
-    name: str
+    name: str | None
     enabled: bool | None
     status: str | None
     scope: (

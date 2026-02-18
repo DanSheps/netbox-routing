@@ -1,6 +1,5 @@
 from django import forms
 from django.core.exceptions import ValidationError
-from django.db.models import Model
 from django.utils.translation import gettext as _
 
 from ipam.models import Prefix
@@ -9,6 +8,7 @@ from utilities.forms.fields import (
     DynamicModelChoiceField,
     DynamicModelMultipleChoiceField,
 )
+from utilities.forms.rendering import TabbedGroups, FieldSet
 
 from netbox_routing.models.community import Community, CommunityList
 from netbox_routing.models.objects import *
@@ -22,10 +22,6 @@ __all__ = (
     'ASPathEntryForm',
     'CustomPrefixForm',
 )
-
-from utilities.forms.rendering import TabbedGroups, FieldSet
-
-from utilities.querysets import RestrictedQuerySet
 
 
 class ASPathForm(PrimaryModelForm):
@@ -205,36 +201,28 @@ class RouteMapForm(PrimaryModelForm):
 
 
 class RouteMapEntryForm(PrimaryModelForm):
-    continue_entry = forms.IntegerField(
+    flow_control = forms.IntegerField(
         required=False,
         label=_("Continue"),
-        help_text=_("0 = Next Entry; >0 = Sequence Number"),
+        help_text=_("None = Not enabled; 0 = Next Entry; >0 = Sequence Number"),
     )
-    match_community = DynamicModelChoiceField(
+    match_community = DynamicModelMultipleChoiceField(
         queryset=Community.objects.all(),
         required=False,
         selector=True,
         label=_('Match Community'),
     )
-    match_community_list = DynamicModelChoiceField(
+    match_community_list = DynamicModelMultipleChoiceField(
         queryset=CommunityList.objects.all(),
         required=False,
         selector=True,
         label=_('Match Community List'),
     )
-    match_ipv4 = DynamicModelMultipleChoiceField(
+    match_prefix_list = DynamicModelMultipleChoiceField(
         queryset=PrefixList.objects.all(),
         required=False,
         selector=True,
-        label=_('Match IPv4'),
-        query_params={'family': '4'},
-    )
-    match_ipv6 = DynamicModelMultipleChoiceField(
-        queryset=PrefixList.objects.all(),
-        required=False,
-        selector=True,
-        label=_('Match IPv6'),
-        query_params={'family': '6'},
+        label=_('Match Prefix List'),
     )
     match_aspath = DynamicModelMultipleChoiceField(
         queryset=ASPath.objects.all(),
@@ -243,12 +231,39 @@ class RouteMapEntryForm(PrimaryModelForm):
         label=_('Match AS-Path'),
     )
 
+    fieldsets = (
+        FieldSet(
+            'route_map',
+            'sequence',
+            'action',
+        ),
+        FieldSet(
+            TabbedGroups(
+                FieldSet('flow_control', name=_('Flow Control')),
+                FieldSet(
+                    'match_prefix_list',
+                    'match_community_list',
+                    'match_community',
+                    'match_aspath',
+                    'match',
+                    name=_('Match'),
+                ),
+                FieldSet('set', name=_('Set')),
+            ),
+        ),
+    )
+
     class Meta:
         model = RouteMapEntry
         fields = (
             'route_map',
             'sequence',
             'action',
+            'flow_control',
+            'match_prefix_list',
+            'match_community_list',
+            'match_community',
+            'match_aspath',
             'match',
             'set',
             'description',
@@ -257,56 +272,14 @@ class RouteMapEntryForm(PrimaryModelForm):
             'owner',
         )
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        if self.instance.pk:
-            matches = [
-                field.replace('match_', '')
-                for field in self.fields.keys()
-                if 'match_' in field
-            ]
-            sets = [
-                field.replace('sets_', '')
-                for field in self.fields.keys()
-                if 'set_' in field
-            ]
-            for field in matches:
-                if field in self.instance.match.keys():
-                    self.fields[f'match_{field}'].initial = self.instance.match.pop(
-                        field
-                    )
-            for field in sets:
-                if field in self.instance.set.keys():
-                    self.fields[f'set_{field}'].initial = self.instance.match.pop(field)
+    def save(self, commit=True):
+        result = super().save(commit)
 
-    def clean(self, *args, **kwargs):
-        super().clean()
-        temp = self.cleaned_data.get('match', {})
-        if temp is None:
-            temp = {}
-        matches = [field for field in self.fields.keys() if 'match_' in field]
-        for field in matches:
-            if data := self.cleaned_data.pop(field):
-                name = field.replace('match_', '')
-                if type(data) is RestrictedQuerySet:
-                    temp.update({f'{name}': [d.pk for d in data]})
-                elif type(data) is Model:
-                    temp.update({f'{name}': data.pk})
-                else:
-                    temp.update({f'{name}': data.pk})
-        self.cleaned_data['match'] = temp
+        self.instance.match_community.set(self.cleaned_data['match_community'])
+        self.instance.match_community_list.set(
+            self.cleaned_data['match_community_list']
+        )
+        self.instance.match_prefix_list.set(self.cleaned_data['match_prefix_list'])
+        self.instance.match_aspath.set(self.cleaned_data['match_aspath'])
 
-        temp = self.cleaned_data.get('set', {})
-        if temp is None:
-            temp = {}
-        sets = [field for field in self.fields.keys() if 'sets_' in field]
-        for field in sets:
-            if data := self.cleaned_data.pop(field):
-                name = field.replace('set_', '')
-                if type(data) is RestrictedQuerySet:
-                    temp.update({f'{name}': [d.pk for d in data]})
-                elif type(data) is Model:
-                    temp.update({f'{name}': data.pk})
-                else:
-                    temp.update({f'{name}': data.pk})
-        self.cleaned_data['set'] = temp
+        return result
