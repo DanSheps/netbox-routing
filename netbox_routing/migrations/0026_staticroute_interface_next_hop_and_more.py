@@ -19,26 +19,6 @@ class Migration(migrations.Migration):
             field=models.CharField(blank=True, null=True),
         ),
         migrations.AlterField(
-            model_name='prefixlistentry',
-            name='assigned_prefix_type',
-            field=models.ForeignKey(
-                blank=True,
-                limit_choices_to=models.Q(
-                    models.Q(
-                        models.Q(('app_label', 'ipam'), ('model', 'prefix')),
-                        models.Q(
-                            ('app_label', 'netbox_routing'), ('model', 'customprefix')
-                        ),
-                        _connector='OR',
-                    )
-                ),
-                null=True,
-                on_delete=django.db.models.deletion.PROTECT,
-                related_name='+',
-                to='contenttypes.contenttype',
-            ),
-        ),
-        migrations.AlterField(
             model_name='staticroute',
             name='next_hop',
             field=netbox_routing.fields.ip.IPAddressField(blank=True, null=True),
