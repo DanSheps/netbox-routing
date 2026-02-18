@@ -8,7 +8,6 @@ from netbox_routing.choices.ospf import OSPFNetworkTypeChoices
 
 from netbox_routing.models import OSPFInstance, OSPFArea, OSPFInterface
 
-
 __all__ = (
     "OSPFInstanceImportForm",
     "OSPFAreaImportForm",
