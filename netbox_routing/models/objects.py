@@ -14,6 +14,8 @@ from django.core.exceptions import ValidationError
 from ipam.choices import IPAddressFamilyChoices
 from ipam.fields import IPNetworkField
 from netbox.models import PrimaryModel
+
+from netbox_routing.models.community import *
 from netbox_routing.choices import ActionChoices
 from netbox_routing.constants.objects import PREFIX_ASSIGNMENT_MODELS
 
@@ -287,10 +289,33 @@ class RouteMapEntry(PermitDenyChoiceMixin, PrimaryModel):
     )
     action = models.CharField(max_length=6, choices=ActionChoices)
     sequence = models.PositiveSmallIntegerField()
+    flow_control = models.PositiveSmallIntegerField(
+        verbose_name=_('Flow Control (Continue)'), null=True, blank=True
+    )
+    match_community_list = models.ManyToManyField(
+        to=CommunityList,
+        blank=True,
+        related_name='route_map_entries',
+    )
+    match_community = models.ManyToManyField(
+        to=Community,
+        blank=True,
+        related_name='route_map_entries',
+    )
+    match_aspath = models.ManyToManyField(
+        to=ASPath,
+        blank=True,
+        related_name='route_map_entries',
+    )
+    match_prefix_list = models.ManyToManyField(
+        to=PrefixList,
+        blank=True,
+        related_name='route_map_entries',
+    )
     match = models.JSONField(
         blank=True,
         null=True,
-        verbose_name=_('Set parameters'),
+        verbose_name=_('Match parameters'),
         help_text=_("JSON blob of options to match "),
     )
     set = models.JSONField(

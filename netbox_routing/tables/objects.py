@@ -81,10 +81,11 @@ class RouteMapTable(NetBoxTable):
 class RouteMapEntryTable(NetBoxTable):
     route_map = tables.Column(verbose_name=_('Route Map'), linkify=True)
     action = columns.ChoiceFieldColumn()
+    flow_control = tables.Column(verbose_name=_('Flow Control (Continue)'))
 
     class Meta(NetBoxTable.Meta):
         model = RouteMapEntry
-        fields = ('pk', 'id', 'route_map', 'sequence', 'action')
+        fields = ('pk', 'id', 'route_map', 'sequence', 'action', 'flow_control')
         default_columns = ('pk', 'id', 'route_map', 'sequence', 'action')
 
 
