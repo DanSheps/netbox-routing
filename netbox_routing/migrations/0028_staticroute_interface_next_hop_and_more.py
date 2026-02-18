@@ -7,8 +7,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('contenttypes', '0002_remove_content_type_name'),
-        ('netbox_routing', '0025_prefixlistentry_prefix_change'),
+        ('netbox_routing', '0027_bgp_name_optional'),
     ]
 
     operations = [
