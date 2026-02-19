@@ -32,6 +32,7 @@ class StaticRouteForm(NetBoxModelForm):
         FieldSet(
             'prefix',
             'next_hop',
+            'interface_next_hop',
             'metric',
             name=_('Route'),
         ),
@@ -51,6 +52,7 @@ class StaticRouteForm(NetBoxModelForm):
             'vrf',
             'prefix',
             'next_hop',
+            'interface_next_hop',
             'name',
             'metric',
             'permanent',

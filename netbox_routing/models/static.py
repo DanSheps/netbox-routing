@@ -2,6 +2,7 @@ from django.db import models
 from django.db.models import CheckConstraint, Q
 from django.urls import reverse
 from django.utils.translation import gettext as _
+from django.core.exceptions import ValidationError
 
 from ipam.fields import IPNetworkField
 from netbox.models import PrimaryModel
@@ -25,6 +26,14 @@ class StaticRoute(PrimaryModel):
     )
     next_hop = IPAddressField(
         verbose_name=_('Next Hop'),
+        blank=True,
+        null=True,
+    )
+    interface_next_hop = models.CharField(
+        verbose_name='Interface Next Hop',
+        help_text='Forwarding interface, for routes without IP address as next hop',
+        blank=True,
+        null=True,
     )
     name = models.CharField(
         max_length=50,
@@ -79,9 +88,22 @@ class StaticRoute(PrimaryModel):
         )
 
     def __str__(self):
-        if self.vrf is None:
-            return f'{self.prefix} NH {self.next_hop}'
-        return f'{self.prefix} VRF {self.vrf} NH {self.next_hop}'
+        if self.next_hop:
+            if self.vrf:
+                return f'{self.prefix} VRF {self.vrf} next-hop {self.next_hop}'
+            return f'{self.prefix} next-hop {self.next_hop}'
+        elif self.vrf:
+            return f'{self.prefix} VRF {self.vrf} next-hop {self.interface_next_hop}'
+        return f'{self.prefix} next-hop {self.next_hop}'
 
     def get_absolute_url(self):
         return reverse('plugins:netbox_routing:staticroute', args=[self.pk])
+
+    def clean(self):
+        super().clean()
+        if not self.interface_next_hop and not self.next_hop:
+            raise ValidationError(
+                {
+                    "next_hop": "A route requires set either an IP next hop or an Interface next hop."
+                }
+            )
