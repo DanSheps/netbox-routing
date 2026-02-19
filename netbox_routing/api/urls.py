@@ -3,7 +3,7 @@ from .views import *
 from .views.objects import CustomPrefixViewSet
 
 router = NetBoxRouter()
-router.register('static/route', StaticRouteViewSet)
+router.register('routes/static', StaticRouteViewSet)
 router.register('bgp/setting', BGPSettingViewSet)
 router.register('bgp/peer-template', BGPPeerTemplateViewSet)
 router.register('bgp/policy-template', BGPPolicyTemplateViewSet)
