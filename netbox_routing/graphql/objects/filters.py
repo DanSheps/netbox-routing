@@ -3,7 +3,7 @@ from typing import Annotated
 import strawberry
 import strawberry_django
 from strawberry import ID
-from strawberry_django import FilterLookup
+from strawberry_django.filters import StrFilterLookup
 
 from netbox.graphql.filters import PrimaryModelFilter
 from netbox_routing import models
@@ -72,4 +72,4 @@ class RouteMapEntryFilter(PrimaryModelFilter):
 
 @strawberry_django.filter(models.CustomPrefix, lookups=True)
 class CustomPrefixFilter(PrimaryModelFilter):
-    prefix: FilterLookup[str] | None = strawberry_django.filter_field()
+    prefix: StrFilterLookup | None = strawberry_django.filter_field()
