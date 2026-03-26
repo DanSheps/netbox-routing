@@ -65,7 +65,7 @@ class PrefixListEntryType(PrimaryObjectType):
     sequence: int
     assigned_prefix_type: (
         Annotated["ContentTypeType", strawberry.lazy('netbox.graphql.types')] | None
-    )  # noqa: F821
+    )
     assigned_prefix: (
         Union[
             Annotated["PrefixType", strawberry.lazy('ipam.graphql.types')],

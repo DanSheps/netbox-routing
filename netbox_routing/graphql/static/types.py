@@ -1,4 +1,4 @@
-from typing import List, Annotated
+from typing import Annotated
 
 import strawberry
 import strawberry_django
@@ -14,7 +14,7 @@ __all__ = ('StaticRouteType',)
 class StaticRouteType(PrimaryObjectType):
 
     name: str
-    devices: List[Annotated["DeviceType", strawberry.lazy('dcim.graphql.types')]] | None
+    devices: list[Annotated["DeviceType", strawberry.lazy('dcim.graphql.types')]] | None
     vrf: Annotated["VRFType", strawberry.lazy('ipam.graphql.types')] | None
     prefix: str | None
     next_hop: str | None

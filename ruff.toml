@@ -7,19 +7,21 @@ output-format = "github"
 
 [lint]
 extend-select = ["E1", "E2", "E3", "E501", "W"]
-ignore = ["F403", "F405"]
+ignore = ["I001", "RUF012", "RUF022", "SIM102", "UP006", "UP007", "F403", "F405"]
 preview = true
 
 [lint.per-file-ignores]
 "template_code.py" = ["E501"]
-"netbox_routing/graphql/filter_mixins.py" = ["F821"]
-"netbox_routing/graphql/bgp/types.py" = ["F821"]
-"netbox_routing/graphql/community/types.py" = ["F821"]
-"netbox_routing/graphql/eigrp/types.py" = ["F821"]
-"netbox_routing/graphql/objects/types.py" = ["F821"]
-"netbox_routing/graphql/ospf/types.py" = ["F821"]
-"netbox_routing/graphql/static/types.py" = ["F821"]
-"netbox_routing/graphql/types_mixin.py" = ["F821"]
+"netbox_routing/graphql/filter_mixins.py" = ["F821",]
+"netbox_routing/graphql/bgp/types.py" = ["F821",]
+"netbox_routing/graphql/community/types.py" = ["F821",]
+"netbox_routing/graphql/eigrp/types.py" = ["F821",]
+"netbox_routing/graphql/objects/types.py" = ["F821",]
+"netbox_routing/graphql/ospf/types.py" = ["F821",]
+"netbox_routing/graphql/static/types.py" = ["F821",]
+"netbox_routing/graphql/types_mixin.py" = ["F821",]
+"netbox_routing/management/commands/migrate-netbox-bgp.py" = ["N999", "SIM114", "SIM210", "TRY002", "TRY201",]
+"netbox_routing/tests/base.py" = ["SIM114", "PLW0127", "BLE001", ]
 
 [format]
 quote-style = "single"
