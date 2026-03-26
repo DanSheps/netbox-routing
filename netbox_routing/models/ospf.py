@@ -122,7 +122,6 @@ class OSPFInterface(PrimaryModel):
     passphrase = models.CharField(max_length=200, blank=True, null=True)
 
     clone_fields = (
-        'device',
         'instance',
         'area',
         'interface',
