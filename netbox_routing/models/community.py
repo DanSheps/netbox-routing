@@ -95,7 +95,6 @@ class Community(PrimaryModel):
 
 
 class CommunityListEntry(PrimaryModel):
-    """ """
 
     community_list = models.ForeignKey(
         to=CommunityList, on_delete=models.CASCADE, related_name='communitylistentries'

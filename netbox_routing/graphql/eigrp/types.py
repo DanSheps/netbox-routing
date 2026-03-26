@@ -23,7 +23,7 @@ __all__ = (
 @strawberry_django.type(models.EIGRPRouter, fields='__all__', filters=EIGRPRouterFilter)
 class EIGRPRouterType(PrimaryObjectType):
 
-    device: Annotated["DeviceType", strawberry.lazy('dcim.graphql.types')]  # noqa: F821
+    device: Annotated["DeviceType", strawberry.lazy('dcim.graphql.types')]
     rid: str
     type: str
     name: str
@@ -55,9 +55,7 @@ class EIGRPNetworkType(PrimaryObjectType):
         ]
         | None
     )
-    network: Annotated[
-        "PrefixType", strawberry.lazy('ipam.graphql.types')
-    ]  # noqa: F821
+    network: Annotated["PrefixType", strawberry.lazy('ipam.graphql.types')]
 
 
 @strawberry_django.type(
@@ -74,9 +72,7 @@ class EIGRPInterfaceType(PrimaryObjectType):
         ]
         | None
     )
-    interface: Annotated[
-        "InterfaceType", strawberry.lazy('dcim.graphql.types')
-    ]  # noqa: F821
+    interface: Annotated["InterfaceType", strawberry.lazy('dcim.graphql.types')]
     passive: str | None
     bfd: bool | None
     authentication: str | None

@@ -7,7 +7,7 @@ from netbox.api.serializers import NetBoxModelSerializer
 from netbox_routing.api.field_serializers import IPAddressField
 from netbox_routing.models import StaticRoute
 
-__all__ = 'StaticRouteSerializer'
+__all__ = ('StaticRouteSerializer',)
 
 
 class StaticRouteSerializer(NetBoxModelSerializer):
@@ -48,13 +48,13 @@ class StaticRouteSerializer(NetBoxModelSerializer):
 
     def create(self, validated_data):
         devices = validated_data.pop('devices', None)
-        instance = super(StaticRouteSerializer, self).create(validated_data)
+        instance = super().create(validated_data)
 
         return self._update_devices(instance, devices)
 
     def update(self, instance, validated_data):
         devices = validated_data.pop('devices', None)
-        instance = super(StaticRouteSerializer, self).update(instance, validated_data)
+        instance = super().update(instance, validated_data)
 
         return self._update_devices(instance, devices)
 
