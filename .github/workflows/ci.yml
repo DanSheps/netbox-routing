@@ -64,7 +64,7 @@ jobs:
 
       - name: Check PEP8 compliance
         run: |
-          ruff check netbox-routing/netbox_routing/
+          ruff check netbox-routing/netbox_routing/ --config netbox-routing/ruff.toml
 
       - name: Check Black
         uses: psf/black@stable
