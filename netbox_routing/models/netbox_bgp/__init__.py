@@ -68,7 +68,6 @@ class RoutingPolicy(AbsoluteURLMixin, NetBoxModel):
 
 
 class BGPPeerGroup(AbsoluteURLMixin, NetBoxModel):
-    """ """
 
     name = models.CharField(max_length=100)
     description = models.CharField(max_length=200, blank=True)
@@ -86,7 +85,6 @@ class BGPPeerGroup(AbsoluteURLMixin, NetBoxModel):
 
 
 class BGPBase(AbsoluteURLMixin, NetBoxModel):
-    """ """
 
     site = models.ForeignKey(
         to='dcim.Site',
@@ -111,7 +109,6 @@ class BGPBase(AbsoluteURLMixin, NetBoxModel):
 
 
 class Community(BGPBase):
-    """ """
 
     value = models.CharField(max_length=64)
 
@@ -126,7 +123,6 @@ class Community(BGPBase):
 
 
 class CommunityList(AbsoluteURLMixin, NetBoxModel):
-    """ """
 
     name = models.CharField(max_length=100)
     description = models.CharField(max_length=200, blank=True)
@@ -144,7 +140,6 @@ class CommunityList(AbsoluteURLMixin, NetBoxModel):
 
 
 class CommunityListRule(AbsoluteURLMixin, NetBoxModel):
-    """ """
 
     community_list = models.ForeignKey(
         to=CommunityList, on_delete=models.CASCADE, related_name='commlistrules'
@@ -168,7 +163,6 @@ class CommunityListRule(AbsoluteURLMixin, NetBoxModel):
 
 
 class PrefixList(AbsoluteURLMixin, NetBoxModel):
-    """ """
 
     name = models.CharField(max_length=100)
     description = models.CharField(max_length=200, blank=True)
@@ -187,7 +181,6 @@ class PrefixList(AbsoluteURLMixin, NetBoxModel):
 
 
 class PrefixListRule(AbsoluteURLMixin, NetBoxModel):
-    """ """
 
     prefix_list = models.ForeignKey(
         to=PrefixList, on_delete=models.CASCADE, related_name='prefrules'
@@ -346,7 +339,6 @@ class RoutingPolicyRule(AbsoluteURLMixin, NetBoxModel):
     class Meta:
         ordering = ['routing_policy', 'index']
         unique_together = ('routing_policy', 'index')
-        ordering = ['routing_policy', 'index']
         app_label = 'netbox_bgp'
         managed = False
 

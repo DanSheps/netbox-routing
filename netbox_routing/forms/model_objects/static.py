@@ -63,7 +63,7 @@ class StaticRouteForm(NetBoxModelForm):
         )
 
     def __init__(self, data=None, instance=None, *args, **kwargs):
-        super().__init__(data=data, instance=instance, *args, **kwargs)
+        super().__init__(*args, data=data, instance=instance, **kwargs)
 
         if self.instance and self.instance.pk is not None:
             self.fields['devices'].initial = self.instance.devices.all().values_list(

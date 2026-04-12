@@ -138,7 +138,7 @@ class Command(BaseCommand):
                         raise Exception(_('All BGP Sessions require a local ASN'))
 
                     assigned_object = item.device if item.device else item.site
-                    if assigned_object in mapping['router'].keys():
+                    if assigned_object in mapping['router']:
                         continue
 
                     try:
