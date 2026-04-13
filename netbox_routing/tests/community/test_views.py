@@ -53,6 +53,8 @@ class CommunityTestCase(
         cls.form_data = {
             'community': '64515',
             'status': 'active',
+            'description': 'Test community description',
+            'comments': 'Test community comments',
         }
 
         cls.bulk_edit_data = {
@@ -97,6 +99,8 @@ class CommunityListTestCase(
 
         cls.form_data = {
             'name': 'Community List X',
+            'description': 'Test community list description',
+            'comments': 'Test community list comments',
         }
 
         cls.bulk_edit_data = {
@@ -189,6 +193,8 @@ class CommunityListEntryTestCase(
             'community_list': cls.community_lists[2].pk,
             'community': cls.communities[2].pk,
             'action': ActionChoices.PERMIT,
+            'description': 'Test entry description',
+            'comments': 'Test entry comments',
         }
 
         cls.bulk_edit_data = {
