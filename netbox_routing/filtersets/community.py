@@ -53,7 +53,7 @@ class CommunityFilterSet(TenancyFilterSet, NetBoxModelFilterSet):
     def search(self, queryset, name, value):
         if not value.strip():
             return queryset
-        qs_filter = Q(community__icontains=value)
+        qs_filter = Q(community__icontains=value) | Q(description__icontains=value)
         return queryset.filter(qs_filter).distinct()
 
 
@@ -72,7 +72,7 @@ class CommunityListFilterSet(TenancyFilterSet, NetBoxModelFilterSet):
     def search(self, queryset, name, value):
         if not value.strip():
             return queryset
-        qs_filter = Q(name__icontains=value)
+        qs_filter = Q(name__icontains=value) | Q(description__icontains=value)
         return queryset.filter(qs_filter).distinct()
 
 
@@ -115,4 +115,5 @@ class CommunityListEntryFilterSet(NetBoxModelFilterSet):
             return queryset
         qs_filter = Q(community_list__name__icontains=value)
         qs_filter |= Q(community__community__icontains=value)
+        qs_filter |= Q(description__icontains=value)
         return queryset.filter(qs_filter).distinct()
