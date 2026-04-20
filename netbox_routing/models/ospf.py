@@ -43,6 +43,15 @@ class OSPFInstance(PrimaryModel):
     class Meta:
         ordering = ['vrf', 'router_id', 'process_id']
         verbose_name = 'OSPF Instance'
+        constraints = (
+            models.UniqueConstraint(
+                fields=('device', 'name'),
+                name='%(app_label)s_%(class)s_unique_device_name',
+                violation_error_message="""Name must be unique per device.
+                Only a single empty name is permitted per device""",
+                nulls_distinct=False,
+            ),
+        )
 
     def __str__(self):
         return f'{self.name} ({self.router_id})'
