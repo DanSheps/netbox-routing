@@ -31,6 +31,7 @@ class CommunityImportForm(NetBoxModelImportForm):
     class Meta:
         model = Community
         fields = (
+            'name',
             'community',
             'status',
             'role',

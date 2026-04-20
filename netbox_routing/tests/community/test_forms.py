@@ -33,6 +33,33 @@ class CommunityTestCase(TestCase):
         self.assertEqual(instance.description, 'Blackhole community')
         self.assertEqual(instance.comments, 'Used for DDoS mitigation')
 
+    def test_community_with_name(self):
+        form = CommunityForm(
+            data={
+                'name': 'blackhole',
+                'community': '65000:666',
+                'status': 'active',
+            }
+        )
+        self.assertTrue(form.is_valid(), form.errors)
+        instance = form.save()
+        instance.refresh_from_db()
+        self.assertEqual(instance.name, 'blackhole')
+        self.assertEqual(str(instance), 'blackhole (65000:666)')
+
+    def test_community_without_name(self):
+        form = CommunityForm(
+            data={
+                'community': '65000:100',
+                'status': 'active',
+            }
+        )
+        self.assertTrue(form.is_valid(), form.errors)
+        instance = form.save()
+        instance.refresh_from_db()
+        self.assertEqual(instance.name, '')
+        self.assertEqual(str(instance), '65000:100')
+
     def test_community_minimal(self):
         form = CommunityForm(
             data={

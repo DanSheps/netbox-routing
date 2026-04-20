@@ -43,6 +43,11 @@ class CommunityList(PrimaryModel):
 
 
 class Community(PrimaryModel):
+    name = models.CharField(
+        verbose_name=_('Name'),
+        max_length=100,
+        blank=True,
+    )
     community = models.CharField(
         verbose_name=_('Community'),
         max_length=255,
@@ -83,6 +88,8 @@ class Community(PrimaryModel):
         ]
 
     def __str__(self):
+        if self.name:
+            return f'{self.name} ({self.community})'
         return f'{self.community}'
 
     def get_absolute_url(self):

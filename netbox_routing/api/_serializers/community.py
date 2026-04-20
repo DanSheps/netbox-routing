@@ -26,6 +26,7 @@ class CommunitySerializer(NetBoxModelSerializer):
             'url',
             'id',
             'display',
+            'name',
             'community',
             'role',
             'status',
@@ -33,7 +34,7 @@ class CommunitySerializer(NetBoxModelSerializer):
             'description',
             'comments',
         )
-        brief_fields = ('url', 'id', 'display', 'community', 'description')
+        brief_fields = ('url', 'id', 'display', 'name', 'community', 'description')
 
 
 class CommunityListSerializer(NetBoxModelSerializer):
