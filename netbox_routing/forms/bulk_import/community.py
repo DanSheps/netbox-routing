@@ -31,8 +31,13 @@ class CommunityImportForm(NetBoxModelImportForm):
     class Meta:
         model = Community
         fields = (
-            'community', 'status', 'role', 'tenant',
-            'description', 'comments', 'tags',
+            'community',
+            'status',
+            'role',
+            'tenant',
+            'description',
+            'comments',
+            'tags',
         )
 
 
@@ -47,8 +52,11 @@ class CommunityListImportForm(NetBoxModelImportForm):
     class Meta:
         model = CommunityList
         fields = (
-            'name', 'tenant',
-            'description', 'comments', 'tags',
+            'name',
+            'tenant',
+            'description',
+            'comments',
+            'tags',
         )
 
 
@@ -69,6 +77,10 @@ class CommunityListEntryImportForm(NetBoxModelImportForm):
     class Meta:
         model = CommunityListEntry
         fields = (
-            'community_list', 'action', 'community',
-            'description', 'comments', 'tags',
+            'community_list',
+            'action',
+            'community',
+            'description',
+            'comments',
+            'tags',
         )

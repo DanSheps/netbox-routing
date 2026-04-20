@@ -64,6 +64,13 @@ class CommunityTestCase(
             '65000:300,reserved',
         )
 
+        cls.csv_update_data = (
+            'id,description',
+            f'{cls.communities[0].pk},Updated description 1',
+            f'{cls.communities[1].pk},Updated description 2',
+            f'{cls.communities[2].pk},Updated description 3',
+        )
+
         cls.bulk_edit_data = {
             'description': 'Test Description',
         }
@@ -115,6 +122,13 @@ class CommunityListTestCase(
             'Import List 1',
             'Import List 2',
             'Import List 3',
+        )
+
+        cls.csv_update_data = (
+            'id,description',
+            f'{cls.community_list[0].pk},Updated description 1',
+            f'{cls.community_list[1].pk},Updated description 2',
+            f'{cls.community_list[2].pk},Updated description 3',
         )
 
         cls.bulk_edit_data = {
@@ -213,9 +227,16 @@ class CommunityListEntryTestCase(
 
         cls.csv_data = (
             'community_list,community,action',
-            f'Community List 3,64512,permit',
-            f'Community List 3,64513,deny',
-            f'Community List 3,64514,permit',
+            'Community List 3,64512,permit',
+            'Community List 3,64513,deny',
+            'Community List 3,64514,permit',
+        )
+
+        cls.csv_update_data = (
+            'id,description',
+            f'{cls.community_list_entries[0].pk},Updated description 1',
+            f'{cls.community_list_entries[1].pk},Updated description 2',
+            f'{cls.community_list_entries[2].pk},Updated description 3',
         )
 
         cls.bulk_edit_data = {
