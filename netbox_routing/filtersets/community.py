@@ -40,6 +40,7 @@ class CommunityFilterSet(TenancyFilterSet, NetBoxModelFilterSet):
     class Meta:
         model = Community
         fields = (
+            'name',
             'community',
             'status',
             'role_id',
@@ -53,7 +54,11 @@ class CommunityFilterSet(TenancyFilterSet, NetBoxModelFilterSet):
     def search(self, queryset, name, value):
         if not value.strip():
             return queryset
-        qs_filter = Q(community__icontains=value) | Q(description__icontains=value)
+        qs_filter = (
+            Q(name__icontains=value)
+            | Q(community__icontains=value)
+            | Q(description__icontains=value)
+        )
         return queryset.filter(qs_filter).distinct()
 
 

@@ -36,13 +36,14 @@ class CommunityListForm(TenancyForm, PrimaryModelForm):
 class CommunityForm(TenancyForm, PrimaryModelForm):
 
     fieldsets = (
-        FieldSet('community', 'status', 'role', 'description'),
+        FieldSet('name', 'community', 'status', 'role', 'description'),
         FieldSet('tenant_group', 'tenant', name=_('Tenancy')),
     )
 
     class Meta:
         model = Community
         fields = [
+            'name',
             'community',
             'status',
             'role',
