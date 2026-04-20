@@ -3,7 +3,7 @@ from typing import Annotated
 import strawberry
 import strawberry_django
 from strawberry import ID
-from strawberry_django.filters import StrFilterLookup
+from strawberry_django import StrFilterLookup
 
 from netbox.graphql.filters import PrimaryModelFilter
 from netbox_routing import models
