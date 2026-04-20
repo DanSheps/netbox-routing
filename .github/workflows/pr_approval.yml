@@ -16,6 +16,6 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       pull-requests: write
-    if: github.actor == 'dansheps'
+    if: github.event.pull_request.user.login == 'dansheps'
     steps:
       - uses: hmarr/auto-approve-action@v4
