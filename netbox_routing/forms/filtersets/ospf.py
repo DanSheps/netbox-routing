@@ -1,125 +1,221 @@
-from django import forms
+import django_filters
+from django.contrib.contenttypes.models import ContentType
+from django.core.exceptions import ValidationError
+from django.db.models import Q
 from django.utils.translation import gettext as _
 
-from dcim.models import Interface, Device
+from dcim.models import Device, Interface
+from virtualization.models import VirtualMachine, VMInterface
 from ipam.models import VRF
-from netbox.forms import NetBoxModelFilterSetForm
-from netbox_routing.choices import AuthenticationChoices
+from utilities.filters import MultiValueCharFilter
+from utilities.filtersets import register_filterset
+
+from netbox.filtersets import NetBoxModelFilterSet
 from netbox_routing.choices.ospf import OSPFAreaTypeChoices
-from utilities.forms import BOOLEAN_WITH_BLANK_CHOICES, add_blank_choice
-from utilities.forms.fields import TagFilterField, DynamicModelMultipleChoiceField
+from netbox_routing.models import OSPFArea, OSPFInstance, OSPFInterface
 
-from netbox_routing.models import OSPFInstance, OSPFArea, OSPFInterface
-
-__all__ = (
-    'OSPFAreaFilterForm',
-    'OSPFInstanceFilterForm',
-    'OSPFInterfaceFilterForm',
-)
-
-from utilities.forms.rendering import FieldSet
+__all__ = ('OSPFAreaFilterSet', 'OSPFInstanceFilterSet', 'OSPFInterfaceFilterSet')
 
 
-class OSPFInstanceFilterForm(NetBoxModelFilterSetForm):
-    device_id = DynamicModelMultipleChoiceField(
+@register_filterset
+class OSPFInstanceFilterSet(NetBoxModelFilterSet):
+    device_id = django_filters.ModelMultipleChoiceFilter(
+        method='filter_device_id',
         queryset=Device.objects.all(),
-        required=False,
-        selector=True,
-        label=_('Device'),
+        label='Device (ID)',
     )
-    vrf_id = DynamicModelMultipleChoiceField(
+    device = django_filters.ModelMultipleChoiceFilter(
+        method='filter_device',
+        queryset=Device.objects.all(),
+        to_field_name='name',
+        label='Device',
+    )
+    virtual_machine_id = django_filters.ModelMultipleChoiceFilter(
+        method='filter_vm_id',
+        queryset=VirtualMachine.objects.all(),
+        label='Virtual Machine (ID)',
+    )
+    vrf_id = django_filters.ModelMultipleChoiceFilter(
+        field_name='vrf',
         queryset=VRF.objects.all(),
-        required=False,
-        selector=True,
-        label=_('VRF'),
+        label='VRF (ID)',
     )
-    router_id = forms.CharField(
-        required=False,
+    vrf = django_filters.ModelMultipleChoiceFilter(
+        field_name='vrf__name',
+        queryset=VRF.objects.all(),
+        to_field_name='name',
+        label='VRF',
+    )
+    router_id = MultiValueCharFilter(
+        method='filter_rid',
         label=_('Router ID'),
     )
-    process_id = forms.CharField(
-        required=False,
-        label=_('Process ID'),
+
+    class Meta:
+        model = OSPFInstance
+        fields = ('name', 'vrf_id', 'vrf', 'router_id', 'process_id')
+
+    def filter_device_id(self, queryset, name, value):
+        if not value:
+            return queryset
+        ct = ContentType.objects.get_for_model(Device)
+        ids = [d.pk for d in value]
+        return queryset.filter(device_type=ct, device_id__in=ids)
+
+    def filter_device(self, queryset, name, value):
+        if not value:
+            return queryset
+        ct = ContentType.objects.get_for_model(Device)
+        ids = [d.pk for d in value]
+        return queryset.filter(device_type=ct, device_id__in=ids)
+
+    def filter_vm_id(self, queryset, name, value):
+        if not value:
+            return queryset
+        ct = ContentType.objects.get_for_model(VirtualMachine)
+        ids = [vm.pk for vm in value]
+        return queryset.filter(device_type=ct, device_id__in=ids)
+
+    def search(self, queryset, name, value):
+        if not value.strip():
+            return queryset
+        device_ct = ContentType.objects.get_for_model(Device)
+        vm_ct = ContentType.objects.get_for_model(VirtualMachine)
+        device_ids = Device.objects.filter(name__icontains=value).values_list('pk', flat=True)
+        vm_ids = VirtualMachine.objects.filter(name__icontains=value).values_list('pk', flat=True)
+        qs_filter = (
+            Q(name__icontains=value)
+            | Q(router_id__icontains=value)
+            | Q(device_type=device_ct, device_id__in=device_ids)
+            | Q(device_type=vm_ct, device_id__in=vm_ids)
+        )
+        return queryset.filter(qs_filter).distinct()
+
+    def filter_rid(self, queryset, name, value):
+        try:
+            return queryset.filter(**{f'{name}__in': value})
+        except ValidationError:
+            return queryset.none()
+
+
+@register_filterset
+class OSPFAreaFilterSet(NetBoxModelFilterSet):
+    area_id = MultiValueCharFilter(
+        method='filter_aid',
+        label=_('Area ID'),
+    )
+    area_type = django_filters.MultipleChoiceFilter(
+        choices=OSPFAreaTypeChoices,
+        label=_('Area Type'),
     )
 
-    model = OSPFInstance
-    fieldsets = (
-        FieldSet(
-            'q',
-            'filter_id',
-            'tag',
-        ),
-        FieldSet('device_id', 'vrf_id', 'router_id', 'process_id', name=_('Device')),
-    )
-    tag = TagFilterField(model)
+    class Meta:
+        model = OSPFArea
+        fields = ('area_id', 'area_type')
+
+    def search(self, queryset, name, value):
+        if not value.strip():
+            return queryset
+        return queryset.filter(Q(area_id__icontains=value)).distinct()
+
+    def filter_aid(self, queryset, name, value):
+        try:
+            return queryset.filter(**{f'{name}__in': value})
+        except ValidationError:
+            return queryset.none()
 
 
-class OSPFAreaFilterForm(NetBoxModelFilterSetForm):
-    model = OSPFArea
-    fieldsets = (FieldSet('q', 'device_id', 'filter_id', 'area_type', 'tag'),)
-
-    device_id = DynamicModelMultipleChoiceField(
-        queryset=Device.objects.all(),
-        required=False,
-        selector=True,
-        label=_('Device'),
-    )
-    area_type = forms.ChoiceField(
-        choices=add_blank_choice(OSPFAreaTypeChoices), label='Area Type', required=False
-    )
-    tag = TagFilterField(model)
-
-
-class OSPFInterfaceFilterForm(NetBoxModelFilterSetForm):
-    model = OSPFInterface
-    fieldsets = (
-        FieldSet('q', 'filter_id', 'tag'),
-        FieldSet('instance_id', 'area_id', name=_('OSPF')),
-        FieldSet('device_id', 'interface_id', 'vrf_id', name=_('Device')),
-        FieldSet('priority', 'bfd', 'authentication', name=_('Attributes')),
-    )
-    device_id = DynamicModelMultipleChoiceField(
-        queryset=Device.objects.all(),
-        required=False,
-        selector=True,
-        label=_('Device'),
-    )
-    vrf_id = DynamicModelMultipleChoiceField(
-        queryset=VRF.objects.all(),
-        required=False,
-        selector=True,
-        label=_('VRF'),
-    )
-    instance_id = DynamicModelMultipleChoiceField(
+@register_filterset
+class OSPFInterfaceFilterSet(NetBoxModelFilterSet):
+    instance_id = django_filters.ModelMultipleChoiceFilter(
+        field_name='instance',
         queryset=OSPFInstance.objects.all(),
-        required=False,
-        selector=True,
-        label=_('Instance'),
+        label='Instance (ID)',
     )
-    area_id = DynamicModelMultipleChoiceField(
+    instance = django_filters.ModelMultipleChoiceFilter(
+        field_name='instance__name',
+        queryset=OSPFInstance.objects.all(),
+        to_field_name='name',
+        label='Instance',
+    )
+    vrf_id = django_filters.ModelMultipleChoiceFilter(
+        field_name='instance__vrf',
+        queryset=VRF.objects.all(),
+        label='VRF (ID)',
+    )
+    vrf = django_filters.ModelMultipleChoiceFilter(
+        field_name='instance__vrf__name',
+        queryset=VRF.objects.all(),
+        to_field_name='name',
+        label='VRF',
+    )
+    area_id = django_filters.ModelMultipleChoiceFilter(
+        field_name='area',
         queryset=OSPFArea.objects.all(),
-        required=False,
-        selector=True,
-        label=_('Area'),
+        label='Area (ID)',
     )
-    interface_id = DynamicModelMultipleChoiceField(
+    area = django_filters.ModelMultipleChoiceFilter(
+        field_name='area__area_id',
+        queryset=OSPFArea.objects.all(),
+        to_field_name='area_id',
+        label='Area',
+    )
+    device_id = django_filters.ModelMultipleChoiceFilter(
+        method='filter_device_id',
+        queryset=Device.objects.all(),
+        label='Device (ID)',
+    )
+    virtual_machine_id = django_filters.ModelMultipleChoiceFilter(
+        method='filter_vm_id',
+        queryset=VirtualMachine.objects.all(),
+        label='Virtual Machine (ID)',
+    )
+    interface_id = django_filters.ModelMultipleChoiceFilter(
+        method='filter_interface_id',
         queryset=Interface.objects.all(),
-        required=False,
-        selector=True,
-        label=_('Interface'),
+        label='Interface (ID)',
     )
-    passive = forms.NullBooleanField(
-        required=False,
-        label='Passive Interface',
-        widget=forms.Select(choices=BOOLEAN_WITH_BLANK_CHOICES),
+    vm_interface_id = django_filters.ModelMultipleChoiceFilter(
+        method='filter_vm_interface_id',
+        queryset=VMInterface.objects.all(),
+        label='VM Interface (ID)',
     )
-    bfd = forms.NullBooleanField(
-        required=False,
-        label='BFD Enabled',
-        widget=forms.Select(choices=BOOLEAN_WITH_BLANK_CHOICES),
-    )
-    priority = forms.IntegerField(required=False)
-    authentication = forms.ChoiceField(
-        choices=add_blank_choice(AuthenticationChoices), required=False
-    )
-    tag = TagFilterField(model)
+
+    class Meta:
+        model = OSPFInterface
+        fields = ('instance', 'area', 'passive', 'bfd', 'priority', 'authentication', 'passphrase')
+
+    def filter_device_id(self, queryset, name, value):
+        if not value:
+            return queryset
+        ct = ContentType.objects.get_for_model(Interface)
+        iface_ids = Interface.objects.filter(device__in=value).values_list('pk', flat=True)
+        return queryset.filter(interface_type=ct, interface_id__in=iface_ids)
+
+    def filter_vm_id(self, queryset, name, value):
+        if not value:
+            return queryset
+        ct = ContentType.objects.get_for_model(VMInterface)
+        iface_ids = VMInterface.objects.filter(virtual_machine__in=value).values_list('pk', flat=True)
+        return queryset.filter(interface_type=ct, interface_id__in=iface_ids)
+
+    def filter_interface_id(self, queryset, name, value):
+        if not value:
+            return queryset
+        ct = ContentType.objects.get_for_model(Interface)
+        return queryset.filter(interface_type=ct, interface_id__in=[i.pk for i in value])
+
+    def filter_vm_interface_id(self, queryset, name, value):
+        if not value:
+            return queryset
+        ct = ContentType.objects.get_for_model(VMInterface)
+        return queryset.filter(interface_type=ct, interface_id__in=[i.pk for i in value])
+
+    def search(self, queryset, name, value):
+        if not value.strip():
+            return queryset
+        qs_filter = (
+            Q(instance__name__icontains=value)
+            | Q(area__area_id__icontains=value)
+        )
+        return queryset.filter(qs_filter).distinct()

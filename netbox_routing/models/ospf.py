@@ -3,6 +3,8 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from django.urls import reverse
 from django.utils.translation import gettext as _
+from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
 
 from netbox.models import PrimaryModel
 
@@ -17,17 +19,25 @@ __all__ = (
 )
 
 
+
+
+
 class OSPFInstance(PrimaryModel):
     name = models.CharField(max_length=100)
     router_id = IPAddressField(verbose_name=_('Router ID'))
     process_id = models.IntegerField(verbose_name=_('Process ID'))
-    device = models.ForeignKey(
-        to='dcim.Device',
-        related_name='ospf_instances',
+
+
+    device_type = models.ForeignKey(
+        ContentType,
         on_delete=models.CASCADE,
-        blank=False,
-        null=False,
+        null=True, blank=True,
+        limit_choices_to={'model__in': ('device', 'virtualmachine')}
     )
+    device_id = models.PositiveIntegerField(null=True, blank=True)
+    device = GenericForeignKey('device_type', 'device_id')
+
+
     vrf = models.ForeignKey(
         verbose_name=_('VRF'),
         to='ipam.VRF',
@@ -37,8 +47,8 @@ class OSPFInstance(PrimaryModel):
         null=True,
     )
 
-    clone_fields = ('name', 'router_id', 'process_id', 'device', 'vrf')
-    prerequisite_models = ('dcim.Device',)
+    clone_fields = ('name', 'router_id', 'process_id', 'device_type', 'device_id', 'vrf')
+    prerequisite_models = ()
 
     class Meta:
         ordering = ['vrf', 'router_id', 'process_id']
@@ -106,13 +116,17 @@ class OSPFInterface(PrimaryModel):
         blank=False,
         null=False,
     )
-    interface = models.OneToOneField(
-        to='dcim.Interface',
-        related_name='ospf_interfaces',
+    # Замінюємо OneToOneField на GenericForeignKey
+    interface_type = models.ForeignKey(
+        ContentType,
         on_delete=models.CASCADE,
-        blank=False,
-        null=False,
+        null=True, blank=True,
+        related_name='ospf_interface_type',
+        limit_choices_to={'model__in': ('interface', 'vminterface')}
     )
+    interface_id = models.PositiveIntegerField(null=True, blank=True)
+    interface = GenericForeignKey('interface_type', 'interface_id')
+
     passive = models.BooleanField(verbose_name='Passive', blank=True, null=True)
     priority = models.IntegerField(blank=True, null=True)
     bfd = models.BooleanField(blank=True, null=True, verbose_name='BFD')
@@ -122,27 +136,20 @@ class OSPFInterface(PrimaryModel):
     passphrase = models.CharField(max_length=200, blank=True, null=True)
 
     clone_fields = (
-        'instance',
-        'area',
-        'interface',
-        'passive',
-        'priority',
-        'bfd',
-        'authentication',
-        'passphrase',
+        'instance', 'area', 'interface_type', 'interface_id',
+        'passive', 'priority', 'bfd', 'authentication', 'passphrase',
     )
     prerequisite_models = (
         'netbox_routing.OSPFInstance',
         'netbox_routing.OSPFArea',
-        'dcim.Interface',
     )
 
     class Meta:
         verbose_name = 'OSPF Interface'
-        ordering = ('instance', 'area', 'interface')  # Name may be non-unique
+        ordering = ('instance', 'area')
 
     def __str__(self):
-        return f'{self.interface.name}'
+        return f'{self.interface}'
 
     def get_absolute_url(self):
         return reverse('plugins:netbox_routing:ospfinterface', args=[self.pk])
