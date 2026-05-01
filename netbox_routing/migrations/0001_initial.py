@@ -215,7 +215,7 @@ class Migration(migrations.Migration):
         migrations.AddConstraint(
             model_name='staticroute',
             constraint=models.CheckConstraint(
-                check=models.Q(models.Q(('metric__lte', 255), ('metric__gte', 0))),
+                condition=models.Q(models.Q(('metric__lte', 255), ('metric__gte', 0))),
                 name='metric_gte_lte',
             ),
         ),
