@@ -18,7 +18,7 @@ class OSPFInstanceSerializer(NetBoxModelSerializer):
         view_name='plugins-api:netbox_routing-api:ospfinstance-detail'
     )
     device = DeviceSerializer(nested=True)
-    vrf = VRFSerializer(nested=True)
+    vrf = VRFSerializer(nested=True, required=False, allow_null=True)
 
     class Meta:
         model = OSPFInstance
