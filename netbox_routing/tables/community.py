@@ -14,7 +14,8 @@ from tenancy.tables import TenancyColumnsMixin
 
 
 class CommunityTable(TenancyColumnsMixin, NetBoxTable):
-    community = tables.Column(verbose_name=_('Name'), linkify=True)
+    name = tables.Column(verbose_name=_('Name'), linkify=True)
+    community = tables.Column(verbose_name=_('Community'), linkify=True)
     role = tables.Column(verbose_name=_('Role'), linkify=True)
 
     class Meta(NetBoxTable.Meta):
@@ -22,16 +23,21 @@ class CommunityTable(TenancyColumnsMixin, NetBoxTable):
         fields = (
             'pk',
             'id',
+            'name',
             'community',
             'role',
             'status',
+            'description',
             'tenant_group',
             'tenant',
         )
         default_columns = (
             'pk',
             'id',
+            'name',
             'community',
+            'status',
+            'description',
         )
 
 
@@ -44,6 +50,7 @@ class CommunityListTable(TenancyColumnsMixin, NetBoxTable):
             'pk',
             'id',
             'name',
+            'description',
             'tenant_group',
             'tenant',
         )
@@ -51,6 +58,7 @@ class CommunityListTable(TenancyColumnsMixin, NetBoxTable):
             'pk',
             'id',
             'name',
+            'description',
         )
 
 
@@ -66,6 +74,7 @@ class CommunityListEntryTable(NetBoxTable):
             'community_list',
             'action',
             'community',
+            'description',
         )
         default_columns = (
             'pk',
@@ -73,4 +82,5 @@ class CommunityListEntryTable(NetBoxTable):
             'community_list',
             'action',
             'community',
+            'description',
         )
