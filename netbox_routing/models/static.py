@@ -76,7 +76,8 @@ class StaticRoute(PrimaryModel):
         ordering = ['vrf', 'prefix', 'metric']
         constraints = (
             CheckConstraint(
-                check=Q(Q(metric__lte=255) & Q(metric__gte=0)), name='metric_gte_lte'
+                condition=Q(Q(metric__lte=255) & Q(metric__gte=0)),
+                name='metric_gte_lte',
             ),
             models.UniqueConstraint(
                 'vrf',
