@@ -6,11 +6,12 @@ from netbox_routing.models.community import *
 class CommunityIndex(SearchIndex):
     model = Community
     fields = (
+        ('name', 100),
         ('community', 100),
         ('description', 4000),
         ('comments', 5000),
     )
-    display_attrs = ('community',)
+    display_attrs = ('name', 'community')
 
 
 @register_search

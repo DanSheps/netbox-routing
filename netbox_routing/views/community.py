@@ -6,6 +6,7 @@ from netbox.views.generic import (
     ObjectChildrenView,
     BulkEditView,
     BulkDeleteView,
+    BulkImportView,
 )
 from utilities.views import register_model_view, ViewTab
 
@@ -22,18 +23,21 @@ __all__ = (
     'CommunityListEntriesView',
     'CommunityListBulkEditView',
     'CommunityListBulkDeleteView',
+    'CommunityListBulkImportView',
     'CommunityListView',
     'CommunityDetailView',
     'CommunityEditView',
     'CommunityDeleteView',
     'CommunityBulkEditView',
     'CommunityBulkDeleteView',
+    'CommunityBulkImportView',
     'CommunityListEntryListView',
     'CommunityListEntryDetailView',
     'CommunityListEntryEditView',
     'CommunityListEntryDeleteView',
     'CommunityListEntryBulkEditView',
     'CommunityListEntryBulkDeleteView',
+    'CommunityListEntryBulkImportView',
 )
 
 
@@ -100,6 +104,12 @@ class CommunityListBulkDeleteView(BulkDeleteView):
     table = CommunityListTable
 
 
+@register_model_view(CommunityList, name='bulk_import', detail=False)
+class CommunityListBulkImportView(BulkImportView):
+    queryset = CommunityList.objects.all()
+    model_form = CommunityListImportForm
+
+
 #
 # Community
 #
@@ -146,6 +156,12 @@ class CommunityBulkDeleteView(BulkDeleteView):
     table = CommunityTable
 
 
+@register_model_view(Community, name='bulk_import', detail=False)
+class CommunityBulkImportView(BulkImportView):
+    queryset = Community.objects.all()
+    model_form = CommunityImportForm
+
+
 #
 # Community List Entry
 #
@@ -190,3 +206,9 @@ class CommunityListEntryBulkDeleteView(BulkDeleteView):
     queryset = CommunityListEntry.objects.all()
     filterset = CommunityListEntryFilterForm
     table = CommunityListEntryTable
+
+
+@register_model_view(CommunityListEntry, name='bulk_import', detail=False)
+class CommunityListEntryBulkImportView(BulkImportView):
+    queryset = CommunityListEntry.objects.all()
+    model_form = CommunityListEntryImportForm
