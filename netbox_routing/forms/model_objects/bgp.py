@@ -758,13 +758,13 @@ class BGPPeerAddressFamilyForm(BGPSettingMixin, TenancyForm, PrimaryModelForm):
         queryset=RouteMap.objects.all(),
         required=False,
         selector=True,
-        label=_('Prefix List (in)'),
+        label=_('Route Map (in)'),
     )
     route_map_out = DynamicModelChoiceField(
         queryset=RouteMap.objects.all(),
         required=False,
         selector=True,
-        label=_('Prefix List (out)'),
+        label=_('Route Map (out)'),
     )
 
     fieldsets = (
