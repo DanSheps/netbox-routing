@@ -79,23 +79,22 @@ class StaticRoute(PrimaryModel):
                 condition=Q(Q(metric__lte=255) & Q(metric__gte=0)),
                 name='metric_gte_lte',
             ),
-            models.UniqueConstraint(
-                'vrf',
-                'prefix',
-                'next_hop',
-                name='%(app_label)s_%(class)s_unique_vrf_prefix_nexthop',
-                violation_error_message="VRF, Prefix and Next Hop must be unique.",
-            ),
         )
 
     def __str__(self):
-        if self.next_hop:
-            if self.vrf:
-                return f'{self.prefix} VRF {self.vrf} next-hop {self.next_hop}'
-            return f'{self.prefix} next-hop {self.next_hop}'
-        elif self.vrf:
-            return f'{self.prefix} VRF {self.vrf} next-hop {self.interface_next_hop}'
-        return f'{self.prefix} next-hop {self.next_hop}'
+        name = [
+            f'{self.prefix}',
+        ]
+        if self.vrf:
+            name.append('VRF')
+            name.append(f'{self.vrf}')
+        if self.next_hop or self.interface_next_hop:
+            name.append('via')
+            if self.next_hop:
+                name.append(f'{self.next_hop}')
+            if self.interface_next_hop:
+                name.append(f'{self.interface_next_hop}')
+        return ' '.join(name)
 
     def get_absolute_url(self):
         return reverse('plugins:netbox_routing:staticroute', args=[self.pk])
@@ -105,6 +104,8 @@ class StaticRoute(PrimaryModel):
         if not self.interface_next_hop and not self.next_hop:
             raise ValidationError(
                 {
-                    "next_hop": "A route requires set either an IP next hop or an Interface next hop."
+                    "next_hop": _(
+                        "A route requires set either an IP next hop or an Interface next hop."
+                    )
                 }
             )
