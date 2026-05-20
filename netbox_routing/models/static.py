@@ -79,17 +79,6 @@ class StaticRoute(PrimaryModel):
                 condition=Q(Q(metric__lte=255) & Q(metric__gte=0)),
                 name='metric_gte_lte',
             ),
-            models.UniqueConstraint(
-                'device',
-                'vrf',
-                'prefix',
-                'next_hop',
-                name='%(app_label)s_%(class)s_unique_vrf_prefix_nexthop',
-                violation_error_message=_(
-                    "VRF, Prefix, Next Hop, and Device (if set, otherwise ignore this is ignored) must be unique."
-                ),
-                nulls_distinct=False,
-            ),
         )
 
     def __str__(self):
