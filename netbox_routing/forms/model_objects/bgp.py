@@ -284,7 +284,7 @@ class BGPPeerTemplateForm(TenancyForm, PrimaryModelForm):
 
 class BGPPolicyTemplateForm(TenancyForm, PrimaryModelForm):
     parents = DynamicModelMultipleChoiceField(
-        queryset=BGPPeerTemplate.objects.all(),
+        queryset=BGPPolicyTemplate.objects.all(),
         required=False,
         selector=True,
         label=_('Parent Policy Templates'),
