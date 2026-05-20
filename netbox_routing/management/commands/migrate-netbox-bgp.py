@@ -144,16 +144,18 @@ class Command(BaseCommand):
                     try:
                         if item.device:
                             router = BGPRouter.objects.get(
-                                device=assigned_object, asn=item.asn
+                                device=assigned_object, asn=item.local_as
                             )
                         elif item.site:
-                            router = BGPRouter.objects.get(site=item.site, asn=item.asn)
+                            router = BGPRouter.objects.get(
+                                site=item.site, asn=item.local_as
+                            )
                         else:
-                            router = BGPRouter.objects.get(asn=item.asn)
+                            router = BGPRouter.objects.get(asn=item.local_as)
                     except BGPRouter.DoesNotExist:
                         router = BGPRouter(
                             assigned_object=assigned_object,
-                            asn=item.asn,
+                            asn=item.local_as,
                         )
                         router.full_clean()
                         router.save()
