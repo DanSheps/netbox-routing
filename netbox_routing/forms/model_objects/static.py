@@ -41,6 +41,10 @@ class StaticRouteForm(PrimaryModelForm):
             'permanent',
             name=_('Metadata'),
         ),
+        FieldSet(
+            'tags',
+            name=_('Tags'),
+        ),
     )
 
     class Meta:
