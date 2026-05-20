@@ -219,7 +219,7 @@ class BGPScopeSerializer(NetBoxModelSerializer):
     )
 
     router = BGPRouterSerializer(nested=True)
-    vrf = VRFSerializer(nested=True)
+    vrf = VRFSerializer(nested=True, required=False, allow_null=True)
     settings = BGPSettingSerializer(many=True, required=False)
     tenant = TenantSerializer(nested=True, required=False)
 
