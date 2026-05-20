@@ -7,6 +7,19 @@ COL_ADD = 'mdi mdi-plus'
 COL_IMPORT = 'mdi mdi-upload'
 
 
+customprefix = PluginMenuItem(
+    link='plugins:netbox_routing:customprefix_list',
+    link_text='Custom Prefixes',
+    permissions=['netbox_routing.view_customprefix'],
+    buttons=(
+        PluginMenuButton(
+            link='plugins:netbox_routing:customprefix_add',
+            title='Add',
+            icon_class=COL_ADD,
+            permissions=['netbox_routing.add_customprefix'],
+        ),
+    ),
+)
 prefixlist = PluginMenuItem(
     link='plugins:netbox_routing:prefixlist_list',
     link_text='Prefix Lists',
@@ -26,8 +39,6 @@ prefixlist = PluginMenuItem(
         # ),
     ),
 )
-
-
 prefixlist_entry = PluginMenuItem(
     link='plugins:netbox_routing:prefixlistentry_list',
     link_text='Prefix List Entries',
@@ -101,6 +112,7 @@ aspath_entry = PluginMenuItem(
 )
 
 OBJECT_MENU = (
+    customprefix,
     prefixlist,
     prefixlist_entry,
     routemap,

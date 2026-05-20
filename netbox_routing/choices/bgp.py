@@ -6,6 +6,7 @@ __all__ = (
     'BGPBestPathASPathChoices',
     'BGPSettingChoices',
     'BFDChoices',
+    'BGPStatusChoices',
 )
 
 
@@ -135,4 +136,18 @@ class BGPAddressFamilyChoices(ChoiceSet):
         (L2VPSEVPN, 'L2VPN EVPN'),
         (LINKSTATE, 'LINK-STATE'),
         (RTFILTER_UNICAST, 'RTFILTER'),
+    ]
+
+
+class BGPStatusChoices(ChoiceSet):
+    ACTIVE = 'active'
+    PLANNED = 'planned'
+    OFFLINE = 'offline'
+    FAILED = 'failed'
+
+    CHOICES = [
+        (ACTIVE, 'Active'),
+        (PLANNED, 'Planned'),
+        (OFFLINE, 'Offline'),
+        (FAILED, 'Failed'),
     ]

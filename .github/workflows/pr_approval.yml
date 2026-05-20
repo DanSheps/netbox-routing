@@ -1,8 +1,13 @@
 name: Auto approve
 on:
-  pull_request:
+  pull_request_target:
     types:
       - opened
+      - auto_merge_enabled
+      - auto_merge_disabled
+      - assigned
+      - unassigned
+      - reopened
     branches:
       - "main"
 
@@ -11,6 +16,6 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       pull-requests: write
-    if: github.actor == 'dansheps'
+    if: github.event.pull_request.user.login == 'dansheps'
     steps:
       - uses: hmarr/auto-approve-action@v4

@@ -14,6 +14,7 @@ __all__ = (
     'BGPPeerTemplateTable',
     'BGPPolicyTemplateTable',
     'BGPSessionTemplateTable',
+    'BFDProfileTable',
 )
 
 from tenancy.tables import TenancyColumnsMixin
@@ -106,6 +107,7 @@ class BGPSessionTemplateTable(TenancyColumnsMixin, NetBoxTable):
             'local_as',
             'remote_as',
             'bfd',
+            'ttl',
             'password',
             'tenant',
         )
@@ -184,12 +186,13 @@ class BGPPeerTable(TenancyColumnsMixin, NetBoxTable):
             'peer_group',
             'peer_session',
             'remote_as',
-            'enabled',
+            'status',
             'local_as',
             'bfd',
             'password',
             'tenant_group',
             'tenant',
+            'ttl',
             'address_families',
         )
         default_columns = (
@@ -200,6 +203,7 @@ class BGPPeerTable(TenancyColumnsMixin, NetBoxTable):
             'peer',
             'remote_as',
             'enabled',
+            'status',
         )
 
 
@@ -255,4 +259,26 @@ class BGPPeerAddressFamilyTable(TenancyColumnsMixin, NetBoxTable):
             'assigned_object',
             'address_family',
             'enabled',
+        )
+
+
+class BFDProfileTable(TenancyColumnsMixin, NetBoxTable):
+    name = tables.Column(linkify=True, verbose_name=_('Name'))
+
+    class Meta(NetBoxTable.Meta):
+        model = BFDProfile
+        fields = (
+            'pk',
+            'id',
+            'name',
+            'min_rx_int',
+            'min_tx_int',
+            'multiplier',
+            'hold',
+            'tenant',
+        )
+        default_columns = (
+            'pk',
+            'id',
+            'name',
         )

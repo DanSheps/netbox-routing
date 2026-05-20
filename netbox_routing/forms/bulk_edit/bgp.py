@@ -11,6 +11,7 @@ from utilities.forms.fields import (
 )
 from utilities.forms.rendering import FieldSet
 
+from netbox_routing.choices.bgp import *
 from netbox_routing.models.bgp import *
 
 __all__ = (
@@ -23,6 +24,7 @@ __all__ = (
     'BGPSessionTemplateBulkEditForm',
     'BGPPeerBulkEditForm',
     'BGPPeerAddressFamilyBulkEditForm',
+    'BFDProfileBulkEditForm',
 )
 
 
@@ -242,6 +244,7 @@ class BGPSessionTemplateBulkEditForm(
             'remote_as',
             'local_as',
             'bfd',
+            'ttl',
             'password',
         ),
         FieldSet('tenant', name=_('Tenancy')),
@@ -252,6 +255,7 @@ class BGPSessionTemplateBulkEditForm(
         'remote_as',
         'local_as',
         'bfd',
+        'ttl',
         'password',
         'tenant',
     )
@@ -291,6 +295,7 @@ class BGPPeerBulkEditForm(
         FieldSet(
             'scope',
             'peer',
+            'status',
             'enabled',
             'source',
             'remote_as',
@@ -300,6 +305,7 @@ class BGPPeerBulkEditForm(
             'peer_group',
             'peer_session',
             'bfd',
+            'ttl',
             'password',
         ),
         FieldSet('tenant', name=_('Tenancy')),
@@ -309,6 +315,9 @@ class BGPPeerBulkEditForm(
         'peer_group',
         'peer_session',
         'local_as',
+        'status',
+        'ttl',
+        'enabled',
         'password',
         'tenant',
     )
@@ -343,5 +352,26 @@ class BGPPeerAddressFamilyBulkEditForm(
         'prefixlist_in',
         'routemap_out',
         'routemap_in',
+        'tenant',
+    )
+
+
+class BFDProfileBulkEditForm(TenantBulkEditMixin, PrimaryModelBulkEditForm):
+    model = BFDProfile
+    fieldsets = (
+        FieldSet(
+            'description',
+        ),
+        FieldSet(
+            'min_tx_int',
+            'min_rx_int',
+            'multiplier',
+            'hold',
+        ),
+        FieldSet('tenant', name=_('Tenancy')),
+    )
+    nullable_fields = (
+        'hold',
+        'description',
         'tenant',
     )

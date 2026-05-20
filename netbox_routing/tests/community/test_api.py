@@ -19,6 +19,7 @@ class CommunityTestCase(APIViewTestCases.APIViewTestCase):
         'description',
         'display',
         'id',
+        'name',
         'url',
     ]
 

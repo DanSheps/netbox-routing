@@ -26,7 +26,12 @@ def build_menus():
                     icon_class=COL_ADD,
                     permissions=[f'netbox_routing.add_{model}'],
                 ),
-                # PluginMenuButton('plugins:netbox_routing:bgprouter_bulk_import', 'Import', COL_IMPORT),
+                PluginMenuButton(
+                    link=f'plugins:netbox_routing:{model}_bulk_import',
+                    title='Import',
+                    icon_class=COL_IMPORT,
+                    permissions=[f'netbox_routing.add_{model}'],
+                ),
             ),
         )
         menus.append(menu)

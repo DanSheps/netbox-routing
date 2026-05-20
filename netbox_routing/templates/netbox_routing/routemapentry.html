@@ -2,6 +2,7 @@
 {% load humanize %}
 {% load helpers %}
 {% load plugins %}
+{% load i18n %}
 
 {% block content %}
 <div class="row">
@@ -27,14 +28,22 @@
             {{ object.sequence }}
           </td>
         </tr>
+        <tr>
+          <th scope="row">Flow Control (Continue)</th>
+          <td>
+            {{ object.flow_control }}
+          </td>
+        </tr>
       </table>
     </div>
+    {% include 'netbox_routing/inc/routemapentry_custom.html' %}
       {% plugin_left_page object %}
   </div>
   <div class="col col-md-6">
     {% include 'inc/panels/related_objects.html' %}
     {% include 'inc/panels/custom_fields.html' %}
     {% include 'inc/panels/comments.html' %}
+    {% include 'inc/panels/tags.html' %}
     {% include 'inc/panels/tags.html' %}
     {% plugin_right_page object %}
   </div>

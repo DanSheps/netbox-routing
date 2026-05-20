@@ -1,4 +1,5 @@
 from django import forms
+from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ValidationError
 from django.forms import fields
 from django.utils.translation import gettext as _
@@ -12,8 +13,10 @@ from utilities.forms.fields import (
     DynamicModelMultipleChoiceField,
 )
 from utilities.forms.rendering import FieldSet, TabbedGroups
+from virtualization.models import Cluster, VirtualMachine, ClusterGroup
 
-from netbox_routing.models import PrefixList, RouteMap
+from netbox_routing.choices.bgp import *
+from netbox_routing.models.objects import *
 from netbox_routing.models.bgp import *
 
 __all__ = (
@@ -26,9 +29,8 @@ __all__ = (
     'BGPPeerTemplateForm',
     'BGPPolicyTemplateForm',
     'BGPSessionTemplateForm',
+    'BFDProfileForm',
 )
-
-from virtualization.models import Cluster, VirtualMachine, ClusterGroup
 
 
 class BGPSettingMixin:
@@ -209,6 +211,8 @@ class BGPSettingForm(PrimaryModelForm):
             'addressfamily',
             'key',
             'value',
+            'description',
+            'comments',
             'tags',
             'owner',
         ]
@@ -260,7 +264,7 @@ class BGPPeerTemplateForm(TenancyForm, PrimaryModelForm):
     )
 
     fieldsets = (
-        FieldSet('name', 'remote_as', 'enabled'),
+        FieldSet('name', 'remote_as', 'enabled', 'description'),
         FieldSet('tenant_group', 'tenant', name=_('Tenancy')),
     )
 
@@ -271,6 +275,8 @@ class BGPPeerTemplateForm(TenancyForm, PrimaryModelForm):
             'remote_as',
             'tenant_group',
             'tenant',
+            'description',
+            'comments',
             'tags',
             'owner',
         ]
@@ -312,6 +318,7 @@ class BGPPolicyTemplateForm(TenancyForm, PrimaryModelForm):
         FieldSet(
             'name',
             'parents',
+            'description',
         ),
         FieldSet(
             'prefixlist_out',
@@ -334,6 +341,8 @@ class BGPPolicyTemplateForm(TenancyForm, PrimaryModelForm):
             'routemap_in',
             'tenant_group',
             'tenant',
+            'description',
+            'comments',
             'tags',
             'owner',
         ]
@@ -356,7 +365,7 @@ class BGPSessionTemplateForm(TenancyForm, PrimaryModelForm):
         queryset=ASN.objects.all(),
         required=False,
         selector=True,
-        label=_('Remote ASN'),
+        label=_('Local ASN'),
     )
 
     fieldsets = (
@@ -365,8 +374,9 @@ class BGPSessionTemplateForm(TenancyForm, PrimaryModelForm):
             'parent',
             'remote_as',
             'local_as',
+            'description',
         ),
-        FieldSet('pasword', 'bfd', 'enabled', name=_('Setings')),
+        FieldSet('pasword', 'bfd', 'ttl', 'enabled', name=_('Setings')),
         FieldSet('tenant_group', 'tenant', name=_('Tenancy')),
     )
 
@@ -379,9 +389,12 @@ class BGPSessionTemplateForm(TenancyForm, PrimaryModelForm):
             'remote_as',
             'local_as',
             'bfd',
+            'ttl',
             'password',
             'tenant_group',
             'tenant',
+            'description',
+            'comments',
             'tags',
             'owner',
         ]
@@ -458,12 +471,13 @@ class BGPRouterForm(BGPSettingMixin, TenancyForm, PrimaryModelForm):
         queryset=BGPPeerTemplate.objects.all(),
         required=False,
         selector=False,
-        label=_('Session Templates'),
+        label=_('Peer Templates'),
     )
 
     fieldsets = [
         FieldSet(
             'name',
+            'description',
         ),
         FieldSet(
             TabbedGroups(
@@ -508,6 +522,8 @@ class BGPRouterForm(BGPSettingMixin, TenancyForm, PrimaryModelForm):
             'peer_templates',
             'tenant_group',
             'tenant',
+            'description',
+            'comments',
             'tags',
             'owner',
         ]
@@ -587,7 +603,7 @@ class BGPScopeForm(BGPSettingMixin, TenancyForm, PrimaryModelForm):
     )
 
     fieldsets = (
-        FieldSet('router', 'vrf', name=_('Scope')),
+        FieldSet('router', 'vrf', 'description', name=_('Scope')),
         FieldSet('tenant_group', 'tenant', name=_('Tenancy')),
     )
 
@@ -598,6 +614,8 @@ class BGPScopeForm(BGPSettingMixin, TenancyForm, PrimaryModelForm):
             'vrf',
             'tenant_group',
             'tenant',
+            'description',
+            'comments',
             'tags',
             'owner',
         ]
@@ -620,7 +638,7 @@ class BGPAddressFamilyForm(BGPSettingMixin, TenancyForm, PrimaryModelForm):
     )
 
     fieldsets = (
-        FieldSet('scope', 'address_family', name=_('Address Family')),
+        FieldSet('scope', 'address_family', 'description', name=_('Address Family')),
         FieldSet('tenant_group', 'tenant', name=_('Tenancy')),
     )
 
@@ -631,6 +649,8 @@ class BGPAddressFamilyForm(BGPSettingMixin, TenancyForm, PrimaryModelForm):
             'address_family',
             'tenant_group',
             'tenant',
+            'description',
+            'comments',
             'tags',
             'owner',
         ]
@@ -668,10 +688,11 @@ class BGPPeerForm(BGPSettingMixin, TenancyForm, PrimaryModelForm):
     fieldsets = (
         FieldSet(
             'name',
+            'description',
         ),
-        FieldSet('scope', 'peer', name=_('Peer')),
+        FieldSet('scope', 'peer', 'status', name=_('Peer')),
         FieldSet('remote_as', 'local_as', name=_('ASNs')),
-        FieldSet('enabled', 'bfd', 'password', name=_('Peer Settings')),
+        FieldSet('enabled', 'bfd', 'password', 'ttl', name=_('Peer Settings')),
         FieldSet('tenant_group', 'tenant', name=_('Tenancy')),
     )
 
@@ -685,10 +706,14 @@ class BGPPeerForm(BGPSettingMixin, TenancyForm, PrimaryModelForm):
             'local_as',
             'tenant',
             'enabled',
+            'status',
+            'ttl',
             'bfd',
             'password',
             'tenant_group',
             'tenant',
+            'description',
+            'comments',
             'tags',
             'owner',
         ]
@@ -733,13 +758,13 @@ class BGPPeerAddressFamilyForm(BGPSettingMixin, TenancyForm, PrimaryModelForm):
         queryset=RouteMap.objects.all(),
         required=False,
         selector=True,
-        label=_('Prefix List (in)'),
+        label=_('Route Map (in)'),
     )
     route_map_out = DynamicModelChoiceField(
         queryset=RouteMap.objects.all(),
         required=False,
         selector=True,
-        label=_('Prefix List (out)'),
+        label=_('Route Map (out)'),
     )
 
     fieldsets = (
@@ -750,7 +775,7 @@ class BGPPeerAddressFamilyForm(BGPSettingMixin, TenancyForm, PrimaryModelForm):
             ),
             name=_('Assigned Object'),
         ),
-        FieldSet('address_family', 'enabled'),
+        FieldSet('address_family', 'enabled', 'description'),
         FieldSet(
             'route_map_in',
             'route_map_out',
@@ -774,6 +799,8 @@ class BGPPeerAddressFamilyForm(BGPSettingMixin, TenancyForm, PrimaryModelForm):
             'prefix_list_out',
             'tenant_group',
             'tenant',
+            'description',
+            'comments',
             'tags',
             'owner',
         ]
@@ -815,3 +842,37 @@ class BGPPeerAddressFamilyForm(BGPSettingMixin, TenancyForm, PrimaryModelForm):
 
     def save(self, *args, **kwargs):
         return super().save(*args, **kwargs)
+
+
+class BFDProfileForm(TenancyForm, PrimaryModelForm):
+
+    fieldsets = (
+        FieldSet(
+            'name',
+            'description',
+        ),
+        FieldSet(
+            'min_rx_int',
+            'min_tx_int',
+            'multiplier',
+            'hold',
+            name=_('BFD Parameters'),
+        ),
+        FieldSet('tenant_group', 'tenant', name=_('Tenancy')),
+    )
+
+    class Meta:
+        model = BFDProfile
+        fields = [
+            'name',
+            'min_tx_int',
+            'min_rx_int',
+            'multiplier',
+            'hold',
+            'description',
+            'comments',
+            'tenant_group',
+            'tenant',
+            'tags',
+            'owner',
+        ]

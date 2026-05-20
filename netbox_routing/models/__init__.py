@@ -35,6 +35,7 @@ __all__ = (
     # Objects -> Prefix Lists
     'PrefixList',
     'PrefixListEntry',
+    'CustomPrefix',
     # Objects -> Route Maps
     'RouteMap',
     'RouteMapEntry',

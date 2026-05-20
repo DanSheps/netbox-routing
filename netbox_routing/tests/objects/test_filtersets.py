@@ -1,5 +1,6 @@
 from django.test import TestCase
 
+from ipam.models import Prefix
 from netbox_routing.choices import ActionChoices
 
 from netbox_routing.filtersets.objects import *
@@ -143,44 +144,50 @@ class PrefixListEntryTestCase(TestCase):
     def setUpTestData(cls):
         cls.prefix_list = (
             PrefixList(
-                name='AS Path List 1',
+                name='Prefix List 1',
             ),
             PrefixList(
-                name='AS Path List 2',
+                name='Prefix List 2',
             ),
         )
         PrefixList.objects.bulk_create(cls.prefix_list)
+
+        cls.prefixes = (Prefix(prefix='10.0.0.0/24'),)
+        Prefix.objects.bulk_create(cls.prefixes)
+
+        cls.custom_prefixes = (CustomPrefix(prefix='10.0.1.0/24'),)
+        CustomPrefix.objects.bulk_create(cls.custom_prefixes)
 
         cls.prefix_list_entry = [
             PrefixListEntry(
                 prefix_list=cls.prefix_list[0],
                 action=ActionChoices.PERMIT,
                 sequence=1,
-                prefix='10.0.0.0/24',
+                assigned_prefix=cls.prefixes[0],
             ),
             PrefixListEntry(
                 prefix_list=cls.prefix_list[0],
                 action=ActionChoices.PERMIT,
                 sequence=2,
-                prefix='10.0.1.0/24',
+                assigned_prefix=cls.custom_prefixes[0],
             ),
             PrefixListEntry(
                 prefix_list=cls.prefix_list[1],
                 action=ActionChoices.PERMIT,
                 sequence=1,
-                prefix='10.0.0.0/24',
+                assigned_prefix=cls.prefixes[0],
             ),
             PrefixListEntry(
                 prefix_list=cls.prefix_list[1],
                 action=ActionChoices.PERMIT,
                 sequence=2,
-                prefix='10.0.1.0/24',
+                assigned_prefix=cls.custom_prefixes[0],
             ),
         ]
         PrefixListEntry.objects.bulk_create(cls.prefix_list_entry)
 
     def test_q(self):
-        params = {'q': 'AS Path List 1'}
+        params = {'q': 'Prefix List 1'}
         self.assertEqual(self.filterset(params, self.queryset).qs.count(), 2)
 
     def test_prefix_list(self):
@@ -199,7 +206,33 @@ class PrefixListEntryTestCase(TestCase):
         self.assertEqual(self.filterset(params, self.queryset).qs.count(), 2)
 
     def test_prefix(self):
-        params = {'prefix': self.prefix_list_entry[1].prefix}
+        params = {
+            'prefix_id': [
+                self.prefixes[0].pk,
+            ]
+        }
+        self.assertEqual(self.filterset(params, self.queryset).qs.count(), 2)
+
+        params = {
+            'prefix': [
+                self.prefixes[0].prefix,
+            ]
+        }
+        self.assertEqual(self.filterset(params, self.queryset).qs.count(), 2)
+
+    def test_custom_prefix(self):
+        params = {
+            'custom_prefix_id': [
+                self.custom_prefixes[0].pk,
+            ]
+        }
+        self.assertEqual(self.filterset(params, self.queryset).qs.count(), 2)
+
+        params = {
+            'custom_prefix': [
+                self.custom_prefixes[0].prefix,
+            ]
+        }
         self.assertEqual(self.filterset(params, self.queryset).qs.count(), 2)
 
 

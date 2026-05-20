@@ -6,21 +6,20 @@ A plugin for tracking all kinds of routing information
 ### Current features
 
 * Static routing
+* Dynamic routing
+  * EIGRP
+  * BGP
+    * Templates/Group inheritance
+    * IPv4/IPv46 AF VRF support
+    * VPNv4 support
+  * OSPF
 
 ### Under development
 
-* Dynamic routing
-  * BGP
-    * Templates/Group inheritance
-  * OSPF
 
 ### Roadmapped
 
 * Dynamic Routing
-  * BGP
-    * IPv4/IPv46 AF VRF support
-    * VPNv4 support
-  * EIGRP
   * IS-IS
 
 # Requirements

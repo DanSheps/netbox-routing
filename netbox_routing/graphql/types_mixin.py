@@ -1,9 +1,9 @@
-from typing import List, Annotated
+from typing import Annotated
 
 import strawberry
 
 
 class BGPSettingsMixin:
-    settings: List[
+    settings: list[
         Annotated['BGPSettingsType', strawberry.lazy('netbox_routing.graphql.types')]
     ]

@@ -1,17 +1,22 @@
-from .ospf import *
+from .community import *
 from .eigrp import *
+from .ospf import *
 from .static import *
 
 __all__ = (
-    # Static
-    'StaticRouteImportForm',
-    # OSPF
-    'OSPFInstanceImportForm',
-    'OSPFAreaImportForm',
-    'OSPFInterfaceImportForm',
+    # Community
+    'CommunityImportForm',
+    'CommunityListImportForm',
+    'CommunityListEntryImportForm',
     # EIGRP
     'EIGRPRouterImportForm',
     'EIGRPAddressFamilyImportForm',
     'EIGRPNetworkImportForm',
     'EIGRPInterfaceImportForm',
+    # OSPF
+    'OSPFInstanceImportForm',
+    'OSPFAreaImportForm',
+    'OSPFInterfaceImportForm',
+    # Static
+    'StaticRouteImportForm',
 )

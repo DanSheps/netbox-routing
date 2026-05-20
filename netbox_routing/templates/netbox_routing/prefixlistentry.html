@@ -24,13 +24,13 @@
         <tr>
           <th scope="row">Type</th>
           <td>
-            {% badge object.get_type_display bg_color=object.get_type_color %}
+            {% badge object.assigned_prefix_type %}
           </td>
         </tr>
         <tr>
           <th scope="row">Prefix</th>
           <td>
-            {{ object.prefix|placeholder }}
+            {{ object.assigned_prefix|linkify|placeholder }}
           </td>
         </tr>
         <tr>

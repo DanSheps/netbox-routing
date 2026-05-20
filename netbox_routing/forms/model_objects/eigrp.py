@@ -6,10 +6,10 @@ from django.utils.translation import gettext as _
 from dcim.models import Interface, Device
 from ipam.choices import IPAddressFamilyChoices
 from ipam.models import VRF, Prefix
-from netbox.forms import NetBoxModelForm
+from netbox.forms import PrimaryModelForm
 from netbox_routing.choices.eigrp import EIGRPRouterChoices
 from utilities.forms import BOOLEAN_WITH_BLANK_CHOICES, get_field_value
-from utilities.forms.fields import DynamicModelChoiceField, CommentField
+from utilities.forms.fields import DynamicModelChoiceField
 from utilities.forms.widgets import HTMXSelect
 
 from netbox_routing.models import *
@@ -22,14 +22,13 @@ __all__ = (
 )
 
 
-class EIGRPRouterForm(NetBoxModelForm):
+class EIGRPRouterForm(PrimaryModelForm):
     device = DynamicModelChoiceField(
         queryset=Device.objects.all(),
         required=True,
         selector=True,
         label=_('Device'),
     )
-    comments = CommentField()
 
     class Meta:
         model = EIGRPRouter
@@ -41,6 +40,8 @@ class EIGRPRouterForm(NetBoxModelForm):
             'rid',
             'description',
             'comments',
+            'tags',
+            'owner',
         )
         widgets = {
             'mode': HTMXSelect(),
@@ -56,7 +57,7 @@ class EIGRPRouterForm(NetBoxModelForm):
             del self.fields['name']
 
 
-class EIGRPAddressFamilyForm(NetBoxModelForm):
+class EIGRPAddressFamilyForm(PrimaryModelForm):
     router = DynamicModelChoiceField(
         queryset=EIGRPRouter.objects.all(),
         required=True,
@@ -74,7 +75,6 @@ class EIGRPAddressFamilyForm(NetBoxModelForm):
         choices=IPAddressFamilyChoices,
         label=_('Family'),
     )
-    comments = CommentField()
 
     class Meta:
         model = EIGRPAddressFamily
@@ -85,10 +85,12 @@ class EIGRPAddressFamilyForm(NetBoxModelForm):
             'rid',
             'description',
             'comments',
+            'tags',
+            'owner',
         )
 
 
-class EIGRPNetworkForm(NetBoxModelForm):
+class EIGRPNetworkForm(PrimaryModelForm):
     router = DynamicModelChoiceField(
         queryset=EIGRPRouter.objects.all(),
         required=True,
@@ -107,7 +109,6 @@ class EIGRPNetworkForm(NetBoxModelForm):
         selector=True,
         label=_('Prefix'),
     )
-    comments = CommentField()
 
     class Meta:
         model = EIGRPNetwork
@@ -117,10 +118,12 @@ class EIGRPNetworkForm(NetBoxModelForm):
             'network',
             'description',
             'comments',
+            'tags',
+            'owner',
         )
 
 
-class EIGRPInterfaceForm(NetBoxModelForm):
+class EIGRPInterfaceForm(PrimaryModelForm):
     device = DynamicModelChoiceField(
         queryset=Device.objects.all(),
         required=False,
@@ -159,7 +162,6 @@ class EIGRPInterfaceForm(NetBoxModelForm):
         label='Passive Interface',
         widget=forms.Select(choices=BOOLEAN_WITH_BLANK_CHOICES),
     )
-    comments = CommentField()
 
     class Meta:
         model = EIGRPInterface
@@ -174,6 +176,8 @@ class EIGRPInterfaceForm(NetBoxModelForm):
             'passphrase',
             'description',
             'comments',
+            'tags',
+            'owner',
         )
 
         widgets = {

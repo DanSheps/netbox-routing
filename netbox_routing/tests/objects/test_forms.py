@@ -1,6 +1,8 @@
 from django.test import TestCase
 
-from netbox_routing.models import Community
+from ipam.models import Prefix
+from netbox_routing.models.objects import *
+from netbox_routing.models.community import *
 
 from netbox_routing.choices import ActionChoices
 from netbox_routing.forms.objects import *
@@ -127,14 +129,33 @@ class PrefixListEntryTestCase(TestCase):
             name='Prefix List 1',
             family=4,
         )
+        cls.prefix = Prefix(prefix='10.0.0.0/8')
+        cls.prefix.full_clean()
+        cls.prefix.save()
 
-    def test_object(self):
+        cls.custom_prefix = CustomPrefix(prefix='192.168.0.0/16')
+        cls.custom_prefix.full_clean()
+        cls.custom_prefix.save()
+
+    def test_prefix(self):
         form = PrefixListEntryForm(
             data={
                 'prefix_list': self.prefix_list,
                 'sequence': 1,
                 'action': ActionChoices.PERMIT,
-                'prefix': '10.1.1.0/24',
+                'ipam_prefix': self.prefix.pk,
+            }
+        )
+        self.assertTrue(form.is_valid())
+        self.assertTrue(form.save())
+
+    def test_custom_prefix(self):
+        form = PrefixListEntryForm(
+            data={
+                'prefix_list': self.prefix_list,
+                'sequence': 1,
+                'action': ActionChoices.PERMIT,
+                'custom_prefix': self.custom_prefix.pk,
             }
         )
         self.assertTrue(form.is_valid())
@@ -142,7 +163,11 @@ class PrefixListEntryTestCase(TestCase):
 
     def test_form_invalid(self):
         form = PrefixListEntryForm(
-            data={'prefix_list': self.prefix_list, 'prefix': '10.1.1.0/24'}
+            data={
+                'prefix_list': self.prefix_list,
+                'prefix': self.prefix.pk,
+                'custom_prefix': self.custom_prefix.pk,
+            }
         )
         self.assertFalse(form.is_valid())
         with self.assertRaises(ValueError):
@@ -202,13 +227,23 @@ class RouteMapEntryTestCase(TestCase):
                 'route_map': self.route_map,
                 'sequence': 1,
                 'action': ActionChoices.PERMIT,
-                'match_community': self.community,
+                'match_community': [
+                    self.community.pk,
+                ],
+                'match_prefix_list': [],
+                'match_community_list': [],
+                'match_aspath': [],
                 'match': {},
             }
         )
         self.assertTrue(form.is_valid())
         self.assertTrue(form.save())
-        self.assertEqual(form.instance.match.get('community'), self.community.pk)
+        self.assertEqual(
+            list(form.instance.match_community.all()),
+            [
+                self.community,
+            ],
+        )
 
     def test_form_invalid(self):
         form = RouteMapEntryForm(

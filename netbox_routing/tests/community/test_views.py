@@ -19,10 +19,10 @@ class CommunityTestCase(
     ViewTestCases.EditObjectViewTestCase,
     ViewTestCases.DeleteObjectViewTestCase,
     ViewTestCases.ListObjectsViewTestCase,
+    ViewTestCases.BulkImportObjectsViewTestCase,
     ViewTestCases.BulkEditObjectsViewTestCase,
     ViewTestCases.BulkDeleteObjectsViewTestCase,
 ):
-    # ViewTestCases.BulkImportObjectsViewTestCase,
     model = Community
 
     @classmethod
@@ -53,7 +53,23 @@ class CommunityTestCase(
         cls.form_data = {
             'community': '64515',
             'status': 'active',
+            'description': 'Test community description',
+            'comments': 'Test community comments',
         }
+
+        cls.csv_data = (
+            'community,status',
+            '65000:100,active',
+            '65000:200,active',
+            '65000:300,reserved',
+        )
+
+        cls.csv_update_data = (
+            'id,description',
+            f'{cls.communities[0].pk},Updated description 1',
+            f'{cls.communities[1].pk},Updated description 2',
+            f'{cls.communities[2].pk},Updated description 3',
+        )
 
         cls.bulk_edit_data = {
             'description': 'Test Description',
@@ -70,10 +86,10 @@ class CommunityListTestCase(
     ViewTestCases.EditObjectViewTestCase,
     ViewTestCases.DeleteObjectViewTestCase,
     ViewTestCases.ListObjectsViewTestCase,
+    ViewTestCases.BulkImportObjectsViewTestCase,
     ViewTestCases.BulkEditObjectsViewTestCase,
     ViewTestCases.BulkDeleteObjectsViewTestCase,
 ):
-    # ViewTestCases.BulkImportObjectsViewTestCase,
     model = CommunityList
 
     @classmethod
@@ -97,7 +113,23 @@ class CommunityListTestCase(
 
         cls.form_data = {
             'name': 'Community List X',
+            'description': 'Test community list description',
+            'comments': 'Test community list comments',
         }
+
+        cls.csv_data = (
+            'name',
+            'Import List 1',
+            'Import List 2',
+            'Import List 3',
+        )
+
+        cls.csv_update_data = (
+            'id,description',
+            f'{cls.community_list[0].pk},Updated description 1',
+            f'{cls.community_list[1].pk},Updated description 2',
+            f'{cls.community_list[2].pk},Updated description 3',
+        )
 
         cls.bulk_edit_data = {
             'description': 'Test Description',
@@ -114,10 +146,10 @@ class CommunityListEntryTestCase(
     ViewTestCases.EditObjectViewTestCase,
     ViewTestCases.DeleteObjectViewTestCase,
     ViewTestCases.ListObjectsViewTestCase,
+    ViewTestCases.BulkImportObjectsViewTestCase,
     ViewTestCases.BulkEditObjectsViewTestCase,
     ViewTestCases.BulkDeleteObjectsViewTestCase,
 ):
-    # ViewTestCases.BulkImportObjectsViewTestCase,
     model = CommunityListEntry
 
     @classmethod
@@ -189,7 +221,23 @@ class CommunityListEntryTestCase(
             'community_list': cls.community_lists[2].pk,
             'community': cls.communities[2].pk,
             'action': ActionChoices.PERMIT,
+            'description': 'Test entry description',
+            'comments': 'Test entry comments',
         }
+
+        cls.csv_data = (
+            'community_list,community,action',
+            'Community List 3,64512,permit',
+            'Community List 3,64513,deny',
+            'Community List 3,64514,permit',
+        )
+
+        cls.csv_update_data = (
+            'id,description',
+            f'{cls.community_list_entries[0].pk},Updated description 1',
+            f'{cls.community_list_entries[1].pk},Updated description 2',
+            f'{cls.community_list_entries[2].pk},Updated description 3',
+        )
 
         cls.bulk_edit_data = {
             'description': 'Test Description',

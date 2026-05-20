@@ -1,3 +1,4 @@
+from netbox import object_actions
 from netbox.views.generic import (
     ObjectListView,
     ObjectView,
@@ -7,7 +8,8 @@ from netbox.views.generic import (
     BulkDeleteView,
     BulkEditView,
 )
-from utilities.views import register_model_view, ViewTab
+from netbox_routing.models import Community, CommunityList
+from utilities.views import register_model_view, ViewTab, GetRelatedModelsMixin
 from netbox_routing.filtersets.objects import *
 from netbox_routing.forms.objects import *
 from netbox_routing.models.objects import *
@@ -134,6 +136,38 @@ class PrefixListEntryBulkDeleteView(BulkDeleteView):
 
 
 #
+# Custom Prefix
+#
+
+
+@register_model_view(CustomPrefix, name='list', path='', detail=False)
+class CustomPrefixListView(ObjectListView):
+    queryset = CustomPrefix.objects.all()
+    table = CustomPrefixTable
+    filterset = CustomPrefixFilterSet
+    filterset_form = CustomPrefixFilterForm
+    actions = (object_actions.AddObject,)
+
+
+@register_model_view(CustomPrefix)
+class CustomPrefixView(ObjectView):
+    queryset = CustomPrefix.objects.all()
+    template_name = 'netbox_routing/customprefix.html'
+
+
+@register_model_view(CustomPrefix, name='add', detail=False)
+@register_model_view(CustomPrefix, name='edit')
+class CustomPrefixEditView(ObjectEditView):
+    queryset = CustomPrefix.objects.all()
+    form = CustomPrefixForm
+
+
+@register_model_view(CustomPrefix, name='delete')
+class CustomPrefixDeleteView(ObjectDeleteView):
+    queryset = CustomPrefix.objects.all()
+
+
+#
 # Route Map
 #
 @register_model_view(RouteMap, name='list', path='', detail=False)
@@ -218,9 +252,45 @@ class RouteMapEntryListView(ObjectListView):
 
 
 @register_model_view(RouteMapEntry)
-class RouteMapEntryView(ObjectView):
+class RouteMapEntryView(GetRelatedModelsMixin, ObjectView):
     queryset = RouteMapEntry.objects.all()
     template_name = 'netbox_routing/routemapentry.html'
+
+    def get_extra_context(self, request, instance):
+
+        return {
+            'related_models': self.get_related_models(
+                request,
+                instance,
+                omit='route_map',
+                extra=(
+                    (
+                        PrefixList.objects.restrict(request.user, 'view').filter(
+                            route_map_entries=instance
+                        ),
+                        'route_map_entry_id',
+                    ),
+                    (
+                        CommunityList.objects.restrict(request.user, 'view').filter(
+                            route_map_entries=instance
+                        ),
+                        'route_map_entry_id',
+                    ),
+                    (
+                        Community.objects.restrict(request.user, 'view').filter(
+                            route_map_entries=instance
+                        ),
+                        'route_map_entry_id',
+                    ),
+                    (
+                        ASPath.objects.restrict(request.user, 'view').filter(
+                            route_map_entries=instance
+                        ),
+                        'route_map_entry_id',
+                    ),
+                ),
+            ),
+        }
 
 
 @register_model_view(RouteMapEntry, name='add', detail=False)

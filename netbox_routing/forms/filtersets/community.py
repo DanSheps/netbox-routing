@@ -36,7 +36,7 @@ class CommunityFilterForm(TenancyFilterForm, NetBoxModelFilterSetForm):
     model = Community
     fieldsets = (
         FieldSet('q', 'filter_id', 'tag'),
-        FieldSet('community', 'status', 'role_id', name=_('Community')),
+        FieldSet('name', 'community', 'status', 'role_id', name=_('Community')),
         FieldSet('tenant_group', 'tenant', name=_('Tenancy')),
     )
     status = forms.ChoiceField(

@@ -11,6 +11,10 @@
       <div class="card-body">
         <table class="table table-hover attr-table">
           <tr>
+            <th scope="row">Name</th>
+            <td>{{ object.name|placeholder }}</td>
+          </tr>
+          <tr>
             <th scope="row">Community</th>
             <td>
               {{ object.community }}
@@ -24,9 +28,11 @@
           </tr>
           <tr>
             <th scope="row">Role</th>
-            <td>
-              {{ object.get_role_display }}
-            </td>
+            <td>{{ object.role|linkify|placeholder }}</td>
+          </tr>
+          <tr>
+            <th scope="row">Description</th>
+            <td>{{ object.description|placeholder }}</td>
           </tr>
         </table>
       </div>

@@ -1,5 +1,6 @@
 from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
 from django.contrib.contenttypes.models import ContentType
+from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 from django.db.models import ManyToManyField
 from django.urls import reverse
@@ -8,9 +9,23 @@ from django.utils.translation import gettext as _
 from netbox.models import PrimaryModel
 from netbox_routing.choices.bgp import *
 from netbox_routing.constants.bgp import *
+from netbox_routing.models.base import SearchAttributeMixin
+
+__all__ = (
+    'BGPSetting',
+    'BGPPeerTemplate',
+    'BGPPolicyTemplate',
+    'BGPSessionTemplate',
+    'BGPRouter',
+    'BGPScope',
+    'BGPAddressFamily',
+    'BGPPeer',
+    'BGPPeerAddressFamily',
+    'BFDProfile',
+)
 
 
-class BGPSetting(PrimaryModel):
+class BGPSetting(SearchAttributeMixin, PrimaryModel):
     assigned_object_type = models.ForeignKey(
         verbose_name=_('Assigned Object Type'),
         to=ContentType,
@@ -83,10 +98,17 @@ class BGPSessionTemplate(PrimaryModel):
         blank=True,
         null=True,
     )
-    bfd = models.CharField(
-        verbose_name=_('BFD'),
-        max_length=50,
-        choices=BFDChoices,
+    ttl = models.PositiveSmallIntegerField(
+        verbose_name=_('TTL'),
+        blank=True,
+        null=True,
+        validators=[MinValueValidator(0), MaxValueValidator(255)],
+    )
+    bfd = models.ForeignKey(
+        verbose_name=_('BFD PRofile'),
+        to='netbox_routing.BFDProfile',
+        on_delete=models.PROTECT,
+        related_name='bgp_session_templates',
         blank=True,
         null=True,
     )
@@ -112,6 +134,7 @@ class BGPSessionTemplate(PrimaryModel):
         'remote_as',
         'local_as',
         'bfd',
+        'ttl',
         'password',
         'tenant',
     )
@@ -252,8 +275,10 @@ class BGPPeerTemplate(PrimaryModel):
         return f'{self.name}'
 
 
-class BGPRouter(PrimaryModel):
-    name = models.CharField(verbose_name=_('Name'), max_length=100)
+class BGPRouter(SearchAttributeMixin, PrimaryModel):
+    name = models.CharField(
+        verbose_name=_('Name'), max_length=100, blank=True, null=True
+    )
     assigned_object_type = models.ForeignKey(
         verbose_name=_('Assigned Object Type'),
         to=ContentType,
@@ -485,6 +510,8 @@ class BGPPeer(PrimaryModel):
     name = models.CharField(
         verbose_name=_('Name'),
         max_length=100,
+        blank=True,
+        null=True,
     )
     scope = models.ForeignKey(
         verbose_name=_('Scope'),
@@ -535,6 +562,13 @@ class BGPPeer(PrimaryModel):
         null=True,
     )
     enabled = models.BooleanField(verbose_name=_('Enabled'), blank=True, null=True)
+    status = models.CharField(
+        verbose_name=_('Status'),
+        max_length=10,
+        choices=BGPStatusChoices,
+        null=True,
+        blank=True,
+    )
     local_as = models.ForeignKey(
         verbose_name=_('Local AS'),
         to='ipam.ASN',
@@ -543,7 +577,20 @@ class BGPPeer(PrimaryModel):
         blank=True,
         null=True,
     )
-    bfd = models.BooleanField(verbose_name=_('BFD'), blank=True, null=True)
+    bfd = models.ForeignKey(
+        verbose_name=_('BFD PRofile'),
+        to='netbox_routing.BFDProfile',
+        on_delete=models.PROTECT,
+        related_name='bgp_peers',
+        blank=True,
+        null=True,
+    )
+    ttl = models.PositiveSmallIntegerField(
+        verbose_name=_('TTL'),
+        blank=True,
+        null=True,
+        validators=[MinValueValidator(0), MaxValueValidator(255)],
+    )
     password = models.CharField(
         verbose_name=_('Password'), max_length=255, blank=True, null=True
     )
@@ -611,7 +658,7 @@ class BGPPeer(PrimaryModel):
         return reverse('plugins:netbox_routing:bgppeer', args=[self.pk])
 
 
-class BGPPeerAddressFamily(PrimaryModel):
+class BGPPeerAddressFamily(SearchAttributeMixin, PrimaryModel):
     assigned_object_type = models.ForeignKey(
         verbose_name=_('Assigned Object Type'),
         to=ContentType,
@@ -717,3 +764,56 @@ class BGPPeerAddressFamily(PrimaryModel):
                 name='%(app_label)s_%(class)s_assigned_object_address_family',
             ),
         ]
+
+    def __str__(self):
+        return f'{self.assigned_object} ({self.address_family})'
+
+
+class BFDProfile(PrimaryModel):
+    name = models.CharField(verbose_name=_('Name'), max_length=100)
+    min_tx_int = models.PositiveIntegerField(
+        verbose_name=_('Min TX Interval'),
+        validators=[MinValueValidator(60), MaxValueValidator(60000)],
+    )
+    min_rx_int = models.PositiveIntegerField(
+        verbose_name=_('Min RX Interval'),
+        validators=[MinValueValidator(60), MaxValueValidator(60000)],
+    )
+    multiplier = models.PositiveSmallIntegerField(
+        verbose_name=_('Multiplier'),
+        validators=[MinValueValidator(0), MaxValueValidator(255)],
+    )
+    hold = models.PositiveIntegerField(
+        verbose_name=_('Hold Time'),
+        blank=True,
+        null=True,
+        validators=[MinValueValidator(60), MaxValueValidator(60000)],
+    )
+    tenant = models.ForeignKey(
+        verbose_name=_('Tenant'),
+        to='tenancy.Tenant',
+        on_delete=models.PROTECT,
+        related_name='bfd_profiles',
+        blank=True,
+        null=True,
+    )
+
+    clone_fields = ('tenant',)
+    prerequisite_models = (
+        'netbox_routing.BGPRouter',
+        'netbox_routing.BGPScope',
+    )
+
+    class Meta:
+        verbose_name = 'BFD Profile'
+        verbose_name_plural = 'BFD Profiles'
+        ordering = ('name',)
+        constraints = [
+            models.UniqueConstraint(
+                fields=('name',),
+                name='%(app_label)s_%(class)s_name',
+            ),
+        ]
+
+    def __str__(self):
+        return f'{self.name}'

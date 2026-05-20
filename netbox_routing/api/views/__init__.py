@@ -21,6 +21,7 @@ __all__ = (
     'BGPPolicyTemplateViewSet',
     'BGPSessionTemplateViewSet',
     'BGPPeerAddressFamilyViewSet',
+    'BFDProfileViewSet',
     'EIGRPRouterViewSet',
     'EIGRPAddressFamilyViewSet',
     'EIGRPNetworkViewSet',

@@ -5,6 +5,9 @@ from django.utils.translation import gettext as _
 from netbox.filtersets import NetBoxModelFilterSet
 from dcim.models import Device
 from ipam.models import ASN, VRF, IPAddress
+from utilities.filtersets import register_filterset
+
+from netbox_routing.choices.bgp import *
 from netbox_routing.models.bgp import *
 
 __all__ = (
@@ -17,9 +20,11 @@ __all__ = (
     'BGPPolicyTemplateFilterSet',
     'BGPSessionTemplateFilterSet',
     'BGPPeerAddressFamilyFilterSet',
+    'BFDProfileFilterSet',
 )
 
 
+@register_filterset
 class BGPPeerTemplateFilterSet(NetBoxModelFilterSet):
     peer_id = django_filters.ModelMultipleChoiceFilter(
         field_name='peers',
@@ -60,6 +65,7 @@ class BGPPeerTemplateFilterSet(NetBoxModelFilterSet):
         return queryset.filter(qs_filter).distinct()
 
 
+@register_filterset
 class BGPPolicyTemplateFilterSet(NetBoxModelFilterSet):
 
     class Meta:
@@ -73,6 +79,7 @@ class BGPPolicyTemplateFilterSet(NetBoxModelFilterSet):
         return queryset.filter(qs_filter).distinct()
 
 
+@register_filterset
 class BGPSessionTemplateFilterSet(NetBoxModelFilterSet):
 
     class Meta:
@@ -86,6 +93,7 @@ class BGPSessionTemplateFilterSet(NetBoxModelFilterSet):
         return queryset.filter(qs_filter).distinct()
 
 
+@register_filterset
 class BGPSettingFilterSet(NetBoxModelFilterSet):
     key = django_filters.MultipleChoiceFilter(
         choices=BGPSettingChoices, null_value=None, label=_('Setting Name')
@@ -102,6 +110,7 @@ class BGPSettingFilterSet(NetBoxModelFilterSet):
         return queryset.filter(qs_filter).distinct()
 
 
+@register_filterset
 class BGPRouterFilterSet(NetBoxModelFilterSet):
     # device_id = django_filters.ModelMultipleChoiceFilter(
     #    field_name='device',
@@ -141,6 +150,7 @@ class BGPRouterFilterSet(NetBoxModelFilterSet):
         return queryset.filter(qs_filter).distinct()
 
 
+@register_filterset
 class BGPScopeFilterSet(NetBoxModelFilterSet):
     router_id = django_filters.ModelMultipleChoiceFilter(
         field_name='router',
@@ -174,6 +184,7 @@ class BGPScopeFilterSet(NetBoxModelFilterSet):
         return queryset.filter(qs_filter).distinct()
 
 
+@register_filterset
 class BGPAddressFamilyFilterSet(NetBoxModelFilterSet):
     scope_id = django_filters.ModelMultipleChoiceFilter(
         field_name='scope',
@@ -195,6 +206,7 @@ class BGPAddressFamilyFilterSet(NetBoxModelFilterSet):
         return queryset.filter(qs_filter).distinct()
 
 
+@register_filterset
 class BGPPeerFilterSet(NetBoxModelFilterSet):
     scope_id = django_filters.ModelMultipleChoiceFilter(
         field_name='scope',
@@ -254,6 +266,7 @@ class BGPPeerFilterSet(NetBoxModelFilterSet):
         return queryset.filter(qs_filter).distinct()
 
 
+@register_filterset
 class BGPPeerAddressFamilyFilterSet(NetBoxModelFilterSet):
     peer_id = django_filters.ModelMultipleChoiceFilter(
         field_name='peer',
@@ -286,4 +299,18 @@ class BGPPeerAddressFamilyFilterSet(NetBoxModelFilterSet):
         qs_filter = Q(peer__address__icontains=value)
         qs_filter |= Q(remote_as__asn__icontains=value)
         qs_filter |= Q(local_as__asn__icontains=value)
+        return queryset.filter(qs_filter).distinct()
+
+
+@register_filterset
+class BFDProfileFilterSet(NetBoxModelFilterSet):
+
+    class Meta:
+        model = BFDProfile
+        fields = ('name',)
+
+    def search(self, queryset, name, value):
+        if not value.strip():
+            return queryset
+        qs_filter = Q(name__icontains=value)
         return queryset.filter(qs_filter).distinct()

@@ -579,3 +579,80 @@ class BGPPeerAddressFamilySettingsView(BGPSettingViewMixin, ObjectChildrenView):
 
     def get_children(self, request, parent):
         return self.child_model.objects.filter(peer_address_families=parent)
+
+
+#
+# BFD Profile
+#
+@register_model_view(BFDProfile, name='list', path='', detail=False)
+class BFDProfileListView(ObjectListView):
+    queryset = BFDProfile.objects.all()
+    filterset = BFDProfileFilterSet
+    filterset_form = BFDProfileFilterForm
+    table = BFDProfileTable
+
+
+@register_model_view(BFDProfile)
+class BFDProfileView(ObjectView):
+    queryset = BFDProfile.objects.all()
+
+
+@register_model_view(BFDProfile, name='add', detail=False)
+@register_model_view(BFDProfile, name='edit')
+class BFDProfileEditView(ObjectEditView):
+    queryset = BFDProfile.objects.all()
+    form = BFDProfileForm
+
+
+@register_model_view(BFDProfile, name='delete')
+class BFDProfileDeleteView(ObjectDeleteView):
+    queryset = BFDProfile.objects.all()
+
+
+@register_model_view(BFDProfile, name='bulk_edit', detail=False)
+class BFDProfileBulkEditView(BulkEditView):
+    queryset = BFDProfile.objects.all()
+    filterset = BFDProfileFilterSet
+    form = BFDProfileBulkEditForm
+    table = BFDProfileTable
+
+
+@register_model_view(BFDProfile, name='bulk_delete', detail=False)
+class BFDProfileBulkDeleteView(BulkDeleteView):
+    queryset = BFDProfile.objects.all()
+    filterset = BFDProfileFilterSet
+    table = BFDProfileTable
+
+
+@register_model_view(BFDProfile, name='peers')
+class BFDProfilePeersView(ObjectChildrenView):
+    queryset = BFDProfile.objects.all()
+    child_model = BGPPeer
+    table = BGPPeerTable
+    filterset = BGPPeerFilterSet
+    filterset_form = BGPPeerFilterForm
+    actions = ObjectChildrenView.actions
+    tab = ViewTab(
+        label='BGP Peers',
+        badge=lambda obj: BGPPeer.objects.filter(bfd=obj).count(),
+    )
+
+    def get_children(self, request, parent):
+        return self.child_model.objects.filter(bfd=parent)
+
+
+@register_model_view(BFDProfile, name='session_templates')
+class BFDProfileSessionTemplatesView(ObjectChildrenView):
+    queryset = BFDProfile.objects.all()
+    child_model = BGPSessionTemplate
+    table = BGPSessionTemplateTable
+    filterset = BGPSessionTemplateFilterSet
+    filterset_form = BGPSessionTemplateFilterForm
+    actions = ObjectChildrenView.actions
+    tab = ViewTab(
+        label='BGP Session Template',
+        badge=lambda obj: BGPSessionTemplate.objects.filter(bfd=obj).count(),
+    )
+
+    def get_children(self, request, parent):
+        return self.child_model.objects.filter(bfd=parent)

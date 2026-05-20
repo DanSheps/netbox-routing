@@ -1,8 +1,9 @@
 from netbox.api.routers import NetBoxRouter
 from .views import *
+from .views.objects import CustomPrefixViewSet
 
 router = NetBoxRouter()
-router.register('static/route', StaticRouteViewSet)
+router.register('routes/static', StaticRouteViewSet)
 router.register('bgp/setting', BGPSettingViewSet)
 router.register('bgp/peer-template', BGPPeerTemplateViewSet)
 router.register('bgp/policy-template', BGPPolicyTemplateViewSet)
@@ -12,6 +13,7 @@ router.register('bgp/scope', BGPScopeViewSet)
 router.register('bgp/address-family', BGPAddressFamilyViewSet)
 router.register('bgp/peer', BGPPeerViewSet)
 router.register('bgp/peer-address-family', BGPPeerAddressFamilyViewSet)
+router.register('bfd/profile', BFDProfileViewSet)
 router.register('ospf/instance', OSPFInstanceViewSet)
 router.register('ospf/area', OSPFAreaViewSet)
 router.register('ospf/interface', OSPFInterfaceViewSet)
@@ -19,6 +21,7 @@ router.register('eigrp/router', EIGRPRouterViewSet)
 router.register('eigrp/address-family', EIGRPAddressFamilyViewSet)
 router.register('eigrp/network', EIGRPNetworkViewSet)
 router.register('eigrp/interface', EIGRPInterfaceViewSet)
+router.register('objects/custom-prefix', CustomPrefixViewSet)
 router.register('objects/prefix-list', PrefixListViewSet)
 router.register('objects/prefix-list-entry', PrefixListEntryViewSet)
 router.register('objects/route-map', RouteMapViewSet)

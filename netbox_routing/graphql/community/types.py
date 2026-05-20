@@ -24,12 +24,8 @@ class CommunityType(PrimaryObjectType):
 
     community: str
     status: str
-    role: (
-        Annotated["RoleType", strawberry.lazy('ipam.graphql.types')] | None
-    )  # noqa: F821
-    tenant: (
-        Annotated["TenantType", strawberry.lazy('tenancy.graphql.types')] | None
-    )  # noqa: F821
+    role: Annotated["RoleType", strawberry.lazy('ipam.graphql.types')] | None
+    tenant: Annotated["TenantType", strawberry.lazy('tenancy.graphql.types')] | None
 
 
 @strawberry_django.type(

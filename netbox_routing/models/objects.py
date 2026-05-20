@@ -1,3 +1,5 @@
+from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
+from django.contrib.contenttypes.models import ContentType
 from django.core.validators import (
     MinValueValidator,
     MaxValueValidator,
@@ -12,13 +14,17 @@ from django.core.exceptions import ValidationError
 from ipam.choices import IPAddressFamilyChoices
 from ipam.fields import IPNetworkField
 from netbox.models import PrimaryModel
+
+from netbox_routing.models.community import *
 from netbox_routing.choices import ActionChoices
+from netbox_routing.constants.objects import PREFIX_ASSIGNMENT_MODELS
 
 __all__ = (
     'ASPath',
     'ASPathEntry',
     'PrefixList',
     'PrefixListEntry',
+    'CustomPrefix',
     'RouteMap',
     'RouteMapEntry',
 )
@@ -129,9 +135,24 @@ class PrefixListEntry(PermitDenyChoiceMixin, PrimaryModel):
         related_name='prefix_list_entries',
         verbose_name='Prefix List',
     )
+    assigned_prefix_type = models.ForeignKey(
+        verbose_name=_('Prefix Type'),
+        to=ContentType,
+        limit_choices_to=PREFIX_ASSIGNMENT_MODELS,
+        on_delete=models.PROTECT,
+        related_name='+',
+        blank=True,
+        null=True,
+    )
+    assigned_prefix_id = models.PositiveBigIntegerField(
+        verbose_name=_('Prefix ID'), blank=True, null=True
+    )
+    assigned_prefix = GenericForeignKey(
+        ct_field='assigned_prefix_type',
+        fk_field='assigned_prefix_id',
+    )
     sequence = models.PositiveSmallIntegerField()
     action = models.CharField(max_length=6, choices=ActionChoices)
-    prefix = IPNetworkField(help_text='IPv4 or IPv6 network with mask')
     ge = models.PositiveSmallIntegerField(
         verbose_name='GE',
         null=True,
@@ -172,8 +193,9 @@ class PrefixListEntry(PermitDenyChoiceMixin, PrimaryModel):
 
     def clean(self):
         super().clean()
-        if self.prefix:
-            boundary = 32 if self.prefix.version == 4 else 128
+        if self.assigned_prefix:
+            prefix = self.assigned_prefix.prefix
+            boundary = 32 if prefix.version == 4 else 128
 
             if self.le is not None and self.le > boundary:
                 raise ValidationError({'le': 'LE value cannot be longer then 32'})
@@ -188,15 +210,49 @@ class PrefixListEntry(PermitDenyChoiceMixin, PrimaryModel):
                     }
                 )
 
-            if self.ge is not None and self.prefix.prefix.prefixlen >= self.ge:
+            if self.ge is not None and prefix.prefixlen >= self.ge:
                 raise ValidationError(
                     'Prefix\'s length cannot be longer then greater or equals value'
                 )
 
-            if self.le is not None and self.prefix.prefix.prefixlen >= self.le:
+            if self.le is not None and prefix.prefixlen >= self.le:
                 raise ValidationError(
                     'Prefix\'s length cannot be longer then greater or equals value'
                 )
+
+
+class CustomPrefix(PrimaryModel):
+    prefix = IPNetworkField(help_text='IPv4 or IPv6 network with mask')
+
+    prefix_list_enties = GenericRelation(
+        verbose_name=_('Settings'),
+        to='netbox_routing.PrefixListEntry',
+        related_name='custom_prefixes',
+        related_query_name='custom_prefixes',
+        content_type_field='assigned_prefix_type',
+        object_id_field='assigned_prefix_id',
+    )
+
+    clone_fields = ('prefix',)
+    prerequisite_models = ()
+
+    class Meta:
+        ordering = [
+            'prefix',
+        ]
+        constraints = (
+            models.UniqueConstraint(
+                fields=('prefix',),
+                name='%(app_label)s_%(class)s_unique_prefix',
+                violation_error_message="Prefix must be unique.",
+            ),
+        )
+
+    def __str__(self):
+        return f'{self.prefix}'
+
+    def get_absolute_url(self):
+        return reverse('plugins:netbox_routing:customprefix', args=[self.pk])
 
 
 class RouteMap(PrimaryModel):
@@ -233,10 +289,33 @@ class RouteMapEntry(PermitDenyChoiceMixin, PrimaryModel):
     )
     action = models.CharField(max_length=6, choices=ActionChoices)
     sequence = models.PositiveSmallIntegerField()
+    flow_control = models.PositiveSmallIntegerField(
+        verbose_name=_('Flow Control (Continue)'), null=True, blank=True
+    )
+    match_community_list = models.ManyToManyField(
+        to=CommunityList,
+        blank=True,
+        related_name='route_map_entries',
+    )
+    match_community = models.ManyToManyField(
+        to=Community,
+        blank=True,
+        related_name='route_map_entries',
+    )
+    match_aspath = models.ManyToManyField(
+        to=ASPath,
+        blank=True,
+        related_name='route_map_entries',
+    )
+    match_prefix_list = models.ManyToManyField(
+        to=PrefixList,
+        blank=True,
+        related_name='route_map_entries',
+    )
     match = models.JSONField(
         blank=True,
         null=True,
-        verbose_name=_('Set parameters'),
+        verbose_name=_('Match parameters'),
         help_text=_("JSON blob of options to match "),
     )
     set = models.JSONField(

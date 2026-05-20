@@ -138,22 +138,24 @@ class Command(BaseCommand):
                         raise Exception(_('All BGP Sessions require a local ASN'))
 
                     assigned_object = item.device if item.device else item.site
-                    if assigned_object in mapping['router'].keys():
+                    if assigned_object in mapping['router']:
                         continue
 
                     try:
                         if item.device:
                             router = BGPRouter.objects.get(
-                                device=assigned_object, asn=item.asn
+                                device=assigned_object, asn=item.local_as
                             )
                         elif item.site:
-                            router = BGPRouter.objects.get(site=item.site, asn=item.asn)
+                            router = BGPRouter.objects.get(
+                                site=item.site, asn=item.local_as
+                            )
                         else:
-                            router = BGPRouter.objects.get(asn=item.asn)
+                            router = BGPRouter.objects.get(asn=item.local_as)
                     except BGPRouter.DoesNotExist:
                         router = BGPRouter(
                             assigned_object=assigned_object,
-                            asn=item.asn,
+                            asn=item.local_as,
                         )
                         router.full_clean()
                         router.save()
@@ -263,7 +265,7 @@ class Command(BaseCommand):
                         entry = PrefixList.objects.get(name=item.name)
                         if not mapping['prefix_list'].get(item.pk):
                             mapping['prefix_list'][item.pk] = entry
-                    except PrefixListEntry.DoesNotExist:
+                    except PrefixList.DoesNotExist:
                         entry = PrefixList(
                             name=item.name,
                             family=family,
@@ -276,9 +278,17 @@ class Command(BaseCommand):
 
                 for item in netbox_bgp.PrefixListRule.objects.all():
                     prefix_list = mapping['prefix_list'][item.prefix_list.pk]
-                    prefix = item.prefix_custom
+                    prefix = None
                     if item.prefix:
-                        prefix = item.prefix.prefix
+                        prefix = item.prefix
+                    elif item.prefix_custom:
+                        try:
+                            prefix = CustomPrefix.objects.get(prefix=item.prefix_custom)
+                        except CustomPrefix.DoesNotExist:
+                            prefix = CustomPrefix(prefix=item.prefix_custom)
+                            prefix.clean()
+                            prefix.save()
+
                     try:
                         entry = PrefixListEntry.objects.get(
                             prefix_list=prefix_list, sequence=item.index
@@ -374,30 +384,23 @@ class Command(BaseCommand):
                             'aspathlist_id', flat=True
                         )
                     ]
-                    ipv4 = [
+                    prefix_list = [
                         mapping['prefix_list'][pl].pk
                         for pl in item.match_ip_address.values_list(
                             'prefixlist_id', flat=True
                         )
                     ]
-                    ipv6 = [
-                        mapping['prefix_list'][pl].pk
-                        for pl in item.match_ipv6_address.values_list(
-                            'prefixlist_id', flat=True
-                        )
-                    ]
+                    prefix_list.extend(
+                        [
+                            mapping['prefix_list'][pl].pk
+                            for pl in item.match_ipv6_address.values_list(
+                                'prefixlist_id', flat=True
+                            )
+                        ]
+                    )
                     match = item.match_custom
                     if not match:
                         match = {}
-                    match.update(
-                        {
-                            'community_list': community_list,
-                            'community': community,
-                            'aspath': aspath,
-                            'ipv4': ipv4,
-                            'ipv6': ipv6,
-                        }
-                    )
                     try:
                         entry = RouteMapEntry.objects.get(
                             route_map=route_map, sequence=item.index
@@ -416,6 +419,10 @@ class Command(BaseCommand):
                         )
                         entry.full_clean()
                         entry.save()
+                        entry.match_prefix_list.set(prefix_list)
+                        entry.match_community_list.set(community_list)
+                        entry.match_community.set(community)
+                        entry.match_aspath.set(aspath)
                         mapping['route_map_entry'][item.pk] = entry
 
                 for item in netbox_bgp.BGPPeerGroup.objects.all():
