@@ -83,7 +83,7 @@ class StaticRoute(PrimaryModel):
 
     def __str__(self):
         name = [
-            self.prefix,
+            f'{self.prefix}',
         ]
         if self.vrf:
             name.append('VRF')
