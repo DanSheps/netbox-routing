@@ -2,7 +2,6 @@ from django.utils.translation import gettext_lazy as _
 
 from netbox.ui import attrs, panels
 
-
 __all__ = (
     'OSPFInstancePanel',
     'OSPFAreaPanel',

@@ -6,7 +6,6 @@ from .static import *
 from .objects import *
 from .ospf import *
 
-
 __all__ = (
     'SettingsChoicePanel',
     'BGPSettingPanel',
