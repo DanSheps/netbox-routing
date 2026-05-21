@@ -29,6 +29,9 @@ class SettingsChoicePanel(panels.ObjectPanel):
 
     def get_context(self, context):
         ctx = super().get_context(context)
+        if not hasattr(ctx['object'], self._accessor):
+            return {**ctx, 'attrs': []}
+
         settings = {
             setting.key: setting
             for setting in getattr(ctx['object'], self._accessor).all()

@@ -152,7 +152,6 @@ class BGPPeerTemplateView(ObjectView):
             TagsPanel(),
         ],
         right_panels=[
-            SettingsChoicePanel(title=_('Settings'), choices=BGPSettingChoices),
             panels.CommentsPanel(),
             panels.RelatedObjectsPanel(),
         ],
@@ -205,7 +204,6 @@ class BGPPolicyTemplateView(ObjectView):
             TagsPanel(),
         ],
         right_panels=[
-            SettingsChoicePanel(title=_('Settings'), choices=BGPSettingChoices),
             panels.CommentsPanel(),
             panels.RelatedObjectsPanel(),
         ],
@@ -258,7 +256,6 @@ class BGPSessionTemplateView(ObjectView):
             TagsPanel(),
         ],
         right_panels=[
-            SettingsChoicePanel(title=_('Settings'), choices=BGPSettingChoices),
             panels.CommentsPanel(),
             panels.RelatedObjectsPanel(),
         ],
