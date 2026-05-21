@@ -63,7 +63,7 @@ class EIGRPRouterFilterSet(RouterMixin, NetBoxModelFilterSet):
         qs_filter = Q()
         qs_filter |= Q(name__icontains=value)
         qs_filter |= Q(device__name__icontains=value)
-        qs_filter |= Q(router_id__icontains=value)
+        qs_filter |= Q(rid__icontains=value)
 
         return queryset.filter(qs_filter).distinct()
 
@@ -111,7 +111,7 @@ class EIGRPAddressFamilyFilterSet(RouterMixin, NetBoxModelFilterSet):
         if not value.strip():
             return queryset
         qs_filter = Q(Q(rid__icontains=value))
-        qs_filter |= Q(eigrprouternamed__name__icontains=value)
+        qs_filter |= Q(router__name__icontains=value)
         return queryset.filter(qs_filter).distinct()
 
 
@@ -179,13 +179,12 @@ class EIGRPNetworkFilterSet(NetBoxModelFilterSet):
         if not value.strip():
             return queryset
         qs_filter = Q(
-            Q(eigrprouternamed__name__icontains=value)
-            | Q(address_family__rid__icontains=value)
+            Q(router__name__icontains=value) | Q(address_family__rid__icontains=value)
         )
-        qs_filter |= Q(network__contains=value.strip())
+        qs_filter |= Q(network__prefix__contains=value.strip())
         try:
             prefix = str(netaddr.IPNetwork(value.strip()).cidr)
-            qs_filter |= Q(network__net_contains_or_equals=prefix)
+            qs_filter |= Q(network__prefix__net_contains_or_equals=prefix)
         except (netaddr.AddrFormatError, ValueError):
             pass
         return queryset.filter(qs_filter).distinct()
