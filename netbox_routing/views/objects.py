@@ -1,3 +1,6 @@
+from django.utils.translation import gettext_lazy as _
+
+from extras.ui.panels import TagsPanel
 from netbox import object_actions
 from netbox.views.generic import (
     ObjectListView,
@@ -8,12 +11,14 @@ from netbox.views.generic import (
     BulkDeleteView,
     BulkEditView,
 )
-from netbox_routing.models import Community, CommunityList
+from netbox.ui import panels, layout
 from utilities.views import register_model_view, ViewTab, GetRelatedModelsMixin
 from netbox_routing.filtersets.objects import *
 from netbox_routing.forms.objects import *
+from netbox_routing.models import Community, CommunityList
 from netbox_routing.models.objects import *
 from netbox_routing.tables.objects import *
+from netbox_routing.ui import *
 
 
 #
@@ -30,12 +35,21 @@ class PrefixListListView(ObjectListView):
 @register_model_view(PrefixList)
 class PrefixListView(ObjectView):
     queryset = PrefixList.objects.all()
-    template_name = 'netbox_routing/prefixlist.html'
+    template_name = 'generic/object.html'
+    layout = layout.SimpleLayout(
+        left_panels=[
+            PrefixListPanel(),
+            TagsPanel(),
+        ],
+        right_panels=[
+            panels.CommentsPanel(),
+            panels.RelatedObjectsPanel(),
+        ],
+    )
 
 
 @register_model_view(PrefixList, name='entries')
 class PrefixListEntriesView(ObjectChildrenView):
-    template_name = 'netbox_routing/objectchildrentable.html'
     queryset = PrefixList.objects.all()
     child_model = PrefixListEntry
     table = PrefixListEntryTable
@@ -105,7 +119,17 @@ class PrefixListEntryListView(ObjectListView):
 @register_model_view(PrefixListEntry)
 class PrefixListEntryView(ObjectView):
     queryset = PrefixListEntry.objects.all()
-    template_name = 'netbox_routing/prefixlistentry.html'
+    template_name = 'generic/object.html'
+    layout = layout.SimpleLayout(
+        left_panels=[
+            PrefixListEntryPanel(),
+            TagsPanel(),
+        ],
+        right_panels=[
+            panels.CommentsPanel(),
+            panels.RelatedObjectsPanel(),
+        ],
+    )
 
 
 @register_model_view(PrefixListEntry, name='add', detail=False)
@@ -152,7 +176,17 @@ class CustomPrefixListView(ObjectListView):
 @register_model_view(CustomPrefix)
 class CustomPrefixView(ObjectView):
     queryset = CustomPrefix.objects.all()
-    template_name = 'netbox_routing/customprefix.html'
+    template_name = 'generic/object.html'
+    layout = layout.SimpleLayout(
+        left_panels=[
+            CustomPrefixPanel(),
+            TagsPanel(),
+        ],
+        right_panels=[
+            panels.CommentsPanel(),
+            panels.RelatedObjectsPanel(),
+        ],
+    )
 
 
 @register_model_view(CustomPrefix, name='add', detail=False)
@@ -181,12 +215,21 @@ class RouteMapListView(ObjectListView):
 @register_model_view(RouteMap)
 class RouteMapView(ObjectView):
     queryset = RouteMap.objects.all()
-    template_name = 'netbox_routing/routemap.html'
+    template_name = 'generic/object.html'
+    layout = layout.SimpleLayout(
+        left_panels=[
+            RouteMapPanel(),
+            TagsPanel(),
+        ],
+        right_panels=[
+            panels.CommentsPanel(),
+            panels.RelatedObjectsPanel(),
+        ],
+    )
 
 
 @register_model_view(RouteMap, name='entries')
 class RouteMapEntriesView(ObjectChildrenView):
-    template_name = 'netbox_routing/objectchildrentable.html'
     queryset = RouteMap.objects.all()
     child_model = RouteMapEntry
     table = RouteMapEntryTable
@@ -254,7 +297,21 @@ class RouteMapEntryListView(ObjectListView):
 @register_model_view(RouteMapEntry)
 class RouteMapEntryView(GetRelatedModelsMixin, ObjectView):
     queryset = RouteMapEntry.objects.all()
-    template_name = 'netbox_routing/routemapentry.html'
+    template_name = 'generic/object.html'
+    layout = layout.SimpleLayout(
+        left_panels=[
+            RouteMapEntryPanel(title=_('Route Map Entry')),
+            RouteMapEntryMatchPanel(title=_('Match Actions')),
+            panels.JSONPanel('match', title=_('Match Parameters'), copy_button=True),
+            RouteMapEntrySetPanel(title=_('Set Actions')),
+            panels.JSONPanel('set', title=_('Set Parameters'), copy_button=True),
+            TagsPanel(),
+        ],
+        right_panels=[
+            panels.CommentsPanel(),
+            panels.RelatedObjectsPanel(),
+        ],
+    )
 
     def get_extra_context(self, request, instance):
 
@@ -334,7 +391,17 @@ class ASPathListView(ObjectListView):
 @register_model_view(ASPath)
 class ASPathView(ObjectView):
     queryset = ASPath.objects.all()
-    template_name = 'netbox_routing/aspath.html'
+    template_name = 'generic/object.html'
+    layout = layout.SimpleLayout(
+        left_panels=[
+            ASPathPanel(),
+            TagsPanel(),
+        ],
+        right_panels=[
+            panels.CommentsPanel(),
+            panels.RelatedObjectsPanel(),
+        ],
+    )
 
 
 @register_model_view(ASPath, name='add', detail=False)
@@ -366,7 +433,6 @@ class ASPathBulkDeleteView(BulkDeleteView):
 
 @register_model_view(ASPath, name='entries')
 class ASPathEntriesView(ObjectChildrenView):
-    template_name = 'netbox_routing/objectchildrentable.html'
     queryset = ASPath.objects.all()
     child_model = ASPathEntry
     table = ASPathEntryTable
@@ -408,7 +474,17 @@ class ASPathEntryListView(ObjectListView):
 @register_model_view(ASPathEntry)
 class ASPathEntryView(ObjectView):
     queryset = ASPathEntry.objects.all()
-    template_name = 'netbox_routing/aspathentry.html'
+    template_name = 'generic/object.html'
+    layout = layout.SimpleLayout(
+        left_panels=[
+            ASPathEntryPanel(),
+            TagsPanel(),
+        ],
+        right_panels=[
+            panels.CommentsPanel(),
+            panels.RelatedObjectsPanel(),
+        ],
+    )
 
 
 @register_model_view(ASPathEntry, name='add', detail=False)
