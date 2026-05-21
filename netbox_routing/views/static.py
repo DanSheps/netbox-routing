@@ -1,6 +1,9 @@
+from django.utils.translation import gettext_lazy as _
+
 from dcim.filtersets import DeviceFilterSet
 from dcim.models import Device
 from dcim.tables import DeviceTable
+from extras.ui.panels import TagsPanel
 from netbox.views.generic import (
     ObjectListView,
     ObjectEditView,
@@ -11,6 +14,7 @@ from netbox.views.generic import (
     BulkEditView,
     BulkImportView,
 )
+from netbox.ui import panels, layout
 from utilities.views import register_model_view, ViewTab
 
 from netbox_routing.filtersets.static import StaticRouteFilterSet
@@ -20,6 +24,7 @@ from netbox_routing.forms.filtersets.static import StaticRouteFilterForm
 from netbox_routing.forms.bulk_import import StaticRouteImportForm
 from netbox_routing.models import StaticRoute
 from netbox_routing.tables.static import StaticRouteTable
+from netbox_routing.ui import *
 
 __all__ = (
     'StaticRouteListView',
@@ -44,12 +49,22 @@ class StaticRouteListView(ObjectListView):
 @register_model_view(StaticRoute)
 class StaticRouteView(ObjectView):
     queryset = StaticRoute.objects.all()
-    template_name = 'netbox_routing/staticroute.html'
+    template_name = 'generic/object.html'
+    layout = layout.SimpleLayout(
+        left_panels=[
+            StaticRoutePanel(),
+            StaticRouteRoutePanel(title=_('Route Parameters')),
+            TagsPanel(),
+        ],
+        right_panels=[
+            panels.CommentsPanel(),
+            panels.RelatedObjectsPanel(),
+        ],
+    )
 
 
 @register_model_view(StaticRoute, name='devices')
 class StaticRouteDevicesView(ObjectChildrenView):
-    template_name = 'netbox_routing/staticroute_devices.html'
     queryset = StaticRoute.objects.all()
     child_model = Device
     table = DeviceTable

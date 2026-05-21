@@ -1,3 +1,6 @@
+from django.utils.translation import gettext_lazy as _
+
+from extras.ui.panels import TagsPanel
 from netbox.object_actions import CloneObject, EditObject, DeleteObject
 from netbox.views.generic import (
     ObjectView,
@@ -8,6 +11,9 @@ from netbox.views.generic import (
     BulkEditView,
     BulkDeleteView,
 )
+from netbox.ui import panels, layout
+from netbox_routing.choices import BGPSettingChoices
+from netbox_routing.ui import *
 
 from utilities.views import register_model_view, ViewTab
 
@@ -85,6 +91,17 @@ class BGPSettingListView(ObjectListView):
 @register_model_view(BGPSetting)
 class BGPSettingView(ObjectView):
     queryset = BGPSetting.objects.all()
+    template_name = 'generic/object.html'
+    layout = layout.SimpleLayout(
+        left_panels=[
+            BGPSettingPanel(),
+            TagsPanel(),
+        ],
+        right_panels=[
+            panels.CommentsPanel(),
+            panels.RelatedObjectsPanel(),
+        ],
+    )
 
 
 @register_model_view(BGPSetting, name='add', detail=False)
@@ -128,6 +145,17 @@ class BGPPeerTemplateListView(ObjectListView):
 @register_model_view(BGPPeerTemplate)
 class BGPPeerTemplateView(ObjectView):
     queryset = BGPPeerTemplate.objects.all()
+    template_name = 'generic/object.html'
+    layout = layout.SimpleLayout(
+        left_panels=[
+            BGPPeerTemplatePanel(),
+            TagsPanel(),
+        ],
+        right_panels=[
+            panels.CommentsPanel(),
+            panels.RelatedObjectsPanel(),
+        ],
+    )
 
 
 @register_model_view(BGPPeerTemplate, name='add', detail=False)
@@ -168,6 +196,18 @@ class BGPPolicyTemplateListView(ObjectListView):
 @register_model_view(BGPPolicyTemplate)
 class BGPPolicyTemplateView(ObjectView):
     queryset = BGPPolicyTemplate.objects.all()
+    template_name = 'generic/object.html'
+    layout = layout.SimpleLayout(
+        left_panels=[
+            BGPPolicyTemplatePanel(),
+            BGPPolicyFilteringPanel(title=_('Filtering')),
+            TagsPanel(),
+        ],
+        right_panels=[
+            panels.CommentsPanel(),
+            panels.RelatedObjectsPanel(),
+        ],
+    )
 
 
 @register_model_view(BGPPolicyTemplate, name='add', detail=False)
@@ -208,6 +248,18 @@ class BGPSessionTemplateListView(ObjectListView):
 @register_model_view(BGPSessionTemplate)
 class BGPSessionTemplateView(ObjectView):
     queryset = BGPSessionTemplate.objects.all()
+    template_name = 'generic/object.html'
+    layout = layout.SimpleLayout(
+        left_panels=[
+            BGPSessionTemplatePanel(),
+            BGPPeerSettingPanel(title=_('Peer Parameters')),
+            TagsPanel(),
+        ],
+        right_panels=[
+            panels.CommentsPanel(),
+            panels.RelatedObjectsPanel(),
+        ],
+    )
 
 
 @register_model_view(BGPSessionTemplate, name='add', detail=False)
@@ -251,7 +303,19 @@ class BGPRouterListView(ObjectListView):
 @register_model_view(BGPRouter)
 class BGPRouterView(ObjectView):
     queryset = BGPRouter.objects.all()
-    template_name = 'netbox_routing/bgprouter.html'
+    template_name = 'generic/object.html'
+    layout = layout.SimpleLayout(
+        left_panels=[
+            BGPRouterPanel(),
+            BGPRouterTemplatesPanel(title=_('Templates')),
+            TagsPanel(),
+        ],
+        right_panels=[
+            SettingsChoicePanel(title=_('Settings'), choices=BGPSettingChoices),
+            panels.CommentsPanel(),
+            panels.RelatedObjectsPanel(),
+        ],
+    )
 
 
 @register_model_view(BGPRouter, name='add', detail=False)
@@ -360,7 +424,18 @@ class BGPScopeListView(ObjectListView):
 @register_model_view(BGPScope)
 class BGPScopeView(ObjectView):
     queryset = BGPScope.objects.all()
-    template_name = 'netbox_routing/bgpscope.html'
+    template_name = 'generic/object.html'
+    layout = layout.SimpleLayout(
+        left_panels=[
+            BGPScopePanel(),
+            TagsPanel(),
+        ],
+        right_panels=[
+            SettingsChoicePanel(title=_('Settings'), choices=BGPSettingChoices),
+            panels.CommentsPanel(),
+            panels.RelatedObjectsPanel(),
+        ],
+    )
 
 
 @register_model_view(BGPScope, name='add', detail=False)
@@ -404,7 +479,18 @@ class BGPAddressFamilyListView(ObjectListView):
 @register_model_view(BGPAddressFamily)
 class BGPAddressFamilyView(ObjectView):
     queryset = BGPAddressFamily.objects.all()
-    template_name = 'netbox_routing/bgpaddressfamily.html'
+    template_name = 'generic/object.html'
+    layout = layout.SimpleLayout(
+        left_panels=[
+            BGPAddressFamilyPanel(),
+            TagsPanel(),
+        ],
+        right_panels=[
+            SettingsChoicePanel(title=_('Settings'), choices=BGPSettingChoices),
+            panels.CommentsPanel(),
+            panels.RelatedObjectsPanel(),
+        ],
+    )
 
 
 @register_model_view(BGPAddressFamily, name='add', detail=False)
@@ -462,6 +548,19 @@ class BGPPeerListView(ObjectListView):
 @register_model_view(BGPPeer)
 class BGPPeerView(ObjectView):
     queryset = BGPPeer.objects.all()
+    template_name = 'generic/object.html'
+    layout = layout.SimpleLayout(
+        left_panels=[
+            BGPPeerPanel(),
+            BGPPeerSettingPanel(title=_('Peer Parameters')),
+            TagsPanel(),
+        ],
+        right_panels=[
+            SettingsChoicePanel(title=_('Settings'), choices=BGPSettingChoices),
+            panels.CommentsPanel(),
+            panels.RelatedObjectsPanel(),
+        ],
+    )
 
 
 @register_model_view(BGPPeer, name='add', detail=False)
@@ -538,6 +637,19 @@ class BGPPeerAddressFamilyListView(ObjectListView):
 @register_model_view(BGPPeerAddressFamily)
 class BGPPeerAddressFamilyView(ObjectView):
     queryset = BGPPeerAddressFamily.objects.all()
+    template_name = 'generic/object.html'
+    layout = layout.SimpleLayout(
+        left_panels=[
+            BGPPeerAddressFamilyPanel(),
+            BGPPolicyFilteringPanel(title=_('Filtering')),
+            TagsPanel(),
+        ],
+        right_panels=[
+            SettingsChoicePanel(title=_('Settings'), choices=BGPSettingChoices),
+            panels.CommentsPanel(),
+            panels.RelatedObjectsPanel(),
+        ],
+    )
 
 
 @register_model_view(BGPPeerAddressFamily, name='add', detail=False)
@@ -595,6 +707,18 @@ class BFDProfileListView(ObjectListView):
 @register_model_view(BFDProfile)
 class BFDProfileView(ObjectView):
     queryset = BFDProfile.objects.all()
+    template_name = 'generic/object.html'
+    layout = layout.SimpleLayout(
+        left_panels=[
+            BFDProfilePanel(),
+            BFDProfileSessionPanel(title=_('Session Parameters')),
+            TagsPanel(),
+        ],
+        right_panels=[
+            panels.CommentsPanel(),
+            panels.RelatedObjectsPanel(),
+        ],
+    )
 
 
 @register_model_view(BFDProfile, name='add', detail=False)

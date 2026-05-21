@@ -1,3 +1,4 @@
+from extras.ui.panels import TagsPanel
 from netbox.views.generic import (
     ObjectListView,
     ObjectView,
@@ -8,12 +9,14 @@ from netbox.views.generic import (
     BulkDeleteView,
     BulkImportView,
 )
+from netbox.ui import panels, layout
 from utilities.views import register_model_view, ViewTab
 
 from netbox_routing.filtersets.community import *
 from netbox_routing.forms.community import *
 from netbox_routing.models.community import *
 from netbox_routing.tables.community import *
+from netbox_routing.ui import *
 
 __all__ = (
     'CommunityListListView',
@@ -55,7 +58,17 @@ class CommunityListListView(ObjectListView):
 @register_model_view(CommunityList)
 class CommunityListDetailView(ObjectView):
     queryset = CommunityList.objects.all()
-    template_name = 'netbox_routing/communitylist.html'
+    template_name = 'generic/object.html'
+    layout = layout.SimpleLayout(
+        left_panels=[
+            CommunityListPanel(),
+            TagsPanel(),
+        ],
+        right_panels=[
+            panels.CommentsPanel(),
+            panels.RelatedObjectsPanel(),
+        ],
+    )
 
 
 @register_model_view(CommunityList, name='add', detail=False)
@@ -126,7 +139,17 @@ class CommunityListView(ObjectListView):
 @register_model_view(Community)
 class CommunityDetailView(ObjectView):
     queryset = Community.objects.all()
-    template_name = 'netbox_routing/community.html'
+    template_name = 'generic/object.html'
+    layout = layout.SimpleLayout(
+        left_panels=[
+            CommunityPanel(),
+            TagsPanel(),
+        ],
+        right_panels=[
+            panels.CommentsPanel(),
+            panels.RelatedObjectsPanel(),
+        ],
+    )
 
 
 @register_model_view(Community, name='add', detail=False)
@@ -178,7 +201,17 @@ class CommunityListEntryListView(ObjectListView):
 @register_model_view(CommunityListEntry)
 class CommunityListEntryDetailView(ObjectView):
     queryset = CommunityListEntry.objects.all()
-    template_name = 'netbox_routing/communitylistentry.html'
+    template_name = 'generic/object.html'
+    layout = layout.SimpleLayout(
+        left_panels=[
+            CommunityListEntryPanel(),
+            TagsPanel(),
+        ],
+        right_panels=[
+            panels.CommentsPanel(),
+            panels.RelatedObjectsPanel(),
+        ],
+    )
 
 
 @register_model_view(CommunityListEntry, name='add', detail=False)

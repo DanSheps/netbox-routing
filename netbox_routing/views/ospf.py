@@ -1,3 +1,6 @@
+from django.utils.translation import gettext_lazy as _
+
+from extras.ui.panels import TagsPanel
 from netbox.views.generic import (
     ObjectListView,
     ObjectEditView,
@@ -8,20 +11,22 @@ from netbox.views.generic import (
     BulkEditView,
     BulkDeleteView,
 )
+from netbox.ui import panels, layout
+from utilities.views import register_model_view, ViewTab
+
 from netbox_routing.filtersets.ospf import (
     OSPFInterfaceFilterSet,
     OSPFAreaFilterSet,
     OSPFInstanceFilterSet,
 )
 from netbox_routing.forms import *
+from netbox_routing.models import OSPFArea, OSPFInstance, OSPFInterface
 from netbox_routing.tables.ospf import (
     OSPFAreaTable,
     OSPFInstanceTable,
     OSPFInterfaceTable,
 )
-from utilities.views import register_model_view, ViewTab
-
-from netbox_routing.models import OSPFArea, OSPFInstance, OSPFInterface
+from netbox_routing.ui import *
 
 __all__ = (
     'OSPFInstanceListView',
@@ -61,12 +66,21 @@ class OSPFInstanceListView(ObjectListView):
 @register_model_view(OSPFInstance)
 class OSPFInstanceView(ObjectView):
     queryset = OSPFInstance.objects.all()
-    template_name = 'netbox_routing/ospfinstance.html'
+    template_name = 'generic/object.html'
+    layout = layout.SimpleLayout(
+        left_panels=[
+            OSPFInstancePanel(),
+            TagsPanel(),
+        ],
+        right_panels=[
+            panels.CommentsPanel(),
+            panels.RelatedObjectsPanel(),
+        ],
+    )
 
 
 @register_model_view(OSPFInstance, name='interfaces')
 class OSPFInstanceInterfacesView(ObjectChildrenView):
-    template_name = 'netbox_routing/ospf_interfaces.html'
     queryset = OSPFInstance.objects.all()
     child_model = OSPFInterface
     table = OSPFInterfaceTable
@@ -138,12 +152,21 @@ class OSPFAreaListView(ObjectListView):
 @register_model_view(OSPFArea)
 class OSPFAreaView(ObjectView):
     queryset = OSPFArea.objects.all()
-    template_name = 'netbox_routing/ospfarea.html'
+    template_name = 'generic/object.html'
+    layout = layout.SimpleLayout(
+        left_panels=[
+            OSPFAreaPanel(),
+            TagsPanel(),
+        ],
+        right_panels=[
+            panels.CommentsPanel(),
+            panels.RelatedObjectsPanel(),
+        ],
+    )
 
 
 @register_model_view(OSPFArea, name='interfaces')
 class OSPFAreaInterfacesView(ObjectChildrenView):
-    template_name = 'netbox_routing/ospf_interfaces.html'
     queryset = OSPFArea.objects.all()
     child_model = OSPFInterface
     table = OSPFInterfaceTable
@@ -209,7 +232,18 @@ class OSPFInterfaceListView(ObjectListView):
 @register_model_view(OSPFInterface)
 class OSPFInterfaceView(ObjectView):
     queryset = OSPFInterface.objects.all()
-    template_name = 'netbox_routing/ospfinterface.html'
+    template_name = 'generic/object.html'
+    layout = layout.SimpleLayout(
+        left_panels=[
+            OSPFInterfacePanel(),
+            OSPFInterfaceSettingsPanel(title=_('Interface Settings')),
+            TagsPanel(),
+        ],
+        right_panels=[
+            panels.CommentsPanel(),
+            panels.RelatedObjectsPanel(),
+        ],
+    )
 
 
 @register_model_view(OSPFInterface, name='add', detail=False)
