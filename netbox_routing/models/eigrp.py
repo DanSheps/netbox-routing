@@ -42,12 +42,18 @@ class EIGRPRouter(PrimaryModel):
 
     class Meta:
         verbose_name = 'EIGRP Router'
+        ordering = [
+            'device',
+            'name',
+            'pid',
+            'rid',
+            'pk',
+        ]
         constraints = (
             models.UniqueConstraint(
                 fields=('device', 'name'),
                 name='%(app_label)s_%(class)s_unique_device_name',
-                violation_error_message="""Name must be unique per device.
-                Only a single empty name is permitted per device""",
+                violation_error_message='Name must be unique per device.',
                 nulls_distinct=False,
             ),
         )
@@ -99,6 +105,12 @@ class EIGRPAddressFamily(PrimaryModel):
 
     class Meta:
         verbose_name = 'EIGRP Address Family'
+        ordering = [
+            'router',
+            'vrf',
+            'family',
+            'pk',
+        ]
         constraints = (
             models.UniqueConstraint(
                 fields=('router', 'vrf', 'family'),
@@ -148,6 +160,12 @@ class EIGRPNetwork(PrimaryModel):
 
     class Meta:
         verbose_name = 'EIGRP Network'
+        ordering = [
+            'router',
+            'address_family',
+            'network',
+            'pk',
+        ]
         constraints = (
             models.UniqueConstraint(
                 fields=(
@@ -225,6 +243,12 @@ class EIGRPInterface(PrimaryModel):
 
     class Meta:
         verbose_name = 'EIGRP Interface'
+        ordering = [
+            'router',
+            'address_family',
+            'interface',
+            'pk',
+        ]
         constraints = (
             models.UniqueConstraint(
                 fields=(
