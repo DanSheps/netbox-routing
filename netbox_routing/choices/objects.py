@@ -20,3 +20,17 @@ class CommunityStatusChoices(ChoiceSet):
         (STATUS_RESERVED, 'Reserved', 'cyan'),
         (STATUS_DEPRECATED, 'Deprecated', 'red'),
     ]
+
+
+class StaticRouteTypeChoices(ChoiceSet):
+    key = 'StaticRoute.type'
+
+    TYPE_UNICAST     = 'unicast'
+    TYPE_BLACKHOLE   = 'blackhole'
+    TYPE_UNREACHABLE = 'unreachable'
+
+    CHOICES = [
+        (TYPE_UNICAST,     'Unicast',     'blue'),
+        (TYPE_BLACKHOLE,   'Blackhole',   'dark'),
+        (TYPE_UNREACHABLE, 'Unreachable', 'orange'),
+    ]

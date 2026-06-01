@@ -6,6 +6,7 @@ from django.core.exceptions import ValidationError
 
 from ipam.fields import IPNetworkField
 from netbox.models import PrimaryModel
+from netbox_routing.choices.objects import StaticRouteTypeChoices
 from netbox_routing.fields.ip import IPAddressField
 
 __all__ = ('StaticRoute',)
@@ -23,6 +24,12 @@ class StaticRoute(PrimaryModel):
     )
     prefix = IPNetworkField(
         help_text=_('IPv4 or IPv6 network with mask'),
+    )
+    type = models.CharField(
+        max_length=20,
+        choices=StaticRouteTypeChoices,
+        default=StaticRouteTypeChoices.TYPE_UNICAST,
+        verbose_name=_('Type'),
     )
     next_hop = IPAddressField(
         verbose_name=_('Next Hop'),
@@ -64,6 +71,7 @@ class StaticRoute(PrimaryModel):
         'name',
         'devices',
         'prefix',
+        'type',
         'next_hop',
         'vrf',
         'metric',
@@ -82,18 +90,17 @@ class StaticRoute(PrimaryModel):
         )
 
     def __str__(self):
-        name = [
-            f'{self.prefix}',
-        ]
+        name = [f'{self.prefix}']
         if self.vrf:
-            name.append('VRF')
-            name.append(f'{self.vrf}')
+            name += ['VRF', f'{self.vrf}']
         if self.next_hop or self.interface_next_hop:
             name.append('via')
             if self.next_hop:
                 name.append(f'{self.next_hop}')
             if self.interface_next_hop:
                 name.append(f'{self.interface_next_hop}')
+        elif self.type != StaticRouteTypeChoices.TYPE_UNICAST:
+            name.append(f'[{self.get_type_display()}]')
         return ' '.join(name)
 
     def get_absolute_url(self):
@@ -101,11 +108,12 @@ class StaticRoute(PrimaryModel):
 
     def clean(self):
         super().clean()
-        if not self.interface_next_hop and not self.next_hop:
-            raise ValidationError(
-                {
-                    "next_hop": _(
-                        "A route requires set either an IP next hop or an Interface next hop."
-                    )
-                }
-            )
+        if self.type == StaticRouteTypeChoices.TYPE_UNICAST:
+            if not self.interface_next_hop and not self.next_hop:
+                raise ValidationError(
+                    {
+                        "next_hop": _(
+                            "A unicast route requires either an IP next hop or an Interface next hop."
+                        )
+                    }
+                )

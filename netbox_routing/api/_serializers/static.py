@@ -16,7 +16,7 @@ class StaticRouteSerializer(NetBoxModelSerializer):
     )
     devices = DeviceSerializer(many=True, nested=True, required=False, allow_null=True)
     vrf = VRFSerializer(nested=True, required=False, allow_null=True)
-    next_hop = IPAddressField()
+    next_hop = IPAddressField(required=False, allow_null=True)
 
     class Meta:
         model = StaticRoute
@@ -27,7 +27,9 @@ class StaticRouteSerializer(NetBoxModelSerializer):
             'devices',
             'vrf',
             'prefix',
+            'type',
             'next_hop',
+            'interface_next_hop',
             'name',
             'metric',
             'tag',
@@ -42,6 +44,7 @@ class StaticRouteSerializer(NetBoxModelSerializer):
             'display',
             'name',
             'prefix',
+            'type',
             'next_hop',
             'description',
         )
