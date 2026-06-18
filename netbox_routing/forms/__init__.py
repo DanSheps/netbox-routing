@@ -8,6 +8,7 @@ from .objects import (
     RouteMapEntryForm,
 )
 from netbox_routing.forms.model_objects.ospf import *
+from netbox_routing.forms.model_objects.isis import *
 from netbox_routing.forms.model_objects.bgp import *
 from netbox_routing.forms.model_objects.static import StaticRouteForm
 from netbox_routing.forms.model_objects.eigrp import *
@@ -29,6 +30,31 @@ __all__ = (
     'OSPFInterfaceFilterForm',
     'OSPFInterfaceBulkEditForm',
     'OSPFInterfaceImportForm',
+    # IS-IS
+    'ISISInstanceForm',
+    'ISISInstanceBulkEditForm',
+    'ISISInstanceFilterForm',
+    'ISISInstanceImportForm',
+    'ISISInterfaceForm',
+    'ISISInterfaceFilterForm',
+    'ISISInterfaceBulkEditForm',
+    'ISISInterfaceImportForm',
+    'ISISSettingForm',
+    'ISISSettingFilterForm',
+    'ISISSettingBulkEditForm',
+    'ISISSettingImportForm',
+    'ISISLevelForm',
+    'ISISLevelFilterForm',
+    'ISISLevelImportForm',
+    'ISISInterfaceLevelForm',
+    'ISISInterfaceLevelFilterForm',
+    'ISISInterfaceLevelImportForm',
+    'ISISSegmentRoutingForm',
+    'ISISSegmentRoutingFilterForm',
+    'ISISSegmentRoutingImportForm',
+    'ISISFlexAlgoForm',
+    'ISISFlexAlgoFilterForm',
+    'ISISFlexAlgoImportForm',
     # EIGRP
     'EIGRPRouterForm',
     'EIGRPRouterBulkEditForm',

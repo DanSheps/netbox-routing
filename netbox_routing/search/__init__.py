@@ -1,6 +1,15 @@
 from .bgp import *
 from .community import *
 from .eigrp import EIGRPRouterIndex, EIGRPAddressFamilyIndex
+from .isis import (
+    ISISInstanceIndex,
+    ISISInterfaceIndex,
+    ISISSettingIndex,
+    ISISLevelIndex,
+    ISISInterfaceLevelIndex,
+    ISISSegmentRoutingIndex,
+    ISISFlexAlgoIndex,
+)
 from .objects import *
 from .ospf import OSPFInstanceIndex, OSPFAreaIndex
 from .static import StaticRouteIndex
@@ -21,6 +30,13 @@ __all__ = (
     'CommunityListEntryIndex',
     'EIGRPRouterIndex',
     'EIGRPAddressFamilyIndex',
+    'ISISInstanceIndex',
+    'ISISInterfaceIndex',
+    'ISISSettingIndex',
+    'ISISLevelIndex',
+    'ISISInterfaceLevelIndex',
+    'ISISSegmentRoutingIndex',
+    'ISISFlexAlgoIndex',
     'OSPFInstanceIndex',
     'OSPFAreaIndex',
     'PrefixListIndex',

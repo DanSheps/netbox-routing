@@ -1,4 +1,5 @@
 from netbox_routing.tests.eigrp.test_filtersets import *
+from netbox_routing.tests.isis.test_filtersets import *
 from netbox_routing.tests.ospf.test_filtersets import *
 from netbox_routing.tests.static.test_filtersets import *
 
@@ -7,6 +8,8 @@ __all__ = (
     'OSPFInstanceTestCase',
     'OSPFAreaTestCase',
     'OSPFInterfaceTestCase',
+    'ISISInstanceFilterSetTestCase',
+    'ISISInterfaceFilterSetTestCase',
     'EIGRPRouterTestCase',
     'EIGRPAddressFamilyTestCase',
     'EIGRPNetworkTestCase',

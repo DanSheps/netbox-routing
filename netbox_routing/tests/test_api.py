@@ -4,6 +4,7 @@ from rest_framework import status
 from utilities.testing import APITestCase
 
 from netbox_routing.tests.eigrp.test_api import *
+from netbox_routing.tests.isis.test_api import *
 from netbox_routing.tests.ospf.test_api import *
 from netbox_routing.tests.static.test_api import *
 
@@ -13,6 +14,8 @@ __all__ = (
     'OSPFInstanceTestCase',
     'OSPFAreaTestCase',
     'OSPFInterfaceTestCase',
+    'ISISInstanceAPITestCase',
+    'ISISInterfaceAPITestCase',
     'EIGRPRouterTestCase',
     'EIGRPAddressFamilyTestCase',
     'EIGRPNetworkTestCase',

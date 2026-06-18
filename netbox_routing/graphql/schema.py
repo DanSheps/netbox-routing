@@ -27,6 +27,15 @@ from .objects.types import (
     RouteMapType,
     RouteMapEntryType,
 )
+from .isis.types import (
+    ISISInstanceType,
+    ISISInterfaceType,
+    ISISSettingType,
+    ISISLevelType,
+    ISISInterfaceLevelType,
+    ISISSegmentRoutingType,
+    ISISFlexAlgoType,
+)
 from .ospf.types import OSPFInstanceType, OSPFAreaType, OSPFInterfaceType
 from .static.types import StaticRouteType
 
@@ -47,6 +56,30 @@ class OSPFQuery:
 
     ospf_interface: OSPFInterfaceType = strawberry_django.field()
     ospf_interface_list: list[OSPFInterfaceType] = strawberry_django.field()
+
+
+@strawberry.type(name="Query")
+class ISISQuery:
+    isis_instance: ISISInstanceType = strawberry_django.field()
+    isis_instance_list: list[ISISInstanceType] = strawberry_django.field()
+
+    isis_interface: ISISInterfaceType = strawberry_django.field()
+    isis_interface_list: list[ISISInterfaceType] = strawberry_django.field()
+
+    isis_setting: ISISSettingType = strawberry_django.field()
+    isis_setting_list: list[ISISSettingType] = strawberry_django.field()
+
+    isis_level: ISISLevelType = strawberry_django.field()
+    isis_level_list: list[ISISLevelType] = strawberry_django.field()
+
+    isis_interface_level: ISISInterfaceLevelType = strawberry_django.field()
+    isis_interface_level_list: list[ISISInterfaceLevelType] = strawberry_django.field()
+
+    isis_segment_routing: ISISSegmentRoutingType = strawberry_django.field()
+    isis_segment_routing_list: list[ISISSegmentRoutingType] = strawberry_django.field()
+
+    isis_flex_algo: ISISFlexAlgoType = strawberry_django.field()
+    isis_flex_algo_list: list[ISISFlexAlgoType] = strawberry_django.field()
 
 
 @strawberry.type(name="Query")
@@ -177,6 +210,7 @@ class BFDProfileQuery:
 schema = [
     StaticRouteQuery,
     OSPFQuery,
+    ISISQuery,
     EIGRPQuery,
     CommunityQuery,
     CommunityListQuery,

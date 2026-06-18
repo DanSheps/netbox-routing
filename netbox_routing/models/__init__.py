@@ -1,6 +1,15 @@
 from .bgp import *
 from .community import *
 from .eigrp import *
+from .isis import (
+    ISISInstance,
+    ISISInterface,
+    ISISSetting,
+    ISISLevel,
+    ISISInterfaceLevel,
+    ISISSegmentRouting,
+    ISISFlexAlgo,
+)
 from .objects import *
 from .ospf import OSPFArea, OSPFInstance, OSPFInterface
 from .static import StaticRoute
@@ -29,6 +38,14 @@ __all__ = (
     'OSPFArea',
     'OSPFInstance',
     'OSPFInterface',
+    # IS-IS
+    'ISISInstance',
+    'ISISInterface',
+    'ISISSetting',
+    'ISISLevel',
+    'ISISInterfaceLevel',
+    'ISISSegmentRouting',
+    'ISISFlexAlgo',
     # Objects -> AS Path
     'ASPath',
     'ASPathEntry',
