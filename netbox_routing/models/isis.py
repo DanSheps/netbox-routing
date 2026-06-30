@@ -1,5 +1,7 @@
 # SPDX-License-Identifier: Apache-2.0
 
+import re
+
 from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ValidationError
@@ -12,8 +14,10 @@ from netbox.models import PrimaryModel
 
 from netbox_routing import choices
 from netbox_routing.choices.isis import ISISSettingChoices
-from netbox_routing.constants.isis import ISISSETTING_ASSIGNMENT_MODELS
-from netbox_routing.models.base import SearchAttributeMixin
+from netbox_routing.constants.isis import (
+    ISISSETTING_ASSIGNMENT_MODEL_NAMES,
+    ISISSETTING_ASSIGNMENT_MODELS,
+)
 
 __all__ = (
     'ISISInstance',
@@ -26,7 +30,23 @@ __all__ = (
 )
 
 
-class ISISSetting(SearchAttributeMixin, PrimaryModel):
+# A NET (Network Entity Title) is hex bytes written as dot-separated groups: a
+# 1-byte AFI, the area + 6-byte system-id as 2-byte (4-hex) groups, and a 1-byte
+# N-selector — e.g. 49.0001.1921.6800.1001.00.
+_NET_RE = re.compile(r'^[0-9A-Fa-f]{2}(?:\.[0-9A-Fa-f]{4}){3,}\.[0-9A-Fa-f]{2}$')
+
+
+def _auth_pair_errors(type_value, key_value, type_field, key_field):
+    """An IS-IS auth (type, key) pair is only meaningful together; return the
+    field-keyed error(s) for a half-configured pair (shared by every IS-IS clean())."""
+    if type_value and not key_value:
+        return {key_field: _('An authentication key is required when an authentication type is set.')}
+    if key_value and not type_value:
+        return {type_field: _('An authentication type is required when an authentication key is set.')}
+    return {}
+
+
+class ISISSetting(PrimaryModel):
     """EAV long-tail for IS-IS scalars (mirrors BGPSetting).
 
     Attaches to an ISISInstance or ISISInterface via a generic FK; the
@@ -99,7 +119,7 @@ class ISISSetting(SearchAttributeMixin, PrimaryModel):
         # an arbitrary object type and break the EAV contract.
         if (
             self.assigned_object_type.app_label != 'netbox_routing'
-            or self.assigned_object_type.model not in ('isisinstance', 'isisinterface')
+            or self.assigned_object_type.model not in ISISSETTING_ASSIGNMENT_MODEL_NAMES
         ):
             raise ValidationError(
                 {'assigned_object_type': _('IS-IS Setting must be assigned to an ISISInstance or ISISInterface.')}
@@ -278,18 +298,8 @@ class ISISInstance(PrimaryModel):
         null=True,
         help_text=_('IS-IS traffic-engineering enabled.'),
     )
-    sr_enabled = models.BooleanField(
-        verbose_name=_('Segment routing'),
-        blank=True,
-        null=True,
-        help_text=_('Segment routing (SR-MPLS) enabled for this instance.'),
-    )
-    sr_node_msd = models.PositiveSmallIntegerField(
-        verbose_name=_('SR maximum SID depth'),
-        blank=True,
-        null=True,
-        help_text=_('Segment routing maximum SID depth (MSD).'),
-    )
+    # Segment-routing state (enabled + node MSD, plus the SRGB/Node-SID detail) lives
+    # on the dedicated 1:1 ISISSegmentRouting child model — not duplicated here.
     distance = models.PositiveSmallIntegerField(
         verbose_name=_('Administrative distance'),
         blank=True,
@@ -321,7 +331,7 @@ class ISISInstance(PrimaryModel):
         'device', 'vrf', 'process_tag', 'is_type', 'metric_style',
         'spf_initial_wait', 'spf_max_wait', 'lsp_initial_wait', 'lsp_max_wait',
         'lsp_lifetime', 'lsp_refresh_interval', 'lsp_mtu', 'te_enabled',
-        'sr_enabled', 'distance', 'maximum_paths', 'reference_bandwidth',
+        'distance', 'maximum_paths', 'reference_bandwidth',
     )
     prerequisite_models = ('dcim.Device',)
 
@@ -337,23 +347,21 @@ class ISISInstance(PrimaryModel):
 
     def clean(self):
         super().clean()
-        # An authentication type and its key are only meaningful together;
-        # reject half-configured pairs.
         errors = {}
+        # An authentication type and its key are only meaningful together.
         for type_field, key_field in (
             ('area_auth_type', 'area_auth_key'),
             ('domain_auth_type', 'domain_auth_key'),
         ):
-            has_type = bool(getattr(self, type_field))
-            has_key = bool(getattr(self, key_field))
-            if has_type and not has_key:
-                errors[key_field] = _(
-                    'An authentication key is required when an authentication type is set.'
+            errors.update(
+                _auth_pair_errors(
+                    getattr(self, type_field), getattr(self, key_field), type_field, key_field
                 )
-            elif has_key and not has_type:
-                errors[type_field] = _(
-                    'An authentication type is required when an authentication key is set.'
-                )
+            )
+        # Reject a malformed NET at the model layer (form/API/import all run full_clean)
+        # rather than letting it fail downstream when pushed to the device.
+        if self.net and not _NET_RE.match(self.net):
+            errors['net'] = _('Enter a valid NET, e.g. 49.0001.0000.0000.0001.00.')
         if errors:
             raise ValidationError(errors)
 
@@ -493,27 +501,26 @@ class ISISInterface(PrimaryModel):
 
     def clean(self):
         super().clean()
+        errors = {}
+        # The interface and the IS-IS instance must live on the same device. Enforced
+        # at the model layer so the form, API and bulk-import paths all get it; both
+        # fields are flagged so the UI highlights the mismatch on either selector.
         if (
             self.instance_id
             and self.interface_id
             and self.instance.device != self.interface.device
         ):
-            raise ValidationError({
-                'interface': _(
-                    'The interface must belong to the same device as the IS-IS instance.'
-                )
-            })
+            msg = _('IS-IS Instance Device and Interface Device must match.')
+            errors['instance'] = msg
+            errors['interface'] = msg
         # Hello auth type and key are only meaningful together (mirrors ISISInstance).
-        has_type = bool(self.hello_auth_type)
-        has_key = bool(self.hello_auth_key)
-        if has_type and not has_key:
-            raise ValidationError({
-                'hello_auth_key': _('An authentication key is required when a hello auth type is set.')
-            })
-        if has_key and not has_type:
-            raise ValidationError({
-                'hello_auth_type': _('An authentication type is required when a hello auth key is set.')
-            })
+        errors.update(
+            _auth_pair_errors(
+                self.hello_auth_type, self.hello_auth_key, 'hello_auth_type', 'hello_auth_key'
+            )
+        )
+        if errors:
+            raise ValidationError(errors)
 
     def __str__(self):
         return f'{self.interface} ({self.address_family})'
@@ -596,12 +603,9 @@ class ISISLevel(PrimaryModel):
 
     def clean(self):
         super().clean()
-        has_type = bool(self.auth_type)
-        has_key = bool(self.auth_key)
-        if has_type and not has_key:
-            raise ValidationError({'auth_key': _('An authentication key is required when an auth type is set.')})
-        if has_key and not has_type:
-            raise ValidationError({'auth_type': _('An authentication type is required when an auth key is set.')})
+        errors = _auth_pair_errors(self.auth_type, self.auth_key, 'auth_type', 'auth_key')
+        if errors:
+            raise ValidationError(errors)
 
     def __str__(self):
         return f'{self.instance} L{self.level}'
@@ -784,6 +788,10 @@ class ISISFlexAlgo(PrimaryModel):
             models.UniqueConstraint(
                 fields=('instance', 'algo_id'),
                 name='netbox_routing_isisflexalgo_instance_algo_id_unique',
+            ),
+            models.CheckConstraint(
+                condition=models.Q(algo_id__gte=128, algo_id__lte=255),
+                name='netbox_routing_isisflexalgo_algo_id_range',
             ),
         ]
 

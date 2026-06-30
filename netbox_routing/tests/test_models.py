@@ -14,6 +14,8 @@ __all__ = (
     'ISISInstanceModelTestCase',
     'ISISInterfaceModelTestCase',
     'ISISSettingModelTestCase',
+    'ISISFlexAlgoModelTestCase',
+    'ISISMigrationStateTestCase',
     'EIGRPRouterTestCase',
     'EIGRPAddressFamilyTestCase',
     'EIGRPNetworkTestCase',
@@ -51,4 +53,30 @@ class AggregateModelTestExportsTestCase(SimpleTestCase):
                     missing.setdefault(name, []).append(cls_name)
         self.assertEqual(
             missing, {}, f'aggregate fails to re-export submodule exports: {missing}'
+        )
+
+    def test_isis_testcases_reexported_in_all_aggregates(self):
+        import importlib
+
+        # The models/api/forms aggregates each ``from ...isis.<mod> import *`` and must
+        # list every IS-IS submodule TestCase in their own ``__all__`` and bind it —
+        # the same contract the models guard above enforces, applied to the api and
+        # forms aggregates too (test_api listed only 2 of the IS-IS API cases, and
+        # test_forms dropped ISISBulkEditFieldsetTestCase).
+        checks = (
+            ('netbox_routing.tests.test_models', 'netbox_routing.tests.isis.test_models'),
+            ('netbox_routing.tests.test_api', 'netbox_routing.tests.isis.test_api'),
+            ('netbox_routing.tests.test_forms', 'netbox_routing.tests.isis.test_forms'),
+            ('netbox_routing.tests.test_views', 'netbox_routing.tests.isis.test_views'),
+        )
+        missing = {}
+        for aggregate_name, submodule_name in checks:
+            aggregate = importlib.import_module(aggregate_name)
+            aggregate_all = getattr(aggregate, '__all__', ())
+            sub = importlib.import_module(submodule_name)
+            for cls_name in getattr(sub, '__all__', ()):
+                if cls_name not in aggregate_all or not hasattr(aggregate, cls_name):
+                    missing.setdefault(aggregate_name, []).append(cls_name)
+        self.assertEqual(
+            missing, {}, f'aggregates fail to re-export IS-IS test cases: {missing}'
         )

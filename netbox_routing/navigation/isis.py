@@ -7,131 +7,45 @@ __all__ = ('MENUITEMS',)
 COL_ADD = 'mdi mdi-plus'
 COL_IMPORT = 'mdi mdi-upload'
 
-isis_instance = PluginMenuItem(
-    link='plugins:netbox_routing:isisinstance_list',
-    link_text='Instances',
-    permissions=['netbox_routing.view_isisinstance'],
-    buttons=(
-        PluginMenuButton(
-            link='plugins:netbox_routing:isisinstance_add',
-            title='Add',
-            icon_class=COL_ADD,
-            permissions=['netbox_routing.add_isisinstance'],
-        ),
-        PluginMenuButton(
-            link='plugins:netbox_routing:isisinstance_bulk_import',
-            title='Import',
-            icon_class=COL_IMPORT,
-            permissions=['netbox_routing.import_isisinstance'],
-        ),
-    ),
-)
-isis_interface = PluginMenuItem(
-    link='plugins:netbox_routing:isisinterface_list',
-    link_text='Interfaces',
-    permissions=['netbox_routing.view_isisinterface'],
-    buttons=(
-        PluginMenuButton(
-            link='plugins:netbox_routing:isisinterface_add',
-            title='Add',
-            icon_class=COL_ADD,
-            permissions=['netbox_routing.add_isisinterface'],
-        ),
-        PluginMenuButton(
-            link='plugins:netbox_routing:isisinterface_bulk_import',
-            title='Import',
-            icon_class=COL_IMPORT,
-            permissions=['netbox_routing.import_isisinterface'],
-        ),
-    ),
-)
 
-isis_setting = PluginMenuItem(
-    link='plugins:netbox_routing:isissetting_list',
-    link_text='Settings',
-    permissions=['netbox_routing.view_isissetting'],
-    buttons=(
-        PluginMenuButton(
-            link='plugins:netbox_routing:isissetting_add',
-            title='Add',
-            icon_class=COL_ADD,
-            permissions=['netbox_routing.add_isissetting'],
-        ),
-        PluginMenuButton(
-            link='plugins:netbox_routing:isissetting_bulk_import',
-            title='Import',
-            icon_class=COL_IMPORT,
-            permissions=['netbox_routing.import_isissetting'],
-        ),
-    ),
-)
+def build_menus():
+    # Primary objects first (instance, interface), then their EAV settings, then the
+    # per-instance detail tables (level, segment-routing, flex-algo). Mirrors the
+    # build_menus() loop used by navigation/bgp.py and navigation/community.py so a
+    # new model is one row, not a copy-pasted block (and the import button is gated by
+    # the real `add` permission, not a non-existent `import_*` one).
+    menus = []
+    menu_items = (
+        ('isisinstance', 'Instances'),
+        ('isisinterface', 'Interfaces'),
+        ('isissetting', 'Settings'),
+        ('isislevel', 'Levels'),
+        ('isissegmentrouting', 'Segment Routing'),
+        ('isisflexalgo', 'Flex-Algos'),
+    )
+    for model, name in menu_items:
+        menu = PluginMenuItem(
+            link=f'plugins:netbox_routing:{model}_list',
+            link_text=name,
+            permissions=[f'netbox_routing.view_{model}'],
+            buttons=(
+                PluginMenuButton(
+                    link=f'plugins:netbox_routing:{model}_add',
+                    title='Add',
+                    icon_class=COL_ADD,
+                    permissions=[f'netbox_routing.add_{model}'],
+                ),
+                PluginMenuButton(
+                    link=f'plugins:netbox_routing:{model}_bulk_import',
+                    title='Import',
+                    icon_class=COL_IMPORT,
+                    permissions=[f'netbox_routing.add_{model}'],
+                ),
+            ),
+        )
+        menus.append(menu)
 
-isis_level = PluginMenuItem(
-    link='plugins:netbox_routing:isislevel_list',
-    link_text='Levels',
-    permissions=['netbox_routing.view_isislevel'],
-    buttons=(
-        PluginMenuButton(
-            link='plugins:netbox_routing:isislevel_add',
-            title='Add',
-            icon_class=COL_ADD,
-            permissions=['netbox_routing.add_isislevel'],
-        ),
-        PluginMenuButton(
-            link='plugins:netbox_routing:isislevel_bulk_import',
-            title='Import',
-            icon_class=COL_IMPORT,
-            permissions=['netbox_routing.import_isislevel'],
-        ),
-    ),
-)
-isis_segment_routing = PluginMenuItem(
-    link='plugins:netbox_routing:isissegmentrouting_list',
-    link_text='Segment Routing',
-    permissions=['netbox_routing.view_isissegmentrouting'],
-    buttons=(
-        PluginMenuButton(
-            link='plugins:netbox_routing:isissegmentrouting_add',
-            title='Add',
-            icon_class=COL_ADD,
-            permissions=['netbox_routing.add_isissegmentrouting'],
-        ),
-        PluginMenuButton(
-            link='plugins:netbox_routing:isissegmentrouting_bulk_import',
-            title='Import',
-            icon_class=COL_IMPORT,
-            permissions=['netbox_routing.import_isissegmentrouting'],
-        ),
-    ),
-)
+    return tuple(menus)
 
-isis_flex_algo = PluginMenuItem(
-    link='plugins:netbox_routing:isisflexalgo_list',
-    link_text='Flex-Algos',
-    permissions=['netbox_routing.view_isisflexalgo'],
-    buttons=(
-        PluginMenuButton(
-            link='plugins:netbox_routing:isisflexalgo_add',
-            title='Add',
-            icon_class=COL_ADD,
-            permissions=['netbox_routing.add_isisflexalgo'],
-        ),
-        PluginMenuButton(
-            link='plugins:netbox_routing:isisflexalgo_bulk_import',
-            title='Import',
-            icon_class=COL_IMPORT,
-            permissions=['netbox_routing.import_isisflexalgo'],
-        ),
-    ),
-)
 
-# Primary objects first (instance, interface), then their EAV settings, then the
-# per-instance detail tables (level, segment-routing, flex-algo).
-MENUITEMS = (
-    isis_instance,
-    isis_interface,
-    isis_setting,
-    isis_level,
-    isis_segment_routing,
-    isis_flex_algo,
-)
+MENUITEMS = build_menus()

@@ -8,12 +8,19 @@ from django.test import TestCase
 from dcim.models import Interface
 from utilities.testing import create_test_device
 
-from netbox_routing.models import ISISInstance, ISISInterface, ISISSetting
+from netbox_routing.models import (
+    ISISFlexAlgo,
+    ISISInstance,
+    ISISInterface,
+    ISISSetting,
+)
 
 __all__ = (
     'ISISInstanceModelTestCase',
     'ISISInterfaceModelTestCase',
     'ISISSettingModelTestCase',
+    'ISISFlexAlgoModelTestCase',
+    'ISISMigrationStateTestCase',
 )
 
 
@@ -25,10 +32,10 @@ class ISISInstanceModelTestCase(TestCase):
         cls.device = create_test_device(name='Device 1')
 
     def _instance(self, **kwargs):
+        kwargs.setdefault('net', '49.0001.0000.0000.0001.00')
         return ISISInstance(
             device=self.device,
             process_tag='CORE',
-            net='49.0001.0000.0000.0001.00',
             is_type='level-1-2',
             **kwargs,
         )
@@ -48,6 +55,23 @@ class ISISInstanceModelTestCase(TestCase):
         with self.assertRaises(ValidationError) as ctx:
             self._instance(domain_auth_key='secret').clean()
         self.assertIn('domain_auth_type', ctx.exception.error_dict)
+
+    def test_clean_accepts_valid_net(self):
+        self._instance(net='49.0001.1921.6800.1001.00').clean()  # should not raise
+
+    def test_clean_accepts_blank_net(self):
+        # net is optional (blank=True, default=''); an empty NET must pass.
+        self._instance(net='').clean()
+
+    def test_clean_rejects_malformed_net(self):
+        # A NET has a fixed hex-grouped syntax; a malformed value must be rejected at
+        # the model layer (form + API + import all run full_clean) rather than only
+        # failing downstream when the adapter pushes it to the device.
+        for bad in ('49.0001.bogus', 'not-a-net', '49.0001', '0000.0000.0001'):
+            with self.subTest(net=bad):
+                with self.assertRaises(ValidationError) as ctx:
+                    self._instance(net=bad).clean()
+                self.assertIn('net', ctx.exception.error_dict)
 
     def test_unique_device_process_tag(self):
         # A device can't hold two IS-IS instances with the same process tag
@@ -242,3 +266,90 @@ class ISISSettingModelTestCase(TestCase):
                 assigned_object=self.instance, key='graceful_restart', value='maybe'
             ).clean()
         self.assertIn('value', ctx.exception.message_dict)
+
+
+class ISISFlexAlgoModelTestCase(TestCase):
+    """algo_id is constrained to the IS-IS Flex-Algo range 128-255.
+
+    The model validators (MinValueValidator/MaxValueValidator) cover the
+    form/API/import paths via full_clean(); a DB CheckConstraint is the backstop
+    for direct writes (objects.create / bulk_create) that bypass full_clean(), so
+    an out-of-range algo_id cannot be persisted through any path.
+    """
+
+    @classmethod
+    def setUpTestData(cls):
+        device = create_test_device(name='Device 1')
+        cls.instance = ISISInstance.objects.create(
+            device=device, process_tag='CORE', net='49.0001.0000.0000.0001.00'
+        )
+
+    def test_db_constraint_rejects_out_of_range_algo_id(self):
+        for bad in (0, 127, 256):
+            with (
+                self.subTest(algo_id=bad),
+                self.assertRaises(IntegrityError),
+                transaction.atomic(),
+            ):
+                ISISFlexAlgo.objects.create(instance=self.instance, algo_id=bad)
+
+    def test_db_constraint_accepts_boundary_algo_ids(self):
+        # The 128 and 255 boundaries are valid and must round-trip.
+        ISISFlexAlgo.objects.create(instance=self.instance, algo_id=128)
+        ISISFlexAlgo.objects.create(instance=self.instance, algo_id=255)
+        self.assertEqual(self.instance.flex_algos.count(), 2)
+
+
+class ISISMigrationStateTestCase(TestCase):
+    """The IS-IS migration must faithfully capture the models.
+
+    Two guards: (1) every IS-IS model's *recorded* CreateModel bases must include
+    PrimaryModel's DeleteMixin — a CreateModel that omits ``bases=`` silently records
+    ``(models.Model,)`` instead, dropping DeleteMixin from the historical state used by
+    data migrations (makemigrations does NOT detect a mixin-only bases drift, so nothing
+    else catches it); (2) makemigrations finds no pending field/option drift, so a model
+    field change (e.g. removing a column) can't land without the matching 0033 edit.
+    """
+
+    #: every IS-IS PrimaryModel — all subclass DeleteMixin via PrimaryModel
+    ISIS_MODELS = (
+        'isisinstance', 'isisinterface', 'isissetting', 'isislevel',
+        'isisinterfacelevel', 'isissegmentrouting', 'isisflexalgo',
+    )
+
+    def test_migration_bases_include_delete_mixin(self):
+        from django.db import connection
+        from django.db.migrations.loader import MigrationLoader
+
+        from netbox.models.deletion import DeleteMixin
+
+        state = MigrationLoader(connection).project_state()
+        dropped = [
+            name
+            for name in self.ISIS_MODELS
+            if DeleteMixin not in state.models['netbox_routing', name].bases
+        ]
+        self.assertEqual(
+            dropped, [], f'CreateModel bases dropped DeleteMixin for: {dropped}'
+        )
+
+    def test_no_pending_isis_migrations(self):
+        # makemigrations is per-app, so scope the assertion to IS-IS models: a pending
+        # change to any of them (e.g. a model field dropped without the matching 0033
+        # edit) names that model in the dry-run output. Pre-existing drift in other
+        # netbox_routing models (e.g. OSPF) is out of scope for this PR.
+        from io import StringIO
+
+        from django.core.management import call_command
+
+        out = StringIO()
+        call_command(
+            'makemigrations', 'netbox_routing',
+            dry_run=True, verbosity=1, stdout=out, stderr=out,
+        )
+        output = out.getvalue().lower()
+        pending = [name for name in self.ISIS_MODELS if name in output]
+        self.assertEqual(
+            pending, [],
+            f'pending IS-IS migration changes detected:\n{out.getvalue()}',
+        )

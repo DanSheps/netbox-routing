@@ -119,8 +119,10 @@ class ISISInstanceImportForm(NetBoxModelImportForm):
             'lsp_refresh_interval',
             'lsp_mtu',
             'te_enabled',
-            'sr_enabled',
-            'sr_node_msd',
+            'area_auth_type',
+            'area_auth_key',
+            'domain_auth_type',
+            'domain_auth_key',
             'description',
             'comments',
             'tags',
@@ -145,6 +147,17 @@ class ISISInterfaceImportForm(NetBoxModelImportForm):
         to_field_name='name',
         help_text=_('Name of interface'),
     )
+
+    def __init__(self, data=None, *args, **kwargs):
+        super().__init__(data, *args, **kwargs)
+        # An interface name (e.g. 'Ethernet1') is only unique within a device, so the
+        # by-name lookup must be scoped to the row's device — otherwise a name shared
+        # across devices resolves ambiguously and the row is rejected. (The interactive
+        # form scopes this via query_params={'device_id': '$device'}.)
+        if data and (device := data.get('device')):
+            self.fields['interface'].queryset = Interface.objects.filter(
+                device__name=device
+            )
 
     class Meta:
         model = ISISInterface

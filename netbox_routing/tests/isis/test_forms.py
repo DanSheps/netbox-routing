@@ -6,11 +6,15 @@ from dcim.models import Interface
 from ipam.models import VRF
 from utilities.testing import create_test_device
 
-from netbox_routing.forms import ISISInstanceForm, ISISInterfaceForm
+from netbox_routing.forms import ISISInstanceForm, ISISInterfaceForm, ISISSettingForm
 from netbox_routing.forms.bulk_edit.isis import (
     ISISInstanceBulkEditForm,
     ISISInterfaceBulkEditForm,
     ISISSettingBulkEditForm,
+)
+from netbox_routing.forms.bulk_import.isis import (
+    ISISInstanceImportForm,
+    ISISInterfaceImportForm,
 )
 from netbox_routing.models import ISISInstance
 
@@ -18,6 +22,9 @@ __all__ = (
     'ISISBulkEditFieldsetTestCase',
     'ISISInstanceFormTestCase',
     'ISISInterfaceFormTestCase',
+    'ISISInterfaceImportFormTestCase',
+    'ISISInstanceImportFormTestCase',
+    'ISISSettingFormInitialTestCase',
 )
 
 
@@ -62,6 +69,20 @@ class ISISBulkEditFieldsetTestCase(TestCase):
         self.assertIn('passive', form.fields)
         self.assertFalse(form.fields['passive'].required)
         self.assertIn('passive', form.nullable_fields)
+
+    def test_comments_is_bulk_nullable(self):
+        # Every IS-IS bulk-edit form exposes a `comments` CommentField; it must also be
+        # in nullable_fields or an operator can only overwrite an existing comment, never
+        # blank it via bulk edit.
+        for form_cls in (
+            ISISSettingBulkEditForm,
+            ISISInstanceBulkEditForm,
+            ISISInterfaceBulkEditForm,
+        ):
+            with self.subTest(form=form_cls.__name__):
+                form = form_cls()
+                self.assertIn('comments', form.fields)
+                self.assertIn('comments', form.nullable_fields)
 
 
 class ISISInstanceFormTestCase(TestCase):
@@ -257,3 +278,83 @@ class ISISInterfaceFormTestCase(TestCase):
         )
         self.assertFalse(form.is_valid())
         self.assertIn('hello_auth_type', form.errors)
+
+
+class ISISInterfaceImportFormTestCase(TestCase):
+    """The interface bulk-import must scope the by-name interface lookup to the named
+    device. Two devices can share an interface name (e.g. 'Ethernet1'); without
+    scoping, Interface.objects.get(name=...) raises MultipleObjectsReturned (an
+    unhandled HTTP 500) instead of resolving the interface on the given device."""
+
+    @classmethod
+    def setUpTestData(cls):
+        cls.device_a = create_test_device(name='Device A')
+        cls.device_b = create_test_device(name='Device B')
+        # Same interface name on two different devices.
+        cls.iface_a = Interface.objects.create(
+            device=cls.device_a, name='Ethernet1', type='virtual'
+        )
+        cls.iface_b = Interface.objects.create(
+            device=cls.device_b, name='Ethernet1', type='virtual'
+        )
+        cls.instance_a = ISISInstance.objects.create(
+            device=cls.device_a,
+            process_tag='CORE',
+            net='49.0001.0000.0000.0001.00',
+            is_type='level-1-2',
+        )
+
+    def test_import_scopes_interface_to_named_device(self):
+        form = ISISInterfaceImportForm(
+            data={
+                'device': 'Device A',
+                'instance': self.instance_a.pk,
+                'interface': 'Ethernet1',
+                'address_family': 'ipv4',
+            }
+        )
+        self.assertTrue(form.is_valid(), form.errors)
+        self.assertEqual(form.cleaned_data['interface'], self.iface_a)
+
+
+class ISISInstanceImportFormTestCase(TestCase):
+    """CSV import must be able to create authenticated IS-IS instances. The
+    interactive ISISInstanceForm exposes the area/domain auth type+key fields, so
+    the import form must list them too — otherwise the bulk path silently drops a
+    supplied authentication value (ModelForm ignores data for unlisted fields)."""
+
+    @classmethod
+    def setUpTestData(cls):
+        cls.device = create_test_device(name='Device 1')
+
+    def test_import_persists_area_and_domain_auth(self):
+        form = ISISInstanceImportForm(
+            data={
+                'device': 'Device 1',
+                'process_tag': 'CORE',
+                'net': '49.0001.0000.0000.0001.00',
+                'is_type': 'level-1-2',
+                'area_auth_type': 'md5',
+                'area_auth_key': 'area-secret',
+                'domain_auth_type': 'md5',
+                'domain_auth_key': 'domain-secret',
+            }
+        )
+        self.assertTrue(form.is_valid(), form.errors)
+        obj = form.save()
+        obj.refresh_from_db()
+        self.assertEqual(obj.area_auth_type, 'md5')
+        self.assertEqual(obj.area_auth_key, 'area-secret')
+        self.assertEqual(obj.domain_auth_type, 'md5')
+        self.assertEqual(obj.domain_auth_key, 'domain-secret')
+
+
+class ISISSettingFormInitialTestCase(TestCase):
+    """ISISSettingForm.__init__ copies kwargs['initial'] to seed the assigned-object
+    field. Django permits initial=None, so the constructor must normalize it before
+    .copy() instead of assuming a dict (which raised AttributeError on NoneType)."""
+
+    def test_init_accepts_initial_none(self):
+        # Must not raise "AttributeError: 'NoneType' object has no attribute 'copy'".
+        form = ISISSettingForm(initial=None)
+        self.assertIn('isisinstance', form.fields)

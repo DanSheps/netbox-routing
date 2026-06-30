@@ -3,7 +3,6 @@
 import django.core.validators
 import django.db.models.deletion
 import netbox.models.deletion
-import netbox_routing.models.base
 import taggit.managers
 import utilities.json
 from django.db import migrations, models
@@ -132,11 +131,6 @@ class Migration(migrations.Migration):
                     models.PositiveIntegerField(blank=True, null=True),
                 ),
                 ('spf_max_wait', models.PositiveIntegerField(blank=True, null=True)),
-                ('sr_enabled', models.BooleanField(blank=True, null=True)),
-                (
-                    'sr_node_msd',
-                    models.PositiveSmallIntegerField(blank=True, null=True),
-                ),
                 ('te_enabled', models.BooleanField(blank=True, null=True)),
             ],
             options={
@@ -149,6 +143,7 @@ class Migration(migrations.Migration):
                     )
                 ],
             },
+            bases=(netbox.models.deletion.DeleteMixin, models.Model),
         ),
         migrations.CreateModel(
             name='ISISInterface',
@@ -240,6 +235,7 @@ class Migration(migrations.Migration):
                     )
                 ],
             },
+            bases=(netbox.models.deletion.DeleteMixin, models.Model),
         ),
         migrations.CreateModel(
             name='ISISSetting',
@@ -325,11 +321,7 @@ class Migration(migrations.Migration):
                     ),
                 ],
             },
-            bases=(
-                netbox_routing.models.base.SearchAttributeMixin,
-                netbox.models.deletion.DeleteMixin,
-                models.Model,
-            ),
+            bases=(netbox.models.deletion.DeleteMixin, models.Model),
         ),
         migrations.CreateModel(
             name='ISISSegmentRouting',
@@ -620,7 +612,13 @@ class Migration(migrations.Migration):
                     models.UniqueConstraint(
                         fields=('instance', 'algo_id'),
                         name='netbox_routing_isisflexalgo_instance_algo_id_unique',
-                    )
+                    ),
+                    models.CheckConstraint(
+                        condition=models.Q(
+                            ('algo_id__gte', 128), ('algo_id__lte', 255)
+                        ),
+                        name='netbox_routing_isisflexalgo_algo_id_range',
+                    ),
                 ],
             },
             bases=(netbox.models.deletion.DeleteMixin, models.Model),

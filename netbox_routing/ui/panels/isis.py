@@ -90,14 +90,13 @@ class ISISInstanceSettingsPanel(panels.ObjectAttributesPanel):
     lsp_refresh_interval = attrs.NumericAttr('lsp_refresh_interval', label=_('LSP Refresh Interval'))
     lsp_mtu = attrs.NumericAttr('lsp_mtu', label=_('LSP MTU'))
     te_enabled = attrs.BooleanAttr('te_enabled', label=_('Traffic Engineering'))
-    sr_enabled = attrs.BooleanAttr('sr_enabled', label=_('Segment Routing'))
-    sr_node_msd = attrs.NumericAttr('sr_node_msd', label=_('SR Maximum SID Depth'))
     distance = attrs.NumericAttr('distance', label=_('Distance'))
     maximum_paths = attrs.NumericAttr('maximum_paths', label=_('Maximum Paths'))
     reference_bandwidth = attrs.NumericAttr('reference_bandwidth', label=_('Reference Bandwidth'))
 
 
 class ISISInterfacePanel(panels.ObjectAttributesPanel):
+    device = attrs.RelatedObjectAttr('instance.device', label=_('Device'))
     instance = attrs.RelatedObjectAttr('instance', label=_('Instance'))
     interface = attrs.RelatedObjectAttr('interface', label=_('Interface'))
     address_family = attrs.ChoiceAttr('address_family', label=_('Address Family'))
@@ -108,6 +107,7 @@ class ISISInterfaceSettingsPanel(panels.ObjectAttributesPanel):
     network_type = attrs.ChoiceAttr('network_type', label=_('Network Type'))
     metric = attrs.NumericAttr('metric', label=_('Metric'))
     passive = attrs.BooleanAttr('passive', label=_('Passive'))
+    bfd_enabled = attrs.BooleanAttr('bfd_enabled', label=_('BFD Enabled'))
     csnp_interval = attrs.NumericAttr('csnp_interval', label=_('CSNP Interval'))
     retransmit_interval = attrs.NumericAttr('retransmit_interval', label=_('Retransmit Interval'))
     lsp_interval = attrs.NumericAttr('lsp_interval', label=_('LSP Interval'))

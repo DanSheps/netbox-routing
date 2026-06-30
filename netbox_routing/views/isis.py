@@ -104,7 +104,9 @@ __all__ = (
 
 @register_model_view(ISISSetting, name='list', path='', detail=False)
 class ISISSettingListView(ObjectListView):
-    queryset = ISISSetting.objects.all()
+    queryset = ISISSetting.objects.select_related('assigned_object_type').prefetch_related(
+        'assigned_object'
+    )
     filterset = ISISSettingFilterSet
     filterset_form = ISISSettingFilterForm
     table = ISISSettingTable
@@ -163,7 +165,7 @@ class ISISSettingBulkDeleteView(BulkDeleteView):
 
 @register_model_view(ISISLevel, name='list', path='', detail=False)
 class ISISLevelListView(ObjectListView):
-    queryset = ISISLevel.objects.all()
+    queryset = ISISLevel.objects.select_related('instance__device')
     filterset = ISISLevelFilterSet
     filterset_form = ISISLevelFilterForm
     table = ISISLevelTable
@@ -208,7 +210,7 @@ class ISISLevelBulkDeleteView(BulkDeleteView):
 
 @register_model_view(ISISInterfaceLevel, name='list', path='', detail=False)
 class ISISInterfaceLevelListView(ObjectListView):
-    queryset = ISISInterfaceLevel.objects.all()
+    queryset = ISISInterfaceLevel.objects.select_related('interface__interface')
     filterset = ISISInterfaceLevelFilterSet
     filterset_form = ISISInterfaceLevelFilterForm
     table = ISISInterfaceLevelTable
@@ -253,7 +255,7 @@ class ISISInterfaceLevelBulkDeleteView(BulkDeleteView):
 
 @register_model_view(ISISSegmentRouting, name='list', path='', detail=False)
 class ISISSegmentRoutingListView(ObjectListView):
-    queryset = ISISSegmentRouting.objects.all()
+    queryset = ISISSegmentRouting.objects.select_related('instance__device')
     filterset = ISISSegmentRoutingFilterSet
     filterset_form = ISISSegmentRoutingFilterForm
     table = ISISSegmentRoutingTable
@@ -298,7 +300,7 @@ class ISISSegmentRoutingBulkDeleteView(BulkDeleteView):
 
 @register_model_view(ISISFlexAlgo, name='list', path='', detail=False)
 class ISISFlexAlgoListView(ObjectListView):
-    queryset = ISISFlexAlgo.objects.all()
+    queryset = ISISFlexAlgo.objects.select_related('instance__device')
     filterset = ISISFlexAlgoFilterSet
     filterset_form = ISISFlexAlgoFilterForm
     table = ISISFlexAlgoTable
@@ -341,7 +343,7 @@ class ISISFlexAlgoBulkDeleteView(BulkDeleteView):
 
 @register_model_view(ISISInstance, name='list', path='', detail=False)
 class ISISInstanceListView(ObjectListView):
-    queryset = ISISInstance.objects.all()
+    queryset = ISISInstance.objects.select_related('device', 'vrf')
     table = ISISInstanceTable
     filterset = ISISInstanceFilterSet
     filterset_form = ISISInstanceFilterForm
@@ -378,7 +380,9 @@ class ISISInstanceInterfacesView(ObjectChildrenView):
     )
 
     def get_children(self, request, parent):
-        return self.child_model.objects.filter(instance=parent)
+        return self.child_model.objects.filter(instance=parent).select_related(
+            'instance__device', 'instance__vrf', 'interface'
+        )
 
     def get_extra_context(self, request, instance):
         return {
@@ -399,7 +403,9 @@ class ISISInstanceLevelsView(ObjectChildrenView):
     )
 
     def get_children(self, request, parent):
-        return self.child_model.objects.filter(instance=parent)
+        return self.child_model.objects.filter(instance=parent).select_related(
+            'instance__device'
+        )
 
 
 @register_model_view(ISISInstance, name='flex-algos')
@@ -415,7 +421,9 @@ class ISISInstanceFlexAlgosView(ObjectChildrenView):
     )
 
     def get_children(self, request, parent):
-        return self.child_model.objects.filter(instance=parent)
+        return self.child_model.objects.filter(instance=parent).select_related(
+            'instance__device'
+        )
 
 
 @register_model_view(ISISInstance, 'add', detail=False)
@@ -453,7 +461,9 @@ class ISISInstanceBulkImportView(BulkImportView):
 
 @register_model_view(ISISInterface, name='list', path='', detail=False)
 class ISISInterfaceListView(ObjectListView):
-    queryset = ISISInterface.objects.all()
+    queryset = ISISInterface.objects.select_related(
+        'instance__device', 'instance__vrf', 'interface'
+    )
     table = ISISInterfaceTable
     filterset = ISISInterfaceFilterSet
     filterset_form = ISISInterfaceFilterForm
@@ -490,7 +500,9 @@ class ISISInterfaceLevelsView(ObjectChildrenView):
     )
 
     def get_children(self, request, parent):
-        return self.child_model.objects.filter(interface=parent)
+        return self.child_model.objects.filter(interface=parent).select_related(
+            'interface__interface'
+        )
 
 
 @register_model_view(ISISInterface, name='add', detail=False)

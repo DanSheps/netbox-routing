@@ -64,7 +64,7 @@ class ISISSettingMixin:
         for key, label in ISISSettingChoices.CHOICES:
             initial = existing.get(key)
             field_type = ISISSettingChoices.FIELD_TYPES[key]
-            if field_type in ('ipaddr', 'string'):
+            if field_type == 'string':
                 self.fields[key] = fields.CharField(
                     label=label, required=False, initial=initial, max_length=128
                 )
@@ -196,7 +196,7 @@ class ISISInstanceForm(ISISSettingMixin, PrimaryModelForm):
             'lsp_mtu',
             name=_('Timers'),
         ),
-        FieldSet('te_enabled', 'sr_enabled', 'sr_node_msd', name=_('TE / Segment Routing')),
+        FieldSet('te_enabled', name=_('Traffic Engineering')),
         FieldSet(
             'area_auth_type',
             'area_auth_key',
@@ -229,8 +229,6 @@ class ISISInstanceForm(ISISSettingMixin, PrimaryModelForm):
             'lsp_refresh_interval',
             'lsp_mtu',
             'te_enabled',
-            'sr_enabled',
-            'sr_node_msd',
             'area_auth_type',
             'area_auth_key',
             'domain_auth_type',
@@ -244,7 +242,6 @@ class ISISInstanceForm(ISISSettingMixin, PrimaryModelForm):
             'overload_bit': forms.Select(choices=BOOLEAN_WITH_BLANK_CHOICES),
             'overload_on_startup': forms.Select(choices=BOOLEAN_WITH_BLANK_CHOICES),
             'te_enabled': forms.Select(choices=BOOLEAN_WITH_BLANK_CHOICES),
-            'sr_enabled': forms.Select(choices=BOOLEAN_WITH_BLANK_CHOICES),
         }
 
 
@@ -326,20 +323,9 @@ class ISISInterfaceForm(ISISSettingMixin, PrimaryModelForm):
         if self.instance.pk and self.instance.interface and self.instance.interface.device:
             self.initial['device'] = self.instance.interface.device.pk
 
-    def clean(self):
-        super().clean()
-        if self.cleaned_data.get('instance') and self.cleaned_data.get('interface'):
-            if self.cleaned_data['instance'].device != self.cleaned_data['interface'].device:
-                raise ValidationError(
-                    {
-                        'instance': _(
-                            'IS-IS Instance Device and Interface Device must match'
-                        ),
-                        'interface': _(
-                            'IS-IS Instance Device and Interface Device must match'
-                        ),
-                    }
-                )
+    # The instance/interface same-device rule lives on ISISInterface.clean() (model
+    # layer), which the form runs via full_clean and which flags both fields — so no
+    # form-level clean() override is needed here.
 
 
 class ISISSettingForm(PrimaryModelForm):
@@ -391,7 +377,9 @@ class ISISSettingForm(PrimaryModelForm):
 
     def __init__(self, *args, **kwargs):
         instance = kwargs.get('instance')
-        initial = kwargs.get('initial', {}).copy()
+        # Django permits initial=None; normalize before copying so an explicit
+        # initial=None caller doesn't hit AttributeError on NoneType.copy().
+        initial = (kwargs.get('initial') or {}).copy()
         if instance and instance.assigned_object:
             if isinstance(instance.assigned_object, ISISInstance):
                 initial['isisinstance'] = instance.assigned_object

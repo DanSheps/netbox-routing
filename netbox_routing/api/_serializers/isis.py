@@ -135,7 +135,7 @@ class ISISInstanceSerializer(NetBoxModelSerializer):
         view_name='plugins-api:netbox_routing-api:isisinstance-detail'
     )
     device = DeviceSerializer(nested=True)
-    vrf = VRFSerializer(nested=True)
+    vrf = VRFSerializer(nested=True, required=False, allow_null=True)
 
     class Meta:
         model = ISISInstance
@@ -164,8 +164,6 @@ class ISISInstanceSerializer(NetBoxModelSerializer):
             'lsp_refresh_interval',
             'lsp_mtu',
             'te_enabled',
-            'sr_enabled',
-            'sr_node_msd',
             'distance',
             'maximum_paths',
             'reference_bandwidth',

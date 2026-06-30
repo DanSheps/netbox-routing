@@ -35,7 +35,7 @@ class ISISSettingBulkEditForm(NetBoxModelBulkEditForm):
 
     model = ISISSetting
     fieldsets = (FieldSet('description', 'comments'),)
-    nullable_fields = ('description',)
+    nullable_fields = ('description', 'comments')
 
 
 class ISISInstanceBulkEditForm(NetBoxModelBulkEditForm):
@@ -81,6 +81,7 @@ class ISISInstanceBulkEditForm(NetBoxModelBulkEditForm):
     nullable_fields = (
         'vrf',
         'description',
+        'comments',
         'is_type',
         'metric_style',
         'lsp_lifetime',
@@ -155,6 +156,7 @@ class ISISInterfaceBulkEditForm(NetBoxModelBulkEditForm):
     )
     nullable_fields = (
         'description',
+        'comments',
         'circuit_type',
         'network_type',
         'metric',

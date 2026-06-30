@@ -4,6 +4,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.db import connection
 from django.test.utils import CaptureQueriesContext
 from django.urls import reverse
+from rest_framework import status
 
 from dcim.models import Interface
 from ipam.models import VRF
@@ -97,11 +98,39 @@ class ISISInstanceAPITestCase(APIViewTestCases.APIViewTestCase):
                 'lsp_refresh_interval': 32767,
                 'lsp_mtu': 1492,
                 'te_enabled': True,
-                'sr_enabled': True,
                 'distance': 115,
                 'maximum_paths': 8,
             },
         ]
+
+    def test_create_without_vrf(self):
+        # vrf is optional (model blank=True, null=True); the API must accept a create
+        # that omits it. The serializer field was incorrectly required.
+        self.add_permissions('netbox_routing.add_isisinstance')
+        device = create_test_device(name='VRFless Device')
+        url = reverse('plugins-api:netbox_routing-api:isisinstance-list')
+        data = {
+            'device': device.pk,
+            'process_tag': 'NOVRF',
+            'net': '49.0001.0000.0000.0099.00',
+            'is_type': 'level-1-2',
+        }
+        response = self.client.post(url, data, format='json', **self.header)
+        self.assertHttpStatus(response, status.HTTP_201_CREATED)
+
+    def test_sr_state_not_exposed_on_instance(self):
+        # Segment-routing state lives on ISISSegmentRouting, not ISISInstance; the
+        # duplicate sr_enabled/sr_node_msd instance fields were removed, so the API
+        # must not surface them.
+        self.add_permissions('netbox_routing.view_isisinstance')
+        instance = ISISInstance.objects.first()
+        url = reverse(
+            'plugins-api:netbox_routing-api:isisinstance-detail', args=[instance.pk]
+        )
+        response = self.client.get(url, **self.header)
+        self.assertHttpStatus(response, status.HTTP_200_OK)
+        self.assertNotIn('sr_enabled', response.json())
+        self.assertNotIn('sr_node_msd', response.json())
 
 
 class ISISInterfaceAPITestCase(APIViewTestCases.APIViewTestCase):
