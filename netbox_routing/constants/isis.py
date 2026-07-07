@@ -22,6 +22,9 @@ ISISSETTING_ASSIGNMENT_MODEL_NAMES = ('isisinstance', 'isisinterface')
 ISISSETTING_ASSIGNMENT_MODELS = Q(
     reduce(
         or_,
-        (Q(app_label='netbox_routing', model=name) for name in ISISSETTING_ASSIGNMENT_MODEL_NAMES),
+        (
+            Q(app_label='netbox_routing', model=name)
+            for name in ISISSETTING_ASSIGNMENT_MODEL_NAMES
+        ),
     )
 )

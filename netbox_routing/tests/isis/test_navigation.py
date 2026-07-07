@@ -34,7 +34,9 @@ class ISISNavigationTestCase(SimpleTestCase):
     def test_import_button_uses_add_permission(self):
         for item in MENUITEMS:
             model = item.link.split(':')[-1].removesuffix('_list')
-            import_buttons = [b for b in item.buttons if b.link.endswith('_bulk_import')]
+            import_buttons = [
+                b for b in item.buttons if b.link.endswith('_bulk_import')
+            ]
             with self.subTest(model=model):
                 self.assertEqual(len(import_buttons), 1)
                 self.assertEqual(

@@ -141,7 +141,8 @@ class ISISInstanceFormTestCase(TestCase):
     def test_settings_persist_with_commit_false_via_save_m2m(self):
         """Regression: callers may use save(commit=False) -> instance.save()
         -> save_m2m(). The submitted ISISSetting values must survive that path instead of
-        being silently dropped (the popped settings used to be discarded when commit=False)."""
+        being silently dropped (the popped settings used to be discarded when commit=False).
+        """
         from django.contrib.contenttypes.models import ContentType
 
         from netbox_routing.models import ISISSetting

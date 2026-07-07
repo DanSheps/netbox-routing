@@ -40,9 +40,17 @@ def _auth_pair_errors(type_value, key_value, type_field, key_field):
     """An IS-IS auth (type, key) pair is only meaningful together; return the
     field-keyed error(s) for a half-configured pair (shared by every IS-IS clean())."""
     if type_value and not key_value:
-        return {key_field: _('An authentication key is required when an authentication type is set.')}
+        return {
+            key_field: _(
+                'An authentication key is required when an authentication type is set.'
+            )
+        }
     if key_value and not type_value:
-        return {type_field: _('An authentication type is required when an authentication key is set.')}
+        return {
+            type_field: _(
+                'An authentication type is required when an authentication key is set.'
+            )
+        }
     return {}
 
 
@@ -122,7 +130,11 @@ class ISISSetting(PrimaryModel):
             or self.assigned_object_type.model not in ISISSETTING_ASSIGNMENT_MODEL_NAMES
         ):
             raise ValidationError(
-                {'assigned_object_type': _('IS-IS Setting must be assigned to an ISISInstance or ISISInterface.')}
+                {
+                    'assigned_object_type': _(
+                        'IS-IS Setting must be assigned to an ISISInstance or ISISInterface.'
+                    )
+                }
             )
         # The value must match the type the key declares in ISISSettingChoices.FIELD_TYPES.
         # The typed Mixin enforces this for inline editing, but the standalone form / API /
@@ -134,14 +146,27 @@ class ISISSetting(PrimaryModel):
             try:
                 parsed = int(self.value)
             except (TypeError, ValueError):
-                raise ValidationError({'value': _('This setting requires an integer value.')})
+                raise ValidationError(
+                    {'value': _('This setting requires an integer value.')}
+                )
             # Every integer ISIS setting is a count/timer/metric; the form enforces min_value=0,
             # so the model backstop (API/import/direct writes) must reject negatives too.
             if parsed < 0:
-                raise ValidationError({'value': _('This setting requires a non-negative integer value.')})
+                raise ValidationError(
+                    {'value': _('This setting requires a non-negative integer value.')}
+                )
         elif field_type == 'boolean':
-            if str(self.value).strip().lower() not in ('true', 'false', '1', '0', 'yes', 'no'):
-                raise ValidationError({'value': _('This setting requires a boolean value.')})
+            if str(self.value).strip().lower() not in (
+                'true',
+                'false',
+                '1',
+                '0',
+                'yes',
+                'no',
+            ):
+                raise ValidationError(
+                    {'value': _('This setting requires a boolean value.')}
+                )
 
     def __str__(self):
         return f'{self.assigned_object}: {self.key}'
@@ -197,7 +222,9 @@ class ISISInstance(PrimaryModel):
         choices=choices.ISISMetricStyleChoices,
         blank=True,
         default='',
-        help_text=_('Metric style: wide, narrow, or transition. Absent = IOS default (narrow).'),
+        help_text=_(
+            'Metric style: wide, narrow, or transition. Absent = IOS default (narrow).'
+        ),
     )
     overload_bit = models.BooleanField(
         verbose_name=_('Overload bit'),
@@ -218,7 +245,9 @@ class ISISInstance(PrimaryModel):
         max_length=128,
         blank=True,
         default='',
-        help_text=_('IS-IS area password authentication key (plaintext — routing-protocol auth, not config access).'),
+        help_text=_(
+            'IS-IS area password authentication key (plaintext — routing-protocol auth, not config access).'
+        ),
     )
     domain_auth_type = models.CharField(
         verbose_name=_('Domain auth type'),
@@ -233,7 +262,9 @@ class ISISInstance(PrimaryModel):
         max_length=128,
         blank=True,
         default='',
-        help_text=_('IS-IS domain password authentication key (plaintext — routing-protocol auth, not config access).'),
+        help_text=_(
+            'IS-IS domain password authentication key (plaintext — routing-protocol auth, not config access).'
+        ),
     )
     # SPF / LSP timers — initial-delay and max-wait mean the same across Cisco,
     # Nokia, Junos and IOS-XR, so they get their own columns. The backoff
@@ -242,13 +273,17 @@ class ISISInstance(PrimaryModel):
         verbose_name=_('SPF initial wait'),
         blank=True,
         null=True,
-        help_text=_('Initial SPF delay in milliseconds (Cisco initial-wait / Nokia spf-initial-wait / Junos delay).'),
+        help_text=_(
+            'Initial SPF delay in milliseconds (Cisco initial-wait / Nokia spf-initial-wait / Junos delay).'
+        ),
     )
     spf_max_wait = models.PositiveIntegerField(
         verbose_name=_('SPF max wait'),
         blank=True,
         null=True,
-        help_text=_('Maximum SPF wait in milliseconds (Cisco maximum-wait / Nokia spf-max-wait / Junos holddown).'),
+        help_text=_(
+            'Maximum SPF wait in milliseconds (Cisco maximum-wait / Nokia spf-max-wait / Junos holddown).'
+        ),
     )
     lsp_initial_wait = models.PositiveIntegerField(
         verbose_name=_('LSP-gen initial wait'),
@@ -328,10 +363,22 @@ class ISISInstance(PrimaryModel):
     )
 
     clone_fields = (
-        'device', 'vrf', 'process_tag', 'is_type', 'metric_style',
-        'spf_initial_wait', 'spf_max_wait', 'lsp_initial_wait', 'lsp_max_wait',
-        'lsp_lifetime', 'lsp_refresh_interval', 'lsp_mtu', 'te_enabled',
-        'distance', 'maximum_paths', 'reference_bandwidth',
+        'device',
+        'vrf',
+        'process_tag',
+        'is_type',
+        'metric_style',
+        'spf_initial_wait',
+        'spf_max_wait',
+        'lsp_initial_wait',
+        'lsp_max_wait',
+        'lsp_lifetime',
+        'lsp_refresh_interval',
+        'lsp_mtu',
+        'te_enabled',
+        'distance',
+        'maximum_paths',
+        'reference_bandwidth',
     )
     prerequisite_models = ('dcim.Device',)
 
@@ -355,7 +402,10 @@ class ISISInstance(PrimaryModel):
         ):
             errors.update(
                 _auth_pair_errors(
-                    getattr(self, type_field), getattr(self, key_field), type_field, key_field
+                    getattr(self, type_field),
+                    getattr(self, key_field),
+                    type_field,
+                    key_field,
                 )
             )
         # Reject a malformed NET at the model layer (form/API/import all run full_clean)
@@ -409,7 +459,9 @@ class ISISInterface(PrimaryModel):
         blank=True,
         default='',
     )
-    metric = models.PositiveIntegerField(verbose_name=_('Metric'), blank=True, null=True)
+    metric = models.PositiveIntegerField(
+        verbose_name=_('Metric'), blank=True, null=True
+    )
     passive = models.BooleanField(verbose_name=_('Passive'), blank=True, null=True)
     hello_auth_type = models.CharField(
         verbose_name=_('Hello auth type'),
@@ -417,21 +469,27 @@ class ISISInterface(PrimaryModel):
         choices=choices.ISISAuthTypeChoices,
         blank=True,
         default='',
-        help_text=_('IS-IS per-interface hello (IIH) authentication type (md5 or text).'),
+        help_text=_(
+            'IS-IS per-interface hello (IIH) authentication type (md5 or text).'
+        ),
     )
     hello_auth_key = models.CharField(
         verbose_name=_('Hello auth key'),
         max_length=128,
         blank=True,
         default='',
-        help_text=_('IS-IS per-interface hello (IIH) authentication key (plaintext — '
-                    'routing-protocol auth, not config access).'),
+        help_text=_(
+            'IS-IS per-interface hello (IIH) authentication key (plaintext — '
+            'routing-protocol auth, not config access).'
+        ),
     )
     bfd_enabled = models.BooleanField(
         verbose_name=_('BFD enabled'),
         blank=True,
         null=True,
-        help_text=_('BFD enabled for IS-IS on this interface (timers come from the interface BFD config).'),
+        help_text=_(
+            'BFD enabled for IS-IS on this interface (timers come from the interface BFD config).'
+        ),
     )
     csnp_interval = models.PositiveIntegerField(
         verbose_name=_('CSNP interval'),
@@ -449,8 +507,10 @@ class ISISInterface(PrimaryModel):
         verbose_name=_('LSP interval'),
         blank=True,
         null=True,
-        help_text=_('LSP transmission pacing interval in milliseconds '
-                    '(Nokia lsp-pacing-interval / Junos lsp-interval).'),
+        help_text=_(
+            'LSP transmission pacing interval in milliseconds '
+            '(Nokia lsp-pacing-interval / Junos lsp-interval).'
+        ),
     )
     mesh_group = models.CharField(
         verbose_name=_('Mesh group'),
@@ -516,7 +576,10 @@ class ISISInterface(PrimaryModel):
         # Hello auth type and key are only meaningful together (mirrors ISISInstance).
         errors.update(
             _auth_pair_errors(
-                self.hello_auth_type, self.hello_auth_key, 'hello_auth_type', 'hello_auth_key'
+                self.hello_auth_type,
+                self.hello_auth_key,
+                'hello_auth_type',
+                'hello_auth_key',
             )
         )
         if errors:
@@ -562,13 +625,17 @@ class ISISLevel(PrimaryModel):
         verbose_name=_('Labeled preference'),
         blank=True,
         null=True,
-        help_text=_('Route preference for SR-labeled (MPLS) paths at this level (Junos labeled-preference).'),
+        help_text=_(
+            'Route preference for SR-labeled (MPLS) paths at this level (Junos labeled-preference).'
+        ),
     )
     disabled = models.BooleanField(
         verbose_name=_('Disabled'),
         blank=True,
         null=True,
-        help_text=_('Level explicitly disabled on this instance (e.g. Junos "level <n> disable").'),
+        help_text=_(
+            'Level explicitly disabled on this instance (e.g. Junos "level <n> disable").'
+        ),
     )
     auth_type = models.CharField(
         verbose_name=_('Auth type'),
@@ -583,11 +650,18 @@ class ISISLevel(PrimaryModel):
         max_length=128,
         blank=True,
         default='',
-        help_text=_('Per-level authentication key (plaintext — routing-protocol auth, not config access).'),
+        help_text=_(
+            'Per-level authentication key (plaintext — routing-protocol auth, not config access).'
+        ),
     )
 
     clone_fields = (
-        'instance', 'default_metric', 'wide_metrics_only', 'preference', 'labeled_preference', 'disabled'
+        'instance',
+        'default_metric',
+        'wide_metrics_only',
+        'preference',
+        'labeled_preference',
+        'disabled',
     )
     prerequisite_models = ('netbox_routing.ISISInstance',)
 
@@ -603,7 +677,9 @@ class ISISLevel(PrimaryModel):
 
     def clean(self):
         super().clean()
-        errors = _auth_pair_errors(self.auth_type, self.auth_key, 'auth_type', 'auth_key')
+        errors = _auth_pair_errors(
+            self.auth_type, self.auth_key, 'auth_type', 'auth_key'
+        )
         if errors:
             raise ValidationError(errors)
 
@@ -633,7 +709,9 @@ class ISISInterfaceLevel(PrimaryModel):
         verbose_name=_('Level'),
         choices=choices.ISISLevelChoices,
     )
-    metric = models.PositiveIntegerField(verbose_name=_('Metric'), blank=True, null=True)
+    metric = models.PositiveIntegerField(
+        verbose_name=_('Metric'), blank=True, null=True
+    )
     hello_interval = models.PositiveIntegerField(
         verbose_name=_('Hello interval'), blank=True, null=True
     )
@@ -645,7 +723,13 @@ class ISISInterfaceLevel(PrimaryModel):
     )
     passive = models.BooleanField(verbose_name=_('Passive'), blank=True, null=True)
 
-    clone_fields = ('interface', 'metric', 'hello_interval', 'hello_multiplier', 'priority')
+    clone_fields = (
+        'interface',
+        'metric',
+        'hello_interval',
+        'hello_multiplier',
+        'priority',
+    )
     prerequisite_models = ('netbox_routing.ISISInterface',)
 
     class Meta:
@@ -751,7 +835,9 @@ class ISISFlexAlgo(PrimaryModel):
         max_length=40,
         blank=True,
         default='',
-        help_text=_('Flex-Algo metric type (e.g. igp-metric, delay-metric, te-metric).'),
+        help_text=_(
+            'Flex-Algo metric type (e.g. igp-metric, delay-metric, te-metric).'
+        ),
     )
     priority = models.PositiveSmallIntegerField(
         verbose_name=_('Priority'), blank=True, null=True
@@ -761,7 +847,9 @@ class ISISFlexAlgo(PrimaryModel):
         max_length=200,
         blank=True,
         default='',
-        help_text=_('Comma-separated affinity/admin-group names excluded from this algo.'),
+        help_text=_(
+            'Comma-separated affinity/admin-group names excluded from this algo.'
+        ),
     )
     admin_group_include_any = models.CharField(
         verbose_name=_('Admin-group include-any'),

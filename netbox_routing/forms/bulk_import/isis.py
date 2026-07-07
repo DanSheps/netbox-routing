@@ -30,55 +30,99 @@ __all__ = (
 
 class ISISFlexAlgoImportForm(NetBoxModelImportForm):
     instance = CSVModelChoiceField(
-        queryset=ISISInstance.objects.all(), required=True, help_text=_('Primary key of IS-IS Instance')
+        queryset=ISISInstance.objects.all(),
+        required=True,
+        help_text=_('Primary key of IS-IS Instance'),
     )
 
     class Meta:
         model = ISISFlexAlgo
         fields = (
-            'instance', 'algo_id', 'metric_type', 'priority', 'admin_group_exclude',
-            'admin_group_include_any', 'admin_group_include_all', 'description', 'comments', 'tags',
+            'instance',
+            'algo_id',
+            'metric_type',
+            'priority',
+            'admin_group_exclude',
+            'admin_group_include_any',
+            'admin_group_include_all',
+            'description',
+            'comments',
+            'tags',
         )
 
 
 class ISISLevelImportForm(NetBoxModelImportForm):
     instance = CSVModelChoiceField(
-        queryset=ISISInstance.objects.all(), required=True, help_text=_('Primary key of IS-IS Instance')
+        queryset=ISISInstance.objects.all(),
+        required=True,
+        help_text=_('Primary key of IS-IS Instance'),
     )
 
     class Meta:
         model = ISISLevel
         fields = (
-            'instance', 'level', 'default_metric', 'wide_metrics_only', 'preference',
-            'labeled_preference', 'disabled', 'auth_type', 'auth_key', 'description', 'comments', 'tags',
+            'instance',
+            'level',
+            'default_metric',
+            'wide_metrics_only',
+            'preference',
+            'labeled_preference',
+            'disabled',
+            'auth_type',
+            'auth_key',
+            'description',
+            'comments',
+            'tags',
         )
 
 
 class ISISInterfaceLevelImportForm(NetBoxModelImportForm):
     interface = CSVModelChoiceField(
-        queryset=ISISInterface.objects.all(), required=True, help_text=_('Primary key of IS-IS Interface')
+        queryset=ISISInterface.objects.all(),
+        required=True,
+        help_text=_('Primary key of IS-IS Interface'),
     )
 
     class Meta:
         model = ISISInterfaceLevel
         fields = (
-            'interface', 'level', 'metric', 'hello_interval', 'hello_multiplier',
-            'priority', 'passive', 'description', 'comments', 'tags',
+            'interface',
+            'level',
+            'metric',
+            'hello_interval',
+            'hello_multiplier',
+            'priority',
+            'passive',
+            'description',
+            'comments',
+            'tags',
         )
 
 
 class ISISSegmentRoutingImportForm(NetBoxModelImportForm):
     instance = CSVModelChoiceField(
-        queryset=ISISInstance.objects.all(), required=True, help_text=_('Primary key of IS-IS Instance')
+        queryset=ISISInstance.objects.all(),
+        required=True,
+        help_text=_('Primary key of IS-IS Instance'),
     )
 
     class Meta:
         model = ISISSegmentRouting
         fields = (
-            'instance', 'enabled', 'prefix_sid_range', 'srgb_start', 'srgb_range',
-            'node_sid_index', 'node_sid_label', 'node_sid_v6_index', 'node_sid_v6_label',
-            'maximum_sid_depth', 'tunnel_table_pref',
-            'description', 'comments', 'tags',
+            'instance',
+            'enabled',
+            'prefix_sid_range',
+            'srgb_start',
+            'srgb_range',
+            'node_sid_index',
+            'node_sid_label',
+            'node_sid_v6_index',
+            'node_sid_v6_label',
+            'maximum_sid_depth',
+            'tunnel_table_pref',
+            'description',
+            'comments',
+            'tags',
         )
 
 

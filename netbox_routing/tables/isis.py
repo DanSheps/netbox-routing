@@ -30,7 +30,15 @@ class ISISFlexAlgoTable(NetBoxTable):
 
     class Meta(NetBoxTable.Meta):
         model = ISISFlexAlgo
-        fields = ('pk', 'id', 'instance', 'algo_id', 'metric_type', 'priority', 'admin_group_exclude')
+        fields = (
+            'pk',
+            'id',
+            'instance',
+            'algo_id',
+            'metric_type',
+            'priority',
+            'admin_group_exclude',
+        )
         default_columns = ('pk', 'id', 'instance', 'algo_id', 'metric_type', 'priority')
 
 
@@ -40,10 +48,24 @@ class ISISLevelTable(NetBoxTable):
     class Meta(NetBoxTable.Meta):
         model = ISISLevel
         fields = (
-            'pk', 'id', 'instance', 'level', 'default_metric', 'wide_metrics_only',
-            'preference', 'labeled_preference', 'disabled',
+            'pk',
+            'id',
+            'instance',
+            'level',
+            'default_metric',
+            'wide_metrics_only',
+            'preference',
+            'labeled_preference',
+            'disabled',
         )
-        default_columns = ('pk', 'id', 'instance', 'level', 'default_metric', 'wide_metrics_only')
+        default_columns = (
+            'pk',
+            'id',
+            'instance',
+            'level',
+            'default_metric',
+            'wide_metrics_only',
+        )
 
 
 class ISISInterfaceLevelTable(NetBoxTable):
@@ -52,8 +74,15 @@ class ISISInterfaceLevelTable(NetBoxTable):
     class Meta(NetBoxTable.Meta):
         model = ISISInterfaceLevel
         fields = (
-            'pk', 'id', 'interface', 'level', 'metric', 'hello_interval',
-            'hello_multiplier', 'priority', 'passive',
+            'pk',
+            'id',
+            'interface',
+            'level',
+            'metric',
+            'hello_interval',
+            'hello_multiplier',
+            'priority',
+            'passive',
         )
         default_columns = ('pk', 'id', 'interface', 'level', 'metric')
 
@@ -64,8 +93,14 @@ class ISISSegmentRoutingTable(NetBoxTable):
     class Meta(NetBoxTable.Meta):
         model = ISISSegmentRouting
         fields = (
-            'pk', 'id', 'instance', 'enabled', 'prefix_sid_range', 'srgb_start',
-            'srgb_range', 'maximum_sid_depth',
+            'pk',
+            'id',
+            'instance',
+            'enabled',
+            'prefix_sid_range',
+            'srgb_start',
+            'srgb_range',
+            'maximum_sid_depth',
         )
         default_columns = ('pk', 'id', 'instance', 'enabled', 'prefix_sid_range')
 

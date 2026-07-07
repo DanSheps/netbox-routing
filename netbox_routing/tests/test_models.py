@@ -64,7 +64,10 @@ class AggregateModelTestExportsTestCase(SimpleTestCase):
         # forms aggregates too (test_api listed only 2 of the IS-IS API cases, and
         # test_forms dropped ISISBulkEditFieldsetTestCase).
         checks = (
-            ('netbox_routing.tests.test_models', 'netbox_routing.tests.isis.test_models'),
+            (
+                'netbox_routing.tests.test_models',
+                'netbox_routing.tests.isis.test_models',
+            ),
             ('netbox_routing.tests.test_api', 'netbox_routing.tests.isis.test_api'),
             ('netbox_routing.tests.test_forms', 'netbox_routing.tests.isis.test_forms'),
             ('netbox_routing.tests.test_views', 'netbox_routing.tests.isis.test_views'),

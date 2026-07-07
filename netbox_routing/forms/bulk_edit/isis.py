@@ -57,13 +57,17 @@ class ISISInstanceBulkEditForm(NetBoxModelBulkEditForm):
         choices=add_blank_choice(ISISMetricStyleChoices),
         required=False,
     )
-    lsp_lifetime = forms.IntegerField(label=_('LSP Lifetime'), min_value=0, required=False)
+    lsp_lifetime = forms.IntegerField(
+        label=_('LSP Lifetime'), min_value=0, required=False
+    )
     lsp_refresh_interval = forms.IntegerField(
         label=_('LSP Refresh Interval'), min_value=0, required=False
     )
     lsp_mtu = forms.IntegerField(label=_('LSP MTU'), min_value=0, required=False)
     distance = forms.IntegerField(label=_('Distance'), min_value=0, required=False)
-    maximum_paths = forms.IntegerField(label=_('Maximum Paths'), min_value=0, required=False)
+    maximum_paths = forms.IntegerField(
+        label=_('Maximum Paths'), min_value=0, required=False
+    )
     description = forms.CharField(
         label=_('Description'), max_length=200, required=False
     )
@@ -71,9 +75,21 @@ class ISISInstanceBulkEditForm(NetBoxModelBulkEditForm):
 
     model = ISISInstance
     fieldsets = (
-        FieldSet('device', 'vrf', 'process_tag', 'net', 'is_type', 'metric_style', name='IS-IS'),
         FieldSet(
-            'lsp_lifetime', 'lsp_refresh_interval', 'lsp_mtu', 'distance', 'maximum_paths',
+            'device',
+            'vrf',
+            'process_tag',
+            'net',
+            'is_type',
+            'metric_style',
+            name='IS-IS',
+        ),
+        FieldSet(
+            'lsp_lifetime',
+            'lsp_refresh_interval',
+            'lsp_mtu',
+            'distance',
+            'maximum_paths',
             name='Attributes',
         ),
         FieldSet('description', 'comments'),
@@ -124,11 +140,15 @@ class ISISInterfaceBulkEditForm(NetBoxModelBulkEditForm):
         required=False,
     )
     hello_auth_key = forms.CharField(label=_('Hello Auth Key'), required=False)
-    csnp_interval = forms.IntegerField(label=_('CSNP Interval'), min_value=0, required=False)
+    csnp_interval = forms.IntegerField(
+        label=_('CSNP Interval'), min_value=0, required=False
+    )
     retransmit_interval = forms.IntegerField(
         label=_('Retransmit Interval'), min_value=0, required=False
     )
-    lsp_interval = forms.IntegerField(label=_('LSP Interval'), min_value=0, required=False)
+    lsp_interval = forms.IntegerField(
+        label=_('LSP Interval'), min_value=0, required=False
+    )
     mesh_group = forms.CharField(label=_('Mesh Group'), required=False)
     description = forms.CharField(
         label=_('Description'), max_length=200, required=False
@@ -149,7 +169,10 @@ class ISISInterfaceBulkEditForm(NetBoxModelBulkEditForm):
             name='Attributes',
         ),
         FieldSet(
-            'csnp_interval', 'retransmit_interval', 'lsp_interval', 'mesh_group',
+            'csnp_interval',
+            'retransmit_interval',
+            'lsp_interval',
+            'mesh_group',
             name='Timers',
         ),
         FieldSet('description', 'comments'),

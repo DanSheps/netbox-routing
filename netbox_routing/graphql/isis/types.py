@@ -28,9 +28,13 @@ __all__ = (
 )
 
 
-@strawberry_django.type(models.ISISFlexAlgo, fields='__all__', filters=ISISFlexAlgoFilter)
+@strawberry_django.type(
+    models.ISISFlexAlgo, fields='__all__', filters=ISISFlexAlgoFilter
+)
 class ISISFlexAlgoType(PrimaryObjectType):
-    instance: Annotated['ISISInstanceType', strawberry.lazy('netbox_routing.graphql.types')]
+    instance: Annotated[
+        'ISISInstanceType', strawberry.lazy('netbox_routing.graphql.types')
+    ]
     algo_id: int
 
 
@@ -48,19 +52,29 @@ class ISISSettingsMixin:
     filters=ISISLevelFilter,
 )
 class ISISLevelType(PrimaryObjectType):
-    instance: Annotated['ISISInstanceType', strawberry.lazy('netbox_routing.graphql.types')]
+    instance: Annotated[
+        'ISISInstanceType', strawberry.lazy('netbox_routing.graphql.types')
+    ]
     level: int
 
 
-@strawberry_django.type(models.ISISInterfaceLevel, fields='__all__', filters=ISISInterfaceLevelFilter)
+@strawberry_django.type(
+    models.ISISInterfaceLevel, fields='__all__', filters=ISISInterfaceLevelFilter
+)
 class ISISInterfaceLevelType(PrimaryObjectType):
-    interface: Annotated['ISISInterfaceType', strawberry.lazy('netbox_routing.graphql.types')]
+    interface: Annotated[
+        'ISISInterfaceType', strawberry.lazy('netbox_routing.graphql.types')
+    ]
     level: int
 
 
-@strawberry_django.type(models.ISISSegmentRouting, fields='__all__', filters=ISISSegmentRoutingFilter)
+@strawberry_django.type(
+    models.ISISSegmentRouting, fields='__all__', filters=ISISSegmentRoutingFilter
+)
 class ISISSegmentRoutingType(PrimaryObjectType):
-    instance: Annotated['ISISInstanceType', strawberry.lazy('netbox_routing.graphql.types')]
+    instance: Annotated[
+        'ISISInstanceType', strawberry.lazy('netbox_routing.graphql.types')
+    ]
 
 
 @strawberry_django.type(

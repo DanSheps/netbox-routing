@@ -38,13 +38,22 @@ urlpatterns = [
         'isis/interface-level/',
         include(get_model_urls(app_name, 'isisinterfacelevel', detail=False)),
     ),
-    path('isis/interface-level/<int:pk>/', include(get_model_urls(app_name, 'isisinterfacelevel'))),
+    path(
+        'isis/interface-level/<int:pk>/',
+        include(get_model_urls(app_name, 'isisinterfacelevel')),
+    ),
     path(
         'isis/segment-routing/',
         include(get_model_urls(app_name, 'isissegmentrouting', detail=False)),
     ),
-    path('isis/segment-routing/<int:pk>/', include(get_model_urls(app_name, 'isissegmentrouting'))),
-    path('isis/flex-algo/', include(get_model_urls(app_name, 'isisflexalgo', detail=False))),
+    path(
+        'isis/segment-routing/<int:pk>/',
+        include(get_model_urls(app_name, 'isissegmentrouting')),
+    ),
+    path(
+        'isis/flex-algo/',
+        include(get_model_urls(app_name, 'isisflexalgo', detail=False)),
+    ),
     path('isis/flex-algo/<int:pk>/', include(get_model_urls(app_name, 'isisflexalgo'))),
     path(
         'isis/instance/',

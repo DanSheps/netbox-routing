@@ -51,7 +51,9 @@ class ISISSettingViewSet(NetBoxModelViewSet):
             'assigned_object',
             [
                 ISISInstance.objects.select_related('device', 'vrf'),
-                ISISInterface.objects.select_related('instance__device', 'instance__vrf', 'interface'),
+                ISISInterface.objects.select_related(
+                    'instance__device', 'instance__vrf', 'interface'
+                ),
             ],
         )
     )
@@ -87,6 +89,8 @@ class ISISInstanceViewSet(NetBoxModelViewSet):
 
 
 class ISISInterfaceViewSet(NetBoxModelViewSet):
-    queryset = ISISInterface.objects.select_related('instance__device', 'instance__vrf', 'interface')
+    queryset = ISISInterface.objects.select_related(
+        'instance__device', 'instance__vrf', 'interface'
+    )
     serializer_class = ISISInterfaceSerializer
     filterset_class = filtersets.ISISInterfaceFilterSet

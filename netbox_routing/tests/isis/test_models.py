@@ -242,7 +242,9 @@ class ISISSettingModelTestCase(TestCase):
     def test_clean_rejects_non_integer_value_for_integer_key(self):
         with self.assertRaises(ValidationError) as ctx:
             ISISSetting(
-                assigned_object=self.instance, key='spf_second_wait', value='not-a-number'
+                assigned_object=self.instance,
+                key='spf_second_wait',
+                value='not-a-number',
             ).clean()
         self.assertIn('value', ctx.exception.message_dict)
 
@@ -313,8 +315,13 @@ class ISISMigrationStateTestCase(TestCase):
 
     #: every IS-IS PrimaryModel — all subclass DeleteMixin via PrimaryModel
     ISIS_MODELS = (
-        'isisinstance', 'isisinterface', 'isissetting', 'isislevel',
-        'isisinterfacelevel', 'isissegmentrouting', 'isisflexalgo',
+        'isisinstance',
+        'isisinterface',
+        'isissetting',
+        'isislevel',
+        'isisinterfacelevel',
+        'isissegmentrouting',
+        'isisflexalgo',
     )
 
     def test_migration_bases_include_delete_mixin(self):
@@ -344,12 +351,17 @@ class ISISMigrationStateTestCase(TestCase):
 
         out = StringIO()
         call_command(
-            'makemigrations', 'netbox_routing',
-            dry_run=True, verbosity=1, stdout=out, stderr=out,
+            'makemigrations',
+            'netbox_routing',
+            dry_run=True,
+            verbosity=1,
+            stdout=out,
+            stderr=out,
         )
         output = out.getvalue().lower()
         pending = [name for name in self.ISIS_MODELS if name in output]
         self.assertEqual(
-            pending, [],
+            pending,
+            [],
             f'pending IS-IS migration changes detected:\n{out.getvalue()}',
         )
