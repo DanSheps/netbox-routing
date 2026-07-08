@@ -12,7 +12,7 @@ preview = true
 
 [lint.per-file-ignores]
 "template_code.py" = ["E501"]
-"netbox_routing/graphql/filter_mixins.py" = ["F821",]
+"netbox_routing/graphql/filter_mixins.py" = ["F821", "RUF009"]
 "netbox_routing/graphql/bgp/types.py" = ["F821",]
 "netbox_routing/graphql/community/types.py" = ["F821",]
 "netbox_routing/graphql/eigrp/types.py" = ["F821",]

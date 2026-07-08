@@ -3,7 +3,7 @@ from typing import Annotated
 import strawberry
 import strawberry_django
 from strawberry import ID
-from strawberry_django import StrFilterLookup
+from strawberry_django import BaseFilterLookup, StrFilterLookup
 
 from netbox.graphql.filters import PrimaryModelFilter
 from netbox_routing import models
@@ -18,7 +18,7 @@ __all__ = (
 
 @strawberry_django.filter(models.OSPFInstance, lookups=True)
 class OSPFInstanceFilter(VRFMixin, DeviceMixin, PrimaryModelFilter):
-    router_id: StrFilterLookup | None = strawberry_django.filter_field()
+    router_id: BaseFilterLookup[str] | None = strawberry_django.filter_field()
 
 
 @strawberry_django.filter(models.OSPFArea, lookups=True)
