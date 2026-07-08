@@ -22,6 +22,8 @@ def build_menus():
         ('isislevel', 'Levels'),
         ('isissegmentrouting', 'Segment Routing'),
         ('isisflexalgo', 'Flex-Algos'),
+        ('isisprefixsid', 'Prefix-SIDs'),
+        ('isissrv6locator', 'SRv6 Locators'),
     )
     for model, name in menu_items:
         menu = PluginMenuItem(

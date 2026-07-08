@@ -3,7 +3,7 @@
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ValidationError
 from django.db import IntegrityError, transaction
-from django.test import TestCase
+from django.test import TestCase, override_settings
 
 from dcim.models import Interface
 from utilities.testing import create_test_device
@@ -12,6 +12,9 @@ from netbox_routing.models import (
     ISISFlexAlgo,
     ISISInstance,
     ISISInterface,
+    ISISPrefixSID,
+    ISISSRv6Locator,
+    ISISSegmentRouting,
     ISISSetting,
 )
 
@@ -20,6 +23,9 @@ __all__ = (
     'ISISInterfaceModelTestCase',
     'ISISSettingModelTestCase',
     'ISISFlexAlgoModelTestCase',
+    'ISISPrefixSIDModelTestCase',
+    'ISISSegmentRoutingCleanTestCase',
+    'ISISSRv6LocatorModelTestCase',
     'ISISMigrationStateTestCase',
 )
 
@@ -42,6 +48,27 @@ class ISISInstanceModelTestCase(TestCase):
 
     def test_clean_accepts_complete_auth_pair(self):
         self._instance(area_auth_type='md5', area_auth_key='secret').clean()
+
+    def test_hmac_sha_auth_types_accepted(self):
+        # Modern deployments authenticate with HMAC-SHA rather than md5/text
+        # (IOS-XR hmac-sha-256, Junos/Nokia key-chain algorithms). full_clean
+        # exercises both choice membership and the column length ('hmac-sha-256'
+        # is 12 chars — longer than the original max_length=10).
+        self._instance(
+            area_auth_type='hmac-sha-256', area_auth_key='secret'
+        ).full_clean()
+        self._instance(
+            domain_auth_type='hmac-sha-1', domain_auth_key='secret'
+        ).full_clean()
+
+    def test_fast_reroute_and_microloop_accepted(self):
+        # Process-wide IP-FRR flavour (LFA / Remote-LFA / TI-LFA — IOS-XR
+        # fast-reroute per-prefix [ti-lfa], Junos backup-spf-options, Nokia
+        # loopfree-alternate) and micro-loop
+        # avoidance, TI-LFA's usual companion knob.
+        for flavour in ('lfa', 'remote-lfa', 'ti-lfa'):
+            self._instance(fast_reroute=flavour).full_clean()
+        self._instance(microloop_avoidance=True).full_clean()
 
     def test_clean_accepts_no_auth(self):
         self._instance().clean()
@@ -143,6 +170,20 @@ class ISISInterfaceModelTestCase(TestCase):
 
     def test_clean_accepts_complete_hello_auth_pair(self):
         self._iface(n=10, hello_auth_type='md5', hello_auth_key='secret').clean()
+
+    def test_hello_auth_hmac_sha_accepted(self):
+        self._iface(
+            n=14, hello_auth_type='hmac-sha-256', hello_auth_key='secret'
+        ).full_clean()
+
+    def test_frr_fields_accepted(self):
+        # Per-interface fast-reroute: protection coverage (link/node — Junos
+        # link-protection/node-link-protection, IOS-XR per-prefix protection)
+        # and the tri-state enable, whose False is the EXPLICIT exclude form
+        # (Nokia loopfree-alternate-exclude, IOS-XR fast-reroute exclude).
+        self._iface(n=15, frr_enabled=True, frr_protection='node').full_clean()
+        self._iface(n=16, frr_enabled=False).full_clean()
+        self._iface(n=17, frr_protection='link').full_clean()
 
     def test_clean_accepts_no_hello_auth(self):
         self._iface(n=11).clean()
@@ -262,6 +303,21 @@ class ISISSettingModelTestCase(TestCase):
             ).clean()
         self.assertIn('value', ctx.exception.message_dict)
 
+    def test_te_router_id_keys_accepted(self):
+        # The IS-IS traffic-engineering router-ID knob (IOS/XR 'mpls traffic-eng
+        # router-id'; derived from the global
+        # router-id on Junos/Nokia). Without vocabulary keys a reader-emitted
+        # setting is silently filtered downstream and the value never lands.
+        # full_clean exercises key choice membership; values are strings (an IP
+        # or, on Cisco, an interface reference).
+        for key, value in (
+            ('te_ipv4_router_id', '192.0.2.1'),
+            ('te_ipv6_router_id', '2001:db8::1'),
+        ):
+            ISISSetting(
+                assigned_object=self.instance, key=key, value=value
+            ).full_clean()
+
     def test_clean_rejects_non_boolean_value_for_boolean_key(self):
         with self.assertRaises(ValidationError) as ctx:
             ISISSetting(
@@ -302,6 +358,178 @@ class ISISFlexAlgoModelTestCase(TestCase):
         self.assertEqual(self.instance.flex_algos.count(), 2)
 
 
+class ISISPrefixSIDModelTestCase(TestCase):
+    """Per-prefix prefix-SID: index and absolute label are mutually exclusive
+    (clean()), and the algorithm is 0 or the Flex-Algo range 128-255 (DB CheckConstraint
+    is the backstop for direct writes that bypass full_clean())."""
+
+    @classmethod
+    def setUpTestData(cls):
+        device = create_test_device(name='Device 1')
+        instance = ISISInstance.objects.create(
+            device=device, process_tag='CORE', net='49.0001.0000.0000.0001.00'
+        )
+        loopback = Interface.objects.create(
+            name='Loopback0', device=device, type='virtual'
+        )
+        cls.isis_interface = ISISInterface.objects.create(
+            instance=instance, interface=loopback, address_family='ipv4', passive=True
+        )
+
+    def test_clean_rejects_index_and_label_together(self):
+        sid = ISISPrefixSID(
+            interface=self.isis_interface, algorithm=0, sid_index=10, sid_label=16010
+        )
+        with self.assertRaises(ValidationError):
+            sid.clean()
+
+    def test_clean_accepts_index_only(self):
+        ISISPrefixSID(interface=self.isis_interface, algorithm=0, sid_index=10).clean()
+
+    def test_clean_accepts_label_only(self):
+        ISISPrefixSID(
+            interface=self.isis_interface, algorithm=128, sid_label=16010
+        ).clean()
+
+    def test_clean_rejects_out_of_range_algorithm(self):
+        # clean() must reject the 1-127 gap (and >255) with a ValidationError
+        # (HTTP 400) rather than deferring to the DB CheckConstraint, which would
+        # surface as an IntegrityError (HTTP 500).
+        for bad in (1, 127, 256):
+            with self.subTest(algorithm=bad), self.assertRaises(ValidationError) as ctx:
+                ISISPrefixSID(
+                    interface=self.isis_interface, algorithm=bad, sid_index=1
+                ).clean()
+            self.assertIn('algorithm', ctx.exception.error_dict)
+
+    def test_clean_accepts_valid_algorithm(self):
+        for algo in (0, 128, 255):
+            ISISPrefixSID(
+                interface=self.isis_interface, algorithm=algo, sid_index=1
+            ).clean()  # should not raise
+
+    def test_db_constraint_rejects_out_of_range_algorithm(self):
+        for bad in (1, 127, 256):
+            with (
+                self.subTest(algorithm=bad),
+                self.assertRaises(IntegrityError),
+                transaction.atomic(),
+            ):
+                ISISPrefixSID.objects.create(
+                    interface=self.isis_interface, algorithm=bad, sid_index=1
+                )
+
+    def test_db_constraint_accepts_valid_algorithms(self):
+        # 0 (SPF) and the 128/255 Flex-Algo boundaries must all round-trip.
+        for algo in (0, 128, 255):
+            ISISPrefixSID.objects.create(
+                interface=self.isis_interface, algorithm=algo, sid_index=algo + 1
+            )
+        self.assertEqual(self.isis_interface.prefix_sids.count(), 3)
+
+    def test_unique_interface_algorithm(self):
+        ISISPrefixSID.objects.create(
+            interface=self.isis_interface, algorithm=0, sid_index=1
+        )
+        with self.assertRaises(IntegrityError), transaction.atomic():
+            ISISPrefixSID.objects.create(
+                interface=self.isis_interface, algorithm=0, sid_index=2
+            )
+
+
+class ISISSegmentRoutingCleanTestCase(TestCase):
+    """SRGB and SRLB are each a (start, range) pair — a lone bound is rejected."""
+
+    @classmethod
+    def setUpTestData(cls):
+        device = create_test_device(name='Device 1')
+        cls.instance = ISISInstance.objects.create(
+            device=device, process_tag='CORE', net='49.0001.0000.0000.0001.00'
+        )
+
+    def _sr(self, **kwargs):
+        return ISISSegmentRouting(instance=self.instance, **kwargs)
+
+    def test_clean_rejects_srgb_start_without_range(self):
+        with self.assertRaises(ValidationError):
+            self._sr(srgb_start=16000).clean()
+
+    def test_clean_rejects_srgb_range_without_start(self):
+        with self.assertRaises(ValidationError):
+            self._sr(srgb_range=8000).clean()
+
+    def test_clean_rejects_srlb_start_without_range(self):
+        with self.assertRaises(ValidationError):
+            self._sr(srlb_start=15000).clean()
+
+    def test_clean_accepts_complete_blocks(self):
+        self._sr(
+            srgb_start=16000, srgb_range=8000, srlb_start=15000, srlb_range=1000
+        ).clean()
+
+    def test_clean_accepts_no_blocks(self):
+        self._sr(enabled=True, srv6_enabled=True).clean()
+
+
+class ISISSRv6LocatorModelTestCase(TestCase):
+    """SRv6 locator: RFC 8986 SID structure (block+node+function+argument) must fit
+    128 bits when pinned; (instance, name) is unique; the prefix round-trips."""
+
+    @classmethod
+    def setUpTestData(cls):
+        device = create_test_device(name='Device 1')
+        cls.instance = ISISInstance.objects.create(
+            device=device, process_tag='CORE', net='49.0001.0000.0000.0001.00'
+        )
+
+    def test_clean_rejects_oversized_sid_structure(self):
+        # 40 + 24 + 48 + 32 = 144 > 128
+        loc = ISISSRv6Locator(
+            instance=self.instance,
+            name='LOC1',
+            prefix='2001:db8:0:a2::/64',
+            block_length=40,
+            node_length=24,
+            function_length=48,
+            argument_length=32,
+        )
+        with self.assertRaises(ValidationError):
+            loc.clean()
+
+    def test_clean_accepts_within_128(self):
+        # 40 + 24 + 16 = 80
+        ISISSRv6Locator(
+            instance=self.instance,
+            name='LOC1',
+            prefix='2001:db8:0:a2::/64',
+            block_length=40,
+            node_length=24,
+            function_length=16,
+        ).clean()
+
+    def test_clean_accepts_derived_lengths(self):
+        # All lengths null → the device derives them; only the prefix is required.
+        ISISSRv6Locator(
+            instance=self.instance, name='LOC1', prefix='2001:db8:0:a2::/64'
+        ).clean()
+
+    def test_unique_instance_name(self):
+        ISISSRv6Locator.objects.create(
+            instance=self.instance, name='LOC1', prefix='2001:db8:0:a2::/64'
+        )
+        with self.assertRaises(IntegrityError), transaction.atomic():
+            ISISSRv6Locator.objects.create(
+                instance=self.instance, name='LOC1', prefix='2001:db8:0:a3::/64'
+            )
+
+    def test_prefix_roundtrips(self):
+        loc = ISISSRv6Locator.objects.create(
+            instance=self.instance, name='LOC2', prefix='2001:db8:0:a2::/64'
+        )
+        loc.refresh_from_db()
+        self.assertEqual(str(loc.prefix), '2001:db8:0:a2::/64')
+
+
 class ISISMigrationStateTestCase(TestCase):
     """The IS-IS migration must faithfully capture the models.
 
@@ -322,6 +550,8 @@ class ISISMigrationStateTestCase(TestCase):
         'isisinterfacelevel',
         'isissegmentrouting',
         'isisflexalgo',
+        'isisprefixsid',
+        'isissrv6locator',
     )
 
     def test_migration_bases_include_delete_mixin(self):
@@ -340,6 +570,13 @@ class ISISMigrationStateTestCase(TestCase):
             dropped, [], f'CreateModel bases dropped DeleteMixin for: {dropped}'
         )
 
+    # NetBox overrides makemigrations to refuse unless settings.DEVELOPER is True (or
+    # --check is passed) — see core/management/commands/makemigrations.py. CI's
+    # configuration_testing leaves DEVELOPER=False, so force it on for this in-process
+    # dry-run; without it the command raises "development purposes only" and the guard
+    # never runs. (Local isis_test config sets DEVELOPER=True, which is why this passed
+    # locally but errored in CI.)
+    @override_settings(DEVELOPER=True)
     def test_no_pending_isis_migrations(self):
         # makemigrations is per-app, so scope the assertion to IS-IS models: a pending
         # change to any of them (e.g. a model field dropped without the matching 0033

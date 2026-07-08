@@ -9,6 +9,8 @@ from .isis import (
     ISISInterfaceLevelViewSet,
     ISISSegmentRoutingViewSet,
     ISISFlexAlgoViewSet,
+    ISISPrefixSIDViewSet,
+    ISISSRv6LocatorViewSet,
 )
 from .bgp import *
 from .objects import *
@@ -45,6 +47,8 @@ __all__ = (
     'ISISInterfaceLevelViewSet',
     'ISISSegmentRoutingViewSet',
     'ISISFlexAlgoViewSet',
+    'ISISPrefixSIDViewSet',
+    'ISISSRv6LocatorViewSet',
     'PrefixListViewSet',
     'PrefixListEntryViewSet',
     'RouteMapViewSet',

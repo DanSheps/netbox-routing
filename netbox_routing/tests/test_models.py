@@ -15,6 +15,9 @@ __all__ = (
     'ISISInterfaceModelTestCase',
     'ISISSettingModelTestCase',
     'ISISFlexAlgoModelTestCase',
+    'ISISPrefixSIDModelTestCase',
+    'ISISSegmentRoutingCleanTestCase',
+    'ISISSRv6LocatorModelTestCase',
     'ISISMigrationStateTestCase',
     'EIGRPRouterTestCase',
     'EIGRPAddressFamilyTestCase',
@@ -71,6 +74,10 @@ class AggregateModelTestExportsTestCase(SimpleTestCase):
             ('netbox_routing.tests.test_api', 'netbox_routing.tests.isis.test_api'),
             ('netbox_routing.tests.test_forms', 'netbox_routing.tests.isis.test_forms'),
             ('netbox_routing.tests.test_views', 'netbox_routing.tests.isis.test_views'),
+            (
+                'netbox_routing.tests.test_filtersets',
+                'netbox_routing.tests.isis.test_filtersets',
+            ),
         )
         missing = {}
         for aggregate_name, submodule_name in checks:
@@ -82,4 +89,47 @@ class AggregateModelTestExportsTestCase(SimpleTestCase):
                     missing.setdefault(aggregate_name, []).append(cls_name)
         self.assertEqual(
             missing, {}, f'aggregates fail to re-export IS-IS test cases: {missing}'
+        )
+
+    def test_search_indexes_reexported_in_package(self):
+        # search/__init__.py must re-export every SearchIndex that search/isis.py
+        # exports so `from netbox_routing.search import <Index>` stays in sync with
+        # the @register_search-decorated classes.
+        import importlib
+
+        search = importlib.import_module('netbox_routing.search')
+        isis_search = importlib.import_module('netbox_routing.search.isis')
+        missing = [
+            name
+            for name in getattr(isis_search, '__all__', ())
+            if name not in getattr(search, '__all__', ()) or not hasattr(search, name)
+        ]
+        self.assertEqual(
+            missing, [], f'search package fails to re-export IS-IS indexes: {missing}'
+        )
+
+    def test_isis_serializers_expose_tags(self):
+        # Every IS-IS serializer models a PrimaryModel (tags-capable); tags must be
+        # in Meta.fields or the API can neither return nor accept them.
+        import importlib
+
+        serializers = importlib.import_module('netbox_routing.api.serializers')
+        names = (
+            'ISISFlexAlgoSerializer',
+            'ISISLevelSerializer',
+            'ISISInterfaceLevelSerializer',
+            'ISISSegmentRoutingSerializer',
+            'ISISSettingSerializer',
+            'ISISInstanceSerializer',
+            'ISISInterfaceSerializer',
+            'ISISPrefixSIDSerializer',
+            'ISISSRv6LocatorSerializer',
+        )
+        missing = [
+            name
+            for name in names
+            if 'tags' not in getattr(serializers, name).Meta.fields
+        ]
+        self.assertEqual(
+            missing, [], f'IS-IS serializers missing tags in Meta.fields: {missing}'
         )

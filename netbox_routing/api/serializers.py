@@ -21,6 +21,8 @@ __all__ = (
     'ISISInterfaceLevelSerializer',
     'ISISSegmentRoutingSerializer',
     'ISISFlexAlgoSerializer',
+    'ISISPrefixSIDSerializer',
+    'ISISSRv6LocatorSerializer',
     'EIGRPRouterSerializer',
     'EIGRPAddressFamilySerializer',
     'EIGRPNetworkSerializer',

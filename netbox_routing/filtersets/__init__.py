@@ -23,6 +23,8 @@ __all__ = (
     'ISISInterfaceLevelFilterSet',
     'ISISSegmentRoutingFilterSet',
     'ISISFlexAlgoFilterSet',
+    'ISISPrefixSIDFilterSet',
+    'ISISSRv6LocatorFilterSet',
     'EIGRPRouterFilterSet',
     'EIGRPAddressFamilyFilterSet',
     'EIGRPNetworkFilterSet',

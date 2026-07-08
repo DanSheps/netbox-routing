@@ -9,6 +9,8 @@ from .isis import (
     ISISInterfaceLevelIndex,
     ISISSegmentRoutingIndex,
     ISISFlexAlgoIndex,
+    ISISPrefixSIDIndex,
+    ISISSRv6LocatorIndex,
 )
 from .objects import *
 from .ospf import OSPFInstanceIndex, OSPFAreaIndex
@@ -37,6 +39,8 @@ __all__ = (
     'ISISInterfaceLevelIndex',
     'ISISSegmentRoutingIndex',
     'ISISFlexAlgoIndex',
+    'ISISPrefixSIDIndex',
+    'ISISSRv6LocatorIndex',
     'OSPFInstanceIndex',
     'OSPFAreaIndex',
     'PrefixListIndex',

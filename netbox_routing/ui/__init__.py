@@ -51,4 +51,6 @@ __all__ = (
     'ISISInterfaceLevelPanel',
     'ISISSegmentRoutingPanel',
     'ISISFlexAlgoPanel',
+    'ISISPrefixSIDPanel',
+    'ISISSRv6LocatorPanel',
 )

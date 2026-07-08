@@ -15,6 +15,8 @@ from .isis import (
     ISISInterfaceLevelFilterForm,
     ISISSegmentRoutingFilterForm,
     ISISFlexAlgoFilterForm,
+    ISISPrefixSIDFilterForm,
+    ISISSRv6LocatorFilterForm,
 )
 from .objects import (
     PrefixListFilterForm,
@@ -47,6 +49,8 @@ __all__ = (
     'ISISInterfaceLevelFilterForm',
     'ISISSegmentRoutingFilterForm',
     'ISISFlexAlgoFilterForm',
+    'ISISPrefixSIDFilterForm',
+    'ISISSRv6LocatorFilterForm',
     # OSPF
     'OSPFAreaFilterForm',
     'OSPFInstanceFilterForm',

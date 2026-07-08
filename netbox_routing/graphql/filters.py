@@ -32,6 +32,8 @@ __all__ = (
     'ISISInterfaceLevelFilter',
     'ISISSegmentRoutingFilter',
     'ISISFlexAlgoFilter',
+    'ISISPrefixSIDFilter',
+    'ISISSRv6LocatorFilter',
     'OSPFInstanceFilter',
     'OSPFAreaFilter',
     'OSPFInterfaceFilter',

@@ -25,6 +25,8 @@ from netbox_routing.filtersets.isis import (
     ISISInterfaceLevelFilterSet,
     ISISSegmentRoutingFilterSet,
     ISISFlexAlgoFilterSet,
+    ISISPrefixSIDFilterSet,
+    ISISSRv6LocatorFilterSet,
 )
 from netbox_routing.forms import *
 from netbox_routing.models import (
@@ -35,6 +37,8 @@ from netbox_routing.models import (
     ISISInterfaceLevel,
     ISISSegmentRouting,
     ISISFlexAlgo,
+    ISISPrefixSID,
+    ISISSRv6Locator,
 )
 from netbox_routing.tables.isis import (
     ISISInstanceTable,
@@ -44,6 +48,8 @@ from netbox_routing.tables.isis import (
     ISISInterfaceLevelTable,
     ISISSegmentRoutingTable,
     ISISFlexAlgoTable,
+    ISISPrefixSIDTable,
+    ISISSRv6LocatorTable,
 )
 from netbox_routing.ui import *
 
@@ -79,9 +85,23 @@ __all__ = (
     'ISISFlexAlgoDeleteView',
     'ISISFlexAlgoBulkDeleteView',
     'ISISFlexAlgoBulkImportView',
+    'ISISPrefixSIDListView',
+    'ISISPrefixSIDView',
+    'ISISPrefixSIDEditView',
+    'ISISPrefixSIDDeleteView',
+    'ISISPrefixSIDBulkDeleteView',
+    'ISISPrefixSIDBulkImportView',
+    'ISISSRv6LocatorListView',
+    'ISISSRv6LocatorView',
+    'ISISSRv6LocatorEditView',
+    'ISISSRv6LocatorDeleteView',
+    'ISISSRv6LocatorBulkDeleteView',
+    'ISISSRv6LocatorBulkImportView',
     'ISISInstanceLevelsView',
     'ISISInstanceFlexAlgosView',
+    'ISISInstanceSRv6LocatorsView',
     'ISISInterfaceLevelsView',
+    'ISISInterfacePrefixSidsView',
     'ISISInstanceListView',
     'ISISInstanceView',
     'ISISInstanceInterfacesView',
@@ -346,6 +366,96 @@ class ISISFlexAlgoBulkDeleteView(BulkDeleteView):
     table = ISISFlexAlgoTable
 
 
+# IS-IS Prefix-SID (per-interface node-SID)
+
+@register_model_view(ISISPrefixSID, name='list', path='', detail=False)
+class ISISPrefixSIDListView(ObjectListView):
+    queryset = ISISPrefixSID.objects.select_related('interface__interface')
+    filterset = ISISPrefixSIDFilterSet
+    filterset_form = ISISPrefixSIDFilterForm
+    table = ISISPrefixSIDTable
+
+
+@register_model_view(ISISPrefixSID)
+class ISISPrefixSIDView(ObjectView):
+    queryset = ISISPrefixSID.objects.all()
+    template_name = 'generic/object.html'
+    layout = layout.SimpleLayout(
+        left_panels=[ISISPrefixSIDPanel(), TagsPanel()],
+        right_panels=[panels.CommentsPanel(), panels.RelatedObjectsPanel()],
+    )
+
+
+@register_model_view(ISISPrefixSID, name='add', detail=False)
+@register_model_view(ISISPrefixSID, name='edit')
+class ISISPrefixSIDEditView(ObjectEditView):
+    queryset = ISISPrefixSID.objects.all()
+    form = ISISPrefixSIDForm
+
+
+@register_model_view(ISISPrefixSID, name='delete')
+class ISISPrefixSIDDeleteView(ObjectDeleteView):
+    queryset = ISISPrefixSID.objects.all()
+
+
+@register_model_view(ISISPrefixSID, name='bulk_import', detail=False)
+class ISISPrefixSIDBulkImportView(BulkImportView):
+    queryset = ISISPrefixSID.objects.all()
+    model_form = ISISPrefixSIDImportForm
+
+
+@register_model_view(ISISPrefixSID, name='bulk_delete', detail=False)
+class ISISPrefixSIDBulkDeleteView(BulkDeleteView):
+    queryset = ISISPrefixSID.objects.all()
+    filterset = ISISPrefixSIDFilterSet
+    table = ISISPrefixSIDTable
+
+
+# IS-IS SRv6 Locator (per-instance locator)
+
+@register_model_view(ISISSRv6Locator, name='list', path='', detail=False)
+class ISISSRv6LocatorListView(ObjectListView):
+    queryset = ISISSRv6Locator.objects.select_related('instance__device')
+    filterset = ISISSRv6LocatorFilterSet
+    filterset_form = ISISSRv6LocatorFilterForm
+    table = ISISSRv6LocatorTable
+
+
+@register_model_view(ISISSRv6Locator)
+class ISISSRv6LocatorView(ObjectView):
+    queryset = ISISSRv6Locator.objects.all()
+    template_name = 'generic/object.html'
+    layout = layout.SimpleLayout(
+        left_panels=[ISISSRv6LocatorPanel(), TagsPanel()],
+        right_panels=[panels.CommentsPanel(), panels.RelatedObjectsPanel()],
+    )
+
+
+@register_model_view(ISISSRv6Locator, name='add', detail=False)
+@register_model_view(ISISSRv6Locator, name='edit')
+class ISISSRv6LocatorEditView(ObjectEditView):
+    queryset = ISISSRv6Locator.objects.all()
+    form = ISISSRv6LocatorForm
+
+
+@register_model_view(ISISSRv6Locator, name='delete')
+class ISISSRv6LocatorDeleteView(ObjectDeleteView):
+    queryset = ISISSRv6Locator.objects.all()
+
+
+@register_model_view(ISISSRv6Locator, name='bulk_import', detail=False)
+class ISISSRv6LocatorBulkImportView(BulkImportView):
+    queryset = ISISSRv6Locator.objects.all()
+    model_form = ISISSRv6LocatorImportForm
+
+
+@register_model_view(ISISSRv6Locator, name='bulk_delete', detail=False)
+class ISISSRv6LocatorBulkDeleteView(BulkDeleteView):
+    queryset = ISISSRv6Locator.objects.all()
+    filterset = ISISSRv6LocatorFilterSet
+    table = ISISSRv6LocatorTable
+
+
 @register_model_view(ISISInstance, name='list', path='', detail=False)
 class ISISInstanceListView(ObjectListView):
     queryset = ISISInstance.objects.select_related('device', 'vrf')
@@ -431,6 +541,24 @@ class ISISInstanceFlexAlgosView(ObjectChildrenView):
         )
 
 
+@register_model_view(ISISInstance, name='srv6-locators')
+class ISISInstanceSRv6LocatorsView(ObjectChildrenView):
+    queryset = ISISInstance.objects.all()
+    child_model = ISISSRv6Locator
+    table = ISISSRv6LocatorTable
+    filterset = ISISSRv6LocatorFilterSet
+    tab = ViewTab(
+        label=_('SRv6 Locators'),
+        badge=lambda obj: ISISSRv6Locator.objects.filter(instance=obj).count(),
+        hide_if_empty=False,
+    )
+
+    def get_children(self, request, parent):
+        return self.child_model.objects.filter(instance=parent).select_related(
+            'instance__device'
+        )
+
+
 @register_model_view(ISISInstance, 'add', detail=False)
 @register_model_view(ISISInstance, name='edit')
 class ISISInstanceEditView(ObjectEditView):
@@ -501,6 +629,24 @@ class ISISInterfaceLevelsView(ObjectChildrenView):
     tab = ViewTab(
         label=_('Levels'),
         badge=lambda obj: ISISInterfaceLevel.objects.filter(interface=obj).count(),
+        hide_if_empty=False,
+    )
+
+    def get_children(self, request, parent):
+        return self.child_model.objects.filter(interface=parent).select_related(
+            'interface__interface'
+        )
+
+
+@register_model_view(ISISInterface, name='prefix-sids')
+class ISISInterfacePrefixSidsView(ObjectChildrenView):
+    queryset = ISISInterface.objects.all()
+    child_model = ISISPrefixSID
+    table = ISISPrefixSIDTable
+    filterset = ISISPrefixSIDFilterSet
+    tab = ViewTab(
+        label=_('Prefix-SIDs'),
+        badge=lambda obj: ISISPrefixSID.objects.filter(interface=obj).count(),
         hide_if_empty=False,
     )
 

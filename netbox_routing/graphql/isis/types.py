@@ -15,6 +15,8 @@ from netbox_routing.graphql.isis.filters import (
     ISISInterfaceLevelFilter,
     ISISSegmentRoutingFilter,
     ISISFlexAlgoFilter,
+    ISISPrefixSIDFilter,
+    ISISSRv6LocatorFilter,
 )
 
 __all__ = (
@@ -25,6 +27,8 @@ __all__ = (
     'ISISInterfaceLevelType',
     'ISISSegmentRoutingType',
     'ISISFlexAlgoType',
+    'ISISPrefixSIDType',
+    'ISISSRv6LocatorType',
 )
 
 
@@ -36,6 +40,21 @@ class ISISFlexAlgoType(PrimaryObjectType):
         'ISISInstanceType', strawberry.lazy('netbox_routing.graphql.types')
     ]
     algo_id: int
+
+
+@strawberry_django.type(models.ISISPrefixSID, fields='__all__', filters=ISISPrefixSIDFilter)
+class ISISPrefixSIDType(PrimaryObjectType):
+    interface: Annotated['ISISInterfaceType', strawberry.lazy('netbox_routing.graphql.types')]
+    algorithm: int
+
+
+@strawberry_django.type(models.ISISSRv6Locator, fields='__all__', filters=ISISSRv6LocatorFilter)
+class ISISSRv6LocatorType(PrimaryObjectType):
+    instance: Annotated['ISISInstanceType', strawberry.lazy('netbox_routing.graphql.types')]
+    name: str
+    # prefix is an IPNetworkField; expose it as a string (mirrors StaticRouteType.prefix).
+    # vendor_ext (JSONField) is auto-mapped to the JSON scalar by fields='__all__'.
+    prefix: str | None
 
 
 class ISISSettingsMixin:

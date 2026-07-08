@@ -19,12 +19,27 @@ __all__ = (
     'ISISInterfaceLevelFilter',
     'ISISSegmentRoutingFilter',
     'ISISFlexAlgoFilter',
+    'ISISPrefixSIDFilter',
+    'ISISSRv6LocatorFilter',
 )
 
 
 @strawberry_django.filter(models.ISISFlexAlgo, lookups=True)
 class ISISFlexAlgoFilter(PrimaryModelFilter):
     instance_id: ID | None = strawberry_django.filter_field()
+
+
+@strawberry_django.filter(models.ISISPrefixSID, lookups=True)
+class ISISPrefixSIDFilter(PrimaryModelFilter):
+    interface_id: ID | None = strawberry_django.filter_field()
+
+
+@strawberry_django.filter(models.ISISSRv6Locator, lookups=True)
+class ISISSRv6LocatorFilter(PrimaryModelFilter):
+    instance_id: ID | None = strawberry_django.filter_field()
+    # prefix is an IPNetworkField; declare an explicit string lookup so schema build
+    # does not choke on the custom field type (mirrors StaticRouteFilter.prefix).
+    prefix: StrFilterLookup | None = strawberry_django.filter_field()
 
 
 @strawberry_django.filter(models.ISISSetting, lookups=True)

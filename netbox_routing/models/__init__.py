@@ -9,6 +9,8 @@ from .isis import (
     ISISInterfaceLevel,
     ISISSegmentRouting,
     ISISFlexAlgo,
+    ISISPrefixSID,
+    ISISSRv6Locator,
 )
 from .objects import *
 from .ospf import OSPFArea, OSPFInstance, OSPFInterface
@@ -46,6 +48,8 @@ __all__ = (
     'ISISInterfaceLevel',
     'ISISSegmentRouting',
     'ISISFlexAlgo',
+    'ISISPrefixSID',
+    'ISISSRv6Locator',
     # Objects -> AS Path
     'ASPath',
     'ASPathEntry',

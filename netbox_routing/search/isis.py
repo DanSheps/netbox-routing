@@ -10,6 +10,8 @@ from netbox_routing.models.isis import (
     ISISInterfaceLevel,
     ISISSegmentRouting,
     ISISFlexAlgo,
+    ISISPrefixSID,
+    ISISSRv6Locator,
 )
 
 __all__ = (
@@ -20,6 +22,8 @@ __all__ = (
     'ISISInterfaceLevelIndex',
     'ISISSegmentRoutingIndex',
     'ISISFlexAlgoIndex',
+    'ISISPrefixSIDIndex',
+    'ISISSRv6LocatorIndex',
 )
 
 
@@ -28,6 +32,20 @@ class ISISFlexAlgoIndex(SearchIndex):
     model = ISISFlexAlgo
     fields = (('metric_type', 200), ('comments', 5000))
     display_attrs = ('instance', 'algo_id', 'metric_type')
+
+
+@register_search
+class ISISPrefixSIDIndex(SearchIndex):
+    model = ISISPrefixSID
+    fields = (('comments', 5000),)
+    display_attrs = ('interface', 'algorithm', 'sid_index')
+
+
+@register_search
+class ISISSRv6LocatorIndex(SearchIndex):
+    model = ISISSRv6Locator
+    fields = (('name', 100), ('flavor', 200), ('comments', 5000))
+    display_attrs = ('instance', 'name', 'prefix')
 
 
 @register_search

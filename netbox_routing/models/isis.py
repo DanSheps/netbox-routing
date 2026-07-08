@@ -10,6 +10,7 @@ from django.db import models
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
+from ipam.fields import IPNetworkField
 from netbox.models import PrimaryModel
 
 from netbox_routing import choices
@@ -27,6 +28,8 @@ __all__ = (
     'ISISInterfaceLevel',
     'ISISSegmentRouting',
     'ISISFlexAlgo',
+    'ISISPrefixSID',
+    'ISISSRv6Locator',
 )
 
 
@@ -234,11 +237,13 @@ class ISISInstance(PrimaryModel):
     )
     area_auth_type = models.CharField(
         verbose_name=_('Area auth type'),
-        max_length=10,
+        max_length=16,
         choices=choices.ISISAuthTypeChoices,
         blank=True,
         default='',
-        help_text=_('IS-IS area password authentication type (md5 or text).'),
+        help_text=_(
+            'IS-IS area password authentication type (md5, text or an HMAC-SHA variant).'
+        ),
     )
     area_auth_key = models.CharField(
         verbose_name=_('Area auth key'),
@@ -251,11 +256,13 @@ class ISISInstance(PrimaryModel):
     )
     domain_auth_type = models.CharField(
         verbose_name=_('Domain auth type'),
-        max_length=10,
+        max_length=16,
         choices=choices.ISISAuthTypeChoices,
         blank=True,
         default='',
-        help_text=_('IS-IS domain password authentication type (md5 or text).'),
+        help_text=_(
+            'IS-IS domain password authentication type (md5, text or an HMAC-SHA variant).'
+        ),
     )
     domain_auth_key = models.CharField(
         verbose_name=_('Domain auth key'),
@@ -327,14 +334,51 @@ class ISISInstance(PrimaryModel):
         null=True,
         help_text=_('Seconds to keep the overload bit set after startup.'),
     )
+    suppress_attached_bit = models.BooleanField(
+        verbose_name=_('Suppress attached bit'),
+        blank=True,
+        null=True,
+        help_text=_(
+            'Do not set the ATT (attached) bit in the L1 LSP even when attached '
+            '(Cisco attached-bit send never / Nokia suppress-attached-bit).'
+        ),
+    )
+    ignore_attached_bit = models.BooleanField(
+        verbose_name=_('Ignore attached bit'),
+        blank=True,
+        null=True,
+        help_text=_(
+            'Ignore the ATT bit received from L1/L2 routers, installing no default '
+            'route toward them (ignore-attached-bit).'
+        ),
+    )
     te_enabled = models.BooleanField(
         verbose_name=_('Traffic engineering'),
         blank=True,
         null=True,
         help_text=_('IS-IS traffic-engineering enabled.'),
     )
-    # Segment-routing state (enabled + node MSD, plus the SRGB/Node-SID detail) lives
-    # on the dedicated 1:1 ISISSegmentRouting child model — not duplicated here.
+    fast_reroute = models.CharField(
+        verbose_name=_('Fast reroute'),
+        max_length=16,
+        choices=choices.ISISFastRerouteChoices,
+        blank=True,
+        default='',
+        help_text=_(
+            'Process-wide IP fast-reroute computation (LFA, Remote-LFA or TI-LFA).'
+        ),
+    )
+    microloop_avoidance = models.BooleanField(
+        verbose_name=_('Micro-loop avoidance'),
+        blank=True,
+        null=True,
+        help_text=_(
+            'Delay post-convergence forwarding to avoid transient micro-loops.'
+        ),
+    )
+    # Segment-routing global state (enable, SRGB/SRLB, MSD, SRv6 enable) lives on the
+    # dedicated 1:1 ISISSegmentRouting child; per-prefix SIDs live on ISISPrefixSID
+    # (per ISISInterface) and SRv6 locators on ISISSRv6Locator — not duplicated here.
     distance = models.PositiveSmallIntegerField(
         verbose_name=_('Administrative distance'),
         blank=True,
@@ -465,12 +509,12 @@ class ISISInterface(PrimaryModel):
     passive = models.BooleanField(verbose_name=_('Passive'), blank=True, null=True)
     hello_auth_type = models.CharField(
         verbose_name=_('Hello auth type'),
-        max_length=10,
+        max_length=16,
         choices=choices.ISISAuthTypeChoices,
         blank=True,
         default='',
         help_text=_(
-            'IS-IS per-interface hello (IIH) authentication type (md5 or text).'
+            'IS-IS per-interface hello (IIH) authentication type (md5, text or an HMAC-SHA variant).'
         ),
     )
     hello_auth_key = models.CharField(
@@ -481,6 +525,24 @@ class ISISInterface(PrimaryModel):
         help_text=_(
             'IS-IS per-interface hello (IIH) authentication key (plaintext — '
             'routing-protocol auth, not config access).'
+        ),
+    )
+    frr_enabled = models.BooleanField(
+        verbose_name=_('FRR enabled'),
+        blank=True,
+        null=True,
+        help_text=_(
+            'Fast-reroute backup computation on this interface (False = explicitly excluded).'
+        ),
+    )
+    frr_protection = models.CharField(
+        verbose_name=_('FRR protection'),
+        max_length=8,
+        choices=choices.ISISFrrProtectionChoices,
+        blank=True,
+        default='',
+        help_text=_(
+            'Requested repair coverage: link protection or node (node-link) protection.'
         ),
     )
     bfd_enabled = models.BooleanField(
@@ -639,11 +701,13 @@ class ISISLevel(PrimaryModel):
     )
     auth_type = models.CharField(
         verbose_name=_('Auth type'),
-        max_length=10,
+        max_length=16,
         choices=choices.ISISAuthTypeChoices,
         blank=True,
         default='',
-        help_text=_('Per-level authentication type (md5 or text).'),
+        help_text=_(
+            'Per-level authentication type (md5, text or an HMAC-SHA variant).'
+        ),
     )
     auth_key = models.CharField(
         verbose_name=_('Auth key'),
@@ -760,7 +824,20 @@ class ISISSegmentRouting(PrimaryModel):
         blank=False,
         null=False,
     )
-    enabled = models.BooleanField(verbose_name=_('Enabled'), blank=True, null=True)
+    enabled = models.BooleanField(
+        verbose_name=_('Enabled'),
+        blank=True,
+        null=True,
+        help_text=_('SR-MPLS enabled for this IS-IS instance.'),
+    )
+    srv6_enabled = models.BooleanField(
+        verbose_name=_('SRv6 enabled'),
+        blank=True,
+        null=True,
+        help_text=_(
+            'SRv6 enabled for this IS-IS instance (locators are modelled separately).'
+        ),
+    )
     prefix_sid_range = models.CharField(
         verbose_name=_('Prefix-SID range'),
         max_length=32,
@@ -774,17 +851,14 @@ class ISISSegmentRouting(PrimaryModel):
     srgb_range = models.PositiveIntegerField(
         verbose_name=_('SRGB range size'), blank=True, null=True
     )
-    node_sid_index = models.PositiveIntegerField(
-        verbose_name=_('Node-SID index (IPv4)'), blank=True, null=True
+    srlb_start = models.PositiveIntegerField(
+        verbose_name=_('SRLB start label'),
+        blank=True,
+        null=True,
+        help_text=_('SR Local Block start label (local/adjacency/binding SIDs).'),
     )
-    node_sid_label = models.PositiveIntegerField(
-        verbose_name=_('Node-SID label (IPv4)'), blank=True, null=True
-    )
-    node_sid_v6_index = models.PositiveIntegerField(
-        verbose_name=_('Node-SID index (IPv6)'), blank=True, null=True
-    )
-    node_sid_v6_label = models.PositiveIntegerField(
-        verbose_name=_('Node-SID label (IPv6)'), blank=True, null=True
+    srlb_range = models.PositiveIntegerField(
+        verbose_name=_('SRLB range size'), blank=True, null=True
     )
     maximum_sid_depth = models.PositiveSmallIntegerField(
         verbose_name=_('Maximum SID depth'), blank=True, null=True
@@ -793,13 +867,36 @@ class ISISSegmentRouting(PrimaryModel):
         verbose_name=_('Tunnel-table preference'), blank=True, null=True
     )
 
-    clone_fields = ('enabled', 'prefix_sid_range', 'srgb_start', 'srgb_range')
+    clone_fields = (
+        'enabled',
+        'srv6_enabled',
+        'prefix_sid_range',
+        'srgb_start',
+        'srgb_range',
+    )
     prerequisite_models = ('netbox_routing.ISISInstance',)
 
     class Meta:
         verbose_name = 'IS-IS Segment Routing'
         verbose_name_plural = 'IS-IS Segment Routing'
         ordering = ('instance',)
+
+    def clean(self):
+        super().clean()
+        errors = {}
+        # An SRGB / SRLB block is a (start, range) pair — a lone bound is meaningless.
+        for start_field, range_field, label in (
+            ('srgb_start', 'srgb_range', 'SRGB'),
+            ('srlb_start', 'srlb_range', 'SRLB'),
+        ):
+            start, size = getattr(self, start_field), getattr(self, range_field)
+            if (start is None) != (size is None):
+                missing = range_field if start is not None else start_field
+                errors[missing] = _(
+                    '%(block)s start and range must be set together.'
+                ) % {'block': label}
+        if errors:
+            raise ValidationError(errors)
 
     def __str__(self):
         return f'{self.instance} (SR)'
@@ -888,3 +985,277 @@ class ISISFlexAlgo(PrimaryModel):
 
     def get_absolute_url(self):
         return reverse('plugins:netbox_routing:isisflexalgo', args=[self.pk])
+
+
+class ISISPrefixSID(PrimaryModel):
+    """A per-prefix SR-MPLS prefix-SID (node-SID) advertised for an IS-IS interface.
+
+    Attaches to the loopback's ISISInterface (which already fixes the address
+    family via its unique (interface, address_family)); keyed per algorithm so a
+    prefix can carry a base (algo 0) SID plus one per Flex-Algo. The value is
+    either an index into the SRGB or an absolute label (mutually exclusive).
+    """
+
+    interface = models.ForeignKey(
+        verbose_name=_('Interface'),
+        to='netbox_routing.ISISInterface',
+        related_name='prefix_sids',
+        on_delete=models.CASCADE,
+        blank=False,
+        null=False,
+    )
+    algorithm = models.PositiveSmallIntegerField(
+        verbose_name=_('Algorithm'),
+        default=0,
+        help_text=_('SR algorithm: 0 (SPF) or a Flex-Algo (128-255).'),
+    )
+    sid_index = models.PositiveIntegerField(
+        verbose_name=_('SID index'),
+        blank=True,
+        null=True,
+        help_text=_(
+            'Prefix-SID index into the SRGB (mutually exclusive with an absolute label).'
+        ),
+    )
+    sid_label = models.PositiveIntegerField(
+        verbose_name=_('SID label'),
+        blank=True,
+        null=True,
+        help_text=_('Absolute prefix-SID label (mutually exclusive with an index).'),
+    )
+    n_flag = models.BooleanField(
+        verbose_name=_('Node (N) flag'),
+        blank=True,
+        null=True,
+        help_text=_(
+            'Node-SID flag — the prefix-SID identifies a single node (a /32 or /128 loopback).'
+        ),
+    )
+    no_php = models.BooleanField(
+        verbose_name=_('No-PHP (P) flag'),
+        blank=True,
+        null=True,
+        help_text=_('Disable penultimate-hop-popping for this prefix-SID.'),
+    )
+    explicit_null = models.BooleanField(
+        verbose_name=_('Explicit-null (E) flag'),
+        blank=True,
+        null=True,
+        help_text=_('Request explicit-null instead of PHP for this prefix-SID.'),
+    )
+    readvertise = models.BooleanField(
+        verbose_name=_('Re-advertise (R) flag'),
+        blank=True,
+        null=True,
+        help_text=_(
+            'Prefix-SID is re-advertised (redistributed/leaked) from another level or protocol.'
+        ),
+    )
+
+    clone_fields = ('interface', 'algorithm', 'n_flag', 'no_php', 'explicit_null')
+    prerequisite_models = ('netbox_routing.ISISInterface',)
+
+    class Meta:
+        verbose_name = 'IS-IS Prefix-SID'
+        ordering = ('interface', 'algorithm')
+        constraints = [
+            models.UniqueConstraint(
+                fields=('interface', 'algorithm'),
+                name='netbox_routing_isisprefixsid_interface_algorithm_unique',
+            ),
+            models.CheckConstraint(
+                condition=models.Q(algorithm=0)
+                | models.Q(algorithm__gte=128, algorithm__lte=255),
+                name='netbox_routing_isisprefixsid_algorithm_range',
+            ),
+        ]
+
+    def clean(self):
+        super().clean()
+        # algorithm is 0 (SPF) or a Flex-Algo in 128-255; the 1-127 gap (and any
+        # value above 255) is invalid. Validate here so a bad value raises a
+        # ValidationError (HTTP 400) instead of tripping the CheckConstraint at
+        # save() as an IntegrityError (HTTP 500). Mirrors ISISFlexAlgo.algo_id.
+        if (
+            self.algorithm is not None
+            and self.algorithm != 0
+            and not (128 <= self.algorithm <= 255)
+        ):
+            raise ValidationError(
+                {
+                    'algorithm': _(
+                        'Algorithm must be 0 (SPF) or a Flex-Algo value in 128-255.'
+                    )
+                }
+            )
+        # A prefix-SID is expressed as an SRGB index OR an absolute label, never both.
+        if self.sid_index is not None and self.sid_label is not None:
+            msg = _(
+                'A prefix-SID takes either an index or an absolute label, not both.'
+            )
+            raise ValidationError({'sid_index': msg, 'sid_label': msg})
+
+    def __str__(self):
+        return f'{self.interface} SID (algo {self.algorithm})'
+
+    def get_absolute_url(self):
+        return reverse('plugins:netbox_routing:isisprefixsid', args=[self.pk])
+
+
+class ISISSRv6Locator(PrimaryModel):
+    """An SRv6 locator advertised by an IS-IS instance (RFC 8986 LOC = Block:Node).
+
+    Locators are defined per instance on both vendors but in different config
+    trees (IOS-XR under segment-routing/srv6, Junos under routing-options); the
+    neutral shape here keeps the common attributes as columns and stashes
+    no-cross-vendor-analogue leaves in ``vendor_ext``. The SID-structure lengths
+    are derivable and left null unless a device reports non-default structure.
+    """
+
+    instance = models.ForeignKey(
+        verbose_name=_('Instance'),
+        to='netbox_routing.ISISInstance',
+        related_name='srv6_locators',
+        on_delete=models.CASCADE,
+        blank=False,
+        null=False,
+    )
+    name = models.CharField(verbose_name=_('Name'), max_length=64)
+    prefix = IPNetworkField(
+        verbose_name=_('Prefix'),
+        help_text=_('IPv6 locator prefix (RFC 8986 LOC = Block:Node).'),
+    )
+    algorithm = models.PositiveSmallIntegerField(
+        verbose_name=_('Algorithm'),
+        blank=True,
+        null=True,
+        help_text=_(
+            'SR algorithm bound to the locator (0 = SPF, 128-255 = Flex-Algo).'
+        ),
+    )
+    is_anycast = models.BooleanField(
+        verbose_name=_('Anycast'),
+        blank=True,
+        null=True,
+        help_text=_(
+            'Anycast locator shared by several nodes (sets the prefix-attribute A-flag).'
+        ),
+    )
+    is_micro_segment = models.BooleanField(
+        verbose_name=_('Micro-segment (uSID)'),
+        blank=True,
+        null=True,
+        help_text=_(
+            'uSID / micro-segment locator (XR micro-segment behavior, Junos micro-sid).'
+        ),
+    )
+    flavor = models.CharField(
+        verbose_name=_('Flavor'),
+        max_length=64,
+        blank=True,
+        default='',
+        help_text=_(
+            'END-SID behaviour flavor(s) as reported, e.g. "psp usd" (Junos set) or "psp-usd" (XR).'
+        ),
+    )
+    block_length = models.PositiveSmallIntegerField(
+        verbose_name=_('Block length'),
+        blank=True,
+        null=True,
+        help_text=_(
+            'Locator-Block length in bits (RFC 8986 B); null = derive from prefix.'
+        ),
+    )
+    node_length = models.PositiveSmallIntegerField(
+        verbose_name=_('Node length'),
+        blank=True,
+        null=True,
+        help_text=_(
+            'Locator-Node length in bits (RFC 8986 N); null = derive from prefix.'
+        ),
+    )
+    function_length = models.PositiveSmallIntegerField(
+        verbose_name=_('Function length'),
+        blank=True,
+        null=True,
+        help_text=_('Function length in bits (RFC 8986 F); null = vendor default.'),
+    )
+    argument_length = models.PositiveSmallIntegerField(
+        verbose_name=_('Argument length'),
+        blank=True,
+        null=True,
+        help_text=_('Argument length in bits (RFC 8986 A); null = none.'),
+    )
+    isis_level = models.PositiveSmallIntegerField(
+        verbose_name=_('IS-IS level'),
+        choices=choices.ISISLevelChoices,
+        blank=True,
+        null=True,
+        help_text=_(
+            'Advertise the locator in this level only (IOS-XR); null = both levels.'
+        ),
+    )
+    enabled = models.BooleanField(
+        verbose_name=_('Enabled'),
+        blank=True,
+        null=True,
+        help_text=_('Locator is attached/advertised by the IS-IS instance.'),
+    )
+    vendor_ext = models.JSONField(
+        verbose_name=_('Vendor extensions'),
+        blank=True,
+        default=dict,
+        help_text=_(
+            'No-cross-vendor-analogue leaves (Junos end-sid/block sizing, XR uSID carrier format).'
+        ),
+    )
+
+    clone_fields = (
+        'instance',
+        'algorithm',
+        'is_micro_segment',
+        'flavor',
+        'block_length',
+        'node_length',
+    )
+    prerequisite_models = ('netbox_routing.ISISInstance',)
+
+    class Meta:
+        verbose_name = 'IS-IS SRv6 Locator'
+        ordering = ('instance', 'name')
+        constraints = [
+            models.UniqueConstraint(
+                fields=('instance', 'name'),
+                name='netbox_routing_isissrv6locator_instance_name_unique',
+            ),
+        ]
+
+    def clean(self):
+        super().clean()
+        # RFC 8986: L + F + A <= 128 (L = block + node). Validate only when the
+        # relevant lengths are pinned; otherwise the device derives them.
+        loc = (self.block_length or 0) + (self.node_length or 0)
+        total = loc + (self.function_length or 0) + (self.argument_length or 0)
+        if (
+            any(
+                v is not None
+                for v in (
+                    self.block_length,
+                    self.node_length,
+                    self.function_length,
+                    self.argument_length,
+                )
+            )
+            and total > 128
+        ):
+            raise ValidationError(
+                _(
+                    'SID structure exceeds 128 bits: block + node + function + argument must be <= 128.'
+                )
+            )
+
+    def __str__(self):
+        return f'{self.instance} SRv6 {self.name}'
+
+    def get_absolute_url(self):
+        return reverse('plugins:netbox_routing:isissrv6locator', args=[self.pk])

@@ -13,6 +13,8 @@ from netbox_routing.api.serializers import (
     ISISInterfaceLevelSerializer,
     ISISSegmentRoutingSerializer,
     ISISFlexAlgoSerializer,
+    ISISPrefixSIDSerializer,
+    ISISSRv6LocatorSerializer,
 )
 from netbox_routing.models import (
     ISISInstance,
@@ -22,6 +24,8 @@ from netbox_routing.models import (
     ISISInterfaceLevel,
     ISISSegmentRouting,
     ISISFlexAlgo,
+    ISISPrefixSID,
+    ISISSRv6Locator,
 )
 
 __all__ = (
@@ -32,6 +36,8 @@ __all__ = (
     'ISISInterfaceLevelViewSet',
     'ISISSegmentRoutingViewSet',
     'ISISFlexAlgoViewSet',
+    'ISISPrefixSIDViewSet',
+    'ISISSRv6LocatorViewSet',
 )
 
 
@@ -41,6 +47,20 @@ class ISISFlexAlgoViewSet(NetBoxModelViewSet):
     queryset = ISISFlexAlgo.objects.select_related('instance__device')
     serializer_class = ISISFlexAlgoSerializer
     filterset_class = filtersets.ISISFlexAlgoFilterSet
+
+
+class ISISPrefixSIDViewSet(NetBoxModelViewSet):
+    # str(self) -> str(ISISInterface) -> ISISInterface.interface (dcim Interface)
+    queryset = ISISPrefixSID.objects.select_related('interface__interface')
+    serializer_class = ISISPrefixSIDSerializer
+    filterset_class = filtersets.ISISPrefixSIDFilterSet
+
+
+class ISISSRv6LocatorViewSet(NetBoxModelViewSet):
+    # str(self) -> str(instance) -> instance.device
+    queryset = ISISSRv6Locator.objects.select_related('instance__device')
+    serializer_class = ISISSRv6LocatorSerializer
+    filterset_class = filtersets.ISISSRv6LocatorFilterSet
 
 
 class ISISSettingViewSet(NetBoxModelViewSet):

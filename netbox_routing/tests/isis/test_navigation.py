@@ -22,6 +22,8 @@ class ISISNavigationTestCase(SimpleTestCase):
         'isislevel',
         'isissegmentrouting',
         'isisflexalgo',
+        'isisprefixsid',
+        'isissrv6locator',
     )
 
     def test_menu_items_cover_all_isis_models(self):

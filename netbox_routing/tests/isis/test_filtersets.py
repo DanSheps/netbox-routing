@@ -1,17 +1,30 @@
 # SPDX-License-Identifier: Apache-2.0
 
+from django.contrib.contenttypes.models import ContentType
 from django.test import TestCase
 
 from dcim.models import Device, Interface
 from ipam.models import VRF
 from utilities.testing import create_test_device
 
-from netbox_routing.filtersets import ISISInstanceFilterSet, ISISInterfaceFilterSet
-from netbox_routing.models import ISISInstance, ISISInterface
+from netbox_routing.filtersets import (
+    ISISInstanceFilterSet,
+    ISISInterfaceFilterSet,
+    ISISSettingFilterSet,
+    ISISSRv6LocatorFilterSet,
+)
+from netbox_routing.models import (
+    ISISInstance,
+    ISISInterface,
+    ISISSetting,
+    ISISSRv6Locator,
+)
 
 __all__ = (
     'ISISInstanceFilterSetTestCase',
     'ISISInterfaceFilterSetTestCase',
+    'ISISSettingFilterSetTestCase',
+    'ISISSRv6LocatorFilterSetTestCase',
 )
 
 
@@ -243,4 +256,76 @@ class ISISInterfaceFilterSetTestCase(TestCase):
 
     def test_hello_auth_type(self):
         params = {'hello_auth_type': ['md5']}
+        self.assertEqual(self.filterset(params, self.queryset).qs.count(), 1)
+
+
+class ISISSRv6LocatorFilterSetTestCase(TestCase):
+    queryset = ISISSRv6Locator.objects.all()
+    filterset = ISISSRv6LocatorFilterSet
+
+    @classmethod
+    def setUpTestData(cls):
+        device = create_test_device(name='Device 1')
+        instance = ISISInstance.objects.create(
+            device=device, process_tag='CORE', net='49.0001.0000.0000.0001.00'
+        )
+        ISISSRv6Locator.objects.create(
+            instance=instance, name='LOC-A', prefix='fc00:a::/48'
+        )
+        ISISSRv6Locator.objects.create(
+            instance=instance, name='LOC-B', prefix='fc00:b::/48'
+        )
+
+    def test_q_matches_name(self):
+        # search() matches on the locator name; before the fix it was a no-op that
+        # returned the full queryset regardless of the term.
+        self.assertEqual(self.filterset({'q': 'LOC-A'}, self.queryset).qs.count(), 1)
+
+    def test_search_ignores_blank(self):
+        # A blank/whitespace term must not filter anything out.
+        self.assertEqual(self.filterset().search(self.queryset, 'q', '   ').count(), 2)
+
+    def test_name(self):
+        params = {'name': ['LOC-B']}
+        self.assertEqual(self.filterset(params, self.queryset).qs.count(), 1)
+
+
+class ISISSettingFilterSetTestCase(TestCase):
+    queryset = ISISSetting.objects.all()
+    filterset = ISISSettingFilterSet
+
+    @classmethod
+    def setUpTestData(cls):
+        device = create_test_device(name='Device 1')
+        cls.inst1 = ISISInstance.objects.create(
+            device=device, process_tag='CORE', net='49.0001.0000.0000.0001.00'
+        )
+        cls.inst2 = ISISInstance.objects.create(
+            device=device, process_tag='EDGE', net='49.0001.0000.0000.0002.00'
+        )
+        ct = ContentType.objects.get_for_model(ISISInstance)
+        ISISSetting.objects.create(
+            assigned_object_type=ct,
+            assigned_object_id=cls.inst1.pk,
+            key='ldp_sync',
+            value='true',
+        )
+        ISISSetting.objects.create(
+            assigned_object_type=ct,
+            assigned_object_id=cls.inst2.pk,
+            key='graceful_restart',
+            value='true',
+        )
+
+    def test_assigned_object_type(self):
+        ct = ContentType.objects.get_for_model(ISISInstance)
+        params = {'assigned_object_type': ct.pk}
+        self.assertEqual(self.filterset(params, self.queryset).qs.count(), 2)
+
+    def test_assigned_object_id(self):
+        params = {'assigned_object_id': [self.inst1.pk]}
+        self.assertEqual(self.filterset(params, self.queryset).qs.count(), 1)
+
+    def test_key(self):
+        params = {'key': ['ldp_sync']}
         self.assertEqual(self.filterset(params, self.queryset).qs.count(), 1)

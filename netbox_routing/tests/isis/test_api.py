@@ -18,6 +18,8 @@ from netbox_routing.models import (
     ISISInterfaceLevel,
     ISISSegmentRouting,
     ISISFlexAlgo,
+    ISISPrefixSID,
+    ISISSRv6Locator,
 )
 
 __all__ = (
@@ -28,6 +30,8 @@ __all__ = (
     'ISISInterfaceLevelAPITestCase',
     'ISISSegmentRoutingAPITestCase',
     'ISISFlexAlgoAPITestCase',
+    'ISISPrefixSIDAPITestCase',
+    'ISISSRv6LocatorAPITestCase',
     'ISISSettingPrefetchAPITestCase',
     'ISISChildDisplayPrefetchAPITestCase',
     'ISISSettingAssignmentAPITestCase',
@@ -395,6 +399,65 @@ class ISISFlexAlgoAPITestCase(APIViewTestCases.APIViewTestCase):
                 'metric_type': 'delay-metric',
                 'priority': 200,
             },
+        ]
+
+
+class ISISPrefixSIDAPITestCase(APIViewTestCases.APIViewTestCase):
+    model = ISISPrefixSID
+    view_namespace = 'plugins-api:netbox_routing'
+    graphql_base_name = 'isis_prefix_sid'
+    brief_fields = ['algorithm', 'display', 'id', 'sid_index', 'url']
+    user_permissions = ('netbox_routing.view_isisinterface',)
+    bulk_update_data = {'no_php': True}
+
+    @classmethod
+    def setUpTestData(cls):
+        device = create_test_device(name='Test Device')
+        inst = ISISInstance.objects.create(device=device, process_tag='0')
+        ifaces = [
+            Interface.objects.create(device=device, name=f'Loopback {n}', type='virtual')
+            for n in range(1, 5)
+        ]
+        ri = [
+            ISISInterface.objects.create(
+                instance=inst, interface=ifaces[i], address_family='ipv4', passive=True
+            )
+            for i in range(4)
+        ]
+        ISISPrefixSID.objects.create(interface=ri[0], algorithm=0, sid_index=10, n_flag=True)
+        ISISPrefixSID.objects.create(interface=ri[1], algorithm=128, sid_index=20)
+        ISISPrefixSID.objects.create(interface=ri[2], algorithm=0, sid_label=16030)
+        cls.create_data = [
+            {'interface': ri[3].pk, 'algorithm': 0, 'sid_index': 40, 'n_flag': True},
+        ]
+
+
+class ISISSRv6LocatorAPITestCase(APIViewTestCases.APIViewTestCase):
+    model = ISISSRv6Locator
+    view_namespace = 'plugins-api:netbox_routing'
+    graphql_base_name = 'isis_srv6_locator'
+    brief_fields = ['display', 'id', 'name', 'prefix', 'url']
+    user_permissions = ('netbox_routing.view_isisinstance',)
+    bulk_update_data = {'is_anycast': True}
+
+    @classmethod
+    def setUpTestData(cls):
+        device = create_test_device(name='Test Device')
+        insts = [
+            ISISInstance.objects.create(device=device, process_tag=str(n)) for n in range(2)
+        ]
+        ISISSRv6Locator.objects.create(
+            instance=insts[0], name='LOC1', prefix='2001:db8:0:a1::/64', enabled=True
+        )
+        ISISSRv6Locator.objects.create(
+            instance=insts[0], name='LOC2', prefix='2001:db8:0:a2::/64',
+            is_micro_segment=True, flavor='psp-usd',
+        )
+        ISISSRv6Locator.objects.create(
+            instance=insts[1], name='LOC1', prefix='2001:db8:0:b1::/64', algorithm=128
+        )
+        cls.create_data = [
+            {'instance': insts[1].pk, 'name': 'LOC-NEW', 'prefix': '2001:db8:0:ff::/64', 'enabled': True},
         ]
 
 

@@ -15,6 +15,8 @@ __all__ = (
     'ISISInterfaceLevelPanel',
     'ISISSegmentRoutingPanel',
     'ISISFlexAlgoPanel',
+    'ISISPrefixSIDPanel',
+    'ISISSRv6LocatorPanel',
 )
 
 
@@ -32,6 +34,37 @@ class ISISFlexAlgoPanel(panels.ObjectAttributesPanel):
     admin_group_include_all = attrs.TextAttr(
         'admin_group_include_all', label=_('Admin-group Include-All')
     )
+
+
+class ISISPrefixSIDPanel(panels.ObjectAttributesPanel):
+    interface = attrs.RelatedObjectAttr('interface', linkify=True, label=_('Interface'))
+    algorithm = attrs.NumericAttr('algorithm', label=_('Algorithm'))
+    sid_index = attrs.NumericAttr('sid_index', label=_('SID Index'))
+    sid_label = attrs.NumericAttr('sid_label', label=_('SID Label'))
+    n_flag = attrs.BooleanAttr('n_flag', label=_('Node (N) Flag'))
+    no_php = attrs.BooleanAttr('no_php', label=_('No-PHP (P) Flag'))
+    explicit_null = attrs.BooleanAttr(
+        'explicit_null', label=_('Explicit-null (E) Flag')
+    )
+    readvertise = attrs.BooleanAttr('readvertise', label=_('Re-advertise (R) Flag'))
+
+
+class ISISSRv6LocatorPanel(panels.ObjectAttributesPanel):
+    instance = attrs.RelatedObjectAttr('instance', linkify=True, label=_('Instance'))
+    name = attrs.TextAttr('name', label=_('Name'))
+    prefix = attrs.TextAttr('prefix', label=_('Prefix'))
+    algorithm = attrs.NumericAttr('algorithm', label=_('Algorithm'))
+    is_anycast = attrs.BooleanAttr('is_anycast', label=_('Anycast'))
+    is_micro_segment = attrs.BooleanAttr(
+        'is_micro_segment', label=_('Micro-segment (uSID)')
+    )
+    flavor = attrs.TextAttr('flavor', label=_('Flavor'))
+    isis_level = attrs.ChoiceAttr('isis_level', label=_('IS-IS Level'))
+    block_length = attrs.NumericAttr('block_length', label=_('Block Length'))
+    node_length = attrs.NumericAttr('node_length', label=_('Node Length'))
+    function_length = attrs.NumericAttr('function_length', label=_('Function Length'))
+    argument_length = attrs.NumericAttr('argument_length', label=_('Argument Length'))
+    enabled = attrs.BooleanAttr('enabled', label=_('Enabled'))
 
 
 class ISISLevelPanel(panels.ObjectAttributesPanel):
@@ -65,21 +98,12 @@ class ISISInterfaceLevelPanel(panels.ObjectAttributesPanel):
 class ISISSegmentRoutingPanel(panels.ObjectAttributesPanel):
     instance = attrs.RelatedObjectAttr('instance', linkify=True, label=_('Instance'))
     enabled = attrs.BooleanAttr('enabled', label=_('Enabled'))
+    srv6_enabled = attrs.BooleanAttr('srv6_enabled', label=_('SRv6 Enabled'))
     prefix_sid_range = attrs.TextAttr('prefix_sid_range', label=_('Prefix-SID Range'))
     srgb_start = attrs.NumericAttr('srgb_start', label=_('SRGB Start'))
     srgb_range = attrs.NumericAttr('srgb_range', label=_('SRGB Range'))
-    node_sid_index = attrs.NumericAttr(
-        'node_sid_index', label=_('Node-SID Index (IPv4)')
-    )
-    node_sid_label = attrs.NumericAttr(
-        'node_sid_label', label=_('Node-SID Label (IPv4)')
-    )
-    node_sid_v6_index = attrs.NumericAttr(
-        'node_sid_v6_index', label=_('Node-SID Index (IPv6)')
-    )
-    node_sid_v6_label = attrs.NumericAttr(
-        'node_sid_v6_label', label=_('Node-SID Label (IPv6)')
-    )
+    srlb_start = attrs.NumericAttr('srlb_start', label=_('SRLB Start'))
+    srlb_range = attrs.NumericAttr('srlb_range', label=_('SRLB Range'))
     maximum_sid_depth = attrs.NumericAttr(
         'maximum_sid_depth', label=_('Maximum SID Depth')
     )
@@ -89,7 +113,7 @@ class ISISSegmentRoutingPanel(panels.ObjectAttributesPanel):
 
 
 class ISISInstancePanel(panels.ObjectAttributesPanel):
-    device = attrs.RelatedObjectAttr('device', label=_('Device'))
+    device = attrs.RelatedObjectAttr('device', linkify=True, label=_('Device'))
     vrf = attrs.RelatedObjectAttr('vrf', linkify=True)
     process_tag = attrs.TextAttr('process_tag', label=_('Process Tag'))
     net = attrs.TextAttr('net', label=_('NET'))
@@ -110,6 +134,12 @@ class ISISInstanceSettingsPanel(panels.ObjectAttributesPanel):
     overload_timeout = attrs.NumericAttr(
         'overload_timeout', label=_('Overload Timeout')
     )
+    suppress_attached_bit = attrs.BooleanAttr(
+        'suppress_attached_bit', label=_('Suppress Attached Bit')
+    )
+    ignore_attached_bit = attrs.BooleanAttr(
+        'ignore_attached_bit', label=_('Ignore Attached Bit')
+    )
     spf_initial_wait = attrs.NumericAttr(
         'spf_initial_wait', label=_('SPF Initial Wait')
     )
@@ -124,6 +154,10 @@ class ISISInstanceSettingsPanel(panels.ObjectAttributesPanel):
     )
     lsp_mtu = attrs.NumericAttr('lsp_mtu', label=_('LSP MTU'))
     te_enabled = attrs.BooleanAttr('te_enabled', label=_('Traffic Engineering'))
+    fast_reroute = attrs.ChoiceAttr('fast_reroute', label=_('Fast Reroute'))
+    microloop_avoidance = attrs.BooleanAttr(
+        'microloop_avoidance', label=_('Micro-loop Avoidance')
+    )
     distance = attrs.NumericAttr('distance', label=_('Distance'))
     maximum_paths = attrs.NumericAttr('maximum_paths', label=_('Maximum Paths'))
     reference_bandwidth = attrs.NumericAttr(
@@ -132,9 +166,9 @@ class ISISInstanceSettingsPanel(panels.ObjectAttributesPanel):
 
 
 class ISISInterfacePanel(panels.ObjectAttributesPanel):
-    device = attrs.RelatedObjectAttr('instance.device', label=_('Device'))
-    instance = attrs.RelatedObjectAttr('instance', label=_('Instance'))
-    interface = attrs.RelatedObjectAttr('interface', label=_('Interface'))
+    device = attrs.RelatedObjectAttr('instance.device', linkify=True, label=_('Device'))
+    instance = attrs.RelatedObjectAttr('instance', linkify=True, label=_('Instance'))
+    interface = attrs.RelatedObjectAttr('interface', linkify=True, label=_('Interface'))
     address_family = attrs.ChoiceAttr('address_family', label=_('Address Family'))
 
 
@@ -144,6 +178,8 @@ class ISISInterfaceSettingsPanel(panels.ObjectAttributesPanel):
     metric = attrs.NumericAttr('metric', label=_('Metric'))
     passive = attrs.BooleanAttr('passive', label=_('Passive'))
     bfd_enabled = attrs.BooleanAttr('bfd_enabled', label=_('BFD Enabled'))
+    frr_enabled = attrs.BooleanAttr('frr_enabled', label=_('FRR Enabled'))
+    frr_protection = attrs.ChoiceAttr('frr_protection', label=_('FRR Protection'))
     csnp_interval = attrs.NumericAttr('csnp_interval', label=_('CSNP Interval'))
     retransmit_interval = attrs.NumericAttr(
         'retransmit_interval', label=_('Retransmit Interval')
@@ -159,4 +195,4 @@ class ISISSettingPanel(panels.ObjectAttributesPanel):
     assigned_object_type = ContentTypeAttribute('assigned_object_type', label=_('Type'))
     assigned_object = attrs.RelatedObjectAttr('assigned_object', linkify=True)
     name = attrs.TextAttr('key', label=_('Name'))
-    value = attrs.TextAttr('value')
+    value = attrs.TextAttr('value', label=_('Value'))

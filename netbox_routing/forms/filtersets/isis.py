@@ -25,6 +25,8 @@ from netbox_routing.models import (
     ISISInterfaceLevel,
     ISISSegmentRouting,
     ISISFlexAlgo,
+    ISISPrefixSID,
+    ISISSRv6Locator,
 )
 
 __all__ = (
@@ -35,11 +37,25 @@ __all__ = (
     'ISISInterfaceLevelFilterForm',
     'ISISSegmentRoutingFilterForm',
     'ISISFlexAlgoFilterForm',
+    'ISISPrefixSIDFilterForm',
+    'ISISSRv6LocatorFilterForm',
 )
 
 
 class ISISFlexAlgoFilterForm(NetBoxModelFilterSetForm):
     model = ISISFlexAlgo
+    fieldsets = (FieldSet('q', 'filter_id', 'tag'),)
+    tag = TagFilterField(model)
+
+
+class ISISPrefixSIDFilterForm(NetBoxModelFilterSetForm):
+    model = ISISPrefixSID
+    fieldsets = (FieldSet('q', 'filter_id', 'tag'),)
+    tag = TagFilterField(model)
+
+
+class ISISSRv6LocatorFilterForm(NetBoxModelFilterSetForm):
+    model = ISISSRv6Locator
     fieldsets = (FieldSet('q', 'filter_id', 'tag'),)
     tag = TagFilterField(model)
 

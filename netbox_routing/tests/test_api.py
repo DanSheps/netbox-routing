@@ -21,6 +21,8 @@ __all__ = (
     'ISISInterfaceLevelAPITestCase',
     'ISISSegmentRoutingAPITestCase',
     'ISISFlexAlgoAPITestCase',
+    'ISISPrefixSIDAPITestCase',
+    'ISISSRv6LocatorAPITestCase',
     'ISISSettingPrefetchAPITestCase',
     'ISISChildDisplayPrefetchAPITestCase',
     'ISISSettingAssignmentAPITestCase',

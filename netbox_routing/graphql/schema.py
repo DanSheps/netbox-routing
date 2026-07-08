@@ -35,6 +35,8 @@ from .isis.types import (
     ISISInterfaceLevelType,
     ISISSegmentRoutingType,
     ISISFlexAlgoType,
+    ISISPrefixSIDType,
+    ISISSRv6LocatorType,
 )
 from .ospf.types import OSPFInstanceType, OSPFAreaType, OSPFInterfaceType
 from .static.types import StaticRouteType
@@ -80,6 +82,12 @@ class ISISQuery:
 
     isis_flex_algo: ISISFlexAlgoType = strawberry_django.field()
     isis_flex_algo_list: list[ISISFlexAlgoType] = strawberry_django.field()
+
+    isis_prefix_sid: ISISPrefixSIDType = strawberry_django.field()
+    isis_prefix_sid_list: list[ISISPrefixSIDType] = strawberry_django.field()
+
+    isis_srv6_locator: ISISSRv6LocatorType = strawberry_django.field()
+    isis_srv6_locator_list: list[ISISSRv6LocatorType] = strawberry_django.field()
 
 
 @strawberry.type(name="Query")

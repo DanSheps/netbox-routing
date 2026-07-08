@@ -55,6 +55,10 @@ urlpatterns = [
         include(get_model_urls(app_name, 'isisflexalgo', detail=False)),
     ),
     path('isis/flex-algo/<int:pk>/', include(get_model_urls(app_name, 'isisflexalgo'))),
+    path('isis/prefix-sid/', include(get_model_urls(app_name, 'isisprefixsid', detail=False))),
+    path('isis/prefix-sid/<int:pk>/', include(get_model_urls(app_name, 'isisprefixsid'))),
+    path('isis/srv6-locator/', include(get_model_urls(app_name, 'isissrv6locator', detail=False))),
+    path('isis/srv6-locator/<int:pk>/', include(get_model_urls(app_name, 'isissrv6locator'))),
     path(
         'isis/instance/',
         include(get_model_urls(app_name, 'isisinstance', detail=False)),

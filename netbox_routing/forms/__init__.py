@@ -55,6 +55,12 @@ __all__ = (
     'ISISFlexAlgoForm',
     'ISISFlexAlgoFilterForm',
     'ISISFlexAlgoImportForm',
+    'ISISPrefixSIDForm',
+    'ISISPrefixSIDFilterForm',
+    'ISISPrefixSIDImportForm',
+    'ISISSRv6LocatorForm',
+    'ISISSRv6LocatorFilterForm',
+    'ISISSRv6LocatorImportForm',
     # EIGRP
     'EIGRPRouterForm',
     'EIGRPRouterBulkEditForm',

@@ -31,6 +31,8 @@ __all__ = (
     'ISISInterfaceLevelType',
     'ISISSegmentRoutingType',
     'ISISFlexAlgoType',
+    'ISISPrefixSIDType',
+    'ISISSRv6LocatorType',
     'OSPFInstanceType',
     'OSPFAreaType',
     'OSPFInterfaceType',
