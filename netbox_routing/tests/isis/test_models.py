@@ -541,6 +541,51 @@ class ISISSRv6LocatorModelTestCase(TestCase):
         loc.refresh_from_db()
         self.assertEqual(str(loc.prefix), '2001:db8:0:a2::/64')
 
+    def test_clean_rejects_out_of_range_algorithm(self):
+        # algorithm is 0 (SPF) or a Flex-Algo in 128-255; the 1-127 gap and >255
+        # must be rejected at clean() (mirrors ISISPrefixSID).
+        for bad in (1, 127, 256):
+            with self.subTest(algorithm=bad), self.assertRaises(ValidationError) as ctx:
+                ISISSRv6Locator(
+                    instance=self.instance,
+                    name='LOC-ALG',
+                    prefix='2001:db8:0:a2::/64',
+                    algorithm=bad,
+                ).clean()
+            self.assertIn('algorithm', ctx.exception.error_dict)
+
+    def test_clean_accepts_valid_algorithm(self):
+        for algo in (0, 128, 255, None):
+            with self.subTest(algorithm=algo):
+                ISISSRv6Locator(
+                    instance=self.instance,
+                    name='LOC-ALG',
+                    prefix='2001:db8:0:a2::/64',
+                    algorithm=algo,
+                ).clean()
+
+    def test_db_constraint_rejects_out_of_range_algorithm(self):
+        # save() bypasses clean(); the DB CheckConstraint is the backstop.
+        with self.assertRaises(IntegrityError), transaction.atomic():
+            ISISSRv6Locator.objects.create(
+                instance=self.instance,
+                name='LOC-DBALG',
+                prefix='2001:db8:0:a2::/64',
+                algorithm=1,
+            )
+
+    def test_clean_rejects_oversized_derived_locator(self):
+        # block/node unpinned → the locator length is the prefix length (120), not
+        # 0; 120 + 16-bit function = 136 > 128 must be rejected.
+        loc = ISISSRv6Locator(
+            instance=self.instance,
+            name='LOC-DERIVED',
+            prefix='2001:db8:0:a2::/120',
+            function_length=16,
+        )
+        with self.assertRaises(ValidationError):
+            loc.clean()
+
 
 class ISISMigrationStateTestCase(TestCase):
     """The IS-IS migration must faithfully capture the models.

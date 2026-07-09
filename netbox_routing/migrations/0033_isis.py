@@ -825,4 +825,16 @@ class Migration(migrations.Migration):
                 name='netbox_routing_isissrv6locator_instance_name_unique',
             ),
         ),
+        migrations.AddConstraint(
+            model_name='isissrv6locator',
+            constraint=models.CheckConstraint(
+                condition=models.Q(
+                    ('algorithm', 0),
+                    models.Q(('algorithm__gte', 128), ('algorithm__lte', 255)),
+                    ('algorithm__isnull', True),
+                    _connector='OR',
+                ),
+                name='netbox_routing_isissrv6locator_algorithm_range',
+            ),
+        ),
     ]

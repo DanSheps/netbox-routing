@@ -2,6 +2,7 @@
 
 import re
 
+import netaddr
 from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ValidationError
@@ -1226,13 +1227,40 @@ class ISISSRv6Locator(PrimaryModel):
                 fields=('instance', 'name'),
                 name='netbox_routing_isissrv6locator_instance_name_unique',
             ),
+            models.CheckConstraint(
+                condition=models.Q(algorithm=0)
+                | models.Q(algorithm__gte=128, algorithm__lte=255)
+                | models.Q(algorithm__isnull=True),
+                name='netbox_routing_isissrv6locator_algorithm_range',
+            ),
         ]
 
     def clean(self):
         super().clean()
+        # algorithm is 0 (SPF) or a Flex-Algo in 128-255; reject the 1-127 gap (and
+        # >255) at clean() so the API/UI return a 400 instead of tripping the DB
+        # CheckConstraint. Mirrors ISISPrefixSID.
+        if (
+            self.algorithm is not None
+            and self.algorithm != 0
+            and not (128 <= self.algorithm <= 255)
+        ):
+            raise ValidationError(
+                {
+                    'algorithm': _(
+                        'Algorithm must be 0 (SPF) or a Flex-Algo value in 128-255.'
+                    )
+                }
+            )
         # RFC 8986: L + F + A <= 128 (L = block + node). Validate only when the
-        # relevant lengths are pinned; otherwise the device derives them.
-        loc = (self.block_length or 0) + (self.node_length or 0)
+        # relevant lengths are pinned; otherwise the device derives them. When
+        # block and node are both unpinned the locator length is the prefix length,
+        # so use prefix.prefixlen rather than falling back to 0 (else an oversized
+        # derived locator, e.g. /120 + 16-bit function, would slip through).
+        if self.block_length is None and self.node_length is None:
+            loc = netaddr.IPNetwork(str(self.prefix)).prefixlen if self.prefix else 0
+        else:
+            loc = (self.block_length or 0) + (self.node_length or 0)
         total = loc + (self.function_length or 0) + (self.argument_length or 0)
         if (
             any(
