@@ -42,15 +42,23 @@ class ISISFlexAlgoType(PrimaryObjectType):
     algo_id: int
 
 
-@strawberry_django.type(models.ISISPrefixSID, fields='__all__', filters=ISISPrefixSIDFilter)
+@strawberry_django.type(
+    models.ISISPrefixSID, fields='__all__', filters=ISISPrefixSIDFilter
+)
 class ISISPrefixSIDType(PrimaryObjectType):
-    interface: Annotated['ISISInterfaceType', strawberry.lazy('netbox_routing.graphql.types')]
+    interface: Annotated[
+        'ISISInterfaceType', strawberry.lazy('netbox_routing.graphql.types')
+    ]
     algorithm: int
 
 
-@strawberry_django.type(models.ISISSRv6Locator, fields='__all__', filters=ISISSRv6LocatorFilter)
+@strawberry_django.type(
+    models.ISISSRv6Locator, fields='__all__', filters=ISISSRv6LocatorFilter
+)
 class ISISSRv6LocatorType(PrimaryObjectType):
-    instance: Annotated['ISISInstanceType', strawberry.lazy('netbox_routing.graphql.types')]
+    instance: Annotated[
+        'ISISInstanceType', strawberry.lazy('netbox_routing.graphql.types')
+    ]
     name: str
     # prefix is an IPNetworkField; expose it as a string (mirrors StaticRouteType.prefix).
     # vendor_ext (JSONField) is auto-mapped to the JSON scalar by fields='__all__'.

@@ -368,6 +368,7 @@ class ISISFlexAlgoBulkDeleteView(BulkDeleteView):
 
 # IS-IS Prefix-SID (per-interface node-SID)
 
+
 @register_model_view(ISISPrefixSID, name='list', path='', detail=False)
 class ISISPrefixSIDListView(ObjectListView):
     queryset = ISISPrefixSID.objects.select_related('interface__interface')
@@ -412,6 +413,7 @@ class ISISPrefixSIDBulkDeleteView(BulkDeleteView):
 
 
 # IS-IS SRv6 Locator (per-instance locator)
+
 
 @register_model_view(ISISSRv6Locator, name='list', path='', detail=False)
 class ISISSRv6LocatorListView(ObjectListView):

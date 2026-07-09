@@ -180,7 +180,9 @@ class ISISInstanceForm(ISISSettingMixin, PrimaryModelForm):
     fieldsets = (
         FieldSet('description'),
         FieldSet('device', name=_('Device')),
-        FieldSet('vrf', 'process_tag', 'net', 'is_type', 'metric_style', name=_('Instance')),
+        FieldSet(
+            'vrf', 'process_tag', 'net', 'is_type', 'metric_style', name=_('Instance')
+        ),
         FieldSet(
             'overload_bit',
             'overload_on_startup',
@@ -339,7 +341,11 @@ class ISISInterfaceForm(ISISSettingMixin, PrimaryModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        if self.instance.pk and self.instance.interface and self.instance.interface.device:
+        if (
+            self.instance.pk
+            and self.instance.interface
+            and self.instance.interface.device
+        ):
             self.initial['device'] = self.instance.interface.device.pk
 
     # The instance/interface same-device rule lives on ISISInterface.clean() (model
@@ -416,7 +422,11 @@ class ISISSettingForm(PrimaryModelForm):
         ]
         if len(selected) > 1:
             raise forms.ValidationError(
-                {selected[1]: _('An IS-IS Setting can only be assigned to a single object.')}
+                {
+                    selected[1]: _(
+                        'An IS-IS Setting can only be assigned to a single object.'
+                    )
+                }
             )
         elif selected:
             self.instance.assigned_object = self.cleaned_data[selected[0]]
@@ -426,14 +436,21 @@ class ISISSettingForm(PrimaryModelForm):
 
 class ISISLevelForm(PrimaryModelForm):
     instance = DynamicModelChoiceField(
-        queryset=ISISInstance.objects.all(), required=True, selector=True, label=_('Instance')
+        queryset=ISISInstance.objects.all(),
+        required=True,
+        selector=True,
+        label=_('Instance'),
     )
 
     fieldsets = (
         FieldSet('description'),
         FieldSet('instance', 'level', name=_('Level')),
         FieldSet(
-            'default_metric', 'wide_metrics_only', 'preference', 'labeled_preference', 'disabled',
+            'default_metric',
+            'wide_metrics_only',
+            'preference',
+            'labeled_preference',
+            'disabled',
             name=_('Attributes'),
         ),
         FieldSet('auth_type', 'auth_key', name=_('Authentication')),
@@ -442,9 +459,19 @@ class ISISLevelForm(PrimaryModelForm):
     class Meta:
         model = ISISLevel
         fields = (
-            'instance', 'level', 'default_metric', 'wide_metrics_only', 'preference',
-            'labeled_preference', 'disabled',
-            'auth_type', 'auth_key', 'description', 'comments', 'tags', 'owner',
+            'instance',
+            'level',
+            'default_metric',
+            'wide_metrics_only',
+            'preference',
+            'labeled_preference',
+            'disabled',
+            'auth_type',
+            'auth_key',
+            'description',
+            'comments',
+            'tags',
+            'owner',
         )
         widgets = {
             'wide_metrics_only': forms.Select(choices=BOOLEAN_WITH_BLANK_CHOICES),
@@ -454,44 +481,83 @@ class ISISLevelForm(PrimaryModelForm):
 
 class ISISInterfaceLevelForm(PrimaryModelForm):
     interface = DynamicModelChoiceField(
-        queryset=ISISInterface.objects.all(), required=True, selector=True, label=_('Interface')
+        queryset=ISISInterface.objects.all(),
+        required=True,
+        selector=True,
+        label=_('Interface'),
     )
 
     fieldsets = (
         FieldSet('description'),
         FieldSet('interface', 'level', name=_('Level')),
-        FieldSet('metric', 'hello_interval', 'hello_multiplier', 'priority', 'passive', name=_('Attributes')),
+        FieldSet(
+            'metric',
+            'hello_interval',
+            'hello_multiplier',
+            'priority',
+            'passive',
+            name=_('Attributes'),
+        ),
     )
 
     class Meta:
         model = ISISInterfaceLevel
         fields = (
-            'interface', 'level', 'metric', 'hello_interval', 'hello_multiplier',
-            'priority', 'passive', 'description', 'comments', 'tags', 'owner',
+            'interface',
+            'level',
+            'metric',
+            'hello_interval',
+            'hello_multiplier',
+            'priority',
+            'passive',
+            'description',
+            'comments',
+            'tags',
+            'owner',
         )
         widgets = {'passive': forms.Select(choices=BOOLEAN_WITH_BLANK_CHOICES)}
 
 
 class ISISSegmentRoutingForm(PrimaryModelForm):
     instance = DynamicModelChoiceField(
-        queryset=ISISInstance.objects.all(), required=True, selector=True, label=_('Instance')
+        queryset=ISISInstance.objects.all(),
+        required=True,
+        selector=True,
+        label=_('Instance'),
     )
 
     fieldsets = (
         FieldSet('description'),
         FieldSet('instance', 'enabled', 'srv6_enabled', name=_('Segment Routing')),
         FieldSet(
-            'prefix_sid_range', 'srgb_start', 'srgb_range', 'srlb_start', 'srlb_range',
-            'maximum_sid_depth', 'tunnel_table_pref', name=_('Attributes'),
+            'prefix_sid_range',
+            'srgb_start',
+            'srgb_range',
+            'srlb_start',
+            'srlb_range',
+            'maximum_sid_depth',
+            'tunnel_table_pref',
+            name=_('Attributes'),
         ),
     )
 
     class Meta:
         model = ISISSegmentRouting
         fields = (
-            'instance', 'enabled', 'srv6_enabled', 'prefix_sid_range', 'srgb_start', 'srgb_range',
-            'srlb_start', 'srlb_range', 'maximum_sid_depth', 'tunnel_table_pref',
-            'description', 'comments', 'tags', 'owner',
+            'instance',
+            'enabled',
+            'srv6_enabled',
+            'prefix_sid_range',
+            'srgb_start',
+            'srgb_range',
+            'srlb_start',
+            'srlb_range',
+            'maximum_sid_depth',
+            'tunnel_table_pref',
+            'description',
+            'comments',
+            'tags',
+            'owner',
         )
         widgets = {
             'enabled': forms.Select(choices=BOOLEAN_WITH_BLANK_CHOICES),
@@ -501,7 +567,10 @@ class ISISSegmentRoutingForm(PrimaryModelForm):
 
 class ISISFlexAlgoForm(PrimaryModelForm):
     instance = DynamicModelChoiceField(
-        queryset=ISISInstance.objects.all(), required=True, selector=True, label=_('Instance')
+        queryset=ISISInstance.objects.all(),
+        required=True,
+        selector=True,
+        label=_('Instance'),
     )
 
     fieldsets = (
@@ -509,7 +578,9 @@ class ISISFlexAlgoForm(PrimaryModelForm):
         FieldSet('instance', 'algo_id', name=_('Flex-Algo')),
         FieldSet('metric_type', 'priority', name=_('Definition')),
         FieldSet(
-            'admin_group_exclude', 'admin_group_include_any', 'admin_group_include_all',
+            'admin_group_exclude',
+            'admin_group_include_any',
+            'admin_group_include_all',
             name=_('Affinity'),
         ),
     )
@@ -517,22 +588,38 @@ class ISISFlexAlgoForm(PrimaryModelForm):
     class Meta:
         model = ISISFlexAlgo
         fields = (
-            'instance', 'algo_id', 'metric_type', 'priority', 'admin_group_exclude',
-            'admin_group_include_any', 'admin_group_include_all',
-            'description', 'comments', 'tags', 'owner',
+            'instance',
+            'algo_id',
+            'metric_type',
+            'priority',
+            'admin_group_exclude',
+            'admin_group_include_any',
+            'admin_group_include_all',
+            'description',
+            'comments',
+            'tags',
+            'owner',
         )
 
 
 class ISISPrefixSIDForm(PrimaryModelForm):
     interface = DynamicModelChoiceField(
-        queryset=ISISInterface.objects.all(), required=True, selector=True, label=_('Interface')
+        queryset=ISISInterface.objects.all(),
+        required=True,
+        selector=True,
+        label=_('Interface'),
     )
 
     fieldsets = (
         FieldSet('description'),
         FieldSet('interface', 'algorithm', name=_('Prefix-SID')),
         FieldSet(
-            'sid_index', 'sid_label', 'n_flag', 'no_php', 'explicit_null', 'readvertise',
+            'sid_index',
+            'sid_label',
+            'n_flag',
+            'no_php',
+            'explicit_null',
+            'readvertise',
             name=_('Attributes'),
         ),
     )
@@ -540,8 +627,18 @@ class ISISPrefixSIDForm(PrimaryModelForm):
     class Meta:
         model = ISISPrefixSID
         fields = (
-            'interface', 'algorithm', 'sid_index', 'sid_label', 'n_flag', 'no_php',
-            'explicit_null', 'readvertise', 'description', 'comments', 'tags', 'owner',
+            'interface',
+            'algorithm',
+            'sid_index',
+            'sid_label',
+            'n_flag',
+            'no_php',
+            'explicit_null',
+            'readvertise',
+            'description',
+            'comments',
+            'tags',
+            'owner',
         )
         widgets = {
             'n_flag': forms.Select(choices=BOOLEAN_WITH_BLANK_CHOICES),
@@ -553,18 +650,28 @@ class ISISPrefixSIDForm(PrimaryModelForm):
 
 class ISISSRv6LocatorForm(PrimaryModelForm):
     instance = DynamicModelChoiceField(
-        queryset=ISISInstance.objects.all(), required=True, selector=True, label=_('Instance')
+        queryset=ISISInstance.objects.all(),
+        required=True,
+        selector=True,
+        label=_('Instance'),
     )
 
     fieldsets = (
         FieldSet('description'),
         FieldSet('instance', 'name', 'prefix', 'enabled', name=_('SRv6 Locator')),
         FieldSet(
-            'algorithm', 'is_anycast', 'is_micro_segment', 'flavor', 'isis_level',
+            'algorithm',
+            'is_anycast',
+            'is_micro_segment',
+            'flavor',
+            'isis_level',
             name=_('Behaviour'),
         ),
         FieldSet(
-            'block_length', 'node_length', 'function_length', 'argument_length',
+            'block_length',
+            'node_length',
+            'function_length',
+            'argument_length',
             name=_('SID structure'),
         ),
         FieldSet('vendor_ext', name=_('Vendor Extensions')),
@@ -573,10 +680,24 @@ class ISISSRv6LocatorForm(PrimaryModelForm):
     class Meta:
         model = ISISSRv6Locator
         fields = (
-            'instance', 'name', 'prefix', 'enabled', 'algorithm', 'is_anycast',
-            'is_micro_segment', 'flavor', 'isis_level', 'block_length', 'node_length',
-            'function_length', 'argument_length', 'vendor_ext',
-            'description', 'comments', 'tags', 'owner',
+            'instance',
+            'name',
+            'prefix',
+            'enabled',
+            'algorithm',
+            'is_anycast',
+            'is_micro_segment',
+            'flavor',
+            'isis_level',
+            'block_length',
+            'node_length',
+            'function_length',
+            'argument_length',
+            'vendor_ext',
+            'description',
+            'comments',
+            'tags',
+            'owner',
         )
         widgets = {
             'is_anycast': forms.Select(choices=BOOLEAN_WITH_BLANK_CHOICES),
