@@ -100,7 +100,8 @@ class ISISSRv6LocatorFilterSet(NetBoxModelFilterSet):
         return queryset.filter(name__icontains=value).distinct()
 
     def filter_prefix(self, queryset, name, value):
-        if not value.strip():
+        value = (value or '').strip()
+        if not value:
             return queryset
         try:
             query = str(netaddr.IPNetwork(value).cidr)

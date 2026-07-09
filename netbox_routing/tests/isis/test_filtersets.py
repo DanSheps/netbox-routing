@@ -289,6 +289,13 @@ class ISISSRv6LocatorFilterSetTestCase(TestCase):
         params = {'name': ['LOC-B']}
         self.assertEqual(self.filterset(params, self.queryset).qs.count(), 1)
 
+    def test_filter_prefix_none_safe(self):
+        # filter_prefix must not raise on a None value (an empty prefix filter can
+        # pass None); it should return the queryset unfiltered.
+        self.assertEqual(
+            self.filterset().filter_prefix(self.queryset, 'prefix', None).count(), 2
+        )
+
 
 class ISISSettingFilterSetTestCase(TestCase):
     queryset = ISISSetting.objects.all()
@@ -329,3 +336,11 @@ class ISISSettingFilterSetTestCase(TestCase):
     def test_key(self):
         params = {'key': ['ldp_sync']}
         self.assertEqual(self.filterset(params, self.queryset).qs.count(), 1)
+
+    def test_q_matches_key(self):
+        # search() matches on key/value; 'ldp_sync' hits one setting's key.
+        self.assertEqual(self.filterset({'q': 'ldp_sync'}, self.queryset).qs.count(), 1)
+
+    def test_search_ignores_blank(self):
+        # A blank/whitespace term must not filter anything out.
+        self.assertEqual(self.filterset().search(self.queryset, 'q', '   ').count(), 2)
