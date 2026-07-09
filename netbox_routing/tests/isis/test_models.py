@@ -198,6 +198,18 @@ class ISISInterfaceModelTestCase(TestCase):
             self._iface(n=13, hello_auth_key='secret').clean()
         self.assertIn('hello_auth_type', ctx.exception.error_dict)
 
+    def test_clone_omits_hello_auth_secret(self):
+        # Cloning serializes clone_fields into the add-form URL query string, so
+        # the plaintext hello auth key must never be a clone field. Its paired
+        # type is excluded too (mirrors ISISInstance/ISISLevel, which keep their
+        # auth secrets out of clone_fields), otherwise a type-without-key prefill
+        # would trip the paired-auth validation on every clone.
+        iface = self._iface(n=18, hello_auth_type='md5', hello_auth_key='secret')
+        iface.save()
+        attrs = iface.clone()
+        self.assertNotIn('hello_auth_key', attrs)
+        self.assertNotIn('hello_auth_type', attrs)
+
     def test_optional_charfields_default_to_empty_string(self):
         # circuit_type / network_type are blank=True, default='' (not nullable),
         # so an unset value round-trips as '' rather than NULL.

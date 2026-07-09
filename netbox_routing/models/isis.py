@@ -598,8 +598,6 @@ class ISISInterface(PrimaryModel):
         'network_type',
         'metric',
         'passive',
-        'hello_auth_type',
-        'hello_auth_key',
         'bfd_enabled',
         'csnp_interval',
         'retransmit_interval',
