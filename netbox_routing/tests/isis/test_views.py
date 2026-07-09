@@ -1,5 +1,7 @@
 # SPDX-License-Identifier: Apache-2.0
 
+from django.test import SimpleTestCase
+
 from dcim.models import Interface
 from ipam.models import VRF
 from utilities.testing import ViewTestCases, create_test_device
@@ -9,7 +11,27 @@ from netbox_routing.models import ISISInstance, ISISInterface
 __all__ = (
     'ISISInstanceViewTestCase',
     'ISISInterfaceViewTestCase',
+    'ISISViewExportsTestCase',
 )
+
+
+class ISISViewExportsTestCase(SimpleTestCase):
+    """Bulk views defined in views/isis.py must also be re-exported from the views
+    package __all__, like every other IS-IS view group (regression guard for the
+    PrefixSID/SRv6Locator bulk views that were previously omitted)."""
+
+    def test_bulk_views_exported(self):
+        from netbox_routing import views
+
+        for name in (
+            'ISISPrefixSIDBulkDeleteView',
+            'ISISPrefixSIDBulkImportView',
+            'ISISSRv6LocatorBulkDeleteView',
+            'ISISSRv6LocatorBulkImportView',
+        ):
+            with self.subTest(view=name):
+                self.assertIn(name, views.__all__)
+                self.assertTrue(hasattr(views, name))
 
 
 class ISISInstanceViewTestCase(
