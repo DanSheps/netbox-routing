@@ -59,7 +59,7 @@ class ISISFlexAlgoSerializer(NetBoxModelSerializer):
             'tags',
             'custom_fields',
         )
-        brief_fields = ('url', 'id', 'display', 'instance', 'algo_id', 'metric_type')
+        brief_fields = ('url', 'id', 'display', 'algo_id', 'metric_type')
 
 
 class ISISPrefixSIDSerializer(NetBoxModelSerializer):

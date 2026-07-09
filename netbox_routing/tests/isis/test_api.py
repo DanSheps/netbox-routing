@@ -366,7 +366,7 @@ class ISISFlexAlgoAPITestCase(APIViewTestCases.APIViewTestCase):
     model = ISISFlexAlgo
     view_namespace = 'plugins-api:netbox_routing'
     graphql_base_name = 'isis_flex_algo'
-    brief_fields = ['algo_id', 'display', 'id', 'instance', 'metric_type', 'url']
+    brief_fields = ['algo_id', 'display', 'id', 'metric_type', 'url']
     user_permissions = ('netbox_routing.view_isisinstance',)
     bulk_update_data = {'priority': 50}
 
