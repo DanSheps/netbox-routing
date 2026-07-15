@@ -1,7 +1,5 @@
 # SPDX-License-Identifier: Apache-2.0
 
-import re
-
 import netaddr
 from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
 from django.contrib.contenttypes.models import ContentType
@@ -20,6 +18,7 @@ from netbox_routing.constants.isis import (
     ISISSETTING_ASSIGNMENT_MODEL_NAMES,
     ISISSETTING_ASSIGNMENT_MODELS,
 )
+from netbox_routing.helpers.isis import NET_RE, auth_pair_errors
 
 __all__ = (
     'ISISInstance',
@@ -32,30 +31,6 @@ __all__ = (
     'ISISPrefixSID',
     'ISISSRv6Locator',
 )
-
-
-# A NET (Network Entity Title) is hex bytes written as dot-separated groups: a
-# 1-byte AFI, the area + 6-byte system-id as 2-byte (4-hex) groups, and a 1-byte
-# N-selector — e.g. 49.0001.1921.6800.1001.00.
-_NET_RE = re.compile(r'^[0-9A-Fa-f]{2}(?:\.[0-9A-Fa-f]{4}){3,}\.[0-9A-Fa-f]{2}$')
-
-
-def _auth_pair_errors(type_value, key_value, type_field, key_field):
-    """An IS-IS auth (type, key) pair is only meaningful together; return the
-    field-keyed error(s) for a half-configured pair (shared by every IS-IS clean())."""
-    if type_value and not key_value:
-        return {
-            key_field: _(
-                'An authentication key is required when an authentication type is set.'
-            )
-        }
-    if key_value and not type_value:
-        return {
-            type_field: _(
-                'An authentication type is required when an authentication key is set.'
-            )
-        }
-    return {}
 
 
 class ISISSetting(PrimaryModel):
@@ -446,7 +421,7 @@ class ISISInstance(PrimaryModel):
             ('domain_auth_type', 'domain_auth_key'),
         ):
             errors.update(
-                _auth_pair_errors(
+                auth_pair_errors(
                     getattr(self, type_field),
                     getattr(self, key_field),
                     type_field,
@@ -455,7 +430,7 @@ class ISISInstance(PrimaryModel):
             )
         # Reject a malformed NET at the model layer (form/API/import all run full_clean)
         # rather than letting it fail downstream when pushed to the device.
-        if self.net and not _NET_RE.match(self.net):
+        if self.net and not NET_RE.match(self.net):
             errors['net'] = _('Enter a valid NET, e.g. 49.0001.0000.0000.0001.00.')
         if errors:
             raise ValidationError(errors)
@@ -636,7 +611,7 @@ class ISISInterface(PrimaryModel):
             errors['interface'] = msg
         # Hello auth type and key are only meaningful together (mirrors ISISInstance).
         errors.update(
-            _auth_pair_errors(
+            auth_pair_errors(
                 self.hello_auth_type,
                 self.hello_auth_key,
                 'hello_auth_type',
@@ -740,7 +715,7 @@ class ISISLevel(PrimaryModel):
 
     def clean(self):
         super().clean()
-        errors = _auth_pair_errors(
+        errors = auth_pair_errors(
             self.auth_type, self.auth_key, 'auth_type', 'auth_key'
         )
         if errors:

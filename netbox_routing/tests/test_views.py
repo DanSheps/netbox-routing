@@ -10,6 +10,7 @@ __all__ = (
     'OSPFInterfaceTestCase',
     'ISISInstanceViewTestCase',
     'ISISInterfaceViewTestCase',
+    'ISISViewExportsTestCase',
     # 'EIGRPRouterTestCase',
     # 'EIGRPAddressFamilyTestCase',
     # 'EIGRPNetworkTestCase',
