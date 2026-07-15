@@ -1,3 +1,4 @@
+from dataclasses import dataclass
 from typing import Annotated
 
 import strawberry
@@ -5,6 +6,7 @@ import strawberry_django
 from strawberry import ID
 
 
+@dataclass
 class DeviceMixin:
     device: (
         Annotated['DeviceFilter', strawberry.lazy('dcim.graphql.filters')] | None
@@ -12,6 +14,7 @@ class DeviceMixin:
     device_id: ID | None = strawberry_django.filter_field()
 
 
+@dataclass
 class InterfaceMixin(DeviceMixin):
     device: (
         Annotated['DeviceFilter', strawberry.lazy('dcim.graphql.filters')] | None
@@ -23,12 +26,14 @@ class InterfaceMixin(DeviceMixin):
     interface_id: ID | None = strawberry_django.filter_field()
 
 
+@dataclass
 class VRFMixin:
     vrf: Annotated['VRFFilter', strawberry.lazy('ipam.graphql.filters')] | None = (
         strawberry_django.filter_field()
     )
 
 
+@dataclass
 class NetworkPrefixMixin:
     network: (
         Annotated['PrefixFilter', strawberry.lazy('ipam.graphql.filters')] | None
