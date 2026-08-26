@@ -28,7 +28,7 @@ __all__ = (
     'CommunityListBulkDeleteView',
     'CommunityListBulkImportView',
     'CommunityListView',
-    'CommunityDetailView',
+    'CommunityView',
     'CommunityEditView',
     'CommunityDeleteView',
     'CommunityBulkEditView',
@@ -137,7 +137,7 @@ class CommunityListView(ObjectListView):
 
 
 @register_model_view(Community)
-class CommunityDetailView(ObjectView):
+class CommunityView(ObjectView):
     queryset = Community.objects.all()
     template_name = 'generic/object.html'
     layout = layout.SimpleLayout(
