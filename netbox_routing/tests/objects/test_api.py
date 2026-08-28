@@ -324,6 +324,7 @@ class RouteMapEntryTestCase(APIViewTestCases.APIViewTestCase):
                 'route_map': cls.route_map[0].pk,
                 'action': 'permit',
                 'sequence': 3,
+                'flow_control': 4,
                 'match': {'tags': 4},
             },
             {
