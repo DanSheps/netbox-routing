@@ -1,5 +1,6 @@
 from .community import *
 from .eigrp import *
+from .isis import *
 from .ospf import *
 from .static import *
 
@@ -13,6 +14,16 @@ __all__ = (
     'EIGRPAddressFamilyImportForm',
     'EIGRPNetworkImportForm',
     'EIGRPInterfaceImportForm',
+    # IS-IS
+    'ISISInstanceImportForm',
+    'ISISInterfaceImportForm',
+    'ISISSettingImportForm',
+    'ISISLevelImportForm',
+    'ISISInterfaceLevelImportForm',
+    'ISISSegmentRoutingImportForm',
+    'ISISFlexAlgoImportForm',
+    'ISISPrefixSIDImportForm',
+    'ISISSRv6LocatorImportForm',
     # OSPF
     'OSPFInstanceImportForm',
     'OSPFAreaImportForm',
