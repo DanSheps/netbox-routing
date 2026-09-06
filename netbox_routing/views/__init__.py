@@ -62,10 +62,8 @@ __all__ = (
     'EIGRPInterfaceBulkDeleteView',
     'BGPRouterView',
     'BGPRouterEditView',
-    # Routing Objects
-    'CommunityListListView',
-    'CommunityListView',
     # 'CommunityListEntriesView',
+    'CommunityListListView',
     'CommunityListEditView',
     'CommunityListDeleteView',
     'CommunityListEntryListView',
