@@ -88,7 +88,7 @@ class BGPPeerGroup(StrMixin, AbsoluteURLMixin, NetBoxModel):
         return self.name
 
 
-class BGPBase(StrMixin, AbsoluteURLMixin, NetBoxModel):
+class BGPBase(AbsoluteURLMixin, NetBoxModel):
     site = models.ForeignKey(
         to='dcim.Site',
         on_delete=models.PROTECT,
