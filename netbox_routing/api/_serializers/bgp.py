@@ -69,7 +69,7 @@ class BGPSettingSerializer(NetBoxModelSerializer):
 
 class BGPSessionTemplateSerializer(NetBoxModelSerializer):
     url = serializers.HyperlinkedIdentityField(
-        view_name='plugins-api:netbox_routing-api:bgpscope-detail'
+        view_name='plugins-api:netbox_routing-api:bgpsessiontemplate-detail'
     )
 
     remote_as = ASNSerializer(nested=True, required=False)
@@ -105,7 +105,7 @@ class BGPSessionTemplateSerializer(NetBoxModelSerializer):
 
 class BGPPolicyTemplateSerializer(NetBoxModelSerializer):
     url = serializers.HyperlinkedIdentityField(
-        view_name='plugins-api:netbox_routing-api:bgpscope-detail'
+        view_name='plugins-api:netbox_routing-api:bgppolicytemplate-detail'
     )
 
     tenant = TenantSerializer(nested=True, required=False)
@@ -136,7 +136,7 @@ class BGPPolicyTemplateSerializer(NetBoxModelSerializer):
 
 class BGPPeerTemplateSerializer(NetBoxModelSerializer):
     url = serializers.HyperlinkedIdentityField(
-        view_name='plugins-api:netbox_routing-api:bgpaddressfamily-detail'
+        view_name='plugins-api:netbox_routing-api:bgppeertemplate-detail'
     )
 
     remote_as = ASNSerializer(nested=True, required=False)
