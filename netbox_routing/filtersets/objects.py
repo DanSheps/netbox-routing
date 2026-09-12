@@ -161,7 +161,6 @@ class PrefixListEntryFilterSet(NetBoxModelFilterSet):
 
 
 class CustomPrefixFilterSet(NetBoxModelFilterSet):
-
     class Meta:
         model = CustomPrefix
         fields = ()
@@ -176,7 +175,6 @@ class CustomPrefixFilterSet(NetBoxModelFilterSet):
 
 @register_filterset
 class RouteMapFilterSet(NetBoxModelFilterSet):
-
     class Meta:
         model = RouteMap
         fields = ()

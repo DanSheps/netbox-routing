@@ -17,7 +17,6 @@ __all__ = (
 
 
 class PrefixListBulkEditForm(PrimaryModelBulkEditForm):
-
     model = PrefixList
     fieldsets = (
         FieldSet(
@@ -46,7 +45,6 @@ class PrefixListEntryBulkEditForm(PrimaryModelBulkEditForm):
 
 
 class RouteMapBulkEditForm(PrimaryModelBulkEditForm):
-
     model = RouteMap
     fieldsets = (
         FieldSet(
@@ -75,7 +73,6 @@ class RouteMapEntryBulkEditForm(PrimaryModelBulkEditForm):
 
 
 class ASPathBulkEditForm(PrimaryModelBulkEditForm):
-
     model = ASPath
     fieldsets = (
         FieldSet(

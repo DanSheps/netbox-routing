@@ -18,13 +18,9 @@ class SettingsChoicePanel(panels.ObjectPanel):
             choice_type = self._choices.FIELD_TYPES[choice]
             if choice_type in ['ipaddr', 'string']:
                 self._attrs[choice] = attrs.TextAttr('value', label=_(label))
-            elif choice_type in [
-                'integer',
-            ]:
+            elif choice_type == 'integer':
                 self._attrs[choice] = attrs.NumericAttr('value', label=_(label))
-            elif choice_type in [
-                'boolean',
-            ]:
+            elif choice_type == 'boolean':
                 self._attrs[choice] = attrs.BooleanAttr('value', label=_(label))
 
     def get_context(self, context):

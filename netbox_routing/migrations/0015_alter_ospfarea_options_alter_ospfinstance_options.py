@@ -4,7 +4,6 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('netbox_routing', '0014_ospfarea_area_type'),
     ]

@@ -25,11 +25,10 @@ class BGPRouterTestCase(ASNMixin, TestCase):
         instance.full_clean()
         instance.save()
         self.assertIsInstance(instance, self.model)
-        self.assertEqual(instance.__str__(), f'{name} ({self.asn})')
+        self.assertEqual(str(instance), f'{name} ({self.asn})')
         self.assertEqual(instance.asn, self.asn)
 
     def test_unique_together(self):
-
         name = 'BGP Router 1'
         instance = self.model(
             name=name,
@@ -53,7 +52,7 @@ class BGPScopeTestCase(BGPRouterMixin, VRFMixin, TestCase):
         instance.full_clean()
         instance.save()
         self.assertIsInstance(instance, self.model)
-        self.assertEqual(instance.__str__(), f'{self.router}: Global VRF')
+        self.assertEqual(str(instance), f'{self.router}: Global VRF')
         self.assertEqual(instance.router, self.router)
 
     def test_model_with_vrf(self):
@@ -64,7 +63,7 @@ class BGPScopeTestCase(BGPRouterMixin, VRFMixin, TestCase):
         instance.full_clean()
         instance.save()
         self.assertIsInstance(instance, self.model)
-        self.assertEqual(instance.__str__(), f'{self.router}: {self.vrf}')
+        self.assertEqual(str(instance), f'{self.router}: {self.vrf}')
         self.assertEqual(instance.router, self.router)
         self.assertEqual(instance.vrf, self.vrf)
 
@@ -237,7 +236,7 @@ class BGPPeerTemplateTestCase(
         instance.full_clean()
         instance.save()
         self.assertIsInstance(instance, self.model)
-        self.assertEqual(instance.__str__(), instance.name)
+        self.assertEqual(str(instance), instance.name)
 
     def test_unique_together(self):
         instance = self.model(
@@ -275,7 +274,7 @@ class BGPPolicyTemplateTestCase(
         instance.full_clean()
         instance.save()
         self.assertIsInstance(instance, self.model)
-        self.assertEqual(instance.__str__(), instance.name)
+        self.assertEqual(str(instance), instance.name)
 
     def test_unique_together(self):
         instance = self.model(
@@ -311,7 +310,7 @@ class BGPSessionTemplateTestCase(
         instance.full_clean()
         instance.save()
         self.assertIsInstance(instance, self.model)
-        self.assertEqual(instance.__str__(), instance.name)
+        self.assertEqual(str(instance), instance.name)
 
     def test_unique_together(self):
         instance = self.model(
@@ -349,7 +348,7 @@ class BFDProfileTestCase(
         instance.full_clean()
         instance.save()
         self.assertIsInstance(instance, self.model)
-        self.assertEqual(instance.__str__(), instance.name)
+        self.assertEqual(str(instance), instance.name)
 
     def test_unique_together(self):
         instance = self.model(

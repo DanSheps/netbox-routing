@@ -9,6 +9,9 @@ class AbsoluteURLMixin:
     def get_absolute_url(self):
         return None
 
+    def __str__(self) -> str:
+        return ''
+
 
 class ASPathList(AbsoluteURLMixin, NetBoxModel):
     """
@@ -68,7 +71,6 @@ class RoutingPolicy(AbsoluteURLMixin, NetBoxModel):
 
 
 class BGPPeerGroup(AbsoluteURLMixin, NetBoxModel):
-
     name = models.CharField(max_length=100)
     description = models.CharField(max_length=200, blank=True)
     comments = models.TextField(blank=True)
@@ -85,7 +87,6 @@ class BGPPeerGroup(AbsoluteURLMixin, NetBoxModel):
 
 
 class BGPBase(AbsoluteURLMixin, NetBoxModel):
-
     site = models.ForeignKey(
         to='dcim.Site',
         on_delete=models.PROTECT,
@@ -109,7 +110,6 @@ class BGPBase(AbsoluteURLMixin, NetBoxModel):
 
 
 class Community(BGPBase):
-
     value = models.CharField(max_length=64)
 
     class Meta:
@@ -123,7 +123,6 @@ class Community(BGPBase):
 
 
 class CommunityList(AbsoluteURLMixin, NetBoxModel):
-
     name = models.CharField(max_length=100)
     description = models.CharField(max_length=200, blank=True)
     comments = models.TextField(blank=True)
@@ -140,7 +139,6 @@ class CommunityList(AbsoluteURLMixin, NetBoxModel):
 
 
 class CommunityListRule(AbsoluteURLMixin, NetBoxModel):
-
     community_list = models.ForeignKey(
         to=CommunityList, on_delete=models.CASCADE, related_name='commlistrules'
     )
@@ -163,7 +161,6 @@ class CommunityListRule(AbsoluteURLMixin, NetBoxModel):
 
 
 class PrefixList(AbsoluteURLMixin, NetBoxModel):
-
     name = models.CharField(max_length=100)
     description = models.CharField(max_length=200, blank=True)
     family = models.CharField(max_length=10)
@@ -181,7 +178,6 @@ class PrefixList(AbsoluteURLMixin, NetBoxModel):
 
 
 class PrefixListRule(AbsoluteURLMixin, NetBoxModel):
-
     prefix_list = models.ForeignKey(
         to=PrefixList, on_delete=models.CASCADE, related_name='prefrules'
     )
@@ -344,7 +340,6 @@ class RoutingPolicyRule(AbsoluteURLMixin, NetBoxModel):
 
 
 class BGPPeerGroup_ImportPolicies(models.Model):
-
     bgppeergroup = models.ForeignKey(
         to='BGPPeerGroup',
         on_delete=models.CASCADE,
@@ -366,7 +361,6 @@ class BGPPeerGroup_ImportPolicies(models.Model):
 
 
 class BGPPeerGroup_ExportPolicies(models.Model):
-
     bgppeergroup = models.ForeignKey(
         to='BGPPeerGroup',
         on_delete=models.CASCADE,
@@ -388,7 +382,6 @@ class BGPPeerGroup_ExportPolicies(models.Model):
 
 
 class BGPSession_ImportPolicies(models.Model):
-
     bgpsession = models.ForeignKey(
         to='BGPSession',
         on_delete=models.CASCADE,
@@ -410,7 +403,6 @@ class BGPSession_ImportPolicies(models.Model):
 
 
 class BGPSession_ExportPolicies(models.Model):
-
     bgpsession = models.ForeignKey(
         to='BGPSession',
         on_delete=models.CASCADE,
@@ -432,7 +424,6 @@ class BGPSession_ExportPolicies(models.Model):
 
 
 class RoutingPolicyRule_Match_Community(models.Model):
-
     routingpolicyrule = models.ForeignKey(
         to='RoutingPolicyRule',
         on_delete=models.CASCADE,
@@ -454,7 +445,6 @@ class RoutingPolicyRule_Match_Community(models.Model):
 
 
 class RoutingPolicyRule_Match_CommunityList(models.Model):
-
     routingpolicyrule = models.ForeignKey(
         to='RoutingPolicyRule',
         on_delete=models.CASCADE,
@@ -476,7 +466,6 @@ class RoutingPolicyRule_Match_CommunityList(models.Model):
 
 
 class RoutingPolicyRule_Match_ASPathList(models.Model):
-
     routingpolicyrule = models.ForeignKey(
         to='RoutingPolicyRule',
         on_delete=models.CASCADE,
@@ -498,7 +487,6 @@ class RoutingPolicyRule_Match_ASPathList(models.Model):
 
 
 class RoutingPolicyRule_Match_IPAddress(models.Model):
-
     routingpolicyrule = models.ForeignKey(
         to='RoutingPolicyRule',
         on_delete=models.CASCADE,
@@ -520,7 +508,6 @@ class RoutingPolicyRule_Match_IPAddress(models.Model):
 
 
 class RoutingPolicyRule_Match_IPV6Address(models.Model):
-
     routingpolicyrule = models.ForeignKey(
         to='RoutingPolicyRule',
         on_delete=models.CASCADE,
