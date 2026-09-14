@@ -29,7 +29,7 @@ class CommunityTestCase(TestCase):
         community.full_clean()
         community.save()
         self.assertIsInstance(community, Community)
-        self.assertEqual(community.__str__(), community_value)
+        self.assertEqual(str(community), community_value)
 
         community_value = '64512:64512'
         community = Community(
@@ -40,7 +40,7 @@ class CommunityTestCase(TestCase):
         community.full_clean()
         community.save()
         self.assertIsInstance(community, Community)
-        self.assertEqual(community.__str__(), community_value)
+        self.assertEqual(str(community), community_value)
 
         community_value = '64512:64512:64512'
         community = Community(
@@ -51,7 +51,7 @@ class CommunityTestCase(TestCase):
         community.full_clean()
         community.save()
         self.assertIsInstance(community, Community)
-        self.assertEqual(community.__str__(), community_value)
+        self.assertEqual(str(community), community_value)
 
         community_value = '64512:64512:64512:64512'
         community = Community(
@@ -89,7 +89,6 @@ class CommunityTestCase(TestCase):
         self.assertEqual(str(community), '65000:100')
 
     def test_unique_together(self):
-
         role = Role.objects.get(name='Test Role')
         community_value = '64512:64512:64512'
         community = Community(

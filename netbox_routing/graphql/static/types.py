@@ -12,7 +12,6 @@ __all__ = ('StaticRouteType',)
 
 @strawberry_django.type(models.StaticRoute, fields='__all__', filters=StaticRouteFilter)
 class StaticRouteType(PrimaryObjectType):
-
     name: str
     devices: list[Annotated["DeviceType", strawberry.lazy('dcim.graphql.types')]] | None
     vrf: Annotated["VRFType", strawberry.lazy('ipam.graphql.types')] | None

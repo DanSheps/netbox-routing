@@ -129,7 +129,7 @@ __all__ = (
     'BGPRouterEditView',
     # Routing Objects
     'CommunityListListView',
-    'CommunityListView',
+    'CommunityListDetailView',
     # 'CommunityListEntriesView',
     'CommunityListEditView',
     'CommunityListDeleteView',
@@ -138,7 +138,7 @@ __all__ = (
     'CommunityListEntryEditView',
     'CommunityListEntryDeleteView',
     'CommunityListView',
-    'CommunityView',
+    'CommunityDetailView',
     'CommunityEditView',
     'CommunityDeleteView',
     'PrefixListListView',

@@ -8,7 +8,6 @@ import utilities.json
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('netbox_routing', '0004_alter_prefixlistentry_ge_alter_prefixlistentry_le'),
     ]

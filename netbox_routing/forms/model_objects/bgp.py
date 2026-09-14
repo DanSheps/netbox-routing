@@ -162,7 +162,6 @@ class BGPSettingMixin:
 
 
 class BGPSettingForm(PrimaryModelForm):
-
     router = DynamicModelChoiceField(
         queryset=BGPRouter.objects.all(),
         required=True,
@@ -845,7 +844,6 @@ class BGPPeerAddressFamilyForm(BGPSettingMixin, TenancyForm, PrimaryModelForm):
 
 
 class BFDProfileForm(TenancyForm, PrimaryModelForm):
-
     fieldsets = (
         FieldSet(
             'name',

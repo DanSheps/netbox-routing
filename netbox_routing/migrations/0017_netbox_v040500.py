@@ -5,7 +5,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('netbox_routing', '0016_ospfinterface_interface_onetoonefield'),
         ('users', '0015_owner'),

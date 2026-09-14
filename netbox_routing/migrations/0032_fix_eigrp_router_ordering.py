@@ -4,7 +4,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('dcim', '0234_cablepath_nodes_index'),
         ('extras', '0138_customfieldchoiceset_choice_colors'),
