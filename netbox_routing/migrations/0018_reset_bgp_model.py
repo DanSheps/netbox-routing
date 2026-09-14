@@ -4,7 +4,6 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('netbox_routing', '0017_netbox_v040500'),
     ]

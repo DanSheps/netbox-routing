@@ -5,7 +5,6 @@ import django.db.models.functions.text
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('netbox_routing', '0002_netboxmodel_updates'),
     ]

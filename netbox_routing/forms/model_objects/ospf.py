@@ -65,7 +65,6 @@ class OSPFInstanceForm(PrimaryModelForm):
 
 
 class OSPFAreaForm(PrimaryModelForm):
-
     class Meta:
         model = OSPFArea
         fields = (

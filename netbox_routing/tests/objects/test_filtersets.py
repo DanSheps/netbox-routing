@@ -22,7 +22,6 @@ class ASPathTestCase(TestCase):
 
     @classmethod
     def setUpTestData(cls):
-
         cls.aspath = [
             ASPath(
                 name='AS Path List 1-1',
@@ -114,7 +113,6 @@ class PrefixListTestCase(TestCase):
 
     @classmethod
     def setUpTestData(cls):
-
         cls.prefix_list = [
             PrefixList(
                 name='Prefix List 1-1',
@@ -242,7 +240,6 @@ class RouteMapTestCase(TestCase):
 
     @classmethod
     def setUpTestData(cls):
-
         cls.prefix_list = [
             RouteMap(
                 name='Route Map 1-1',

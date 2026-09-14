@@ -12,7 +12,6 @@ from netbox_routing.models import StaticRoute
 
 @register_filterset
 class StaticRouteFilterSet(NetBoxModelFilterSet):
-
     device = django_filters.ModelMultipleChoiceFilter(
         field_name='devices__name',
         queryset=Device.objects.all(),

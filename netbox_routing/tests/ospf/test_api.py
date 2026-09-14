@@ -86,7 +86,6 @@ class OSPFAreaTestCase(IPAddressFieldMixin, APIViewTestCases.APIViewTestCase):
 
     @classmethod
     def setUpTestData(cls):
-
         data = (
             cls.model(area_id='1', area_type='stub'),
             cls.model(area_id='2', area_type='stub'),
@@ -126,7 +125,6 @@ class OSPFInterfaceTestCase(IPAddressFieldMixin, APIViewTestCases.APIViewTestCas
 
     @classmethod
     def setUpTestData(cls):
-
         device = create_test_device(name='Test Device')
         instance = OSPFInstance.objects.create(
             name='Instance 1', device=device, router_id='1.1.1.1', process_id=1
