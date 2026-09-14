@@ -20,7 +20,7 @@
   "bgpscope:api_list_objects": 17,
   "bgpscope:list_objects_with_permission": 20,
   "bgpsessiontemplate:api_list_objects": 11,
-  "bgpsessiontemplate:list_objects_with_permission": 20,
+  "bgpsessiontemplate:list_objects_with_permission": 17,
   "community:api_list_objects": 12,
   "community:list_objects_with_permission": 17,
   "communitylist:api_list_objects": 11,
