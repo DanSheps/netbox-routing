@@ -86,8 +86,7 @@ class StaticRoute(PrimaryModel):
             f'{self.prefix}',
         ]
         if self.vrf:
-            name.append('VRF')
-            name.append(f'{self.vrf}')
+            name.append(f'VRF: {self.vrf}')
         if self.next_hop or self.interface_next_hop:
             name.append('via')
             if self.next_hop:

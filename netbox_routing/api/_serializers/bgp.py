@@ -330,6 +330,7 @@ class BGPPeerAddressFamilySerializer(NetBoxModelSerializer):
         allow_null=True,
     )
     assigned_object = GFKSerializerField(read_only=True)
+
     # tenant = TenantSerializer(nested=True)
 
     class Meta:

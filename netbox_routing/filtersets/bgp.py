@@ -67,7 +67,6 @@ class BGPPeerTemplateFilterSet(NetBoxModelFilterSet):
 
 @register_filterset
 class BGPPolicyTemplateFilterSet(NetBoxModelFilterSet):
-
     class Meta:
         model = BGPPolicyTemplate
         fields = ('name',)
@@ -81,7 +80,6 @@ class BGPPolicyTemplateFilterSet(NetBoxModelFilterSet):
 
 @register_filterset
 class BGPSessionTemplateFilterSet(NetBoxModelFilterSet):
-
     class Meta:
         model = BGPSessionTemplate
         fields = ('name',)
@@ -304,7 +302,6 @@ class BGPPeerAddressFamilyFilterSet(NetBoxModelFilterSet):
 
 @register_filterset
 class BFDProfileFilterSet(NetBoxModelFilterSet):
-
     class Meta:
         model = BFDProfile
         fields = ('name',)
