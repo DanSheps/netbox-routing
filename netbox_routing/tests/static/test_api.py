@@ -25,7 +25,6 @@ class StaticRouteTestCase(IPAddressFieldMixin, APIViewTestCases.APIViewTestCase)
 
     @classmethod
     def setUpTestData(cls):
-
         device = create_test_device(name='Test Device')
         vrf = VRF.objects.create(name='Test VRF')
 

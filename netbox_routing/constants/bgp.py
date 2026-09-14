@@ -8,7 +8,6 @@ __all__ = (
     'BGPPEERAF_ASSIGNMENT_MODELS',
 )
 
-
 BGPROUTER_ASSIGNMENT_MODEL = Q(
     Q(app_label='dcim', model='region')
     | Q(app_label='dcim', model='site')

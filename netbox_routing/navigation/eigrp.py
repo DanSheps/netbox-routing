@@ -2,10 +2,8 @@ from netbox.plugins import PluginMenuButton, PluginMenuItem
 
 __all__ = ('eigrp',)
 
-
 COL_ADD = 'mdi mdi-plus'
 COL_IMPORT = 'mdi mdi-upload'
-
 
 routers = PluginMenuItem(
     link='plugins:netbox_routing:eigrprouter_list',
