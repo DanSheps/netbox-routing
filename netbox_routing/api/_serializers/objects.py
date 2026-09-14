@@ -163,7 +163,7 @@ class CustomPrefixSerializer(NetBoxModelSerializer):
 
 class RouteMapSerializer(NetBoxModelSerializer):
     url = serializers.HyperlinkedIdentityField(
-        view_name='plugins-api:netbox_routing-api:prefixlist-detail'
+        view_name='plugins-api:netbox_routing-api:routemap-detail'
     )
 
     class Meta:
@@ -181,7 +181,7 @@ class RouteMapSerializer(NetBoxModelSerializer):
 
 class RouteMapEntrySerializer(NetBoxModelSerializer):
     url = serializers.HyperlinkedIdentityField(
-        view_name='plugins-api:netbox_routing-api:prefixlistentry-detail'
+        view_name='plugins-api:netbox_routing-api:routemapentry-detail'
     )
     route_map = RouteMapSerializer(nested=True)
     match_prefix_list = PrefixListSerializer(nested=True, many=True, required=False)
