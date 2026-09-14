@@ -58,7 +58,6 @@ def reverse_migrate(apps, schema_editor):
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('netbox_routing', '0025_prefixlistentry_prefix_change'),
     ]

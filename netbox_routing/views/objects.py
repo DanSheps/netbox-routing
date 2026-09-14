@@ -63,7 +63,6 @@ class PrefixListEntriesView(ObjectChildrenView):
         return self.child_model.objects.filter(prefix_list=parent)
 
     def get_extra_context(self, request, instance):
-
         return {
             'url_parent': 'plugins:netbox_routing:prefixlist_entries',
             'url_add': 'plugins:netbox_routing:prefixlistentry_add',
@@ -243,7 +242,6 @@ class RouteMapEntriesView(ObjectChildrenView):
         return self.child_model.objects.filter(route_map=parent)
 
     def get_extra_context(self, request, instance):
-
         return {
             'url_parent': 'plugins:netbox_routing:routemap_entries',
             'url_add': 'plugins:netbox_routing:routemapentry_add',
@@ -314,7 +312,6 @@ class RouteMapEntryView(GetRelatedModelsMixin, ObjectView):
     )
 
     def get_extra_context(self, request, instance):
-
         return {
             'related_models': self.get_related_models(
                 request,

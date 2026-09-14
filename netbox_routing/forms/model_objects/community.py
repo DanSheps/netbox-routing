@@ -14,7 +14,6 @@ __all__ = (
 
 
 class CommunityListForm(TenancyForm, PrimaryModelForm):
-
     fieldsets = (
         FieldSet('name', 'description'),
         FieldSet('tenant_group', 'tenant', name=_('Tenancy')),
@@ -34,7 +33,6 @@ class CommunityListForm(TenancyForm, PrimaryModelForm):
 
 
 class CommunityForm(TenancyForm, PrimaryModelForm):
-
     fieldsets = (
         FieldSet('name', 'community', 'status', 'role', 'description'),
         FieldSet('tenant_group', 'tenant', name=_('Tenancy')),
@@ -57,7 +55,6 @@ class CommunityForm(TenancyForm, PrimaryModelForm):
 
 
 class CommunityListEntryForm(PrimaryModelForm):
-
     fieldsets = (FieldSet('community_list', 'action', 'community', 'description'),)
 
     class Meta:
