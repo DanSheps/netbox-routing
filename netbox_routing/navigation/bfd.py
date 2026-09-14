@@ -2,7 +2,6 @@ from netbox.plugins import PluginMenuItem, PluginMenuButton
 
 __all__ = ('BFD_MENU',)
 
-
 COL_ADD = 'mdi mdi-plus'
 COL_IMPORT = 'mdi mdi-upload'
 

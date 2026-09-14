@@ -8,7 +8,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('netbox_routing', '0009_alter_staticroute_metric_alter_staticroute_permanent'),
     ]

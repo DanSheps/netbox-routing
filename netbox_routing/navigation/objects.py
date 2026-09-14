@@ -2,10 +2,8 @@ from netbox.plugins import PluginMenuButton, PluginMenuItem
 
 __all__ = ('OBJECT_MENU',)
 
-
 COL_ADD = 'mdi mdi-plus'
 COL_IMPORT = 'mdi mdi-upload'
-
 
 customprefix = PluginMenuItem(
     link='plugins:netbox_routing:customprefix_list',
