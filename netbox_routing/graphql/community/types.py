@@ -21,7 +21,6 @@ __all__ = (
 
 @strawberry_django.type(models.Community, fields='__all__', filters=CommunityFilter)
 class CommunityType(PrimaryObjectType):
-
     community: str
     status: str
     role: Annotated["RoleType", strawberry.lazy('ipam.graphql.types')] | None
@@ -32,7 +31,6 @@ class CommunityType(PrimaryObjectType):
     models.CommunityList, fields='__all__', filters=CommunityListFilter
 )
 class CommunityListType(PrimaryObjectType):
-
     name: str
     tenant: Annotated["TenantType", strawberry.lazy('tenancy.graphql.types')] | None
 
@@ -41,7 +39,6 @@ class CommunityListType(PrimaryObjectType):
     models.CommunityListEntry, fields='__all__', filters=CommunityListEntryFilter
 )
 class CommunityListEntryType(PrimaryObjectType):
-
     community_list: Annotated[
         "CommunityListType", strawberry.lazy('netbox_routing.graphql.types')
     ]

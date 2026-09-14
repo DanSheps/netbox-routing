@@ -25,7 +25,6 @@ __all__ = (
 
 
 class ASPathForm(PrimaryModelForm):
-
     class Meta:
         model = ASPath
         fields = (
@@ -38,7 +37,6 @@ class ASPathForm(PrimaryModelForm):
 
 
 class ASPathEntryForm(PrimaryModelForm):
-
     class Meta:
         model = ASPathEntry
         fields = (
@@ -54,7 +52,6 @@ class ASPathEntryForm(PrimaryModelForm):
 
 
 class PrefixListForm(PrimaryModelForm):
-
     class Meta:
         model = PrefixList
         fields = (
@@ -168,7 +165,6 @@ class PrefixListEntryForm(PrimaryModelForm):
 
 
 class CustomPrefixForm(PrimaryModelForm):
-
     fieldsets = (
         FieldSet(
             'prefix',
@@ -188,7 +184,6 @@ class CustomPrefixForm(PrimaryModelForm):
 
 
 class RouteMapForm(PrimaryModelForm):
-
     class Meta:
         model = RouteMap
         fields = (

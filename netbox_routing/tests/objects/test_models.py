@@ -30,10 +30,9 @@ class ASPathTestCase(TestCase):
         asp.full_clean()
         asp.save()
         self.assertIsInstance(asp, ASPath)
-        self.assertEqual(asp.__str__(), name)
+        self.assertEqual(str(asp), name)
 
     def test_unique_together(self):
-
         name = 'AS Path 1'
         asp = ASPath(
             name=name,
@@ -77,7 +76,7 @@ class ASPathEntryTestCase(TestCase):
             aspe.full_clean()
             aspe.save()
             self.assertIsInstance(aspe, ASPathEntry)
-            self.assertEqual(aspe.__str__(), f'{self.aspath} permit {seq}')
+            self.assertEqual(str(aspe), f'{self.aspath} permit {seq}')
 
 
 class PrefixListTestCase(TestCase):
@@ -94,10 +93,9 @@ class PrefixListTestCase(TestCase):
         pl.full_clean()
         pl.save()
         self.assertIsInstance(pl, PrefixList)
-        self.assertEqual(pl.__str__(), name)
+        self.assertEqual(str(pl), name)
 
     def test_unique_together(self):
-
         name = 'Prefix List 1'
         pl = PrefixList(
             name=name,
@@ -151,7 +149,7 @@ class PrefixListEntryTestCase(TestCase):
             ple.full_clean()
             ple.save()
             self.assertIsInstance(ple, PrefixListEntry)
-            self.assertEqual(ple.__str__(), f'{self.prefix_list} permit {seq}')
+            self.assertEqual(str(ple), f'{self.prefix_list} permit {seq}')
 
 
 class RouteMapTestCase(TestCase):
@@ -168,10 +166,9 @@ class RouteMapTestCase(TestCase):
         rm.full_clean()
         rm.save()
         self.assertIsInstance(rm, RouteMap)
-        self.assertEqual(rm.__str__(), name)
+        self.assertEqual(str(rm), name)
 
     def test_unique_together(self):
-
         name = 'Route Map 1'
         rm = RouteMap(
             name=name,
@@ -215,4 +212,4 @@ class RouteMapEntryTestCase(TestCase):
             rme.full_clean()
             rme.save()
             self.assertIsInstance(rme, RouteMapEntry)
-            self.assertEqual(rme.__str__(), f'{self.route_map} permit {seq}')
+            self.assertEqual(str(rme), f'{self.route_map} permit {seq}')

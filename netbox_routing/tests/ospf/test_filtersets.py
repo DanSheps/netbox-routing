@@ -108,7 +108,6 @@ class OSPFAreaTestCase(TestCase):
 
     @classmethod
     def setUpTestData(cls):
-
         data = (
             OSPFArea(area_id='0.0.0.0'),
             OSPFArea(area_id='1.1.1.1'),

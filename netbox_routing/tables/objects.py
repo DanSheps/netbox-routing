@@ -54,7 +54,6 @@ class PrefixListEntryTable(NetBoxTable):
 
 
 class CustomPrefixTable(NetBoxTable):
-
     class Meta(NetBoxTable.Meta):
         model = CustomPrefix
         fields = (

@@ -44,7 +44,6 @@ def reverse_migrate(apps, schema_editor):
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('extras', '0134_owner'),
         ('netbox_routing', '0023_peer_and_session_add_ttl'),
