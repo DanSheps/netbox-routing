@@ -5,7 +5,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('netbox_routing', '0011_osfp_passive_interface'),
     ]

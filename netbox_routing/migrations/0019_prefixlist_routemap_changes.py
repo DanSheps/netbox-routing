@@ -9,7 +9,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('netbox_routing', '0018_reset_bgp_model'),
     ]

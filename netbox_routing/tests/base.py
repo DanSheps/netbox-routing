@@ -26,9 +26,7 @@ class IPAddressFieldMixin:
             if api:
                 if type(value) is netaddr.IPAddress:
                     model_dict[key] = str(value)
-            elif not api and key in [
-                'router_id',
-            ]:
+            elif not api and key == 'router_id':
                 if type(value) is netaddr.IPAddress:
                     model_dict[key] = str(value)
         return model_dict

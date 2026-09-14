@@ -4,7 +4,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('netbox_routing', '0003_model_ordering_and_constraints'),
     ]
