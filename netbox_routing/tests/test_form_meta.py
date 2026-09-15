@@ -20,7 +20,15 @@ def _iter_model_forms():
     from django.forms import ModelForm
 
     seen = set()
-    for submodule_name in ('bgp', 'community', 'eigrp', 'objects', 'ospf', 'static'):
+    for submodule_name in (
+        'bgp',
+        'community',
+        'eigrp',
+        'isis',
+        'objects',
+        'ospf',
+        'static',
+    ):
         submodule = getattr(model_objects, submodule_name, None)
         if submodule is None:
             continue

@@ -1,6 +1,7 @@
 from .bgp.filters import *
 from .community.filters import *
 from .eigrp.filters import *
+from .isis.filters import *
 from .objects.filters import *
 from .ospf.filters import *
 from .static.filters import *
@@ -24,6 +25,15 @@ __all__ = (
     'EIGRPAddressFamilyFilter',
     'EIGRPNetworkFilter',
     'EIGRPInterfaceFilter',
+    'ISISInstanceFilter',
+    'ISISInterfaceFilter',
+    'ISISSettingFilter',
+    'ISISLevelFilter',
+    'ISISInterfaceLevelFilter',
+    'ISISSegmentRoutingFilter',
+    'ISISFlexAlgoFilter',
+    'ISISPrefixSIDFilter',
+    'ISISSRv6LocatorFilter',
     'OSPFInstanceFilter',
     'OSPFAreaFilter',
     'OSPFInterfaceFilter',
