@@ -167,12 +167,12 @@ class BGPAddressFamilyTable(TenancyColumnsMixin, NetBoxTable):
 class BGPPeerTable(TenancyColumnsMixin, NetBoxTable):
     name = tables.Column(linkify=True, verbose_name=_('Name'))
     scope = tables.Column(linkify=True, verbose_name=_('Scope'))
-    peer = tables.Column(linkify=True, verbose_name=_('Scope'))
-    source = tables.Column(linkify=True, verbose_name=_('Scope'))
-    peer_group = tables.Column(linkify=True, verbose_name=_('Scope'))
-    peer_session = tables.Column(linkify=True, verbose_name=_('Scope'))
-    remote_as = tables.Column(linkify=True, verbose_name=_('Scope'))
-    local_as = tables.Column(linkify=True, verbose_name=_('Scope'))
+    peer = tables.Column(linkify=True, verbose_name=_('Peer Address'))
+    source = tables.Column(linkify=True, verbose_name=_('Source Address'))
+    peer_group = tables.Column(linkify=True, verbose_name=_('Peer Group'))
+    peer_session = tables.Column(linkify=True, verbose_name=_('Peer Session'))
+    remote_as = tables.Column(linkify=True, verbose_name=_('Remote AS'))
+    local_as = tables.Column(linkify=True, verbose_name=_('Local AS'))
 
     class Meta(NetBoxTable.Meta):
         model = BGPPeer
