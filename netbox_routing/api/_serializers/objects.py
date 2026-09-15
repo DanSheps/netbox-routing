@@ -200,6 +200,7 @@ class RouteMapEntrySerializer(NetBoxModelSerializer):
             'route_map',
             'sequence',
             'action',
+            'flow_control',
             'match_prefix_list',
             'match_community_list',
             'match_community',
