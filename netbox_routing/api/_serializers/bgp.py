@@ -173,9 +173,7 @@ class BGPRouterSerializer(NetBoxModelSerializer):
     asn = ASNSerializer(nested=True)
     settings = BGPSettingSerializer(many=True, required=False)
     tenant = TenantSerializer(nested=True, required=False)
-    peer_templates = BGPPeerTemplateSerializer(
-        many=True, nested=True, required=False
-    )
+    peer_templates = BGPPeerTemplateSerializer(many=True, nested=True, required=False)
     policy_templates = BGPPolicyTemplateSerializer(
         many=True, nested=True, required=False
     )
