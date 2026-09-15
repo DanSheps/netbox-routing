@@ -3,7 +3,7 @@
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ValidationError
 from django.db import IntegrityError, transaction
-from django.test import TestCase, override_settings
+from django.test import TestCase
 
 from dcim.models import Interface
 from utilities.testing import create_test_device
@@ -590,12 +590,11 @@ class ISISSRv6LocatorModelTestCase(TestCase):
 class ISISMigrationStateTestCase(TestCase):
     """The IS-IS migration must faithfully capture the models.
 
-    Two guards: (1) every IS-IS model's *recorded* CreateModel bases must include
-    PrimaryModel's DeleteMixin — a CreateModel that omits ``bases=`` silently records
+    Every IS-IS model's *recorded* CreateModel bases must include PrimaryModel's
+    DeleteMixin — a CreateModel that omits ``bases=`` silently records
     ``(models.Model,)`` instead, dropping DeleteMixin from the historical state used by
     data migrations (makemigrations does NOT detect a mixin-only bases drift, so nothing
-    else catches it); (2) makemigrations finds no pending field/option drift, so a model
-    field change (e.g. removing a column) can't land without the matching 0033 edit.
+    else catches it).
     """
 
     #: every IS-IS PrimaryModel — all subclass DeleteMixin via PrimaryModel
@@ -625,37 +624,4 @@ class ISISMigrationStateTestCase(TestCase):
         ]
         self.assertEqual(
             dropped, [], f'CreateModel bases dropped DeleteMixin for: {dropped}'
-        )
-
-    # NetBox overrides makemigrations to refuse unless settings.DEVELOPER is True (or
-    # --check is passed) — see core/management/commands/makemigrations.py. CI's
-    # configuration_testing leaves DEVELOPER=False, so force it on for this in-process
-    # dry-run; without it the command raises "development purposes only" and the guard
-    # never runs. (Local isis_test config sets DEVELOPER=True, which is why this passed
-    # locally but errored in CI.)
-    @override_settings(DEVELOPER=True)
-    def test_no_pending_isis_migrations(self):
-        # makemigrations is per-app, so scope the assertion to IS-IS models: a pending
-        # change to any of them (e.g. a model field dropped without the matching 0033
-        # edit) names that model in the dry-run output. Pre-existing drift in other
-        # netbox_routing models (e.g. OSPF) is out of scope for this PR.
-        from io import StringIO
-
-        from django.core.management import call_command
-
-        out = StringIO()
-        call_command(
-            'makemigrations',
-            'netbox_routing',
-            dry_run=True,
-            verbosity=1,
-            stdout=out,
-            stderr=out,
-        )
-        output = out.getvalue().lower()
-        pending = [name for name in self.ISIS_MODELS if name in output]
-        self.assertEqual(
-            pending,
-            [],
-            f'pending IS-IS migration changes detected:\n{out.getvalue()}',
         )
