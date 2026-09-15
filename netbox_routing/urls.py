@@ -26,6 +26,62 @@ urlpatterns = [
     path(
         'ospf/interface/<int:pk>/', include(get_model_urls(app_name, 'ospfinterface'))
     ),
+    # IS-IS
+    path(
+        'isis/setting/',
+        include(get_model_urls(app_name, 'isissetting', detail=False)),
+    ),
+    path('isis/setting/<int:pk>/', include(get_model_urls(app_name, 'isissetting'))),
+    path('isis/level/', include(get_model_urls(app_name, 'isislevel', detail=False))),
+    path('isis/level/<int:pk>/', include(get_model_urls(app_name, 'isislevel'))),
+    path(
+        'isis/interface-level/',
+        include(get_model_urls(app_name, 'isisinterfacelevel', detail=False)),
+    ),
+    path(
+        'isis/interface-level/<int:pk>/',
+        include(get_model_urls(app_name, 'isisinterfacelevel')),
+    ),
+    path(
+        'isis/segment-routing/',
+        include(get_model_urls(app_name, 'isissegmentrouting', detail=False)),
+    ),
+    path(
+        'isis/segment-routing/<int:pk>/',
+        include(get_model_urls(app_name, 'isissegmentrouting')),
+    ),
+    path(
+        'isis/flex-algo/',
+        include(get_model_urls(app_name, 'isisflexalgo', detail=False)),
+    ),
+    path('isis/flex-algo/<int:pk>/', include(get_model_urls(app_name, 'isisflexalgo'))),
+    path(
+        'isis/prefix-sid/',
+        include(get_model_urls(app_name, 'isisprefixsid', detail=False)),
+    ),
+    path(
+        'isis/prefix-sid/<int:pk>/', include(get_model_urls(app_name, 'isisprefixsid'))
+    ),
+    path(
+        'isis/srv6-locator/',
+        include(get_model_urls(app_name, 'isissrv6locator', detail=False)),
+    ),
+    path(
+        'isis/srv6-locator/<int:pk>/',
+        include(get_model_urls(app_name, 'isissrv6locator')),
+    ),
+    path(
+        'isis/instance/',
+        include(get_model_urls(app_name, 'isisinstance', detail=False)),
+    ),
+    path('isis/instance/<int:pk>/', include(get_model_urls(app_name, 'isisinstance'))),
+    path(
+        'isis/interface/',
+        include(get_model_urls(app_name, 'isisinterface', detail=False)),
+    ),
+    path(
+        'isis/interface/<int:pk>/', include(get_model_urls(app_name, 'isisinterface'))
+    ),
     # EIGRP
     path(
         'eigrp/router/', include(get_model_urls(app_name, 'eigrprouter', detail=False))

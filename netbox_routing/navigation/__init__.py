@@ -3,6 +3,7 @@ from netbox.plugins import PluginMenu
 from .bfd import BFD_MENU
 from .objects import OBJECT_MENU
 from .ospf import MENUITEMS as OSPF_MENU
+from .isis import MENUITEMS as ISIS_MENU
 from .eigrp import eigrp
 from .static import MENUITEMS as STATIC_MENU
 from .bgp import BGP_MENU
@@ -18,6 +19,7 @@ menu = PluginMenu(
         ('Static', STATIC_MENU),
         ('BGP', BGP_MENU),
         ('OSPF', OSPF_MENU),
+        ('IS-IS', ISIS_MENU),
         ('EIGRP', eigrp),
     ),
     icon_class='mdi mdi-router',
