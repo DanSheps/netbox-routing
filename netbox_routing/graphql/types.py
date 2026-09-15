@@ -1,6 +1,7 @@
 from .bgp.types import *
 from .community.types import *
 from .eigrp.types import *
+from .isis.types import *
 from .objects.types import *
 from .ospf.types import *
 from .static.types import *
@@ -23,6 +24,15 @@ __all__ = (
     'EIGRPAddressFamilyType',
     'EIGRPNetworkType',
     'EIGRPInterfaceType',
+    'ISISInstanceType',
+    'ISISInterfaceType',
+    'ISISSettingType',
+    'ISISLevelType',
+    'ISISInterfaceLevelType',
+    'ISISSegmentRoutingType',
+    'ISISFlexAlgoType',
+    'ISISPrefixSIDType',
+    'ISISSRv6LocatorType',
     'OSPFInstanceType',
     'OSPFAreaType',
     'OSPFInterfaceType',

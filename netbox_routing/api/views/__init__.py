@@ -1,6 +1,17 @@
 from .community import *
 from .static import StaticRouteViewSet
 from .ospf import OSPFInstanceViewSet, OSPFAreaViewSet, OSPFInterfaceViewSet
+from .isis import (
+    ISISInstanceViewSet,
+    ISISInterfaceViewSet,
+    ISISSettingViewSet,
+    ISISLevelViewSet,
+    ISISInterfaceLevelViewSet,
+    ISISSegmentRoutingViewSet,
+    ISISFlexAlgoViewSet,
+    ISISPrefixSIDViewSet,
+    ISISSRv6LocatorViewSet,
+)
 from .bgp import *
 from .objects import *
 from .eigrp import (
@@ -29,6 +40,15 @@ __all__ = (
     'OSPFInstanceViewSet',
     'OSPFAreaViewSet',
     'OSPFInterfaceViewSet',
+    'ISISInstanceViewSet',
+    'ISISInterfaceViewSet',
+    'ISISSettingViewSet',
+    'ISISLevelViewSet',
+    'ISISInterfaceLevelViewSet',
+    'ISISSegmentRoutingViewSet',
+    'ISISFlexAlgoViewSet',
+    'ISISPrefixSIDViewSet',
+    'ISISSRv6LocatorViewSet',
     'PrefixListViewSet',
     'PrefixListEntryViewSet',
     'RouteMapViewSet',

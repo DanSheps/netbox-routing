@@ -1,6 +1,7 @@
 from .static import *
 from .objects import *
 from .ospf import *
+from .isis import *
 from .eigrp import *
 from .bgp import *
 
@@ -11,6 +12,10 @@ __all__ = (
     'OSPFInstanceBulkEditForm',
     'OSPFInterfaceBulkEditForm',
     'OSPFAreaBulkEditForm',
+    # IS-IS
+    'ISISInstanceBulkEditForm',
+    'ISISInterfaceBulkEditForm',
+    'ISISSettingBulkEditForm',
     # EIGRP
     'EIGRPRouterBulkEditForm',
     'EIGRPAddressFamilyBulkEditForm',
