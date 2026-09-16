@@ -73,7 +73,7 @@ class StaticRoute(PrimaryModel):
     prerequisite_models = ('dcim.Device',)
 
     class Meta:
-        ordering = ['vrf', 'prefix', 'metric']
+        ordering = ['vrf', 'prefix', 'metric', 'pk']
         constraints = (
             CheckConstraint(
                 condition=Q(Q(metric__lte=255) & Q(metric__gte=0)),
