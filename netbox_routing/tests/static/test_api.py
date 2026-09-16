@@ -27,20 +27,9 @@ class StaticRouteTestCase(IPAddressFieldMixin, APIViewTestCases.APIViewTestCase)
     bulk_update_data = {'metric': 5}
 
     def test_paginated_list_returns_each_tied_route_once(self):
-        """Reproduce the paged list dropping and repeating rows (issue #206).
-
-        StaticRoute orders by (vrf, prefix, metric). These rows share all three and
-        differ only by next_hop, so the ordering is not total unless it ends in a
-        unique field.
-
-        The REST API pages with LIMIT and OFFSET, and PostgreSQL picks a different
-        plan as the offset grows: an incremental sort for the first page, then a full
-        sort over a sequential scan for later ones. The two plans order tied rows
-        differently, so a row that appeared on an early page appears again later while
-        another is never returned.
-
-        Do not filter the list here. A filter changes the row estimates, the planner
-        then uses one plan for every offset, and the defect no longer shows.
+        """
+        StaticRoute orders by (vrf, prefix, metric). These rows differ only by next_hop,
+        so the ordering is not total unless it ends in a unique field.
         """
         self.add_permissions('netbox_routing.view_staticroute')
         vrf = VRF.objects.create(name='Pagination Test VRF')
@@ -55,8 +44,6 @@ class StaticRouteTestCase(IPAddressFieldMixin, APIViewTestCases.APIViewTestCase)
                 for index in range(1, 1501)
             ]
         )
-        # page the plain list endpoint, as the report does, so every route in the
-        # table takes part, not just this VRF's
         expected_ids = set(StaticRoute.objects.values_list('pk', flat=True))
         collected_ids = []
         visited_urls = set()
