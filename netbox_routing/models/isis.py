@@ -73,6 +73,7 @@ class ISISSetting(PrimaryModel):
             'assigned_object_type',
             'assigned_object_id',
             'key',
+            'pk',
         )
         constraints = [
             models.UniqueConstraint(
@@ -587,7 +588,7 @@ class ISISInterface(PrimaryModel):
 
     class Meta:
         verbose_name = 'IS-IS Interface'
-        ordering = ('instance', 'interface')
+        ordering = ('instance', 'interface', 'pk')
         constraints = [
             models.UniqueConstraint(
                 fields=('interface', 'address_family'),

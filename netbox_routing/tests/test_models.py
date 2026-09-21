@@ -1,3 +1,5 @@
+from django.apps import apps
+from django.db.models import UniqueConstraint
 from django.test import SimpleTestCase
 
 from netbox_routing.tests.community.test_models import *
@@ -26,8 +28,61 @@ __all__ = (
     'CommunityTestCase',
     'CommunityListTestCase',
     'CommunityListEntryTestCase',
+    'ModelOrderingTestCase',
     'AggregateModelTestExportsTestCase',
 )
+
+
+class ModelOrderingTestCase(SimpleTestCase):
+    def test_concrete_models_have_total_ordering(self):
+        invalid_ordering = {}
+
+        for model in apps.get_app_config('netbox_routing').get_models():
+            if model._meta.abstract:
+                continue
+
+            ordering = model._meta.ordering
+            if not ordering:
+                invalid_ordering[model._meta.label] = ordering
+                continue
+
+            ordering_fields = {field.lstrip('-') for field in ordering}
+            unique_field_sets = [
+                {field.name}
+                for field in model._meta.fields
+                if field.unique and not field.null
+            ]
+            unique_field_sets.extend(
+                set(fields)
+                for fields in model._meta.unique_together
+                if all(not model._meta.get_field(field).null for field in fields)
+            )
+            unique_field_sets.extend(
+                set(constraint.fields)
+                for constraint in model._meta.constraints
+                if isinstance(constraint, UniqueConstraint)
+                and constraint.fields
+                and constraint.condition is None
+                and (
+                    constraint.nulls_distinct is False
+                    or all(
+                        not model._meta.get_field(field).null
+                        for field in constraint.fields
+                    )
+                )
+            )
+
+            last_field = ordering[-1].lstrip('-')
+            if last_field not in ('pk', 'id') and not any(
+                fields <= ordering_fields for fields in unique_field_sets
+            ):
+                invalid_ordering[model._meta.label] = ordering
+
+        self.assertEqual(
+            invalid_ordering,
+            {},
+            f'models without total ordering: {invalid_ordering}',
+        )
 
 
 class AggregateModelTestExportsTestCase(SimpleTestCase):
