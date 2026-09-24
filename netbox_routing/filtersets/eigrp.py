@@ -68,6 +68,7 @@ class EIGRPRouterFilterSet(RouterMixin, NetBoxModelFilterSet):
         return queryset.filter(qs_filter).distinct()
 
 
+@register_filterset
 class EIGRPAddressFamilyFilterSet(RouterMixin, NetBoxModelFilterSet):
     router_id = django_filters.ModelMultipleChoiceFilter(
         field_name='router',
@@ -115,6 +116,7 @@ class EIGRPAddressFamilyFilterSet(RouterMixin, NetBoxModelFilterSet):
         return queryset.filter(qs_filter).distinct()
 
 
+@register_filterset
 class EIGRPNetworkFilterSet(NetBoxModelFilterSet):
     router_id = django_filters.ModelMultipleChoiceFilter(
         field_name='router',
@@ -190,6 +192,7 @@ class EIGRPNetworkFilterSet(NetBoxModelFilterSet):
         return queryset.filter(qs_filter).distinct()
 
 
+@register_filterset
 class EIGRPInterfaceFilterSet(NetBoxModelFilterSet):
     router_id = django_filters.ModelMultipleChoiceFilter(
         field_name='router',

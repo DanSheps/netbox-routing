@@ -2,9 +2,11 @@ import django_filters
 from django.db.models import Q
 from django.utils.translation import gettext as _
 
-from netbox.filtersets import NetBoxModelFilterSet
+from netbox.filtersets import NetBoxModelFilterSet, PrimaryModelFilterSet
 from dcim.models import Device
 from ipam.models import ASN, VRF, IPAddress
+from netbox_routing.models import PrefixList, RouteMap
+from tenancy.filtersets import TenancyFilterSet
 from utilities.filtersets import register_filterset
 
 from netbox_routing.choices.bgp import *
@@ -24,8 +26,71 @@ __all__ = (
 )
 
 
+class PolicyFilterSetMixin(django_filters.FilterSet):
+    prefixlist_in_id = django_filters.ModelMultipleChoiceFilter(
+        field_name='prefixlist_in_id',
+        queryset=PrefixList.objects.all(),
+        label=_('Incoming Prefix List (ID)'),
+    )
+    prefixlist_in = django_filters.ModelMultipleChoiceFilter(
+        field_name='prefixlist_in_id__name',
+        queryset=PrefixList.objects.all(),
+        to_field_name='name',
+        label=_('Incoming Prefix List (Name)'),
+    )
+    prefixlist_out_id = django_filters.ModelMultipleChoiceFilter(
+        field_name='prefixlist_out_id',
+        queryset=PrefixList.objects.all(),
+        label=_('Outgoing Prefix List (ID)'),
+    )
+    prefixlist_out = django_filters.ModelMultipleChoiceFilter(
+        field_name='prefixlist_out_id__name',
+        queryset=PrefixList.objects.all(),
+        to_field_name='name',
+        label=_('Outgoing Prefix List (Name)'),
+    )
+    routemap_in_id = django_filters.ModelMultipleChoiceFilter(
+        field_name='routemap_in_id',
+        queryset=RouteMap.objects.all(),
+        label=_('Incoming Route Map (ID)'),
+    )
+    routemap_in = django_filters.ModelMultipleChoiceFilter(
+        field_name='routemap_in_id__name',
+        queryset=RouteMap.objects.all(),
+        to_field_name='name',
+        label=_('Incoming Route Map (Name)'),
+    )
+    routemap_out_id = django_filters.ModelMultipleChoiceFilter(
+        field_name='routemap_out_id',
+        queryset=RouteMap.objects.all(),
+        label=_('Outgoing Route Map (ID)'),
+    )
+    routemap_out = django_filters.ModelMultipleChoiceFilter(
+        field_name='routemap_out_id__name',
+        queryset=RouteMap.objects.all(),
+        to_field_name='name',
+        label=_('Outgoing Route Map (Name)'),
+    )
+
+
+class RemoteASFilterSetMixin(django_filters.FilterSet):
+    remote_as_id = django_filters.ModelMultipleChoiceFilter(
+        field_name='remote_as',
+        queryset=ASN.objects.all(),
+        label=_('Remote AS (ID)'),
+    )
+    remote_as = django_filters.ModelMultipleChoiceFilter(
+        field_name='remote_as__asn',
+        queryset=ASN.objects.all(),
+        to_field_name='asn',
+        label=_('Remote AS (ASN)'),
+    )
+
+
 @register_filterset
-class BGPPeerTemplateFilterSet(NetBoxModelFilterSet):
+class BGPPeerTemplateFilterSet(
+    RemoteASFilterSetMixin, TenancyFilterSet, PrimaryModelFilterSet
+):
     peer_id = django_filters.ModelMultipleChoiceFilter(
         field_name='peers',
         queryset=BGPScope.objects.all(),
@@ -36,17 +101,6 @@ class BGPPeerTemplateFilterSet(NetBoxModelFilterSet):
         queryset=BGPPeerAddressFamily.objects.all(),
         label=_('Address Family (ID)'),
     )
-    remote_as_id = django_filters.ModelMultipleChoiceFilter(
-        field_name='remote_as',
-        queryset=ASN.objects.all(),
-        label=_('Remote AS (ID)'),
-    )
-    remote_as = django_filters.ModelMultipleChoiceFilter(
-        field_name='remote_as__asn',
-        queryset=ASN.objects.all(),
-        to_field_name='remote_as',
-        label=_('Remote AS (ASN)'),
-    )
 
     class Meta:
         model = BGPPeerTemplate
@@ -56,6 +110,8 @@ class BGPPeerTemplateFilterSet(NetBoxModelFilterSet):
             'remote_as_id',
             'remote_as',
             'enabled',
+            'tenant_group',
+            'tenant',
         )
 
     def search(self, queryset, name, value):
@@ -66,10 +122,36 @@ class BGPPeerTemplateFilterSet(NetBoxModelFilterSet):
 
 
 @register_filterset
-class BGPPolicyTemplateFilterSet(NetBoxModelFilterSet):
+class BGPPolicyTemplateFilterSet(
+    PolicyFilterSetMixin, TenancyFilterSet, PrimaryModelFilterSet
+):
+    name = django_filters.CharFilter()
+    enabled = django_filters.BooleanFilter()
+    parent_id = django_filters.ModelMultipleChoiceFilter(
+        field_name='parents',
+        queryset=BGPPolicyTemplate.objects.all(),
+        label=_('Parent (ID)'),
+    )
+    parent = django_filters.ModelMultipleChoiceFilter(
+        field_name='parents__name',
+        queryset=BGPPolicyTemplate.objects.all(),
+        to_field_name='name',
+        label=_('Parent (Name)'),
+    )
+
     class Meta:
         model = BGPPolicyTemplate
-        fields = ('name',)
+        fields = (
+            'name',
+            'parent',
+            'enabled',
+            'prefixlist_in',
+            'prefixlist_out',
+            'routemap_in',
+            'routemap_out',
+            'tenant_group',
+            'tenant',
+        )
 
     def search(self, queryset, name, value):
         if not value.strip():
@@ -79,10 +161,13 @@ class BGPPolicyTemplateFilterSet(NetBoxModelFilterSet):
 
 
 @register_filterset
-class BGPSessionTemplateFilterSet(NetBoxModelFilterSet):
+class BGPSessionTemplateFilterSet(
+    RemoteASFilterSetMixin, TenancyFilterSet, PrimaryModelFilterSet
+):
+
     class Meta:
         model = BGPSessionTemplate
-        fields = ('name',)
+        fields = ('name', 'remote_as_id', 'remote_as', 'tenant_group', 'tenant')
 
     def search(self, queryset, name, value):
         if not value.strip():
@@ -92,7 +177,7 @@ class BGPSessionTemplateFilterSet(NetBoxModelFilterSet):
 
 
 @register_filterset
-class BGPSettingFilterSet(NetBoxModelFilterSet):
+class BGPSettingFilterSet(PrimaryModelFilterSet):
     key = django_filters.MultipleChoiceFilter(
         choices=BGPSettingChoices, null_value=None, label=_('Setting Name')
     )
@@ -109,18 +194,18 @@ class BGPSettingFilterSet(NetBoxModelFilterSet):
 
 
 @register_filterset
-class BGPRouterFilterSet(NetBoxModelFilterSet):
-    # device_id = django_filters.ModelMultipleChoiceFilter(
-    #    field_name='device',
-    #    queryset=Device.objects.all(),
-    #    label=_('Device (ID)'),
-    # )
-    # device = django_filters.ModelMultipleChoiceFilter(
-    #    field_name='device__name',
-    #    queryset=Device.objects.all(),
-    #    to_field_name='name',
-    #    label=_('Device'),
-    # )
+class BGPRouterFilterSet(TenancyFilterSet, PrimaryModelFilterSet):
+    device_id = django_filters.ModelMultipleChoiceFilter(
+        field_name='device',
+        queryset=Device.objects.all(),
+        label=_('Device (ID)'),
+    )
+    device = django_filters.ModelMultipleChoiceFilter(
+        field_name='device__name',
+        queryset=Device.objects.all(),
+        to_field_name='name',
+        label=_('Device'),
+    )
     asn_id = django_filters.ModelMultipleChoiceFilter(
         field_name='asn',
         queryset=ASN.objects.all(),
@@ -135,7 +220,7 @@ class BGPRouterFilterSet(NetBoxModelFilterSet):
 
     class Meta:
         model = BGPRouter
-        fields = ('asn_id', 'asn')
+        fields = ('device_id', 'device', 'asn_id', 'asn', 'tenant_group', 'tenant')
 
     def search(self, queryset, name, value):
         if not value.strip():
@@ -149,7 +234,7 @@ class BGPRouterFilterSet(NetBoxModelFilterSet):
 
 
 @register_filterset
-class BGPScopeFilterSet(NetBoxModelFilterSet):
+class BGPScopeFilterSet(TenancyFilterSet, PrimaryModelFilterSet):
     router_id = django_filters.ModelMultipleChoiceFilter(
         field_name='router',
         queryset=BGPRouter.objects.all(),
@@ -169,7 +254,7 @@ class BGPScopeFilterSet(NetBoxModelFilterSet):
 
     class Meta:
         model = BGPScope
-        fields = ('router_id', 'vrf_id', 'vrf')
+        fields = ('router_id', 'vrf_id', 'vrf', 'tenant_group', 'tenant')
 
     def search(self, queryset, name, value):
         if not value.strip():
@@ -183,7 +268,7 @@ class BGPScopeFilterSet(NetBoxModelFilterSet):
 
 
 @register_filterset
-class BGPAddressFamilyFilterSet(NetBoxModelFilterSet):
+class BGPAddressFamilyFilterSet(TenancyFilterSet, PrimaryModelFilterSet):
     scope_id = django_filters.ModelMultipleChoiceFilter(
         field_name='scope',
         queryset=Device.objects.all(),
@@ -195,7 +280,7 @@ class BGPAddressFamilyFilterSet(NetBoxModelFilterSet):
 
     class Meta:
         model = BGPAddressFamily
-        fields = ('scope_id', 'address_family')
+        fields = ('scope_id', 'address_family', 'tenant_group', 'tenant')
 
     def search(self, queryset, name, value):
         if not value.strip():
@@ -302,6 +387,7 @@ class BGPPeerAddressFamilyFilterSet(NetBoxModelFilterSet):
 
 @register_filterset
 class BFDProfileFilterSet(NetBoxModelFilterSet):
+
     class Meta:
         model = BFDProfile
         fields = ('name',)

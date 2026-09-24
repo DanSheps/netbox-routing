@@ -162,6 +162,7 @@ class BGPSettingMixin:
 
 
 class BGPSettingForm(PrimaryModelForm):
+
     router = DynamicModelChoiceField(
         queryset=BGPRouter.objects.all(),
         required=True,
@@ -318,6 +319,7 @@ class BGPPolicyTemplateForm(TenancyForm, PrimaryModelForm):
             'name',
             'parents',
             'description',
+            'tags',
         ),
         FieldSet(
             'prefixlist_out',
@@ -446,7 +448,7 @@ class BGPRouterForm(BGPSettingMixin, TenancyForm, PrimaryModelForm):
         queryset=VirtualMachine.objects.all(),
         required=False,
         selector=True,
-        label=_('Device'),
+        label=_('Virtual Machine'),
     )
     asn = DynamicModelChoiceField(
         queryset=ASN.objects.all(),
@@ -473,6 +475,9 @@ class BGPRouterForm(BGPSettingMixin, TenancyForm, PrimaryModelForm):
         label=_('Peer Templates'),
     )
 
+    location_selected = forms.HiddenInput()
+    vm_selected = forms.HiddenInput()
+
     fieldsets = [
         FieldSet(
             'name',
@@ -481,10 +486,11 @@ class BGPRouterForm(BGPSettingMixin, TenancyForm, PrimaryModelForm):
         FieldSet(
             TabbedGroups(
                 FieldSet(
-                    'region', 'site_group', 'site', 'location', name=_('Locations')
+                    'location_selected', 'region', 'site_group', 'site', 'location', name=_('Locations')
                 ),
                 FieldSet('device', name=_('Device')),
                 FieldSet(
+                    'vm_selected',
                     'cluster_group',
                     'cluster',
                     'virtual_machine',
@@ -534,20 +540,27 @@ class BGPRouterForm(BGPSettingMixin, TenancyForm, PrimaryModelForm):
         initial = kwargs.get('initial', {}).copy()
         if instance:
             if type(instance.assigned_object) is Region:
+                initial['location_selected'] = True
                 initial['region'] = instance.assigned_object
             elif type(instance.assigned_object) is SiteGroup:
+                initial['location_selected'] = True
                 initial['site_group'] = instance.assigned_object
             elif type(instance.assigned_object) is Site:
+                initial['location_selected'] = True
                 initial['site'] = instance.assigned_object
             elif type(instance.assigned_object) is Location:
+                initial['location_selected'] = True
                 initial['location'] = instance.assigned_object
             elif type(instance.assigned_object) is Device:
                 initial['device'] = instance.assigned_object
             elif type(instance.assigned_object) is ClusterGroup:
+                initial['vm_selected'] = True
                 initial['cluster_group'] = instance.assigned_object
             elif type(instance.assigned_object) is Cluster:
+                initial['vm_selected'] = True
                 initial['cluster'] = instance.assigned_object
             elif type(instance.assigned_object) is VirtualMachine:
+                initial['vm_selected'] = True
                 initial['virtual_machine'] = instance.assigned_object
         kwargs['initial'] = initial
         super().__init__(*args, **kwargs)
@@ -582,6 +595,20 @@ class BGPRouterForm(BGPSettingMixin, TenancyForm, PrimaryModelForm):
             self.instance.assigned_object = self.cleaned_data[selected_objects[0]]
         else:
             self.instance.assigned_object = None
+
+        filter = {selected_objects[0]: self.instance.assigned_object}
+        if (
+            self.Meta.model.objects.filter(**filter)
+            .exclude(pk=self.instance.pk)
+            .exists()
+        ):
+            raise forms.ValidationError(
+                {
+                    selected_objects[0]: _(
+                        "A BGP Router with this object already exists."
+                    )
+                }
+            )
 
     def save(self, *args, **kwargs):
         return super().save(*args, **kwargs)
@@ -839,11 +866,26 @@ class BGPPeerAddressFamilyForm(BGPSettingMixin, TenancyForm, PrimaryModelForm):
                 _('A BGP Peer Address Family must specify an Peer or Peer Group.')
             )
 
+        filter = {selected_objects[0]: self.instance.assigned_object}
+        if (
+            self.Meta.model.objects.filter(**filter)
+            .exclude(pk=self.instance.pk)
+            .exists()
+        ):
+            raise forms.ValidationError(
+                {
+                    selected_objects[0]: _(
+                        "A BGP Peer Address Family with this object already exists."
+                    )
+                }
+            )
+
     def save(self, *args, **kwargs):
         return super().save(*args, **kwargs)
 
 
 class BFDProfileForm(TenancyForm, PrimaryModelForm):
+
     fieldsets = (
         FieldSet(
             'name',
