@@ -8,6 +8,7 @@ from netbox.models import PrimaryModel
 
 from netbox_routing import choices
 from netbox_routing.choices.ospf import OSPFAreaTypeChoices
+from netbox_routing.constants import ERROR_UNIQUENESS_CONSTRAINT
 from netbox_routing.fields.ip import IPAddressField
 
 __all__ = (
@@ -47,8 +48,7 @@ class OSPFInstance(PrimaryModel):
             models.UniqueConstraint(
                 fields=('device', 'name'),
                 name='%(app_label)s_%(class)s_unique_device_name',
-                violation_error_message="""Name must be unique per device.
-                Only a single empty name is permitted per device""",
+                violation_error_message=ERROR_UNIQUENESS_CONSTRAINT ,
                 nulls_distinct=False,
             ),
         )
