@@ -37,6 +37,7 @@ from netbox_routing.graphql.types_mixin import BGPSettingsMixin
 
 @strawberry_django.type(
     models.BGPSetting,
+    pagination=True,
     fields='__all__',
     exclude=['assigned_object_type', 'assigned_object_id'],
     filters=BGPSettingFilter,
@@ -70,7 +71,8 @@ class BGPSettingType(PrimaryObjectType):
 
 
 @strawberry_django.type(
-    models.BGPPeerTemplate, fields='__all__', filters=BGPPeerTemplateFilter
+    models.BGPPeerTemplate,
+    pagination=True, fields='__all__', filters=BGPPeerTemplateFilter
 )
 class BGPPeerTemplateType(PrimaryObjectType):
     name: str
@@ -80,7 +82,8 @@ class BGPPeerTemplateType(PrimaryObjectType):
 
 
 @strawberry_django.type(
-    models.BGPPolicyTemplate, fields='__all__', filters=BGPPolicyTemplateFilter
+    models.BGPPolicyTemplate,
+    pagination=True, fields='__all__', filters=BGPPolicyTemplateFilter
 )
 class BGPPolicyTemplateType(PrimaryObjectType):
     name: str
@@ -113,7 +116,8 @@ class BGPPolicyTemplateType(PrimaryObjectType):
 
 
 @strawberry_django.type(
-    models.BGPSessionTemplate, fields='__all__', filters=BGPSessionTemplateFilter
+    models.BGPSessionTemplate,
+    pagination=True, fields='__all__', filters=BGPSessionTemplateFilter
 )
 class BGPSessionTemplateType(BGPSettingsMixin, PrimaryObjectType):
     name: str
@@ -137,6 +141,7 @@ class BGPSessionTemplateType(BGPSettingsMixin, PrimaryObjectType):
 
 @strawberry_django.type(
     models.BGPRouter,
+    pagination=True,
     fields='__all__',
     exclude=['assigned_object_type', 'assigned_object_id'],
     filters=BGPRouterFilter,
@@ -191,6 +196,7 @@ class BGPRouterType(BGPSettingsMixin, PrimaryObjectType):
 
 @strawberry_django.type(
     models.BGPScope,
+    pagination=True,
     fields='__all__',
     filters=BGPScopeFilter,
     select_related=[
@@ -206,6 +212,7 @@ class BGPScopeType(BGPSettingsMixin, PrimaryObjectType):
 
 @strawberry_django.type(
     models.BGPAddressFamily,
+    pagination=True,
     fields='__all__',
     filters=BGPAddressFamilyFilter,
     select_related=[
@@ -220,6 +227,7 @@ class BGPAddressFamilyType(BGPSettingsMixin, PrimaryObjectType):
 
 @strawberry_django.type(
     models.BGPPeer,
+    pagination=True,
     fields='__all__',
     filters=BGPPeerFilter,
     select_related=['scope', 'peer', 'remote_as'],
@@ -268,6 +276,7 @@ class BGPPeerType(BGPSettingsMixin, PrimaryObjectType):
 
 @strawberry_django.type(
     models.BGPPeerAddressFamily,
+    pagination=True,
     fields='__all__',
     exclude=['assigned_object_type', 'assigned_object_id'],
     filters=BGPPeerAddressFamilyFilter,
@@ -324,6 +333,7 @@ class BGPPeerAddressFamilyType(BGPSettingsMixin, PrimaryObjectType):
 
 @strawberry_django.type(
     models.BFDProfile,
+    pagination=True,
     fields='__all__',
     filters=BFDProfileFilter,
 )
