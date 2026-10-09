@@ -465,6 +465,55 @@ class BGPAddressFamily(PrimaryModel):
     address_family = models.CharField(
         verbose_name=_('Address Family'), max_length=50, choices=BGPAddressFamilyChoices
     )
+    enabled = models.BooleanField(verbose_name=_('Enabled'), blank=True, null=True)
+    prefixlist_out = models.ForeignKey(
+        verbose_name=_('Outbound Prefix List'),
+        to='netbox_routing.PrefixList',
+        on_delete=models.PROTECT,
+        related_name='address_families_out',
+        blank=True,
+        null=True,
+    )
+    prefixlist_in = models.ForeignKey(
+        verbose_name=_('Inbound Prefix List'),
+        to='netbox_routing.PrefixList',
+        on_delete=models.PROTECT,
+        related_name='address_families_in',
+        blank=True,
+        null=True,
+    )
+    routemap_out = models.ForeignKey(
+        verbose_name=_('Outbound Route Map'),
+        to='netbox_routing.RouteMap',
+        on_delete=models.PROTECT,
+        related_name='address_families_out',
+        blank=True,
+        null=True,
+    )
+    routemap_in = models.ForeignKey(
+        verbose_name=_('Inbound Route Map'),
+        to='netbox_routing.RouteMap',
+        on_delete=models.PROTECT,
+        related_name='address_families_in',
+        blank=True,
+        null=True,
+    )
+    redistribute_routemap = models.ForeignKey(
+        verbose_name=_('Redistribute Connected Route Map'),
+        to='netbox_routing.RouteMap',
+        on_delete=models.PROTECT,
+        related_name='address_families_redistribute',
+        blank=True,
+        null=True,
+    )
+    vrf_in = models.ForeignKey(
+        verbose_name=_('Import VRF'),
+        to='ipam.VRF',
+        on_delete=models.PROTECT,
+        related_name='address_families_in',
+        blank=True,
+        null=True,
+    )
     tenant = models.ForeignKey(
         verbose_name=_('Tenant'),
         to='tenancy.Tenant',

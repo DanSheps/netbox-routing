@@ -14,6 +14,7 @@ __all__ = (
     'BGPPolicyTemplatePanel',
     'BGPSessionTemplatePanel',
     'BGPPolicyFilteringPanel',
+    'BGPAdditionalPolicyFilteringPanel',
     'BGPRouterPanel',
     'BGPRouterTemplatesPanel',
     'BGPScopePanel',

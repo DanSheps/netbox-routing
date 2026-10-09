@@ -29,13 +29,13 @@ __all__ = (
 
 
 class BGPPolicyMixin:
-    prefix_list_in = DynamicModelChoiceField(
+    prefixlist_in = DynamicModelChoiceField(
         label=_('Prefix List (in)'),
         queryset=PrefixList.objects.all(),
         required=False,
         selector=True,
     )
-    prefix_list_out = DynamicModelChoiceField(
+    prefixlist_out = DynamicModelChoiceField(
         label=_('Prefix List (out)'),
         queryset=PrefixList.objects.all(),
         required=False,
@@ -143,7 +143,9 @@ class BGPScopeBulkEditForm(TenantBulkEditMixin, PrimaryModelBulkEditForm):
     )
 
 
-class BGPAddressFamilyBulkEditForm(TenantBulkEditMixin, PrimaryModelBulkEditForm):
+class BGPAddressFamilyBulkEditForm(
+    TenantBulkEditMixin, BGPPolicyMixin, PrimaryModelBulkEditForm
+):
     scope = DynamicModelChoiceField(
         label=_('Scope'), queryset=BGPScope.objects.all(), required=False, selector=True
     )
@@ -152,18 +154,48 @@ class BGPAddressFamilyBulkEditForm(TenantBulkEditMixin, PrimaryModelBulkEditForm
         choices=BGPAddressFamilyChoices,
         required=False,
     )
+    redistribute_routemap = DynamicModelChoiceField(
+        label=_('Redistribute Route Map'),
+        queryset=RouteMap.objects.all(),
+        required=False,
+        selector=True,
+    )
+    vrf_in = DynamicModelChoiceField(
+        label=_('Import VRF'),
+        queryset=VRF.objects.all(),
+        required=False,
+        selector=True,
+    )
+
     model = BGPAddressFamily
     fieldsets = (
         FieldSet(
             'scope',
             'address_family',
+            'enabled',
             'description',
+        ),
+        FieldSet(
+            'prefixlist_out',
+            'prefixlist_in',
+            'routemap_out',
+            'routemap_in',
+            'redistribute_routemap',
+        ),
+        FieldSet(
+            'vrf_in',
         ),
         FieldSet('tenant', name=_('Tenancy')),
     )
     nullable_fields = (
         'scope',
         'description',
+        'prefixlist_out',
+        'prefixlist_in',
+        'routemap_out',
+        'routemap_in',
+        'redistribute_routemap',
+        'vrf_in',
         'tenant',
     )
 

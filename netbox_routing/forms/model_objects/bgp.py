@@ -249,10 +249,11 @@ class BGPSettingForm(PrimaryModelForm):
                     )
                 }
             )
-        elif selected_objects:
-            self.instance.assigned_object = self.cleaned_data[selected_objects[0]]
-        else:
+
+        if not selected_objects:
             raise ValidationError(_('A BGP Setting must be assigned to an object.'))
+
+        self.instance.assigned_object = self.cleaned_data[selected_objects[0]]
 
 
 class BGPPeerTemplateForm(TenancyForm, PrimaryModelForm):
@@ -486,7 +487,12 @@ class BGPRouterForm(BGPSettingMixin, TenancyForm, PrimaryModelForm):
         FieldSet(
             TabbedGroups(
                 FieldSet(
-                    'location_selected', 'region', 'site_group', 'site', 'location', name=_('Locations')
+                    'location_selected',
+                    'region',
+                    'site_group',
+                    'site',
+                    'location',
+                    name=_('Locations'),
                 ),
                 FieldSet('device', name=_('Device')),
                 FieldSet(
@@ -596,19 +602,21 @@ class BGPRouterForm(BGPSettingMixin, TenancyForm, PrimaryModelForm):
         else:
             self.instance.assigned_object = None
 
-        filter = {selected_objects[0]: self.instance.assigned_object}
-        if (
-            self.Meta.model.objects.filter(**filter)
-            .exclude(pk=self.instance.pk)
-            .exists()
-        ):
-            raise forms.ValidationError(
-                {
-                    selected_objects[0]: _(
-                        "A BGP Router with this object already exists."
-                    )
-                }
-            )
+        if selected_objects:
+            field_name = selected_objects[0]
+            filter_kwargs = {field_name: self.instance.assigned_object}
+            if (
+                self.Meta.model.objects.filter(**filter_kwargs)
+                .exclude(pk=self.instance.pk)
+                .exists()
+            ):
+                raise forms.ValidationError(
+                    {
+                        selected_objects[0]: _(
+                            "A BGP Router with this object already exists."
+                        )
+                    }
+                )
 
     def save(self, *args, **kwargs):
         return super().save(*args, **kwargs)
@@ -662,9 +670,59 @@ class BGPAddressFamilyForm(BGPSettingMixin, TenancyForm, PrimaryModelForm):
         required=True,
         label=_('Address Family'),
     )
-
+    prefixlist_in = DynamicModelChoiceField(
+        queryset=PrefixList.objects.all(),
+        required=False,
+        selector=True,
+        label=_('Prefix List (in)'),
+    )
+    prefixlist_out = DynamicModelChoiceField(
+        queryset=PrefixList.objects.all(),
+        required=False,
+        selector=True,
+        label=_('Prefix List (out)'),
+    )
+    routemap_in = DynamicModelChoiceField(
+        queryset=RouteMap.objects.all(),
+        required=False,
+        selector=True,
+        label=_('Route Map (in)'),
+    )
+    routemap_out = DynamicModelChoiceField(
+        queryset=RouteMap.objects.all(),
+        required=False,
+        selector=True,
+        label=_('Route Map (out)'),
+    )
+    redistribute_routemap = DynamicModelChoiceField(
+        queryset=RouteMap.objects.all(),
+        required=False,
+        selector=True,
+        label=_('Redistribute Connected Route Map'),
+    )
+    vrf_in = DynamicModelChoiceField(
+        queryset=VRF.objects.all(),
+        required=False,
+        selector=True,
+        label=_('Import VRF'),
+    )
     fieldsets = (
-        FieldSet('scope', 'address_family', 'description', name=_('Address Family')),
+        FieldSet(
+            'scope',
+            'address_family',
+            'enabled',
+            'description',
+            name=_('Address Family'),
+        ),
+        FieldSet(
+            'routemap_in',
+            'routemap_out',
+            'prefixlist_in',
+            'prefixlist_out',
+            'redistribute_routemap',
+            name=_('Filtering'),
+        ),
+        FieldSet('vrf_in', name=_('VRF Import')),
         FieldSet('tenant_group', 'tenant', name=_('Tenancy')),
     )
 
@@ -673,6 +731,13 @@ class BGPAddressFamilyForm(BGPSettingMixin, TenancyForm, PrimaryModelForm):
         fields = [
             'scope',
             'address_family',
+            'enabled',
+            'routemap_in',
+            'routemap_out',
+            'prefixlist_in',
+            'prefixlist_out',
+            'redistribute_routemap',
+            'vrf_in',
             'tenant_group',
             'tenant',
             'description',
@@ -768,25 +833,25 @@ class BGPPeerAddressFamilyForm(BGPSettingMixin, TenancyForm, PrimaryModelForm):
         label=_('Address Family'),
     )
 
-    prefix_list_in = DynamicModelChoiceField(
+    prefixlist_in = DynamicModelChoiceField(
         queryset=PrefixList.objects.all(),
         required=False,
         selector=True,
         label=_('Prefix List (in)'),
     )
-    prefix_list_out = DynamicModelChoiceField(
+    prefixlist_out = DynamicModelChoiceField(
         queryset=PrefixList.objects.all(),
         required=False,
         selector=True,
         label=_('Prefix List (out)'),
     )
-    route_map_in = DynamicModelChoiceField(
+    routemap_in = DynamicModelChoiceField(
         queryset=RouteMap.objects.all(),
         required=False,
         selector=True,
         label=_('Route Map (in)'),
     )
-    route_map_out = DynamicModelChoiceField(
+    routemap_out = DynamicModelChoiceField(
         queryset=RouteMap.objects.all(),
         required=False,
         selector=True,
@@ -803,10 +868,10 @@ class BGPPeerAddressFamilyForm(BGPSettingMixin, TenancyForm, PrimaryModelForm):
         ),
         FieldSet('address_family', 'enabled', 'description'),
         FieldSet(
-            'route_map_in',
-            'route_map_out',
-            'prefix_list_in',
-            'prefix_list_out',
+            'routemap_in',
+            'routemap_out',
+            'prefixlist_in',
+            'prefixlist_out',
             name=_('Filtering'),
         ),
         FieldSet('tenant_group', 'tenant', name=_('Tenancy')),
@@ -819,10 +884,10 @@ class BGPPeerAddressFamilyForm(BGPSettingMixin, TenancyForm, PrimaryModelForm):
             'peer_group',
             'address_family',
             'enabled',
-            'route_map_in',
-            'route_map_out',
-            'prefix_list_in',
-            'prefix_list_out',
+            'routemap_in',
+            'routemap_out',
+            'prefixlist_in',
+            'prefixlist_out',
             'tenant_group',
             'tenant',
             'description',
@@ -851,31 +916,38 @@ class BGPPeerAddressFamilyForm(BGPSettingMixin, TenancyForm, PrimaryModelForm):
         selected_objects = [
             field for field in ('peer', 'peer_group') if self.cleaned_data[field]
         ]
+
         if len(selected_objects) > 1:
             raise forms.ValidationError(
                 {
                     selected_objects[1]: _(
-                        "A BGP Peer Address Family can only be assigned to a single object."
+                        'A BGP Peer Address Family can only be assigned to a single object.'
                     )
                 }
             )
-        elif selected_objects:
-            self.instance.assigned_object = self.cleaned_data[selected_objects[0]]
-        else:
+
+        if not selected_objects:
             raise ValidationError(
-                _('A BGP Peer Address Family must specify an Peer or Peer Group.')
+                _('A BGP Peer Address Family must specify a Peer or Peer Group.')
             )
 
-        filter = {selected_objects[0]: self.instance.assigned_object}
+        self.instance.assigned_object = self.cleaned_data[selected_objects[0]]
+
         if (
-            self.Meta.model.objects.filter(**filter)
+            self.Meta.model.objects.filter(
+                assigned_object_type=ContentType.objects.get_for_model(
+                    self.instance.assigned_object
+                ).pk,
+                assigned_object_id=self.instance.assigned_object.pk,
+                address_family=self.cleaned_data.get('address_family'),
+            )
             .exclude(pk=self.instance.pk)
             .exists()
         ):
             raise forms.ValidationError(
                 {
                     selected_objects[0]: _(
-                        "A BGP Peer Address Family with this object already exists."
+                        'A BGP Peer Address Family with this object already exists.'
                     )
                 }
             )

@@ -214,6 +214,28 @@ class BGPScopeType(BGPSettingsMixin, PrimaryObjectType):
 )
 class BGPAddressFamilyType(BGPSettingsMixin, PrimaryObjectType):
     scope: Annotated["BGPScopeType", strawberry.lazy('netbox_routing.graphql.types')]
+    enabled: bool | None
+    prefixlist_in: (
+        Annotated['PrefixListType', strawberry.lazy('netbox_routing.graphql.types')]
+        | None
+    )
+    prefixlist_out: (
+        Annotated['PrefixListType', strawberry.lazy('netbox_routing.graphql.types')]
+        | None
+    )
+    routemap_in: (
+        Annotated['RouteMapType', strawberry.lazy('netbox_routing.graphql.types')]
+        | None
+    )
+    routemap_out: (
+        Annotated['RouteMapType', strawberry.lazy('netbox_routing.graphql.types')]
+        | None
+    )
+    redistribute_routemap: (
+        Annotated['RouteMapType', strawberry.lazy('netbox_routing.graphql.types')]
+        | None
+    )
+    vrf_in: Annotated['VRFType', strawberry.lazy('ipam.graphql.types')] | None
     address_family: str | None
     tenant: Annotated["TenantType", strawberry.lazy('tenancy.graphql.types')] | None
 
