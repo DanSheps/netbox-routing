@@ -102,6 +102,7 @@ class BGPPeerIndex(SearchIndex):
     fields = (
         ('name', 100),
         ('peer', 200),
+        ('interface', 200),
         ('remote_as', 210),
         ('source', 300),
         ('local_as', 310),
@@ -111,6 +112,7 @@ class BGPPeerIndex(SearchIndex):
     display_attrs = (
         'name',
         'peer',
+        'interface',
         'remote_as',
     )
 

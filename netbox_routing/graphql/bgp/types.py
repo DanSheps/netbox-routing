@@ -222,7 +222,7 @@ class BGPAddressFamilyType(BGPSettingsMixin, PrimaryObjectType):
     models.BGPPeer,
     fields='__all__',
     filters=BGPPeerFilter,
-    select_related=['scope', 'peer', 'remote_as'],
+    select_related=['scope', 'peer', 'remote_as', 'interface'],
 )
 class BGPPeerType(BGPSettingsMixin, PrimaryObjectType):
     name: str | None
@@ -244,9 +244,11 @@ class BGPPeerType(BGPSettingsMixin, PrimaryObjectType):
         ]
         | None
     )
-    peer: Annotated["IPAddressType", strawberry.lazy('ipam.graphql.types')]
+    peer: Annotated["IPAddressType", strawberry.lazy('ipam.graphql.types')] | None
+    interface: Annotated["InterfaceType", strawberry.lazy('dcim.graphql.types')] | None
     source: Annotated["IPAddressType", strawberry.lazy('ipam.graphql.types')] | None
     remote_as: Annotated["ASNType", strawberry.lazy('ipam.graphql.types')] | None
+    remote_as_list: list[Annotated["ASNType", strawberry.lazy('ipam.graphql.types')]] | None
     local_as: Annotated["ASNType", strawberry.lazy('ipam.graphql.types')] | None
     bfd: (
         Annotated["BFDProfileType", strawberry.lazy('netbox_routing.graphql.types')]

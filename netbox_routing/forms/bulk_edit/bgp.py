@@ -2,6 +2,7 @@ from django import forms
 from django.utils.translation import gettext as _
 
 from ipam.models import ASN, IPAddress, VRF
+from dcim.models import Interface
 from netbox.forms import PrimaryModelBulkEditForm
 from netbox_routing.forms.bulk_edit.base import EnableMixin, TenantBulkEditMixin
 from netbox_routing.models import RouteMap, PrefixList
@@ -269,6 +270,12 @@ class BGPPeerBulkEditForm(
     )
     peer = DynamicModelChoiceField(
         label=_('Peer'), queryset=IPAddress.objects.all(), required=False, selector=True
+    )
+    interface = DynamicModelChoiceField(
+        label=_('Interface'), queryset=Interface.objects.all(), required=False, selector=True
+    )
+    remote_as_list = DynamicModelMultipleChoiceField(
+        label=_('Remote AS List'), queryset=ASN.objects.all(), required=False, selector=True
     )
     source = DynamicModelChoiceField(
         label=_('Source'),

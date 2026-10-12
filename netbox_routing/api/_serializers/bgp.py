@@ -2,6 +2,7 @@ from django.contrib.contenttypes.models import ContentType
 from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
 
+from dcim.api.serializers_.device_components import InterfaceSerializer
 from ipam.api.serializers_.asns import ASNSerializer
 from ipam.api.serializers_.ip import IPAddressSerializer
 from ipam.api.serializers_.vrfs import VRFSerializer
@@ -279,8 +280,10 @@ class BGPPeerSerializer(NetBoxModelSerializer):
 
     scope = BGPScopeSerializer(nested=True)
     peer = IPAddressSerializer(nested=True)
+    interface = InterfaceSerializer(nested=True, required=False)
     source = IPAddressSerializer(nested=True, required=False)
     remote_as = ASNSerializer(nested=True, required=False)
+    remote_as_list = ASNSerializer(many=True, required=False)
     local_as = ASNSerializer(nested=True, required=False)
     tenant = TenantSerializer(nested=True, required=False)
 
@@ -292,9 +295,11 @@ class BGPPeerSerializer(NetBoxModelSerializer):
             'display',
             'scope',
             'peer',
+            'interface',
             'source',
             'name',
             'remote_as',
+            'remote_as_list',
             'local_as',
             'status',
             'enabled',
@@ -312,10 +317,53 @@ class BGPPeerSerializer(NetBoxModelSerializer):
             'name',
             'scope',
             'peer',
+            'interface',
             'remote_as',
+            'remote_as_list',
             'enabled',
             'status',
         )
+
+    def validate(self, data):
+        instance = self.instance
+
+        peer = data.get('peer', getattr(instance, 'peer', None))
+        interface = data.get('interface', getattr(instance, 'interface', None))
+
+        remote_as = data.get('remote_as', getattr(instance, 'remote_as', None))
+
+        if 'remote_as_list' in data:
+            remote_as_list = data.get('remote_as_list') or []
+        elif instance is not None:
+            remote_as_list = list(instance.remote_as_list.all())
+        else:
+            remote_as_list = []
+
+        if peer and interface:
+            raise serializers.ValidationError(
+                {
+                    'peer': 'Cannot set both peer and interface.',
+                    'interface': 'Cannot set both peer and interface.',
+                }
+            )
+
+        if not (peer or interface):
+            raise serializers.ValidationError(
+                {
+                    'peer': 'Either peer or interface must be set.',
+                    'interface': 'Either peer or interface must be set.',
+                }
+            )
+
+        if remote_as and remote_as_list:
+            raise serializers.ValidationError(
+                {
+                    'remote_as': 'Cannot set both remote_as and remote_as_list.',
+                    'remote_as_list': 'Cannot set both remote_as and remote_as_list.',
+                }
+            )
+
+        return data
 
 
 class BGPPeerAddressFamilySerializer(NetBoxModelSerializer):

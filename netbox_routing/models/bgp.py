@@ -1,6 +1,7 @@
 from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
 from django.contrib.contenttypes.models import ContentType
 from django.core.validators import MinValueValidator, MaxValueValidator
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import ManyToManyField
 from django.urls import reverse
@@ -526,8 +527,16 @@ class BGPPeer(PrimaryModel):
         to='ipam.IPAddress',
         on_delete=models.PROTECT,
         related_name='remote_peers',
-        blank=False,
-        null=False,
+        blank=True,
+        null=True,
+    )
+    interface = models.ForeignKey(
+        verbose_name=_('Interface'),
+        to='dcim.Interface',
+        on_delete=models.PROTECT,
+        related_name='remote_peers',
+        blank=True,
+        null=True,
     )
     source = models.ForeignKey(
         verbose_name=_('Source Address'),
@@ -560,6 +569,12 @@ class BGPPeer(PrimaryModel):
         related_name='+',
         blank=True,
         null=True,
+    )
+    remote_as_list = models.ManyToManyField(
+        verbose_name=_('Remote AS List'),
+        to='ipam.ASN',
+        related_name='+',
+        blank=True,
     )
     enabled = models.BooleanField(verbose_name=_('Enabled'), blank=True, null=True)
     status = models.CharField(
