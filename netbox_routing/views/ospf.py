@@ -73,6 +73,12 @@ class OSPFInstanceView(ObjectView):
             TagsPanel(),
         ],
         right_panels=[
+            panels.ObjectsTablePanel(
+                model='netbox_routing.OSPFArea',
+                filters={'instance_id': lambda ctx: ctx['object'].pk},
+                exclude_columns=['id'],
+                title=_('Areas'),
+            ),
             panels.CommentsPanel(),
             panels.RelatedObjectsPanel(),
         ],
