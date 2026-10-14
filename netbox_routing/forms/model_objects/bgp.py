@@ -486,7 +486,12 @@ class BGPRouterForm(BGPSettingMixin, TenancyForm, PrimaryModelForm):
         FieldSet(
             TabbedGroups(
                 FieldSet(
-                    'location_selected', 'region', 'site_group', 'site', 'location', name=_('Locations')
+                    'location_selected',
+                    'region',
+                    'site_group',
+                    'site',
+                    'location',
+                    name=_('Locations'),
                 ),
                 FieldSet('device', name=_('Device')),
                 FieldSet(
