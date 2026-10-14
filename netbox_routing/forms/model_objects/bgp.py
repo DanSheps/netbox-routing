@@ -600,6 +600,7 @@ class BGPRouterForm(BGPSettingMixin, TenancyForm, PrimaryModelForm):
             self.instance.assigned_object = self.cleaned_data[selected_objects[0]]
         else:
             self.instance.assigned_object = None
+            return
 
         filter = {selected_objects[0]: self.instance.assigned_object}
         if (
@@ -871,7 +872,10 @@ class BGPPeerAddressFamilyForm(BGPSettingMixin, TenancyForm, PrimaryModelForm):
                 _('A BGP Peer Address Family must specify an Peer or Peer Group.')
             )
 
-        filter = {selected_objects[0]: self.instance.assigned_object}
+        filter = {
+            selected_objects[0]: self.instance.assigned_object,
+            'address_family': self.cleaned_data.get('address_family'),
+        }
         if (
             self.Meta.model.objects.filter(**filter)
             .exclude(pk=self.instance.pk)
@@ -880,7 +884,8 @@ class BGPPeerAddressFamilyForm(BGPSettingMixin, TenancyForm, PrimaryModelForm):
             raise forms.ValidationError(
                 {
                     selected_objects[0]: _(
-                        "A BGP Peer Address Family with this object already exists."
+                        "A BGP Peer Address Family with this object and address family "
+                        "already exists."
                     )
                 }
             )
