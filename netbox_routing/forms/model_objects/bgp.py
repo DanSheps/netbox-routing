@@ -162,7 +162,6 @@ class BGPSettingMixin:
 
 
 class BGPSettingForm(PrimaryModelForm):
-
     router = DynamicModelChoiceField(
         queryset=BGPRouter.objects.all(),
         required=True,
@@ -245,7 +244,7 @@ class BGPSettingForm(PrimaryModelForm):
             raise forms.ValidationError(
                 {
                     selected_objects[1]: _(
-                        "A BGP Setting can only be assigned to a single object."
+                        'A BGP Setting can only be assigned to a single object.'
                     )
                 }
             )
@@ -486,7 +485,12 @@ class BGPRouterForm(BGPSettingMixin, TenancyForm, PrimaryModelForm):
         FieldSet(
             TabbedGroups(
                 FieldSet(
-                    'location_selected', 'region', 'site_group', 'site', 'location', name=_('Locations')
+                    'location_selected',
+                    'region',
+                    'site_group',
+                    'site',
+                    'location',
+                    name=_('Locations'),
                 ),
                 FieldSet('device', name=_('Device')),
                 FieldSet(
@@ -587,7 +591,7 @@ class BGPRouterForm(BGPSettingMixin, TenancyForm, PrimaryModelForm):
             raise forms.ValidationError(
                 {
                     selected_objects[1]: _(
-                        "A BGP Router can only be assigned to a single object."
+                        'A BGP Router can only be assigned to a single object.'
                     )
                 }
             )
@@ -605,7 +609,7 @@ class BGPRouterForm(BGPSettingMixin, TenancyForm, PrimaryModelForm):
             raise forms.ValidationError(
                 {
                     selected_objects[0]: _(
-                        "A BGP Router with this object already exists."
+                        'A BGP Router with this object already exists.'
                     )
                 }
             )
@@ -855,7 +859,7 @@ class BGPPeerAddressFamilyForm(BGPSettingMixin, TenancyForm, PrimaryModelForm):
             raise forms.ValidationError(
                 {
                     selected_objects[1]: _(
-                        "A BGP Peer Address Family can only be assigned to a single object."
+                        'A BGP Peer Address Family can only be assigned to a single object.'
                     )
                 }
             )
@@ -875,7 +879,7 @@ class BGPPeerAddressFamilyForm(BGPSettingMixin, TenancyForm, PrimaryModelForm):
             raise forms.ValidationError(
                 {
                     selected_objects[0]: _(
-                        "A BGP Peer Address Family with this object already exists."
+                        'A BGP Peer Address Family with this object already exists.'
                     )
                 }
             )
@@ -885,7 +889,6 @@ class BGPPeerAddressFamilyForm(BGPSettingMixin, TenancyForm, PrimaryModelForm):
 
 
 class BFDProfileForm(TenancyForm, PrimaryModelForm):
-
     fieldsets = (
         FieldSet(
             'name',
