@@ -6,7 +6,7 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('netbox_routing', '0033_isis'),
+        ('netbox_routing', '0034_owner_foreign_key_changes'),
     ]
 
     operations = [
