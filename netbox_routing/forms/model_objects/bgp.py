@@ -600,19 +600,20 @@ class BGPRouterForm(BGPSettingMixin, TenancyForm, PrimaryModelForm):
         else:
             self.instance.assigned_object = None
 
-        filter = {selected_objects[0]: self.instance.assigned_object}
-        if (
-            self.Meta.model.objects.filter(**filter)
-            .exclude(pk=self.instance.pk)
-            .exists()
-        ):
-            raise forms.ValidationError(
-                {
-                    selected_objects[0]: _(
-                        'A BGP Router with this object already exists.'
-                    )
-                }
-            )
+        if self.instance.assigned_object:
+            filter = {selected_objects[0]: self.instance.assigned_object}
+            if (
+                self.Meta.model.objects.filter(**filter)
+                .exclude(pk=self.instance.pk)
+                .exists()
+            ):
+                raise forms.ValidationError(
+                    {
+                        selected_objects[0]: _(
+                            'A BGP Router with this object already exists.'
+                        )
+                    }
+                )
 
     def save(self, *args, **kwargs):
         return super().save(*args, **kwargs)
@@ -870,7 +871,10 @@ class BGPPeerAddressFamilyForm(BGPSettingMixin, TenancyForm, PrimaryModelForm):
                 _('A BGP Peer Address Family must specify an Peer or Peer Group.')
             )
 
-        filter = {selected_objects[0]: self.instance.assigned_object}
+        filter = {
+            selected_objects[0]: self.instance.assigned_object,
+            'address_family': self.cleaned_data['address_family'],
+        }
         if (
             self.Meta.model.objects.filter(**filter)
             .exclude(pk=self.instance.pk)
