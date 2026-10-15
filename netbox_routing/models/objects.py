@@ -44,6 +44,7 @@ class ASPath(PrimaryModel):
     class Meta:
         ordering = [
             'name',
+            'pk',
         ]
         constraints = (
             models.UniqueConstraint(
@@ -112,6 +113,7 @@ class PrefixList(PrimaryModel):
     class Meta:
         ordering = [
             'name',
+            'pk',
         ]
         constraints = (
             models.UniqueConstraint(
@@ -264,6 +266,7 @@ class RouteMap(PrimaryModel):
     class Meta:
         ordering = [
             'name',
+            'pk',
         ]
         constraints = (
             models.UniqueConstraint(
