@@ -48,7 +48,7 @@ class OSPFInstance(PrimaryModel):
             models.UniqueConstraint(
                 fields=('device', 'name'),
                 name='%(app_label)s_%(class)s_unique_device_name',
-                violation_error_message=ERROR_UNIQUENESS_CONSTRAINT ,
+                violation_error_message=ERROR_UNIQUENESS_CONSTRAINT,
                 nulls_distinct=False,
             ),
         )
