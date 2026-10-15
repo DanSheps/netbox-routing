@@ -132,24 +132,19 @@ class BGPSettingMixin:
                 assigned_object_id=self.get_assigned_object_id(),
                 key=key,
             ).first()
-            # print(f'{key}')
-            if setting and value:
-                # print('\tPrev: {setting.value}')
-                # print('\tNew: {value}')
-                setting.value = settings.get(key)
+            if setting is not None and value is not None:
+                setting.value = value
                 setting.clean()
                 setting.save()
-            elif value:
-                # print('\tNew: {value}')
+            elif setting is None and value is not None:
                 setting = BGPSetting(
                     assigned_object=self.instance,
                     key=key,
-                    value=settings.get(key, None),
+                    value=value,
                 )
                 setting.clean()
                 setting.save()
-            elif setting:
-                # print('\tPrev: {setting.value}')
+            elif setting is not None and value is None:
                 setting.delete()
 
         return obj
@@ -873,7 +868,7 @@ class BGPPeerAddressFamilyForm(BGPSettingMixin, TenancyForm, PrimaryModelForm):
 
         filter = {
             selected_objects[0]: self.instance.assigned_object,
-            'address_family': self.cleaned_data['address_family'],
+            'address_family': self.cleaned_data.get('address_family'),
         }
         if (
             self.Meta.model.objects.filter(**filter)
