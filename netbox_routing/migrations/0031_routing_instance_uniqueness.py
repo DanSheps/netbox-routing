@@ -2,6 +2,8 @@
 
 from django.db import migrations, models
 
+from netbox_routing.constants import ERROR_UNIQUENESS_CONSTRAINT
+
 
 class Migration(migrations.Migration):
     dependencies = [
@@ -25,8 +27,7 @@ class Migration(migrations.Migration):
                 fields=('device', 'name'),
                 name='netbox_routing_ospfinstance_unique_device_name',
                 nulls_distinct=False,
-                violation_error_message="""Name must be unique per device.\n
-                Only a single empty name is permitted per device""",
+                violation_error_message=ERROR_UNIQUENESS_CONSTRAINT,
             ),
         ),
     ]

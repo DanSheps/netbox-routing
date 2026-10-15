@@ -21,6 +21,7 @@ class NetboxRouting(PluginConfig):
     graphql_schema = 'graphql.schema.schema'
 
     def ready(self):
+
         from netbox_routing.fields.generic import NetBoxGenericRelation
         from dcim.models import Region, SiteGroup, Site, Location, Device
         from ipam.models import Prefix

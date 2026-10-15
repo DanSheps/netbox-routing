@@ -3,7 +3,8 @@ from django.utils.translation import gettext as _
 
 from dcim.models import Device
 from ipam.models import ASN, VRF, IPAddress
-from netbox.forms import NetBoxModelFilterSetForm
+from netbox.forms import NetBoxModelFilterSetForm, PrimaryModelFilterSetForm
+from netbox_routing.models import PrefixList, RouteMap
 from tenancy.forms import TenancyFilterForm
 from utilities.forms.fields import TagFilterField, DynamicModelMultipleChoiceField
 from utilities.forms.rendering import FieldSet
@@ -25,34 +26,96 @@ __all__ = (
 )
 
 
-class BGPSettingFilterForm(NetBoxModelFilterSetForm):
+class BGPPolicyFilterFormMixin(forms.Form):
+    prefixlist_in_id = DynamicModelMultipleChoiceField(
+        queryset=PrefixList.objects.all(),
+        required=False,
+        selector=True,
+        label=_('Incoming Prefix List'),
+    )
+    prefixlist_out_id = DynamicModelMultipleChoiceField(
+        queryset=PrefixList.objects.all(),
+        required=False,
+        selector=True,
+        label=_('Outgoing Prefix List'),
+    )
+    routemap_in_id = DynamicModelMultipleChoiceField(
+        queryset=RouteMap.objects.all(),
+        required=False,
+        selector=True,
+        label=_('Incoming Route Map'),
+    )
+    routemap_out_id = DynamicModelMultipleChoiceField(
+        queryset=RouteMap.objects.all(),
+        required=False,
+        selector=True,
+        label=_('Outgoing Route Map'),
+    )
+
+
+class SessionFilterFormMixin(forms.Form):
+    local_as_id = DynamicModelMultipleChoiceField(
+        queryset=ASN.objects.all(),
+        required=False,
+        selector=True,
+        label=_('Local AS'),
+    )
+    remote_as_id = DynamicModelMultipleChoiceField(
+        queryset=ASN.objects.all(),
+        required=False,
+        selector=True,
+        label=_('Remote AS'),
+    )
+
+
+class BGPSettingFilterForm(TenancyFilterForm, PrimaryModelFilterSetForm):
     model = BGPSetting
-    fieldsets = (FieldSet('q', 'filter_id', 'tag'),)
+    fieldsets = (FieldSet('q', 'filter_id', 'tag'),
+        FieldSet('key'),)
     tag = TagFilterField(model)
 
 
-class BGPPeerTemplateFilterForm(NetBoxModelFilterSetForm):
+class BGPPeerTemplateFilterForm(TenancyFilterForm, PrimaryModelFilterSetForm):
     model = BGPPeerTemplate
-    fieldsets = (FieldSet('q', 'filter_id', 'tag'),)
+    fieldsets = (FieldSet('q', 'filter_id', 'tag'),
+        FieldSet('name'),)
     tag = TagFilterField(model)
 
 
-class BGPPolicyTemplateFilterForm(NetBoxModelFilterSetForm):
+class BGPPolicyTemplateFilterForm(BGPPolicyFilterFormMixin, TenancyFilterForm, PrimaryModelFilterSetForm):
     model = BGPPolicyTemplate
-    fieldsets = (FieldSet('q', 'filter_id', 'tag'),)
+    fieldsets = (
+        FieldSet('q', 'filter_id', 'tag'),
+        FieldSet('name'),
+        FieldSet(
+            'prefixlist_in_id',
+            'prefixlist_out_id',
+            'routemap_in_id',
+            'routemap_out_id',
+            name=_('Filtering'),
+        ),
+        FieldSet('tenant_group_id', 'tenant_id', name=_('Tenancy')),
+    )
+    name = forms.CharField()
     tag = TagFilterField(model)
 
 
-class BGPSessionTemplateFilterForm(NetBoxModelFilterSetForm):
+class BGPSessionTemplateFilterForm(SessionFilterFormMixin, TenancyFilterForm, PrimaryModelFilterSetForm):
     model = BGPSessionTemplate
-    fieldsets = (FieldSet('q', 'filter_id', 'tag'),)
+    fieldsets = (
+        FieldSet('q', 'filter_id', 'tag'),
+        FieldSet('name'),
+        FieldSet('enabled', 'local_as_id', 'remote_as_id', name=_('Session')),
+        FieldSet('ttl', 'bfd', name=_('Parameters')),
+        FieldSet('tenant_group_id', 'tenant_id', name=_('Tenancy')),
+    )
     tag = TagFilterField(model)
 
 
 class BGPRouterFilterForm(
     TenancyFilterForm,
     # ContactModelFilterForm,
-    NetBoxModelFilterSetForm,
+    PrimaryModelFilterSetForm,
 ):
     device_id = DynamicModelMultipleChoiceField(
         queryset=Device.objects.all(),
