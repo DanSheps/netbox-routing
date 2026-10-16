@@ -350,7 +350,8 @@ class BGPPeerFilterSet(NetBoxModelFilterSet):
 
 
 @register_filterset
-class BGPPeerAddressFamilyFilterSet(NetBoxModelFilterSet):
+class BGPPeerAddressFamilyFilterSet(PolicyFilterSetMixin, NetBoxModelFilterSet):
+    enabled = django_filters.BooleanFilter()
     peer_id = django_filters.ModelMultipleChoiceFilter(
         field_name='peer',
         queryset=BGPScope.objects.all(),
@@ -372,8 +373,12 @@ class BGPPeerAddressFamilyFilterSet(NetBoxModelFilterSet):
         fields = (
             'peer_id',
             'peer_group_id',
-            'address_family',
+            'address_family_id',
             'enabled',
+            'prefixlist_in',
+            'prefixlist_out',
+            'routemap_in',
+            'routemap_out',
         )
 
     def search(self, queryset, name, value):

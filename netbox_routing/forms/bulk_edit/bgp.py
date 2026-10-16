@@ -144,7 +144,7 @@ class BGPScopeBulkEditForm(TenantBulkEditMixin, PrimaryModelBulkEditForm):
 
 
 class BGPAddressFamilyBulkEditForm(
-    TenantBulkEditMixin, BGPPolicyMixin, PrimaryModelBulkEditForm
+    TenantBulkEditMixin, BGPPolicyMixin, EnableMixin, PrimaryModelBulkEditForm
 ):
     scope = DynamicModelChoiceField(
         label=_('Scope'), queryset=BGPScope.objects.all(), required=False, selector=True
