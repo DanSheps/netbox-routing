@@ -123,11 +123,7 @@ class BGPSettingMixin:
 
     def _field_unset(self, key, value):
         field_type = self._get_settings_field_type(key)
-        if field_type == 'ipaddr':
-            return value is None or value == ''
-        elif field_type == 'integer':
-            return value is None
-        elif field_type == 'boolean':
+        if field_type == 'integer' or field_type == 'boolean':
             return value is None
         else:
             return value is None or value == ''
