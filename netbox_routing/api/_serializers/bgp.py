@@ -279,11 +279,11 @@ class BGPPeerSerializer(NetBoxModelSerializer):
     )
 
     scope = BGPScopeSerializer(nested=True)
-    peer = IPAddressSerializer(nested=True)
-    interface = InterfaceSerializer(nested=True, required=False)
+    peer = IPAddressSerializer(nested=True, required=False, allow_null=True)
+    interface = InterfaceSerializer(nested=True, required=False, allow_null=True)
     source = IPAddressSerializer(nested=True, required=False)
-    remote_as = ASNSerializer(nested=True, required=False)
-    remote_as_list = ASNSerializer(many=True, required=False)
+    remote_as = ASNSerializer(nested=True, required=False, allow_null=True)
+    remote_as_list = ASNSerializer(nested=True, many=True, required=False, allow_null=True)
     local_as = ASNSerializer(nested=True, required=False)
     tenant = TenantSerializer(nested=True, required=False)
 
@@ -327,15 +327,37 @@ class BGPPeerSerializer(NetBoxModelSerializer):
     def validate(self, data):
         instance = self.instance
 
-        peer = data.get('peer', getattr(instance, 'peer', None))
-        interface = data.get('interface', getattr(instance, 'interface', None))
+        if 'peer' in data:
+            peer = data['peer']
+        elif instance is not None:
+            peer = instance.peer
+        else:
+            peer = None
 
-        remote_as = data.get('remote_as', getattr(instance, 'remote_as', None))
+        if 'interface' in data:
+            interface = data['interface']
+        elif instance is not None:
+            interface = instance.interface
+        else:
+            interface = None
+
+        if 'remote_as' in data:
+            remote_as = data['remote_as']
+        elif instance is not None:
+            remote_as = instance.remote_as
+        else:
+            remote_as = None
 
         if 'remote_as_list' in data:
             remote_as_list = data.get('remote_as_list') or []
         elif instance is not None:
-            remote_as_list = list(instance.remote_as_list.all())
+            pending = getattr(instance, '_m2m_values', {})
+            if 'remote_as_list' in pending and pending['remote_as_list'] is not None:
+                remote_as_list = list(pending['remote_as_list'])
+            elif instance.pk is None:
+                remote_as_list = []
+            else:
+                remote_as_list = list(instance.remote_as_list.all())
         else:
             remote_as_list = []
 

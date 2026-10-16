@@ -302,10 +302,12 @@ class BGPPeerBulkEditForm(
         FieldSet(
             'scope',
             'peer',
+            'interface',
             'status',
             'enabled',
             'source',
             'remote_as',
+            'remote_as_list',
             'local_as',
         ),
         FieldSet(

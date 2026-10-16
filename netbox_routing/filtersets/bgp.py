@@ -304,8 +304,8 @@ class BGPPeerFilterSet(NetBoxModelFilterSet):
     peer = django_filters.ModelMultipleChoiceFilter(
         field_name='peer__address',
         queryset=IPAddress.objects.all(),
-        to_field_name='peer',
-        label=_('Peer (Name)'),
+        to_field_name='address',
+        label=_('Peer (Address)'),
     )
     interface_id = django_filters.ModelMultipleChoiceFilter(
         field_name='interface',
@@ -315,7 +315,7 @@ class BGPPeerFilterSet(NetBoxModelFilterSet):
     interface = django_filters.ModelMultipleChoiceFilter(
         field_name='interface__name',
         queryset=Interface.objects.all(),
-        to_field_name='interface',
+        to_field_name='name',
         label=_('Interface (Name)'),
     )
     peer_group_id = django_filters.ModelMultipleChoiceFilter(
@@ -331,7 +331,7 @@ class BGPPeerFilterSet(NetBoxModelFilterSet):
     remote_as = django_filters.ModelMultipleChoiceFilter(
         field_name='remote_as__asn',
         queryset=ASN.objects.all(),
-        to_field_name='remote_as',
+        to_field_name='asn',
         label=_('Remote AS (ASN)'),
     )
     remote_as_list_id = django_filters.ModelMultipleChoiceFilter(
@@ -342,7 +342,7 @@ class BGPPeerFilterSet(NetBoxModelFilterSet):
     remote_as_list = django_filters.ModelMultipleChoiceFilter(
         field_name='remote_as_list__asn',
         queryset=ASN.objects.all(),
-        to_field_name='remote_as_list',
+        to_field_name='asn',
         label=_('Remote AS List (ASN)'),
     )
     local_as_id = django_filters.ModelMultipleChoiceFilter(
@@ -353,7 +353,7 @@ class BGPPeerFilterSet(NetBoxModelFilterSet):
     local_as = django_filters.ModelMultipleChoiceFilter(
         field_name='local_as__asn',
         queryset=ASN.objects.all(),
-        to_field_name='local_as',
+        to_field_name='asn',
         label=_('Local AS (ASN)'),
     )
 

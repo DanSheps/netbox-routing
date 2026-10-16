@@ -916,7 +916,11 @@ class BGPPeerAddressFamilyForm(BGPSettingMixin, TenancyForm, PrimaryModelForm):
                 _('A BGP Peer Address Family must specify an Peer or Peer Group.')
             )
 
-        filter = {selected_objects[0]: self.instance.assigned_object}
+        filter = {
+            selected_objects[0]: self.instance.assigned_object,
+            'address_family': self.cleaned_data['address_family'],
+        }
+
         if (
             self.Meta.model.objects.filter(**filter)
             .exclude(pk=self.instance.pk)
