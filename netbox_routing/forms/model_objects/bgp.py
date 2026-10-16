@@ -162,7 +162,6 @@ class BGPSettingMixin:
 
 
 class BGPSettingForm(PrimaryModelForm):
-
     router = DynamicModelChoiceField(
         queryset=BGPRouter.objects.all(),
         required=True,
@@ -245,7 +244,7 @@ class BGPSettingForm(PrimaryModelForm):
             raise forms.ValidationError(
                 {
                     selected_objects[1]: _(
-                        "A BGP Setting can only be assigned to a single object."
+                        'A BGP Setting can only be assigned to a single object.'
                     )
                 }
             )
@@ -593,7 +592,7 @@ class BGPRouterForm(BGPSettingMixin, TenancyForm, PrimaryModelForm):
             raise forms.ValidationError(
                 {
                     selected_objects[1]: _(
-                        "A BGP Router can only be assigned to a single object."
+                        'A BGP Router can only be assigned to a single object.'
                     )
                 }
             )
@@ -957,7 +956,6 @@ class BGPPeerAddressFamilyForm(BGPSettingMixin, TenancyForm, PrimaryModelForm):
 
 
 class BFDProfileForm(TenancyForm, PrimaryModelForm):
-
     fieldsets = (
         FieldSet(
             'name',
