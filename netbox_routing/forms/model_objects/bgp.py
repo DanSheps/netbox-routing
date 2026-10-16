@@ -118,6 +118,20 @@ class BGPSettingMixin:
     def _clean_fieldset(self):
         pass
 
+    def _get_settings_field_type(self, key):
+        return BGPSettingChoices.FIELD_TYPES.get(key, 'string')
+
+    def _field_unset(self, key, value):
+        field_type = self._get_settings_field_type(key)
+        if field_type == 'ipaddr':
+            return value is None or value == ''
+        elif field_type == 'integer':
+            return value is None
+        elif field_type == 'boolean':
+            return value is None
+        else:
+            return value is None or value == ''
+
     def save(self, *args, **kwargs):
         settings = {}
         for key, name in BGPSettingChoices.CHOICES:
@@ -132,11 +146,11 @@ class BGPSettingMixin:
                 assigned_object_id=self.get_assigned_object_id(),
                 key=key,
             ).first()
-            if setting is not None and value is not None:
+            if setting is not None and not self._field_unset(key, value):
                 setting.value = value
                 setting.clean()
                 setting.save()
-            elif setting is None and value is not None:
+            elif setting is None and not self._field_unset(key, value):
                 setting = BGPSetting(
                     assigned_object=self.instance,
                     key=key,
@@ -144,7 +158,7 @@ class BGPSettingMixin:
                 )
                 setting.clean()
                 setting.save()
-            elif setting is not None and value is None:
+            elif setting is not None and self._field_unset(key, value):
                 setting.delete()
 
         return obj
