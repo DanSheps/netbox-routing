@@ -113,7 +113,7 @@ class CommunityListEntry(PrimaryModel):
     )
 
     class Meta:
-        ordering = ('community_list', 'community')
+        ordering = ('community_list', 'community', 'pk')
 
     def __str__(self):
         return f'{self.community_list}: {self.action} {self.community}'

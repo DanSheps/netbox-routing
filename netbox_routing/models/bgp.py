@@ -57,6 +57,7 @@ class BGPSetting(SearchAttributeMixin, PrimaryModel):
             'assigned_object_type',
             'assigned_object_id',
             'key',
+            'pk',
         )
         constraints = [
             models.UniqueConstraint(
@@ -264,7 +265,7 @@ class BGPPeerTemplate(PrimaryModel):
     class Meta:
         verbose_name = 'BGP Peer Template'
         verbose_name_plural = 'BGP Peer Templates'
-        ordering = ('name',)
+        ordering = ('name', 'pk')
         constraints = [
             models.UniqueConstraint(
                 fields=('name', 'remote_as'),
@@ -817,7 +818,12 @@ class BGPPeerAddressFamily(SearchAttributeMixin, PrimaryModel):
     class Meta:
         verbose_name = 'BGP Peer Address Family'
         verbose_name_plural = 'BGP Peer Address Families'
-        ordering = ('assigned_object_type', 'assigned_object_id', 'address_family')
+        ordering = (
+            'assigned_object_type',
+            'assigned_object_id',
+            'address_family',
+            'pk',
+        )
         constraints = [
             models.UniqueConstraint(
                 fields=('assigned_object_type', 'assigned_object_id', 'address_family'),

@@ -42,13 +42,13 @@ class OSPFInstance(PrimaryModel):
     prerequisite_models = ('dcim.Device',)
 
     class Meta:
-        ordering = ['vrf', 'router_id', 'process_id']
+        ordering = ['vrf', 'router_id', 'process_id', 'pk']
         verbose_name = 'OSPF Instance'
         constraints = (
             models.UniqueConstraint(
                 fields=('device', 'name'),
                 name='%(app_label)s_%(class)s_unique_device_name',
-                violation_error_message=ERROR_UNIQUENESS_CONSTRAINT ,
+                violation_error_message=ERROR_UNIQUENESS_CONSTRAINT,
                 nulls_distinct=False,
             ),
         )
@@ -73,7 +73,7 @@ class OSPFArea(PrimaryModel):
     clone_fields = ('area_id', 'area_type')
 
     class Meta:
-        ordering = ['area_id']
+        ordering = ['area_id', 'pk']
         verbose_name = 'OSPF Area'
 
     def __str__(self):

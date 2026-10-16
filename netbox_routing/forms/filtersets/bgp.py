@@ -70,19 +70,25 @@ class SessionFilterFormMixin(forms.Form):
 
 class BGPSettingFilterForm(TenancyFilterForm, PrimaryModelFilterSetForm):
     model = BGPSetting
-    fieldsets = (FieldSet('q', 'filter_id', 'tag'),
-        FieldSet('key'),)
+    fieldsets = (
+        FieldSet('q', 'filter_id', 'tag'),
+        FieldSet('key'),
+    )
     tag = TagFilterField(model)
 
 
 class BGPPeerTemplateFilterForm(TenancyFilterForm, PrimaryModelFilterSetForm):
     model = BGPPeerTemplate
-    fieldsets = (FieldSet('q', 'filter_id', 'tag'),
-        FieldSet('name'),)
+    fieldsets = (
+        FieldSet('q', 'filter_id', 'tag'),
+        FieldSet('name'),
+    )
     tag = TagFilterField(model)
 
 
-class BGPPolicyTemplateFilterForm(BGPPolicyFilterFormMixin, TenancyFilterForm, PrimaryModelFilterSetForm):
+class BGPPolicyTemplateFilterForm(
+    BGPPolicyFilterFormMixin, TenancyFilterForm, PrimaryModelFilterSetForm
+):
     model = BGPPolicyTemplate
     fieldsets = (
         FieldSet('q', 'filter_id', 'tag'),
@@ -100,7 +106,9 @@ class BGPPolicyTemplateFilterForm(BGPPolicyFilterFormMixin, TenancyFilterForm, P
     tag = TagFilterField(model)
 
 
-class BGPSessionTemplateFilterForm(SessionFilterFormMixin, TenancyFilterForm, PrimaryModelFilterSetForm):
+class BGPSessionTemplateFilterForm(
+    SessionFilterFormMixin, TenancyFilterForm, PrimaryModelFilterSetForm
+):
     model = BGPSessionTemplate
     fieldsets = (
         FieldSet('q', 'filter_id', 'tag'),
