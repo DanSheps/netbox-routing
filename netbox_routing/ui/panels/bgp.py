@@ -9,6 +9,7 @@ __all__ = (
     'BGPPolicyTemplatePanel',
     'BGPSessionTemplatePanel',
     'BGPPolicyFilteringPanel',
+    'BGPAdditionalPolicyFilteringPanel',
     'BGPRouterPanel',
     'BGPRouterTemplatesPanel',
     'BGPScopePanel',
@@ -39,6 +40,13 @@ class BGPPolicyFilteringPanel(panels.ObjectAttributesPanel):
     prefixlist_in = attrs.RelatedObjectAttr('prefixlist_in', linkify=True)
     routemap_out = attrs.RelatedObjectAttr('routemap_out', linkify=True)
     routemap_in = attrs.RelatedObjectAttr('routemap_in', linkify=True)
+
+
+class BGPAdditionalPolicyFilteringPanel(panels.ObjectAttributesPanel):
+    redistribute_routemap = attrs.RelatedObjectAttr(
+        'redistribute_routemap', linkify=True
+    )
+    vrf_in = attrs.RelatedObjectAttr('vrf_in', linkify=True)
 
 
 class BGPPeerSettingPanel(panels.ObjectAttributesPanel):
@@ -100,6 +108,7 @@ class BGPScopePanel(panels.ObjectAttributesPanel):
 class BGPAddressFamilyPanel(panels.ObjectAttributesPanel):
     scope = attrs.RelatedObjectAttr('router', linkify=True)
     address_family = attrs.ChoiceAttr('address_family', label=_('Address Family'))
+    enabled = attrs.BooleanAttr('enabled', label=_('Enabled'))
     description = attrs.TextAttr('description', label=_('Description'))
     tenants = attrs.RelatedObjectAttr('tenants', linkify=True)
 

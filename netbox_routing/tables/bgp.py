@@ -151,6 +151,31 @@ class BGPScopeTable(TenancyColumnsMixin, NetBoxTable):
 
 
 class BGPAddressFamilyTable(TenancyColumnsMixin, NetBoxTable):
+    prefixlist_in = tables.Column(
+        linkify=True,
+        verbose_name=_('Prefix List (in)'),
+    )
+    prefixlist_out = tables.Column(
+        linkify=True,
+        verbose_name=_('Prefix List (out)'),
+    )
+    routemap_in = tables.Column(
+        linkify=True,
+        verbose_name=_('Route Map (in)'),
+    )
+    routemap_out = tables.Column(
+        linkify=True,
+        verbose_name=_('Route Map (out)'),
+    )
+    redistribute_routemap = tables.Column(
+        linkify=True,
+        verbose_name=_('Redistribute Route Map'),
+    )
+    vrf_in = tables.Column(
+        linkify=True,
+        verbose_name=_('Import VRF'),
+    )
+
     class Meta(NetBoxTable.Meta):
         model = BGPAddressFamily
         fields = (
@@ -158,10 +183,17 @@ class BGPAddressFamilyTable(TenancyColumnsMixin, NetBoxTable):
             'id',
             'scope',
             'address_family',
+            'enabled',
+            'prefixlist_in',
+            'prefixlist_out',
+            'routemap_in',
+            'routemap_out',
+            'redistribute_routemap',
+            'vrf_in',
             'tenant_group',
             'tenant',
         )
-        default_columns = ('pk', 'id', 'scope', 'address_family')
+        default_columns = ('pk', 'id', 'scope', 'address_family', 'enabled')
 
 
 class BGPPeerTable(TenancyColumnsMixin, NetBoxTable):

@@ -164,7 +164,7 @@ class BGPScopeFilterForm(
     tag = TagFilterField(model)
 
 
-class BGPAddressFamilyFilterForm(TenancyFilterForm, NetBoxModelFilterSetForm):
+class BGPAddressFamilyFilterForm(TenancyFilterForm, BGPPolicyFilterFormMixin, NetBoxModelFilterSetForm):
     scope_id = DynamicModelMultipleChoiceField(
         queryset=BGPScope.objects.all(),
         required=False,
@@ -176,8 +176,18 @@ class BGPAddressFamilyFilterForm(TenancyFilterForm, NetBoxModelFilterSetForm):
         required=False,
         label=_('Address Family'),
     )
+    enabled = forms.BooleanField(required=False, label=_('Enabled'))
     model = BGPAddressFamily
-    fieldsets = (FieldSet('q', 'filter_id', 'tag', 'scope_id', 'address_family'),)
+    fieldsets = (
+        FieldSet('q', 'filter_id', 'tag', 'scope_id', 'address_family', 'enabled'),
+        FieldSet(
+            'prefixlist_in_id',
+            'prefixlist_out_id',
+            'routemap_in_id',
+            'routemap_out_id',
+            name=_('Filtering'),
+        ),
+    )
     tag = TagFilterField(model)
 
 
