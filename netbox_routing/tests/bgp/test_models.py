@@ -1,3 +1,6 @@
+from dcim.models import Interface
+from utilities.testing import create_test_device
+
 from django.core.exceptions import ValidationError
 from django.db import IntegrityError
 from django.test import TestCase
@@ -140,16 +143,17 @@ class BGPAddressFamilyTestCase(BGPScopeMixin, TestCase):
             instance.save()
 
 
-class BGPPeerTestCase(
-    BGPScopeMixin,
-    AddressesMixin,
-    TestCase,
-):
+class BGPPeerTestCase(BGPScopeMixin, AddressesMixin, TestCase):
     model = BGPPeer
 
     @classmethod
     def setUpTestData(cls):
         super().setUpTestData()
+        cls.interface = Interface.objects.create(
+            device=create_test_device(name='Test BGP Device'),
+            name='Ethernet1',
+            type='virtual',
+        )
 
     def test_model(self):
         instance = self.model(
@@ -177,12 +181,32 @@ class BGPPeerTestCase(
         with self.assertRaises(IntegrityError):
             instance.save()
 
+    def test_conflicting_peer_and_interface_is_invalid(self):
+        instance = self.model(
+            name='Test Peer',
+            scope=self.scope,
+            peer=self.peer_address,
+            interface=self.interface,
+        )
 
-class BGPPeerAddressFamilyTestCase(
-    BGPPeerMixin,
-    BGPAddressFamilyMixin,
-    TestCase,
-):
+        with self.assertRaises(ValidationError):
+            instance.full_clean()
+
+    def test_conflicting_remote_as_and_remote_as_list_is_invalid(self):
+        instance = self.model(
+            name='Test Peer',
+            scope=self.scope,
+            peer=self.peer_address,
+            remote_as=self.asn,
+        )
+        instance.save()
+        instance.remote_as_list.add(self.asns[1])
+
+        with self.assertRaises(ValidationError):
+            instance.full_clean()
+
+
+class BGPPeerAddressFamilyTestCase(BGPPeerMixin, BGPAddressFamilyMixin, TestCase):
     model = BGPPeerAddressFamily
 
     @classmethod
@@ -219,10 +243,7 @@ class BGPPeerAddressFamilyTestCase(
             instance.save()
 
 
-class BGPPeerTemplateTestCase(
-    BGPAddressFamilyMixin,
-    TestCase,
-):
+class BGPPeerTemplateTestCase(BGPAddressFamilyMixin, TestCase):
     model = BGPPeerTemplate
 
     @classmethod
@@ -257,10 +278,7 @@ class BGPPeerTemplateTestCase(
             instance.save()
 
 
-class BGPPolicyTemplateTestCase(
-    BGPAddressFamilyMixin,
-    TestCase,
-):
+class BGPPolicyTemplateTestCase(BGPAddressFamilyMixin, TestCase):
     model = BGPPolicyTemplate
 
     @classmethod
@@ -293,10 +311,7 @@ class BGPPolicyTemplateTestCase(
             instance.save()
 
 
-class BGPSessionTemplateTestCase(
-    BGPAddressFamilyMixin,
-    TestCase,
-):
+class BGPSessionTemplateTestCase(BGPAddressFamilyMixin, TestCase):
     model = BGPSessionTemplate
 
     @classmethod
@@ -329,9 +344,7 @@ class BGPSessionTemplateTestCase(
             instance.save()
 
 
-class BFDProfileTestCase(
-    TestCase,
-):
+class BFDProfileTestCase(TestCase):
     model = BFDProfile
 
     @classmethod
@@ -371,3 +384,4 @@ class BFDProfileTestCase(
             instance.full_clean()
         with self.assertRaises(IntegrityError):
             instance.save()
+

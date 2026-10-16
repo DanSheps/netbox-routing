@@ -4,7 +4,7 @@ from django.core.exceptions import ValidationError
 from django.forms import fields
 from django.utils.translation import gettext as _
 
-from dcim.models import Device, Region, SiteGroup, Site, Location
+from dcim.models import Device, Interface, Region, SiteGroup, Site, Location
 from ipam.models import ASN, VRF, IPAddress
 from netbox.forms import PrimaryModelForm
 from tenancy.forms import TenancyForm
@@ -595,7 +595,7 @@ class BGPRouterForm(BGPSettingMixin, TenancyForm, PrimaryModelForm):
                     )
                 }
             )
-        elif selected_objects:
+        if selected_objects:
             self.instance.assigned_object = self.cleaned_data[selected_objects[0]]
         else:
             self.instance.assigned_object = None
@@ -699,15 +699,34 @@ class BGPPeerForm(BGPSettingMixin, TenancyForm, PrimaryModelForm):
     )
     peer = DynamicModelChoiceField(
         queryset=IPAddress.objects.all(),
-        required=True,
+        required=False,
         selector=True,
         label=_('Peer'),
+    )
+    device = DynamicModelChoiceField(
+        queryset=Device.objects.all(),
+        required=False,
+        selector=True,
+        label=_('Device'),
+    )
+    interface = DynamicModelChoiceField(
+        queryset=Interface.objects.all(),
+        query_params={'device_id': '$device'},
+        required=False,
+        selector=True,
+        label=_('Interface'),
     )
     remote_as = DynamicModelChoiceField(
         queryset=ASN.objects.all(),
         required=False,
         selector=True,
         label=_('Remote AS'),
+    )
+    remote_as_list = DynamicModelMultipleChoiceField(
+        queryset=ASN.objects.all(),
+        required=False,
+        selector=True,
+        label=_('Remote AS List'),
     )
     local_as = DynamicModelChoiceField(
         queryset=ASN.objects.all(),
@@ -721,8 +740,15 @@ class BGPPeerForm(BGPSettingMixin, TenancyForm, PrimaryModelForm):
             'name',
             'description',
         ),
-        FieldSet('scope', 'peer', 'status', name=_('Peer')),
-        FieldSet('remote_as', 'local_as', name=_('ASNs')),
+        FieldSet('scope', 'status', name=_('Scope')),
+        FieldSet(
+            TabbedGroups(
+                FieldSet('peer', name=_('Peer')),
+                FieldSet('device', 'interface', name=_('Interface')),
+            ),
+            name=_('Peer'),
+        ),
+        FieldSet('remote_as', 'remote_as_list', 'local_as', name=_('ASNs')),
         FieldSet('enabled', 'bfd', 'password', 'ttl', name=_('Peer Settings')),
         FieldSet('tenant_group', 'tenant', name=_('Tenancy')),
     )
@@ -733,7 +759,9 @@ class BGPPeerForm(BGPSettingMixin, TenancyForm, PrimaryModelForm):
             'name',
             'scope',
             'peer',
+            'interface',
             'remote_as',
+            'remote_as_list',
             'local_as',
             'tenant',
             'enabled',
@@ -748,6 +776,26 @@ class BGPPeerForm(BGPSettingMixin, TenancyForm, PrimaryModelForm):
             'tags',
             'owner',
         ]
+
+    def clean(self):
+        super().clean()
+
+        has_peer = self.cleaned_data.get('peer') is not None
+        has_interface = self.cleaned_data.get('interface') is not None
+
+        if has_peer and has_interface:
+            raise forms.ValidationError('Cannot have a Peer IP and a Peer Interface on the same BGP Peer')
+
+        if not (has_peer or has_interface):
+            raise forms.ValidationError('Either peer or interface must be set.')
+
+        remote_as = self.cleaned_data.get('remote_as')
+        remote_as_list = self.cleaned_data.get('remote_as_list') or []
+
+        if remote_as and remote_as_list:
+            raise forms.ValidationError('Cannot have both a Remote AS and a Remote AS List.')
+
+        return self.cleaned_data
 
     def save(self, *args, **kwargs):
         return super().save(*args, **kwargs)

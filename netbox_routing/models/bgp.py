@@ -1,6 +1,7 @@
 from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
 from django.contrib.contenttypes.models import ContentType
 from django.core.validators import MinValueValidator, MaxValueValidator
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import ManyToManyField
 from django.urls import reverse
@@ -527,8 +528,16 @@ class BGPPeer(PrimaryModel):
         to='ipam.IPAddress',
         on_delete=models.PROTECT,
         related_name='remote_peers',
-        blank=False,
-        null=False,
+        blank=True,
+        null=True,
+    )
+    interface = models.ForeignKey(
+        verbose_name=_('Interface'),
+        to='dcim.Interface',
+        on_delete=models.PROTECT,
+        related_name='remote_peers',
+        blank=True,
+        null=True,
     )
     source = models.ForeignKey(
         verbose_name=_('Source Address'),
@@ -561,6 +570,12 @@ class BGPPeer(PrimaryModel):
         related_name='+',
         blank=True,
         null=True,
+    )
+    remote_as_list = models.ManyToManyField(
+        verbose_name=_('Remote AS List'),
+        to='ipam.ASN',
+        related_name='+',
+        blank=True,
     )
     enabled = models.BooleanField(verbose_name=_('Enabled'), blank=True, null=True)
     status = models.CharField(
@@ -642,16 +657,61 @@ class BGPPeer(PrimaryModel):
         )
         constraints = [
             models.UniqueConstraint(
-                fields=('scope', 'peer', 'name'),
+                fields=('scope', 'peer', 'name', 'interface'),
                 name='%(app_label)s_%(class)s_scope_peer_name',
                 nulls_distinct=False,
             ),
         ]
 
+    def clean(self):
+        super().clean()
+
+        has_peer = self.peer is not None
+        has_interface = self.interface is not None
+
+        if has_peer and has_interface:
+            raise ValidationError(
+                {
+                    'peer': 'Cannot have a Peer IP and a Peer Interface on the same BGP Peer',
+                    'interface': 'Cannot have a Peer IP and a Peer Interface on the same BGP Peer',
+                }
+            )
+
+        if not (has_peer or has_interface):
+            raise ValidationError(
+                {
+                    'peer': 'Either peer or interface must be set.',
+                    'interface': 'Either peer or interface must be set.',
+                }
+            )
+
+        remote_as = self.remote_as
+        remote_as_list = getattr(self, '_m2m_values', {}).get('remote_as_list')
+        if remote_as_list is None:
+            if self._state.adding:
+                remote_as_list = []
+            else:
+                remote_as_list = list(self.remote_as_list.all())
+
+        if remote_as and remote_as_list:
+            raise ValidationError(
+                {
+                    'remote_as': 'Cannot have both a Remote AS and a Remote AS List.',
+                    'remote_as_list': 'Cannot have both a Remote AS and a Remote AS List.',
+                }
+            )
+
     def __str__(self):
+        if self.peer is not None:
+            peer = self.peer
+        elif self.interface is not None:
+            peer = self.interface
+        else:
+            peer = self.name or 'Unknown peer'
+
         if self.remote_as:
-            return f'{self.peer} ({self.remote_as})'
-        return f'{self.peer}'
+            return f'{peer} ({self.remote_as})'
+        return str(peer)
 
     def get_absolute_url(self):
         from django.urls import reverse
