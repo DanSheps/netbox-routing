@@ -33,6 +33,7 @@ class OSPFInterfacePanel(panels.ObjectAttributesPanel):
 
 
 class OSPFInterfaceSettingsPanel(panels.ObjectAttributesPanel):
+    network_type = attrs.ChoiceAttr('network_type', label=_('Network Type'))
     priority = attrs.NumericAttr('priority', label=_('Priority'))
     passive = attrs.BooleanAttr('passive', label=_('Passive'))
     bfd = attrs.BooleanAttr('bfd', label=_('BFD'))

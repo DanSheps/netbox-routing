@@ -87,6 +87,7 @@ class OSPFInterfaceImportForm(NetBoxModelImportForm):
             "instance",
             "area",
             "interface",
+            "network_type",
             "passive",
             "priority",
             "bfd",
