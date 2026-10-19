@@ -10,5 +10,4 @@ repos:
     hooks:
       - id: black
         name: "Black"
-        exclude: ^netbox_routing/migrations/
         args: [ --check, ]
