@@ -164,7 +164,9 @@ class BGPScopeFilterForm(
     tag = TagFilterField(model)
 
 
-class BGPAddressFamilyFilterForm(TenancyFilterForm, BGPPolicyFilterFormMixin, NetBoxModelFilterSetForm):
+class BGPAddressFamilyFilterForm(
+    TenancyFilterForm, BGPPolicyFilterFormMixin, NetBoxModelFilterSetForm
+):
     scope_id = DynamicModelMultipleChoiceField(
         queryset=BGPScope.objects.all(),
         required=False,
