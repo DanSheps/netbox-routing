@@ -384,4 +384,3 @@ class BFDProfileTestCase(TestCase):
             instance.full_clean()
         with self.assertRaises(IntegrityError):
             instance.save()
-
