@@ -207,6 +207,9 @@ class EIGRPAddressFamilyInterfacesView(ObjectChildrenView):
         badge=lambda obj: EIGRPInterface.objects.filter(address_family=obj).count(),
     )
 
+    def get_children(self, request, parent):
+        return self.child_model.objects.filter(address_family=parent)
+
 
 @register_model_view(EIGRPAddressFamily, name='networks')
 class EIGRPAddressFamilyNetworksView(ObjectChildrenView):
@@ -216,12 +219,12 @@ class EIGRPAddressFamilyNetworksView(ObjectChildrenView):
     table = EIGRPNetworkTable
     filterset = EIGRPNetworkFilterSet
     tab = ViewTab(
-        label='Interfaces',
-        badge=lambda obj: EIGRPInterface.objects.filter(address_family=obj).count(),
+        label='Networks',
+        badge=lambda obj: EIGRPNetwork.objects.filter(address_family=obj).count(),
     )
 
     def get_children(self, request, parent):
-        return self.child_model.objects.filter(address_famiily=parent)
+        return self.child_model.objects.filter(address_family=parent)
 
 
 @register_model_view(EIGRPAddressFamily, name='add', detail=False)
