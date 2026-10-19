@@ -198,11 +198,13 @@ class OSPFInterfaceTestCase(
             'interface': interfaces[3].pk,
             'area': areas[3].pk,
             'instance': instances[3].pk,
+            'network_type': 'point-to-point',
             'passive': True,
         }
 
         cls.bulk_edit_data = {
             'description': 'A test Interface description',
+            'network_type': 'broadcast',
             'passive': False,
         }
 

@@ -7,7 +7,7 @@ from django.utils.translation import gettext as _
 from netbox.models import PrimaryModel
 
 from netbox_routing import choices
-from netbox_routing.choices.ospf import OSPFAreaTypeChoices
+from netbox_routing.choices.ospf import OSPFAreaTypeChoices, OSPFNetworkTypeChoices
 from netbox_routing.constants import ERROR_UNIQUENESS_CONSTRAINT
 from netbox_routing.fields.ip import IPAddressField
 
@@ -125,6 +125,13 @@ class OSPFInterface(PrimaryModel):
     passive = models.BooleanField(verbose_name='Passive', blank=True, null=True)
     priority = models.IntegerField(blank=True, null=True)
     bfd = models.BooleanField(blank=True, null=True, verbose_name='BFD')
+    network_type = models.CharField(
+        verbose_name=_('Network Type'),
+        max_length=50,
+        choices=OSPFNetworkTypeChoices,
+        blank=True,
+        null=True,
+    )
     authentication = models.CharField(
         max_length=50, choices=choices.AuthenticationChoices, blank=True, null=True
     )
@@ -137,6 +144,7 @@ class OSPFInterface(PrimaryModel):
         'passive',
         'priority',
         'bfd',
+        'network_type',
         'authentication',
         'passphrase',
     )
