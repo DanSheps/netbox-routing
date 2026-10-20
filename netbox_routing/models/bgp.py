@@ -3,6 +3,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.db.models import Q
 from django.db.models import ManyToManyField
 from django.urls import reverse
 from django.utils.translation import gettext as _
@@ -657,9 +658,14 @@ class BGPPeer(PrimaryModel):
         )
         constraints = [
             models.UniqueConstraint(
-                fields=('scope', 'peer', 'name', 'interface'),
-                name='%(app_label)s_%(class)s_scope_peer_name',
-                nulls_distinct=False,
+                fields=('scope', 'peer'),
+                condition=Q(peer__isnull=False),
+                name='%(app_label)s_%(class)s_scope_peer_unique',
+            ),
+            models.UniqueConstraint(
+                fields=('scope', 'interface'),
+                condition=Q(interface__isnull=False),
+                name='%(app_label)s_%(class)s_scope_interface_unique',
             ),
         ]
 
