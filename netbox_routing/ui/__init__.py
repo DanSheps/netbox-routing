@@ -15,6 +15,7 @@ __all__ = (
     'BGPRouterTemplatesPanel',
     'BGPScopePanel',
     'BGPAddressFamilyPanel',
+    'BGPAdditionalPolicyFilteringPanel',
     'BGPPeerPanel',
     'BGPPeerAddressFamilyPanel',
     'BGPPeerSettingPanel',

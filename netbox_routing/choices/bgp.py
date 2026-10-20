@@ -20,6 +20,7 @@ class BGPSettingChoices(ChoiceSet):
     ASDOT = 'asdot'
     GR = 'graceful_restart'
     DEFAULT_ORIGINATE = 'default_information_originate'
+    REDISTRIBUTE_CONNECTED = 'redistribute_connected'
     DEFAULT_METRIC = 'default_metric'
     DISTANCE_EBGP = 'distance_ebgp'
     DISTANCE_IBGP = 'distance_ibgp'
@@ -39,6 +40,7 @@ class BGPSettingChoices(ChoiceSet):
         (ASDOT, 'AS Dot Notation'),
         (GR, 'Graceful Restart'),
         (DEFAULT_ORIGINATE, 'Default Originate'),
+        (REDISTRIBUTE_CONNECTED, 'Redistribute Connected'),
         (DEFAULT_METRIC, 'Default Metric'),
         (DISTANCE_EBGP, 'eBGP Distance'),
         (DISTANCE_IBGP, 'iBGP Distance'),
@@ -59,6 +61,7 @@ class BGPSettingChoices(ChoiceSet):
         ASDOT: 'boolean',
         GR: 'boolean',
         DEFAULT_ORIGINATE: 'boolean',
+        REDISTRIBUTE_CONNECTED: 'boolean',
         DEFAULT_METRIC: 'integer',
         DISTANCE_EBGP: 'integer',
         DISTANCE_IBGP: 'integer',
