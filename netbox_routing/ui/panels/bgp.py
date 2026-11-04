@@ -109,7 +109,9 @@ class BGPPeerPanel(panels.ObjectAttributesPanel):
     peer = attrs.RelatedObjectAttr('peer', linkify=True)
     interface = attrs.RelatedObjectAttr('interface', linkify=True)
     remote_as = attrs.RelatedObjectAttr('remote_as', label=_('Remote AS'), linkify=True)
-    remote_as_list = attrs.RelatedObjectListAttr('remote_as_list', label=_('Remote AS List'), linkify=True)
+    remote_as_list = attrs.RelatedObjectListAttr(
+        'remote_as_list', label=_('Remote AS List'), linkify=True
+    )
     local_as = attrs.RelatedObjectAttr('local_as', label=_('Local AS'), linkify=True)
     status = attrs.ChoiceAttr('status', label=_('Status'))
     description = attrs.TextAttr('description', label=_('Description'))

@@ -272,10 +272,16 @@ class BGPPeerBulkEditForm(
         label=_('Peer'), queryset=IPAddress.objects.all(), required=False, selector=True
     )
     interface = DynamicModelChoiceField(
-        label=_('Interface'), queryset=Interface.objects.all(), required=False, selector=True
+        label=_('Interface'),
+        queryset=Interface.objects.all(),
+        required=False,
+        selector=True,
     )
     remote_as_list = DynamicModelMultipleChoiceField(
-        label=_('Remote AS List'), queryset=ASN.objects.all(), required=False, selector=True
+        label=_('Remote AS List'),
+        queryset=ASN.objects.all(),
+        required=False,
+        selector=True,
     )
     source = DynamicModelChoiceField(
         label=_('Source'),

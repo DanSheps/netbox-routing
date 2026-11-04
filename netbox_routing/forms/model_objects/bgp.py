@@ -789,7 +789,9 @@ class BGPPeerForm(BGPSettingMixin, TenancyForm, PrimaryModelForm):
         has_interface = self.cleaned_data.get('interface') is not None
 
         if has_peer and has_interface:
-            raise forms.ValidationError('Cannot have a Peer IP and a Peer Interface on the same BGP Peer')
+            raise forms.ValidationError(
+                'Cannot have a Peer IP and a Peer Interface on the same BGP Peer'
+            )
 
         if not (has_peer or has_interface):
             raise forms.ValidationError('Either peer or interface must be set.')
@@ -798,7 +800,9 @@ class BGPPeerForm(BGPSettingMixin, TenancyForm, PrimaryModelForm):
         remote_as_list = self.cleaned_data.get('remote_as_list') or []
 
         if remote_as and remote_as_list:
-            raise forms.ValidationError('Cannot have both a Remote AS and a Remote AS List.')
+            raise forms.ValidationError(
+                'Cannot have both a Remote AS and a Remote AS List.'
+            )
 
         return self.cleaned_data
 

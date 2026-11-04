@@ -248,7 +248,9 @@ class BGPPeerType(BGPSettingsMixin, PrimaryObjectType):
     interface: Annotated["InterfaceType", strawberry.lazy('dcim.graphql.types')] | None
     source: Annotated["IPAddressType", strawberry.lazy('ipam.graphql.types')] | None
     remote_as: Annotated["ASNType", strawberry.lazy('ipam.graphql.types')] | None
-    remote_as_list: list[Annotated["ASNType", strawberry.lazy('ipam.graphql.types')]] | None
+    remote_as_list: (
+        list[Annotated["ASNType", strawberry.lazy('ipam.graphql.types')]] | None
+    )
     local_as: Annotated["ASNType", strawberry.lazy('ipam.graphql.types')] | None
     bfd: (
         Annotated["BFDProfileType", strawberry.lazy('netbox_routing.graphql.types')]

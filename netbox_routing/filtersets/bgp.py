@@ -359,7 +359,13 @@ class BGPPeerFilterSet(NetBoxModelFilterSet):
 
     class Meta:
         model = BGPPeer
-        fields = ('scope_id', 'peer_id', 'remote_as_id', 'remote_as_list_id', 'local_as_id')
+        fields = (
+            'scope_id',
+            'peer_id',
+            'remote_as_id',
+            'remote_as_list_id',
+            'local_as_id',
+        )
 
     def search(self, queryset, name, value):
         if not value.strip():

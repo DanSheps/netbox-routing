@@ -283,7 +283,9 @@ class BGPPeerSerializer(NetBoxModelSerializer):
     interface = InterfaceSerializer(nested=True, required=False, allow_null=True)
     source = IPAddressSerializer(nested=True, required=False)
     remote_as = ASNSerializer(nested=True, required=False, allow_null=True)
-    remote_as_list = ASNSerializer(nested=True, many=True, required=False, allow_null=True)
+    remote_as_list = ASNSerializer(
+        nested=True, many=True, required=False, allow_null=True
+    )
     local_as = ASNSerializer(nested=True, required=False)
     tenant = TenantSerializer(nested=True, required=False)
 
