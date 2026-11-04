@@ -1,4 +1,11 @@
 # Netbox Routing
+
+[![PyPI](https://img.shields.io/pypi/v/netbox-routing.svg)](https://pypi.org/project/netbox-routing/)
+[![Python](https://img.shields.io/pypi/pyversions/netbox-routing.svg)](https://pypi.org/project/netbox-routing/)
+[![NetBox](https://img.shields.io/badge/NetBox-4.7%2B-success.svg)](https://github.com/netbox-community/netbox)
+[![CI](https://github.com/dansheps/netbox-routing/actions/workflows/ci.yml/badge.svg)](https://github.com/dansheps/netbox-routing/actions/workflows/ci.yml)
+[![License: AGPL-3.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
+
 A plugin for tracking all kinds of routing information
 
 ## Features
@@ -29,14 +36,16 @@ A plugin for tracking all kinds of routing information
 
 ## Compatibility Matrix
 
-|       | Netbox 3.2.x   | NetBox 4.1.x   | Netbox 4.2.x   | NetBox 4.3.x - 4.4.x | NetBox 4.5.x   |  
-|-------|----------------|----------------|----------------|----------------------|----------------|
-| 0.1.x | Compatible     | Not Compatible | Not Compatible | Not Compatible       | Not Compatible |
-| 0.2.x | Not Compatible | Compatible     | Not Compatible | Not Compatible       | Not Compatible |
-| 0.3.0 | Not Compatible | Not Compatible | Compatible     | Not Compatible       | Not Compatible |
-| 0.3.1 | Not Compatible | Not Compatible | Not Compatible | Compatible           | Not Compatible |
-| 0.3.2 | Not Compatible | Not Compatible | Not Compatible | Not Compatible       | Compatible     |
-| 0.4.x | Not Compatible | Not Compatible | Not Compatible | Not Compatible       | Compatible     |
+|       | Netbox 3.2.x   | NetBox 4.1.x   | Netbox 4.2.x   | NetBox 4.3.x - 4.4.x | NetBox 4.5.x   | NetBox 4.6.x   | NetBox 4.7.x   |
+|-------|----------------|----------------|----------------|----------------------|----------------|----------------|----------------|
+| 0.1.x | Compatible     | Not Compatible | Not Compatible | Not Compatible       | Not Compatible | Not Compatible | Not Compatible |
+| 0.2.x | Not Compatible | Compatible     | Not Compatible | Not Compatible       | Not Compatible | Not Compatible | Not Compatible |
+| 0.3.0 | Not Compatible | Not Compatible | Compatible     | Not Compatible       | Not Compatible | Not Compatible | Not Compatible |
+| 0.3.1 | Not Compatible | Not Compatible | Not Compatible | Compatible           | Not Compatible | Not Compatible | Not Compatible |
+| 0.3.2 | Not Compatible | Not Compatible | Not Compatible | Not Compatible       | Compatible     | Not Compatible | Not Compatible |
+| 0.4.x | Not Compatible | Not Compatible | Not Compatible | Not Compatible       | Compatible     | Not Compatible | Not Compatible |
+| 0.5.0 | Not Compatible | Not Compatible | Not Compatible | Not Compatible       | Not Compatible | Compatible     | Not Compatible |
+| 0.5.x | Not Compatible | Not Compatible | Not Compatible | Not Compatible       | Not Compatible | Compatible     | Compatible     |
 
 ## Installation
 
