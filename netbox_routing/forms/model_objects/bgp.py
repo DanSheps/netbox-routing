@@ -118,6 +118,16 @@ class BGPSettingMixin:
     def _clean_fieldset(self):
         pass
 
+    def _get_settings_field_type(self, key):
+        return BGPSettingChoices.FIELD_TYPES.get(key, 'string')
+
+    def _field_unset(self, key, value):
+        field_type = self._get_settings_field_type(key)
+        if field_type == 'integer' or field_type == 'boolean':
+            return value is None
+        else:
+            return value is None or value == ''
+
     def save(self, *args, **kwargs):
         settings = {}
         for key, name in BGPSettingChoices.CHOICES:
@@ -132,24 +142,19 @@ class BGPSettingMixin:
                 assigned_object_id=self.get_assigned_object_id(),
                 key=key,
             ).first()
-            # print(f'{key}')
-            if setting and value:
-                # print('\tPrev: {setting.value}')
-                # print('\tNew: {value}')
-                setting.value = settings.get(key)
+            if setting is not None and not self._field_unset(key, value):
+                setting.value = value
                 setting.clean()
                 setting.save()
-            elif value:
-                # print('\tNew: {value}')
+            elif setting is None and not self._field_unset(key, value):
                 setting = BGPSetting(
                     assigned_object=self.instance,
                     key=key,
-                    value=settings.get(key, None),
+                    value=value,
                 )
                 setting.clean()
                 setting.save()
-            elif setting:
-                # print('\tPrev: {setting.value}')
+            elif setting is not None and self._field_unset(key, value):
                 setting.delete()
 
         return obj
@@ -873,7 +878,7 @@ class BGPPeerAddressFamilyForm(BGPSettingMixin, TenancyForm, PrimaryModelForm):
 
         filter = {
             selected_objects[0]: self.instance.assigned_object,
-            'address_family': self.cleaned_data['address_family'],
+            'address_family': self.cleaned_data.get('address_family'),
         }
         if (
             self.Meta.model.objects.filter(**filter)
