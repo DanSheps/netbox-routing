@@ -44,6 +44,7 @@ class OSPFInterfaceType(PrimaryObjectType):
     ]
     area: Annotated["OSPFAreaType", strawberry.lazy('netbox_routing.graphql.types')]
     interface: Annotated["InterfaceType", strawberry.lazy('dcim.graphql.types')]
+    network_type: str | None
     passive: bool | None
     priority: str | None
     bfd: bool | None
