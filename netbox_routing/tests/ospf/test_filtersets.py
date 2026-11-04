@@ -252,18 +252,21 @@ class OSPFInterfaceTestCase(TestCase):
                 instance=instances[0],
                 area=areas[0],
                 passive=True,
+                network_type='point-to-point',
             ),
             OSPFInterface(
                 interface=interfaces[1],
                 instance=instances[1],
                 area=areas[1],
                 passive=False,
+                network_type='point-to-point',
             ),
             OSPFInterface(
                 interface=interfaces[2],
                 instance=instances[2],
                 area=areas[2],
                 passive=True,
+                network_type='broadcast',
             ),
             OSPFInterface(
                 interface=interfaces[3],
@@ -329,3 +332,10 @@ class OSPFInterfaceTestCase(TestCase):
     def test_passive(self):
         params = {'passive': True}
         self.assertEqual(self.filterset(params, self.queryset).qs.count(), 2)
+
+    def test_network_type(self):
+        params = {'network_type': ['point-to-point']}
+        self.assertEqual(self.filterset(params, self.queryset).qs.count(), 2)
+
+        params = {'network_type': ['point-to-point', 'broadcast']}
+        self.assertEqual(self.filterset(params, self.queryset).qs.count(), 3)
