@@ -8,7 +8,7 @@ from utilities.forms import BOOLEAN_WITH_BLANK_CHOICES, add_blank_choice
 from utilities.forms.fields import DynamicModelChoiceField, CommentField
 
 from netbox_routing import choices
-from netbox_routing.choices.ospf import OSPFAreaTypeChoices
+from netbox_routing.choices.ospf import OSPFAreaTypeChoices, OSPFNetworkTypeChoices
 from netbox_routing.models import OSPFArea, OSPFInstance, OSPFInterface
 
 __all__ = (
@@ -80,6 +80,11 @@ class OSPFInterfaceBulkEditForm(NetBoxModelBulkEditForm):
     bfd = forms.ChoiceField(
         label=_('BFD'), choices=BOOLEAN_WITH_BLANK_CHOICES, required=False
     )
+    network_type = forms.ChoiceField(
+        label=_('Network Type'),
+        choices=add_blank_choice(OSPFNetworkTypeChoices),
+        required=False,
+    )
     authentication = forms.ChoiceField(
         label=_('Authentication'),
         choices=add_blank_choice(choices.AuthenticationChoices),
@@ -96,6 +101,7 @@ class OSPFInterfaceBulkEditForm(NetBoxModelBulkEditForm):
     fieldsets = (
         FieldSet('instance', 'area', name='OSPF'),
         FieldSet(
+            'network_type',
             'passive',
             'priority',
             'bfd',
@@ -105,4 +111,4 @@ class OSPFInterfaceBulkEditForm(NetBoxModelBulkEditForm):
         ),
         FieldSet('description'),
     )
-    nullable_fields = ()
+    nullable_fields = ('network_type',)
