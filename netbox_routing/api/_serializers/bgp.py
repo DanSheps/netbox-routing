@@ -282,7 +282,11 @@ class BGPPeerSerializer(NetBoxModelSerializer):
     peer = IPAddressSerializer(nested=True, required=False, allow_null=True)
     interface = InterfaceSerializer(nested=True, required=False, allow_null=True)
     source = IPAddressSerializer(nested=True, required=False)
-    remote_as = ASNSerializer(nested=True, required=False, allow_null=True)
+    peer_group = BGPPeerTemplateSerializer(nested=True, required=False, allow_null=True)
+    peer_session = BGPSessionTemplateSerializer(
+        nested=True, required=False, allow_null=True
+    )
+    remote_as = ASNSerializer(nested=True, required=False)
     remote_as_list = ASNSerializer(
         nested=True, many=True, required=False, allow_null=True
     )
@@ -299,6 +303,8 @@ class BGPPeerSerializer(NetBoxModelSerializer):
             'peer',
             'interface',
             'source',
+            'peer_group',
+            'peer_session',
             'name',
             'remote_as',
             'remote_as_list',
