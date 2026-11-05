@@ -10,7 +10,7 @@ class Migration(migrations.Migration):
         ('dcim', '0250_cooling_infrastructure'),
         ('extras', '0144_customfield_status'),
         ('ipam', '0097_merge_ipaddress_host_index_and_multi_protocol_services'),
-        ('netbox_routing', '0035_total_model_ordering'),
+        ('netbox_routing', '0036_ospfinterface_network_type'),
         ('tenancy', '0026_consolidate_unique_constraints'),
         ('users', '0016_default_ordering_indexes'),
     ]
