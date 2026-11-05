@@ -5,7 +5,7 @@ from dcim.models import Interface, Device
 from ipam.models import VRF
 from netbox.forms import NetBoxModelFilterSetForm
 from netbox_routing.choices import AuthenticationChoices
-from netbox_routing.choices.ospf import OSPFAreaTypeChoices
+from netbox_routing.choices.ospf import OSPFAreaTypeChoices, OSPFNetworkTypeChoices
 from utilities.forms import BOOLEAN_WITH_BLANK_CHOICES, add_blank_choice
 from utilities.forms.fields import TagFilterField, DynamicModelMultipleChoiceField
 
@@ -85,7 +85,9 @@ class OSPFInterfaceFilterForm(NetBoxModelFilterSetForm):
         FieldSet('q', 'filter_id', 'tag'),
         FieldSet('instance_id', 'area_id', name=_('OSPF')),
         FieldSet('device_id', 'interface_id', 'vrf_id', name=_('Device')),
-        FieldSet('priority', 'bfd', 'authentication', name=_('Attributes')),
+        FieldSet(
+            'network_type', 'priority', 'bfd', 'authentication', name=_('Attributes')
+        ),
     )
     device_id = DynamicModelMultipleChoiceField(
         queryset=Device.objects.all(),
@@ -128,6 +130,11 @@ class OSPFInterfaceFilterForm(NetBoxModelFilterSetForm):
         widget=forms.Select(choices=BOOLEAN_WITH_BLANK_CHOICES),
     )
     priority = forms.IntegerField(required=False)
+    network_type = forms.ChoiceField(
+        choices=add_blank_choice(OSPFNetworkTypeChoices),
+        label=_('Network Type'),
+        required=False,
+    )
     authentication = forms.ChoiceField(
         choices=add_blank_choice(AuthenticationChoices), required=False
     )
