@@ -200,10 +200,15 @@ class BGPPeerTable(TenancyColumnsMixin, NetBoxTable):
     name = tables.Column(linkify=True, verbose_name=_('Name'))
     scope = tables.Column(linkify=True, verbose_name=_('Scope'))
     peer = tables.Column(linkify=True, verbose_name=_('Peer Address'))
+    interface = tables.Column(linkify=True, verbose_name=_('Interface'))
     source = tables.Column(linkify=True, verbose_name=_('Source Address'))
     peer_group = tables.Column(linkify=True, verbose_name=_('Peer Group'))
     peer_session = tables.Column(linkify=True, verbose_name=_('Peer Session'))
     remote_as = tables.Column(linkify=True, verbose_name=_('Remote AS'))
+    remote_as_list = ManyToManyColumn(
+        verbose_name=_('Remote AS List'),
+        linkify_item=True,
+    )
     local_as = tables.Column(linkify=True, verbose_name=_('Local AS'))
 
     class Meta(NetBoxTable.Meta):
@@ -214,10 +219,12 @@ class BGPPeerTable(TenancyColumnsMixin, NetBoxTable):
             'name',
             'scope',
             'peer',
+            'interface',
             'source',
             'peer_group',
             'peer_session',
             'remote_as',
+            'remote_as_list',
             'status',
             'local_as',
             'bfd',
@@ -233,7 +240,9 @@ class BGPPeerTable(TenancyColumnsMixin, NetBoxTable):
             'name',
             'scope',
             'peer',
+            'interface',
             'remote_as',
+            'remote_as_list',
             'enabled',
             'status',
         )

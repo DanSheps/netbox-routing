@@ -1,7 +1,7 @@
 from django import forms
 from django.utils.translation import gettext as _
 
-from dcim.models import Device
+from dcim.models import Device, Interface
 from ipam.models import ASN, VRF, IPAddress
 from netbox.forms import NetBoxModelFilterSetForm, PrimaryModelFilterSetForm
 from netbox_routing.models import PrefixList, RouteMap
@@ -210,6 +210,12 @@ class BGPPeerFilterForm(
         selector=True,
         label=_('Peer'),
     )
+    interface_id = DynamicModelMultipleChoiceField(
+        queryset=Interface.objects.all(),
+        required=False,
+        selector=True,
+        label=_('Interface'),
+    )
     peer_group_id = DynamicModelMultipleChoiceField(
         queryset=BGPPeerTemplate.objects.all(),
         required=False,
@@ -221,6 +227,12 @@ class BGPPeerFilterForm(
         required=False,
         selector=True,
         label=_('Remote AS'),
+    )
+    remote_as_list_id = DynamicModelMultipleChoiceField(
+        queryset=ASN.objects.all(),
+        required=False,
+        selector=True,
+        label=_('Remote AS List'),
     )
     local_as_id = DynamicModelMultipleChoiceField(
         queryset=ASN.objects.all(),
@@ -236,8 +248,10 @@ class BGPPeerFilterForm(
             'tag',
             'scope_id',
             'peer_id',
+            'interface_id',
             'peer_group_id',
             'remote_as_id',
+            'remote_as_list_id',
             'local_as_id',
             'status',
             'enabled',
