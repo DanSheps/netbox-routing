@@ -8,7 +8,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('ipam', '0097_merge_ipaddress_host_index_and_multi_protocol_services'),
-        ('netbox_routing', '0034_owner_foreign_key_changes'),
+        ('netbox_routing', '0037_bgp_unnumbered_support'),
     ]
 
     operations = [
