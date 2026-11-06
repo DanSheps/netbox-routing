@@ -703,7 +703,9 @@ class BGPPeer(PrimaryModel):
         ordering = (
             'scope',
             'peer',
+            'interface',
             'name',
+            'pk',
         )
         constraints = [
             models.UniqueConstraint(

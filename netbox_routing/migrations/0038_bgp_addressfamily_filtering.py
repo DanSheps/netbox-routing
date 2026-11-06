@@ -83,4 +83,8 @@ class Migration(migrations.Migration):
                 to='ipam.vrf',
             ),
         ),
+        migrations.AlterModelOptions(
+            name='bgppeer',
+            options={'ordering': ('scope', 'peer', 'interface', 'name', 'pk')},
+        ),
     ]
