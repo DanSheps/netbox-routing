@@ -169,19 +169,19 @@ class BGPSettingMixin:
 class BGPSettingForm(PrimaryModelForm):
     router = DynamicModelChoiceField(
         queryset=BGPRouter.objects.all(),
-        required=True,
+        required=False,
         selector=True,
         label=_('Router'),
     )
     scope = DynamicModelChoiceField(
         queryset=BGPScope.objects.all(),
-        required=True,
+        required=False,
         selector=True,
         label=_('Scope'),
     )
     addressfamily = DynamicModelChoiceField(
         queryset=BGPAddressFamily.objects.all(),
-        required=True,
+        required=False,
         selector=True,
         label=_('Address Family'),
     )
