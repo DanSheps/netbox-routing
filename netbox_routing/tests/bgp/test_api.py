@@ -165,6 +165,7 @@ class BGPAddressFamilyTestCase(
     brief_fields = [
         'address_family',
         'display',
+        'enabled',
         'id',
         'scope',
         'url',

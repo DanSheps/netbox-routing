@@ -260,6 +260,13 @@ class BGPAddressFamilySerializer(NetBoxModelSerializer):
             'display',
             'scope',
             'address_family',
+            'enabled',
+            'prefixlist_in',
+            'prefixlist_out',
+            'routemap_in',
+            'routemap_out',
+            'redistribute_routemap',
+            'vrf_in',
             'settings',
             'description',
             'comments',
@@ -270,6 +277,7 @@ class BGPAddressFamilySerializer(NetBoxModelSerializer):
             'display',
             'scope',
             'address_family',
+            'enabled',
         )
 
 

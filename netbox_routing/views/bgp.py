@@ -68,7 +68,6 @@ __all__ = (
 )
 
 
-@register_model_view(BGPAddressFamily, name='settings')
 class BGPSettingViewMixin:
     child_model = BGPSetting
     table = BGPSettingTable
@@ -483,6 +482,8 @@ class BGPAddressFamilyView(ObjectView):
     layout = layout.SimpleLayout(
         left_panels=[
             BGPAddressFamilyPanel(),
+            BGPPolicyFilteringPanel(title=_('Filtering')),
+            BGPAdditionalPolicyFilteringPanel(title=_('Redistribution Filtering')),
             TagsPanel(),
         ],
         right_panels=[
