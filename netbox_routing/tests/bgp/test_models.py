@@ -89,8 +89,7 @@ class BGPRouterTestCase(ASNMixin, TestCase):
         self.assertEqual(attrs.get('asn'), self.asn.pk)
 
         # Verify assigned_object is included
-        self.assertIn('assigned_object_content_type', attrs)
-        self.assertIn('assigned_object_object_id', attrs)
+        self.assertIn('device', attrs)
 
 
 class BGPScopeTestCase(BGPRouterMixin, VRFMixin, TestCase):
