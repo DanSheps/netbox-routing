@@ -40,6 +40,57 @@ class BGPRouterTestCase(ASNMixin, TestCase):
         instance.full_clean()
         instance.save()
 
+    def test_clone_does_not_raise_attribute_error(self):
+        """
+        Regression test: BGPRouter.clone() should not raise AttributeError
+        when clone_fields contains fields with inaccessible reverse relations
+        (GenericRelations with related_name='+'). The fix filters clone_fields
+        to separate accessible from inaccessible fields, calls parent clone()
+        with only accessible fields, then attempts to manually clone fields
+        from the inaccessible set that do have accessible accessors.
+        """
+        name = 'BGP Router Clone Test'
+        instance = self.model(
+            name=name,
+            asn=self.asn,
+        )
+        instance.full_clean()
+        instance.save()
+
+        # This should not raise AttributeError: 'BGPRouter' object has no attribute '+'
+        attrs = instance.clone()
+
+        # Verify that clone returns a dict with at least asn (a valid field)
+        self.assertIsInstance(attrs, dict)
+        self.assertEqual(attrs.get('asn'), self.asn.pk)
+
+    def test_clone_with_assigned_device(self):
+        """
+        Test that clone() includes the assigned_object when device is populated.
+        """
+        from utilities.testing import create_test_device
+
+        name = 'BGP Router with Device'
+        device = create_test_device(name='test-bgp-device')
+
+        instance = self.model.objects.create(
+            name=name,
+            asn=self.asn,
+            assigned_object=device,
+        )
+
+        # Clone the instance
+        attrs = instance.clone()
+
+        # Verify that clone returns a dict
+        self.assertIsInstance(attrs, dict)
+
+        # Verify asn is included
+        self.assertEqual(attrs.get('asn'), self.asn.pk)
+
+        # Verify assigned_object is included
+        self.assertIn('device', attrs)
+
 
 class BGPScopeTestCase(BGPRouterMixin, VRFMixin, TestCase):
     model = BGPScope
