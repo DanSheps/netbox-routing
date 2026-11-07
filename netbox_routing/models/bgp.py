@@ -385,6 +385,78 @@ class BGPRouter(SearchAttributeMixin, PrimaryModel):
             ),
         ]
 
+    def clone(self):
+        """
+        Override clone to safely handle GenericRelations with inaccessible accessors.
+        
+        Strategy:
+        1. Filter clone_fields to separate accessible and inaccessible fields
+        2. Call parent clone() with only accessible fields
+        3. Attempt to manually clone any inaccessible fields that have accessible accessors
+        """
+        from django.contrib.contenttypes.fields import GenericForeignKey
+
+        # Get the current clone_fields tuple
+        original_clone_fields = getattr(self, 'clone_fields', ())
+        accessible_fields = []
+        inaccessible_fields = []
+
+        # Separate accessible from inaccessible fields
+        for field_name in original_clone_fields:
+            try:
+                field = self._meta.get_field(field_name)
+                
+                # For GenericForeignKey, it's always accessible by design
+                if isinstance(field, GenericForeignKey):
+                    accessible_fields.append(field_name)
+                    continue
+                
+                # For other fields, check if the accessor is available
+                # GenericRelation fields may have related_name='+' which makes them inaccessible
+                if hasattr(field, 'get_accessor_name'):
+                    accessor_name = field.get_accessor_name()
+                    if accessor_name and hasattr(self, accessor_name):
+                        accessible_fields.append(field_name)
+                    else:
+                        inaccessible_fields.append(field_name)
+                else:
+                    # Regular fields are always accessible
+                    accessible_fields.append(field_name)
+            except Exception:
+                # If field lookup fails, it's inaccessible
+                inaccessible_fields.append(field_name)
+
+        # Temporarily set clone_fields to only accessible fields and call parent
+        self.clone_fields = tuple(accessible_fields)
+        attrs = super().clone()
+        
+        # Restore original clone_fields
+        self.clone_fields = original_clone_fields
+
+        # Attempt to manually clone inaccessible fields that have accessible accessors
+        for field_name in inaccessible_fields:
+            try:
+                field = self._meta.get_field(field_name)
+                
+                # Try to get the field value safely
+                if hasattr(field, 'get_accessor_name'):
+                    accessor_name = field.get_accessor_name()
+                    if accessor_name and hasattr(self, accessor_name):
+                        # Field has an accessible accessor; try to clone it
+                        try:
+                            field_value = field.value_from_object(self)
+                            if field_value and isinstance(field, models.ManyToManyField):
+                                attrs[field_name] = [v.pk for v in field_value]
+                            elif field_value not in (None, ''):
+                                attrs[field_name] = field_value
+                        except AttributeError:
+                            # If value_from_object fails, skip this field
+                            pass
+            except Exception:
+                # If we can't process this field, skip it gracefully
+                pass
+
+        return attrs
 
     def __str__(self):
         if self.name:
