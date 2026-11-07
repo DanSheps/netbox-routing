@@ -385,6 +385,74 @@ class BGPRouter(SearchAttributeMixin, PrimaryModel):
             ),
         ]
 
+    def clone(self):
+        """
+        Override clone to safely handle missing field accessors (e.g., GenericRelations
+        with related_name='+'). These fields are defined in clone_fields for historical
+        compatibility but may not be accessible on all model instances.
+        """
+        from logging import getLogger
+
+        logger = getLogger('netbox_routing.models.bgp.BGPRouter.clone')
+        from django.contrib.contenttypes.fields import GenericForeignKey
+        import json
+
+        attrs = {}
+
+        for field_name in getattr(self, 'clone_fields', []):
+            logger.info(f'Processing field: {field_name}')
+            try:
+                field = self._meta.get_field(field_name)
+            except Exception:
+                # Field not found; skip it gracefully
+                logger.warning("Field '%s' not found on %s", field_name, self)
+                continue
+
+            # A GenericForeignKey is cloned under the subwidget names the creation form's
+            # GenericObjectChoiceField expects (e.g. scope_content_type / scope_object_id).
+            if isinstance(field, GenericForeignKey):
+                content_type_id = getattr(self, f'{field.ct_field}_id', None)
+                object_id = getattr(self, field.fk_field, None)
+
+                if content_type_id not in (None, '') and object_id not in (None, ''):
+                    attrs[f'{field.name}_content_type'] = content_type_id
+                    attrs[f'{field.name}_object_id'] = object_id
+                continue
+
+            # Safely call value_from_object, catching AttributeError from hidden accessors
+            try:
+                field_value = field.value_from_object(self)
+            except AttributeError:
+                # Field accessor not available (e.g., related_name='+'); skip
+                logger.warning(
+                    "Field '%s' accessor not available on %s; skipping clone for this field",
+                    field_name,
+                    self,
+                )
+
+                continue
+
+            if field_value and isinstance(field, models.ManyToManyField):
+                attrs[field_name] = [v.pk for v in field_value]
+            elif field_value and isinstance(field, models.JSONField):
+                attrs[field_name] = json.dumps(field_value)
+            elif field_value not in (None, ''):
+                attrs[field_name] = field_value
+
+        # Include tags (if applicable)
+        from netbox.models.features import is_taggable
+
+        if is_taggable(self):
+            attrs['tags'] = [tag.pk for tag in self.tags.all()]
+
+        # Include any cloneable custom fields
+        if hasattr(self, 'custom_fields'):
+            for field in self.custom_fields:
+                if field.is_cloneable:
+                    attrs[f'cf_{field.name}'] = self.custom_field_data.get(field.name)
+
+        return attrs
+
     def __str__(self):
         if self.name:
             if self.assigned_object:

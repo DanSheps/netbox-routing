@@ -40,6 +40,27 @@ class BGPRouterTestCase(ASNMixin, TestCase):
         instance.full_clean()
         instance.save()
 
+    def test_clone_does_not_raise_attribute_error(self):
+        """
+        Regression test: BGPRouter.clone() should not raise AttributeError
+        when clone_fields contains fields with inaccessible reverse relations.
+        This can occur with GenericRelations that have related_name='+'.
+        """
+        name = 'BGP Router Clone Test'
+        instance = self.model(
+            name=name,
+            asn=self.asn,
+        )
+        instance.full_clean()
+        instance.save()
+
+        # This should not raise AttributeError: 'BGPRouter' object has no attribute '+'
+        attrs = instance.clone()
+
+        # Verify that clone returns a dict with at least asn (a valid field)
+        self.assertIsInstance(attrs, dict)
+        self.assertEqual(attrs.get('asn'), self.asn.pk)
+
 
 class BGPScopeTestCase(BGPRouterMixin, VRFMixin, TestCase):
     model = BGPScope
