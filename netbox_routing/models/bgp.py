@@ -388,11 +388,13 @@ class BGPRouter(SearchAttributeMixin, PrimaryModel):
     def clone(self):
         """
         Override clone to safely handle GenericRelations with inaccessible accessors.
-        
+
         Strategy:
         1. Filter clone_fields to separate accessible and inaccessible fields
         2. Call parent clone() with only accessible fields
         3. Attempt to manually clone any inaccessible fields that have accessible accessors
+        4. For non-existent fields (device, site, etc), check if assigned_object matches
+           and if so, include the assignment in the clone
         """
         from django.contrib.contenttypes.fields import GenericForeignKey
 
@@ -400,17 +402,18 @@ class BGPRouter(SearchAttributeMixin, PrimaryModel):
         original_clone_fields = getattr(self, 'clone_fields', ())
         accessible_fields = []
         inaccessible_fields = []
+        pseudo_fields = []
 
         # Separate accessible from inaccessible fields
         for field_name in original_clone_fields:
             try:
                 field = self._meta.get_field(field_name)
-                
+
                 # For GenericForeignKey, it's always accessible by design
                 if isinstance(field, GenericForeignKey):
                     accessible_fields.append(field_name)
                     continue
-                
+
                 # For other fields, check if the accessor is available
                 # GenericRelation fields may have related_name='+' which makes them inaccessible
                 if hasattr(field, 'get_accessor_name'):
@@ -423,13 +426,14 @@ class BGPRouter(SearchAttributeMixin, PrimaryModel):
                     # Regular fields are always accessible
                     accessible_fields.append(field_name)
             except Exception:
-                # If field lookup fails, it's inaccessible
-                inaccessible_fields.append(field_name)
+                # If field lookup fails, it's a pseudo-field (device, site, region, etc)
+                # These refer to the type of assigned_object
+                pseudo_fields.append(field_name)
 
         # Temporarily set clone_fields to only accessible fields and call parent
         self.clone_fields = tuple(accessible_fields)
         attrs = super().clone()
-        
+
         # Restore original clone_fields
         self.clone_fields = original_clone_fields
 
@@ -437,7 +441,7 @@ class BGPRouter(SearchAttributeMixin, PrimaryModel):
         for field_name in inaccessible_fields:
             try:
                 field = self._meta.get_field(field_name)
-                
+
                 # Try to get the field value safely
                 if hasattr(field, 'get_accessor_name'):
                     accessor_name = field.get_accessor_name()
@@ -454,6 +458,35 @@ class BGPRouter(SearchAttributeMixin, PrimaryModel):
                             pass
             except Exception:
                 # If we can't process this field, skip it gracefully
+                pass
+
+        # Handle pseudo-fields (device, site, region, site_group, location)
+        # These represent the type of the assigned_object
+        if self.assigned_object_id is not None and self.assigned_object_type_id is not None:
+            try:
+                # Get the assigned object's model name (already lowercase from ContentType)
+                assigned_model_name = self.assigned_object_type.model
+
+                # Strategy 1: Check if any pseudo-field matches the assigned model type
+                matched = False
+                for field_name in pseudo_fields:
+                    if field_name == assigned_model_name:
+                        # This pseudo-field matches the assigned object type
+                        attrs[field_name] = self.assigned_object.pk
+                        matched = True
+                        break
+
+                # Strategy 2: If no pseudo-field matched but we have assigned_object,
+                # still check all original clone_fields for matching model types
+                # (in case the field was categorized differently)
+                if not matched:
+                    for field_name in original_clone_fields:
+                        if field_name == assigned_model_name:
+                            attrs[field_name] = self.assigned_object.pk
+                            break
+
+            except Exception:
+                # If we can't determine the assigned object type, skip pseudo-fields
                 pass
 
         return attrs
