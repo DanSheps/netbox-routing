@@ -43,8 +43,10 @@ class BGPRouterTestCase(ASNMixin, TestCase):
     def test_clone_does_not_raise_attribute_error(self):
         """
         Regression test: BGPRouter.clone() should not raise AttributeError
-        when clone_fields contains fields with inaccessible reverse relations.
-        This can occur with GenericRelations that have related_name='+'.
+        when clone_fields contains fields with hidden reverse relations
+        (GenericRelations with related_name='+'). The fix is in
+        NetBoxGenericRel.value_from_object() which now safely handles
+        accessors that don't exist.
         """
         name = 'BGP Router Clone Test'
         instance = self.model(
