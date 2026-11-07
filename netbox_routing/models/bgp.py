@@ -425,7 +425,7 @@ class BGPRouter(SearchAttributeMixin, PrimaryModel):
                 else:
                     # Regular fields are always accessible
                     accessible_fields.append(field_name)
-            except Exception:
+            except AttributeError:
                 # If field lookup fails, it's a pseudo-field (device, site, region, etc)
                 # These refer to the type of assigned_object
                 pseudo_fields.append(field_name)
@@ -439,56 +439,49 @@ class BGPRouter(SearchAttributeMixin, PrimaryModel):
 
         # Attempt to manually clone inaccessible fields that have accessible accessors
         for field_name in inaccessible_fields:
-            try:
-                field = self._meta.get_field(field_name)
+            field = self._meta.get_field(field_name)
 
-                # Try to get the field value safely
-                if hasattr(field, 'get_accessor_name'):
-                    accessor_name = field.get_accessor_name()
-                    if accessor_name and hasattr(self, accessor_name):
-                        # Field has an accessible accessor; try to clone it
-                        try:
-                            field_value = field.value_from_object(self)
-                            if field_value and isinstance(field, models.ManyToManyField):
-                                attrs[field_name] = [v.pk for v in field_value]
-                            elif field_value not in (None, ''):
-                                attrs[field_name] = field_value
-                        except AttributeError:
-                            # If value_from_object fails, skip this field
-                            pass
-            except Exception:
-                # If we can't process this field, skip it gracefully
-                pass
+            # Try to get the field value safely
+            if hasattr(field, 'get_accessor_name'):
+                accessor_name = field.get_accessor_name()
+                if accessor_name and hasattr(self, accessor_name):
+                    # Field has an accessible accessor; try to clone it
+                    try:
+                        field_value = field.value_from_object(self)
+                        if field_value and isinstance(field, models.ManyToManyField):
+                            attrs[field_name] = [v.pk for v in field_value]
+                        elif field_value not in (None, ''):
+                            attrs[field_name] = field_value
+                    except AttributeError:
+                        # If value_from_object fails, skip this field
+                        pass
 
         # Handle pseudo-fields (device, site, region, site_group, location)
         # These represent the type of the assigned_object
-        if self.assigned_object_id is not None and self.assigned_object_type_id is not None:
-            try:
-                # Get the assigned object's model name (already lowercase from ContentType)
-                assigned_model_name = self.assigned_object_type.model
+        if (
+            self.assigned_object_id is not None
+            and self.assigned_object_type_id is not None
+        ):
+            # Get the assigned object's model name (already lowercase from ContentType)
+            assigned_model_name = self.assigned_object_type.model
 
-                # Strategy 1: Check if any pseudo-field matches the assigned model type
-                matched = False
-                for field_name in pseudo_fields:
+            # Strategy 1: Check if any pseudo-field matches the assigned model type
+            matched = False
+            for field_name in pseudo_fields:
+                if field_name == assigned_model_name:
+                    # This pseudo-field matches the assigned object type
+                    attrs[field_name] = self.assigned_object.pk
+                    matched = True
+                    break
+
+            # Strategy 2: If no pseudo-field matched but we have assigned_object,
+            # still check all original clone_fields for matching model types
+            # (in case the field was categorized differently)
+            if not matched:
+                for field_name in original_clone_fields:
                     if field_name == assigned_model_name:
-                        # This pseudo-field matches the assigned object type
                         attrs[field_name] = self.assigned_object.pk
-                        matched = True
                         break
-
-                # Strategy 2: If no pseudo-field matched but we have assigned_object,
-                # still check all original clone_fields for matching model types
-                # (in case the field was categorized differently)
-                if not matched:
-                    for field_name in original_clone_fields:
-                        if field_name == assigned_model_name:
-                            attrs[field_name] = self.assigned_object.pk
-                            break
-
-            except Exception:
-                # If we can't determine the assigned object type, skip pseudo-fields
-                pass
-
         return attrs
 
     def __str__(self):
