@@ -72,7 +72,7 @@ class BGPRouterTestCase(ASNMixin, TestCase):
 
         name = 'BGP Router with Device'
         device = create_test_device(name='test-bgp-device')
-        
+
         instance = self.model.objects.create(
             name=name,
             asn=self.asn,
@@ -84,10 +84,10 @@ class BGPRouterTestCase(ASNMixin, TestCase):
 
         # Verify that clone returns a dict
         self.assertIsInstance(attrs, dict)
-        
+
         # Verify asn is included
         self.assertEqual(attrs.get('asn'), self.asn.pk)
-        
+
         # Verify assigned_object is included
         self.assertIn('assigned_object_content_type', attrs)
         self.assertIn('assigned_object_object_id', attrs)
