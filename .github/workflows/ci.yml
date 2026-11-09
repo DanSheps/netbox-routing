@@ -16,7 +16,7 @@ jobs:
     name: Ruff 🐍 linter
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Set up Python 3.14
         uses: actions/setup-python@v5
         with:
@@ -31,7 +31,7 @@ jobs:
     name: Black 🐍 code formatter
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Set up Python 3.14
         uses: actions/setup-python@v5
         with:
@@ -79,14 +79,16 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
-      - name: Check out netbox-routing
-        uses: actions/checkout@v4
       - name: Check out NetBox
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           repository: netbox-community/netbox
           ref: main
           path: netbox
+      - name: Check out netbox-routing
+        uses: actions/checkout@v7
+        with:
+          path: netbox-routing
       - name: Install dependencies & set up configuration
         run: |
           python -m pip install --upgrade pip
