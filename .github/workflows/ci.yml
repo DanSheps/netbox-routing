@@ -13,6 +13,7 @@ env:
 
 jobs:
   ruff:
+    name: Ruff 🐍 linter
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -22,12 +23,13 @@ jobs:
           python-version: 3.14
       - name: Install dependencies
         run: |
+          ls -la
           python -m pip install --upgrade pip
           pip install ruff
       - name: Check Ruff
         run: ruff check netbox-routing/netbox_routing/
   black:
-    name: Set up Python 3.14
+    name: Black 🐍 code formatter
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
