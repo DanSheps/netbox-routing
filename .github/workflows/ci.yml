@@ -12,7 +12,44 @@ env:
   GROUP: ci-${{ github.event_name }}-${{ github.ref }}-${{ github.actor }}
 
 jobs:
-  build:
+  ruff:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python 3.14
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.14
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install ruff
+      - name: Check Ruff
+        run: ruff check netbox-routing/netbox_routing/
+  black:
+    name: Set up Python 3.14
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python 3.14
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.14
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install black
+      - name: Check Black
+        uses: psf/black@stable
+        with:
+          options: "--check --skip-string-normalization"
+          src: "netbox-routing/netbox_routing"
+
+  test:
+    name: Run tests
+    needs:
+      - ruff
+      - black
     runs-on: ubuntu-latest
     env:
       NETBOX_CONFIGURATION: netbox.configuration_testing
@@ -42,37 +79,21 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
+      - name: Check out netbox-routing
+        uses: actions/checkout@v4
       - name: Check out NetBox
         uses: actions/checkout@v4
         with:
           repository: netbox-community/netbox
           ref: main
           path: netbox
-
-      - name: Check out repo
-        uses: actions/checkout@v4
-        with:
-          path: netbox-routing
-
       - name: Install dependencies & set up configuration
         run: |
           python -m pip install --upgrade pip
           pip install -r netbox/requirements.txt
-          pip install ruff black coverage tblib
+          pip install coverage tblib
           pip install -e netbox-routing
           cp -f netbox-routing/.github/configuration.testing.py netbox/netbox/netbox/configuration_testing.py
-
-      - name: Check Ruff
-        run: |
-          cp -f netbox-routing/ruff.toml ./ruff.toml
-          ruff check netbox-routing/netbox_routing/
-
-      - name: Check Black
-        uses: psf/black@stable
-        with:
-          options: "--check --skip-string-normalization"
-          src: "netbox-routing/netbox_routing"
-
       - name: Run tests
         run: coverage run --source="netbox-routing/netbox_routing" netbox/netbox/manage.py test netbox-routing/netbox_routing --parallel
 
