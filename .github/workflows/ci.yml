@@ -23,11 +23,10 @@ jobs:
           python-version: 3.14
       - name: Install dependencies
         run: |
-          ls -la
           python -m pip install --upgrade pip
           pip install ruff
       - name: Check Ruff
-        run: ruff check netbox-routing/netbox_routing/
+        run: ruff check
   black:
     name: Black 🐍 code formatter
     runs-on: ubuntu-latest
@@ -45,7 +44,6 @@ jobs:
         uses: psf/black@stable
         with:
           options: "--check --skip-string-normalization"
-          src: "netbox-routing/netbox_routing"
 
   test:
     name: Run tests
