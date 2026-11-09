@@ -20,7 +20,7 @@ keywords = ["netbox-plugin", ]
 version = "1.0.0"
 license = { file = "LICENSE" }
 classifiers = [
-    'Development Status :: 4 - Beta',
+    'Development Status :: 5 - Production/Stable',
     'Framework :: Django',
     'Framework :: Django :: 6',
     'Framework :: Django :: 6.0',
