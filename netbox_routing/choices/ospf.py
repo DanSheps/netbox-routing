@@ -33,3 +33,23 @@ class OSPFNetworkTypeChoices(ChoiceSet):
         (POINT_TO_MULTIPOINT, 'Point-to-Multipoint'),
         (POINT_TO_MULTIPOINT_NON_BROADCAST, 'Point-to-Multipoint Non-Broadcast'),
     ]
+
+
+class OSPFMetricTypeChoices(ChoiceSet):
+    TYPE_1 = 'type-1'
+    TYPE_2 = 'type-2'
+
+    CHOICES = [
+        (TYPE_1, 'Type 1'),
+        (TYPE_2, 'Type 2'),
+    ]
+
+
+class OSPFDefaultInformationOriginateChoices(ChoiceSet):
+    ORIGINATE = 'originate'
+    ALWAYS = 'always'
+
+    CHOICES = [
+        (ORIGINATE, 'Originate'),
+        (ALWAYS, 'Always'),
+    ]

@@ -27,6 +27,23 @@ class OSPFInstanceType(PrimaryObjectType):
     vrf: Annotated["VRFType", strawberry.lazy('ipam.graphql.types')] | None
     router_id: str
     process_id: str
+    reference_bandwidth: int | None
+    timers_spf_initial: int | None
+    timers_spf_hold: int | None
+    timers_spf_max: int | None
+    timers_lsa_initial: int | None
+    timers_lsa_hold: int | None
+    timers_lsa_max: int | None
+    distance: int | None
+    distance_intra_area: int | None
+    distance_inter_area: int | None
+    distance_external: int | None
+    default_information_originate: str | None
+    default_information_metric: int | None
+    default_information_metric_type: str | None
+    max_metric_router_lsa: bool | None
+    max_metric_on_startup: int | None
+    passive_interface_default: bool | None
 
 
 @strawberry_django.type(models.OSPFArea, fields='__all__', filters=OSPFAreaFilter)
