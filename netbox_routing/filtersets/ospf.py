@@ -9,7 +9,12 @@ from utilities.filters import MultiValueCharFilter
 from utilities.filtersets import register_filterset
 
 from netbox.filtersets import NetBoxModelFilterSet
-from netbox_routing.choices.ospf import OSPFAreaTypeChoices, OSPFNetworkTypeChoices
+from netbox_routing.choices.ospf import (
+    OSPFAreaTypeChoices,
+    OSPFDefaultInformationOriginateChoices,
+    OSPFMetricTypeChoices,
+    OSPFNetworkTypeChoices,
+)
 from netbox_routing.models import OSPFArea, OSPFInstance, OSPFInterface
 
 __all__ = ('OSPFAreaFilterSet', 'OSPFInstanceFilterSet', 'OSPFInterfaceFilterSet')
@@ -44,6 +49,14 @@ class OSPFInstanceFilterSet(NetBoxModelFilterSet):
         method='filter_rid',
         label=_('Router ID'),
     )
+    default_information_originate = django_filters.MultipleChoiceFilter(
+        choices=OSPFDefaultInformationOriginateChoices,
+        label=_('Default Information Originate'),
+    )
+    default_information_metric_type = django_filters.MultipleChoiceFilter(
+        choices=OSPFMetricTypeChoices,
+        label=_('Default Information Metric Type'),
+    )
 
     class Meta:
         model = OSPFInstance
@@ -55,6 +68,21 @@ class OSPFInstanceFilterSet(NetBoxModelFilterSet):
             'vrf',
             'router_id',
             'process_id',
+            'reference_bandwidth',
+            'timers_spf_initial',
+            'timers_spf_hold',
+            'timers_spf_max',
+            'timers_lsa_initial',
+            'timers_lsa_hold',
+            'timers_lsa_max',
+            'distance',
+            'distance_intra_area',
+            'distance_inter_area',
+            'distance_external',
+            'default_information_metric',
+            'max_metric_router_lsa',
+            'max_metric_on_startup',
+            'passive_interface_default',
         )
 
     def search(self, queryset, name, value):

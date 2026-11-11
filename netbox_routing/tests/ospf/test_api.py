@@ -28,7 +28,10 @@ class OSPFInstanceTestCase(IPAddressFieldMixin, APIViewTestCases.APIViewTestCase
 
     user_permissions = ('dcim.view_device',)
 
-    bulk_update_data = {'description': "A test description"}
+    bulk_update_data = {
+        'description': "A test description",
+        'reference_bandwidth': 100000,
+    }
 
     @classmethod
     def setUpTestData(cls):
@@ -67,6 +70,17 @@ class OSPFInstanceTestCase(IPAddressFieldMixin, APIViewTestCases.APIViewTestCase
                 'router_id': '4.4.4.4',
                 'process_id': 4,
                 'vrf': vrf.pk,
+                'reference_bandwidth': 100000,
+                'timers_spf_initial': 50,
+                'timers_spf_hold': 200,
+                'timers_spf_max': 5000,
+                'distance': 110,
+                'default_information_originate': 'always',
+                'default_information_metric': 10,
+                'default_information_metric_type': 'type-2',
+                'max_metric_router_lsa': True,
+                'max_metric_on_startup': 300,
+                'passive_interface_default': True,
             },
         ]
 

@@ -1,5 +1,6 @@
 import netaddr
 from django.core.exceptions import ValidationError
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.urls import reverse
 from django.utils.translation import gettext as _
@@ -7,7 +8,12 @@ from django.utils.translation import gettext as _
 from netbox.models import PrimaryModel
 
 from netbox_routing import choices
-from netbox_routing.choices.ospf import OSPFAreaTypeChoices, OSPFNetworkTypeChoices
+from netbox_routing.choices.ospf import (
+    OSPFAreaTypeChoices,
+    OSPFDefaultInformationOriginateChoices,
+    OSPFMetricTypeChoices,
+    OSPFNetworkTypeChoices,
+)
 from netbox_routing.constants import ERROR_UNIQUENESS_CONSTRAINT
 from netbox_routing.fields.ip import IPAddressField
 
@@ -37,8 +43,111 @@ class OSPFInstance(PrimaryModel):
         blank=True,
         null=True,
     )
+    reference_bandwidth = models.PositiveIntegerField(
+        verbose_name=_('Reference Bandwidth (Mbps)'),
+        blank=True,
+        null=True,
+        validators=[MinValueValidator(1)],
+    )
+    timers_spf_initial = models.PositiveIntegerField(
+        verbose_name=_('SPF Initial Delay (ms)'), blank=True, null=True
+    )
+    timers_spf_hold = models.PositiveIntegerField(
+        verbose_name=_('SPF Hold Time (ms)'), blank=True, null=True
+    )
+    timers_spf_max = models.PositiveIntegerField(
+        verbose_name=_('SPF Max Wait (ms)'), blank=True, null=True
+    )
+    timers_lsa_initial = models.PositiveIntegerField(
+        verbose_name=_('LSA Initial Delay (ms)'), blank=True, null=True
+    )
+    timers_lsa_hold = models.PositiveIntegerField(
+        verbose_name=_('LSA Hold Time (ms)'), blank=True, null=True
+    )
+    timers_lsa_max = models.PositiveIntegerField(
+        verbose_name=_('LSA Max Wait (ms)'), blank=True, null=True
+    )
+    distance = models.PositiveSmallIntegerField(
+        verbose_name=_('Distance'),
+        blank=True,
+        null=True,
+        validators=[MinValueValidator(1), MaxValueValidator(255)],
+    )
+    distance_intra_area = models.PositiveSmallIntegerField(
+        verbose_name=_('Intra-Area Distance'),
+        blank=True,
+        null=True,
+        validators=[MinValueValidator(1), MaxValueValidator(255)],
+    )
+    distance_inter_area = models.PositiveSmallIntegerField(
+        verbose_name=_('Inter-Area Distance'),
+        blank=True,
+        null=True,
+        validators=[MinValueValidator(1), MaxValueValidator(255)],
+    )
+    distance_external = models.PositiveSmallIntegerField(
+        verbose_name=_('External Distance'),
+        blank=True,
+        null=True,
+        validators=[MinValueValidator(1), MaxValueValidator(255)],
+    )
+    default_information_originate = models.CharField(
+        verbose_name=_('Default Information Originate'),
+        max_length=50,
+        choices=OSPFDefaultInformationOriginateChoices,
+        blank=True,
+        null=True,
+    )
+    default_information_metric = models.PositiveIntegerField(
+        verbose_name=_('Default Information Metric'),
+        blank=True,
+        null=True,
+        validators=[MaxValueValidator(16777214)],
+    )
+    default_information_metric_type = models.CharField(
+        verbose_name=_('Default Information Metric Type'),
+        max_length=50,
+        choices=OSPFMetricTypeChoices,
+        blank=True,
+        null=True,
+    )
+    max_metric_router_lsa = models.BooleanField(
+        verbose_name=_('Max Metric Router LSA'), blank=True, null=True
+    )
+    max_metric_on_startup = models.PositiveIntegerField(
+        verbose_name=_('Max Metric On Startup (s)'),
+        blank=True,
+        null=True,
+        validators=[MinValueValidator(5), MaxValueValidator(86400)],
+    )
+    passive_interface_default = models.BooleanField(
+        verbose_name=_('Passive Interface Default'), blank=True, null=True
+    )
 
-    clone_fields = ('name', 'router_id', 'process_id', 'device', 'vrf')
+    clone_fields = (
+        'name',
+        'router_id',
+        'process_id',
+        'device',
+        'vrf',
+        'reference_bandwidth',
+        'timers_spf_initial',
+        'timers_spf_hold',
+        'timers_spf_max',
+        'timers_lsa_initial',
+        'timers_lsa_hold',
+        'timers_lsa_max',
+        'distance',
+        'distance_intra_area',
+        'distance_inter_area',
+        'distance_external',
+        'default_information_originate',
+        'default_information_metric',
+        'default_information_metric_type',
+        'max_metric_router_lsa',
+        'max_metric_on_startup',
+        'passive_interface_default',
+    )
     prerequisite_models = ('dcim.Device',)
 
     class Meta:
@@ -58,6 +167,20 @@ class OSPFInstance(PrimaryModel):
 
     def get_absolute_url(self):
         return reverse('plugins:netbox_routing:ospfinstance', args=[self.pk])
+
+    def clean(self):
+        super().clean()
+        if not self.default_information_originate:
+            errors = {
+                field: _('Requires Default Information Originate')
+                for field in (
+                    'default_information_metric',
+                    'default_information_metric_type',
+                )
+                if getattr(self, field) is not None
+            }
+            if errors:
+                raise ValidationError(errors)
 
 
 class OSPFArea(PrimaryModel):

@@ -70,6 +70,7 @@ class OSPFInstanceView(ObjectView):
     layout = layout.SimpleLayout(
         left_panels=[
             OSPFInstancePanel(),
+            OSPFInstanceSettingsPanel(title=_('Settings')),
             TagsPanel(),
         ],
         right_panels=[

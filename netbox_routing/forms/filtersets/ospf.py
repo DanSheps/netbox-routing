@@ -5,7 +5,11 @@ from dcim.models import Interface, Device
 from ipam.models import VRF
 from netbox.forms import NetBoxModelFilterSetForm
 from netbox_routing.choices import AuthenticationChoices
-from netbox_routing.choices.ospf import OSPFAreaTypeChoices, OSPFNetworkTypeChoices
+from netbox_routing.choices.ospf import (
+    OSPFAreaTypeChoices,
+    OSPFDefaultInformationOriginateChoices,
+    OSPFNetworkTypeChoices,
+)
 from utilities.forms import BOOLEAN_WITH_BLANK_CHOICES, add_blank_choice
 from utilities.forms.fields import TagFilterField, DynamicModelMultipleChoiceField
 
@@ -41,6 +45,25 @@ class OSPFInstanceFilterForm(NetBoxModelFilterSetForm):
         required=False,
         label=_('Process ID'),
     )
+    reference_bandwidth = forms.IntegerField(
+        required=False,
+        label=_('Reference Bandwidth (Mbps)'),
+    )
+    passive_interface_default = forms.NullBooleanField(
+        required=False,
+        label=_('Passive Interface Default'),
+        widget=forms.Select(choices=BOOLEAN_WITH_BLANK_CHOICES),
+    )
+    default_information_originate = forms.MultipleChoiceField(
+        choices=OSPFDefaultInformationOriginateChoices,
+        required=False,
+        label=_('Default Information Originate'),
+    )
+    max_metric_router_lsa = forms.NullBooleanField(
+        required=False,
+        label=_('Max Metric Router LSA'),
+        widget=forms.Select(choices=BOOLEAN_WITH_BLANK_CHOICES),
+    )
 
     model = OSPFInstance
     fieldsets = (
@@ -50,6 +73,13 @@ class OSPFInstanceFilterForm(NetBoxModelFilterSetForm):
             'tag',
         ),
         FieldSet('device_id', 'vrf_id', 'router_id', 'process_id', name=_('Device')),
+        FieldSet(
+            'reference_bandwidth',
+            'passive_interface_default',
+            'default_information_originate',
+            'max_metric_router_lsa',
+            name=_('Attributes'),
+        ),
     )
     tag = TagFilterField(model)
 
