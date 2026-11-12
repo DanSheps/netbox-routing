@@ -91,6 +91,8 @@ jobs:
           path: netbox-routing
       - name: Install dependencies & set up configuration
         run: |
+          ls -la
+          ls -la ../
           python -m pip install --upgrade pip
           pip install -r netbox/requirements.txt
           pip install coverage tblib
