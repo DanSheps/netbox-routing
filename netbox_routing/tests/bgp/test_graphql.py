@@ -80,9 +80,7 @@ class BGPGraphQLTestCase(APITestCase):
 
     def test_peer_list_filters_on_the_router(self):
         self.assertEqual(
-            self.ids(
-                '{ bgp_peer_list(filters: {scope: {router: {name: {exact: "router-b"}}}}) { id } }'
-            ),
+            self.ids('{ bgp_peer_list(filters: {scope: {router: {name: {exact: "router-b"}}}}) { id } }'),
             self.pks(('router-b', 1), ('router-b', 2), ('router-b', 3)),
         )
 
@@ -90,25 +88,19 @@ class BGPGraphQLTestCase(APITestCase):
         device_id = BGPRouter.objects.get(name='router-a').assigned_object_id
         self.assertEqual(
             self.ids(
-                '{ bgp_peer_list(filters: {scope: {router: {assigned_object_id: "'
-                f'{device_id}'
-                '"}}}) { id } }'
+                '{ bgp_peer_list(filters: {scope: {router: {assigned_object_id: "' f'{device_id}' '"}}}) { id } }'
             ),
             self.pks(('router-a', 1), ('router-a', 2), ('router-a', 3)),
         )
 
     def test_peer_list_filters_on_the_peer_address_remote_as_and_status(self):
         self.assertEqual(
-            self.ids(
-                '{ bgp_peer_list(filters: {peer: {address: {exact: "10.1.0.2/31"}}}) { id } }'
-            ),
+            self.ids('{ bgp_peer_list(filters: {peer: {address: {exact: "10.1.0.2/31"}}}) { id } }'),
             self.pks(('router-a', 2)),
         )
         remote_as = ASN.objects.get(asn=64513).pk
         self.assertEqual(
-            self.ids(
-                f'{{ bgp_peer_list(filters: {{remote_as_id: "{remote_as}"}}) {{ id }} }}'
-            ),
+            self.ids(f'{{ bgp_peer_list(filters: {{remote_as_id: "{remote_as}"}}) {{ id }} }}'),
             self.pks(('router-a', 1), ('router-b', 1)),
         )
         self.assertEqual(
@@ -117,14 +109,8 @@ class BGPGraphQLTestCase(APITestCase):
         )
 
     def test_router_and_scope_lists_page_and_filter(self):
+        self.assertEqual(len(self.ids('{ bgp_router_list(pagination: {limit: 1}) { id } }')), 1)
         self.assertEqual(
-            len(self.ids('{ bgp_router_list(pagination: {limit: 1}) { id } }')), 1
-        )
-        self.assertEqual(
-            len(
-                self.ids(
-                    '{ bgp_scope_list(filters: {router: {name: {exact: "router-a"}}}) { id } }'
-                )
-            ),
+            len(self.ids('{ bgp_scope_list(filters: {router: {name: {exact: "router-a"}}}) { id } }')),
             1,
         )

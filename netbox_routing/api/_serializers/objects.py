@@ -20,9 +20,7 @@ __all__ = (
 
 
 class ASPathSerializer(NetBoxModelSerializer):
-    url = serializers.HyperlinkedIdentityField(
-        view_name='plugins-api:netbox_routing-api:aspath-detail'
-    )
+    url = serializers.HyperlinkedIdentityField(view_name='plugins-api:netbox_routing-api:aspath-detail')
 
     class Meta:
         model = ASPath
@@ -38,9 +36,7 @@ class ASPathSerializer(NetBoxModelSerializer):
 
 
 class ASPathEntrySerializer(NetBoxModelSerializer):
-    url = serializers.HyperlinkedIdentityField(
-        view_name='plugins-api:netbox_routing-api:aspathentry-detail'
-    )
+    url = serializers.HyperlinkedIdentityField(view_name='plugins-api:netbox_routing-api:aspathentry-detail')
     aspath = ASPathSerializer(nested=True)
 
     class Meta:
@@ -68,9 +64,7 @@ class ASPathEntrySerializer(NetBoxModelSerializer):
 
 
 class PrefixListSerializer(NetBoxModelSerializer):
-    url = serializers.HyperlinkedIdentityField(
-        view_name='plugins-api:netbox_routing-api:prefixlist-detail'
-    )
+    url = serializers.HyperlinkedIdentityField(view_name='plugins-api:netbox_routing-api:prefixlist-detail')
 
     class Meta:
         model = PrefixList
@@ -92,9 +86,7 @@ class PrefixListSerializer(NetBoxModelSerializer):
 
 
 class PrefixListEntrySerializer(NetBoxModelSerializer):
-    url = serializers.HyperlinkedIdentityField(
-        view_name='plugins-api:netbox_routing-api:prefixlistentry-detail'
-    )
+    url = serializers.HyperlinkedIdentityField(view_name='plugins-api:netbox_routing-api:prefixlistentry-detail')
     prefix_list = PrefixListSerializer(nested=True)
     assigned_prefix_type = ContentTypeField(
         queryset=ContentType.objects.filter(PREFIX_ASSIGNMENT_MODELS),
@@ -102,9 +94,7 @@ class PrefixListEntrySerializer(NetBoxModelSerializer):
         required=False,
         default=None,
     )
-    assigned_prefix_id = serializers.IntegerField(
-        allow_null=True, required=False, default=None
-    )
+    assigned_prefix_id = serializers.IntegerField(allow_null=True, required=False, default=None)
     assigned_prefix = GFKSerializerField(read_only=True)
 
     class Meta:
@@ -139,9 +129,7 @@ class PrefixListEntrySerializer(NetBoxModelSerializer):
 
 
 class CustomPrefixSerializer(NetBoxModelSerializer):
-    url = serializers.HyperlinkedIdentityField(
-        view_name='plugins-api:netbox_routing-api:customprefix-detail'
-    )
+    url = serializers.HyperlinkedIdentityField(view_name='plugins-api:netbox_routing-api:customprefix-detail')
 
     class Meta:
         model = CustomPrefix
@@ -162,9 +150,7 @@ class CustomPrefixSerializer(NetBoxModelSerializer):
 
 
 class RouteMapSerializer(NetBoxModelSerializer):
-    url = serializers.HyperlinkedIdentityField(
-        view_name='plugins-api:netbox_routing-api:routemap-detail'
-    )
+    url = serializers.HyperlinkedIdentityField(view_name='plugins-api:netbox_routing-api:routemap-detail')
 
     class Meta:
         model = RouteMap
@@ -180,14 +166,10 @@ class RouteMapSerializer(NetBoxModelSerializer):
 
 
 class RouteMapEntrySerializer(NetBoxModelSerializer):
-    url = serializers.HyperlinkedIdentityField(
-        view_name='plugins-api:netbox_routing-api:routemapentry-detail'
-    )
+    url = serializers.HyperlinkedIdentityField(view_name='plugins-api:netbox_routing-api:routemapentry-detail')
     route_map = RouteMapSerializer(nested=True)
     match_prefix_list = PrefixListSerializer(nested=True, many=True, required=False)
-    match_community_list = CommunityListSerializer(
-        nested=True, many=True, required=False
-    )
+    match_community_list = CommunityListSerializer(nested=True, many=True, required=False)
     match_community = CommunitySerializer(nested=True, many=True, required=False)
     match_aspath = ASPathSerializer(nested=True, many=True, required=False)
 

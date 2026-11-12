@@ -125,9 +125,7 @@ __all__ = (
 
 @register_model_view(ISISSetting, name='list', path='', detail=False)
 class ISISSettingListView(ObjectListView):
-    queryset = ISISSetting.objects.select_related(
-        'assigned_object_type'
-    ).prefetch_related('assigned_object')
+    queryset = ISISSetting.objects.select_related('assigned_object_type').prefetch_related('assigned_object')
     filterset = ISISSettingFilterSet
     filterset_form = ISISSettingFilterForm
     table = ISISSettingTable
@@ -520,9 +518,7 @@ class ISISInstanceLevelsView(ObjectChildrenView):
     )
 
     def get_children(self, request, parent):
-        return self.child_model.objects.filter(instance=parent).select_related(
-            'instance__device'
-        )
+        return self.child_model.objects.filter(instance=parent).select_related('instance__device')
 
 
 @register_model_view(ISISInstance, name='flex-algos')
@@ -538,9 +534,7 @@ class ISISInstanceFlexAlgosView(ObjectChildrenView):
     )
 
     def get_children(self, request, parent):
-        return self.child_model.objects.filter(instance=parent).select_related(
-            'instance__device'
-        )
+        return self.child_model.objects.filter(instance=parent).select_related('instance__device')
 
 
 @register_model_view(ISISInstance, name='srv6-locators')
@@ -556,9 +550,7 @@ class ISISInstanceSRv6LocatorsView(ObjectChildrenView):
     )
 
     def get_children(self, request, parent):
-        return self.child_model.objects.filter(instance=parent).select_related(
-            'instance__device'
-        )
+        return self.child_model.objects.filter(instance=parent).select_related('instance__device')
 
 
 @register_model_view(ISISInstance, 'add', detail=False)
@@ -596,9 +588,7 @@ class ISISInstanceBulkImportView(BulkImportView):
 
 @register_model_view(ISISInterface, name='list', path='', detail=False)
 class ISISInterfaceListView(ObjectListView):
-    queryset = ISISInterface.objects.select_related(
-        'instance__device', 'instance__vrf', 'interface'
-    )
+    queryset = ISISInterface.objects.select_related('instance__device', 'instance__vrf', 'interface')
     table = ISISInterfaceTable
     filterset = ISISInterfaceFilterSet
     filterset_form = ISISInterfaceFilterForm
@@ -635,9 +625,7 @@ class ISISInterfaceLevelsView(ObjectChildrenView):
     )
 
     def get_children(self, request, parent):
-        return self.child_model.objects.filter(interface=parent).select_related(
-            'interface__interface'
-        )
+        return self.child_model.objects.filter(interface=parent).select_related('interface__interface')
 
 
 @register_model_view(ISISInterface, name='prefix-sids')
@@ -653,9 +641,7 @@ class ISISInterfacePrefixSidsView(ObjectChildrenView):
     )
 
     def get_children(self, request, parent):
-        return self.child_model.objects.filter(interface=parent).select_related(
-            'interface__interface'
-        )
+        return self.child_model.objects.filter(interface=parent).select_related('interface__interface')
 
 
 @register_model_view(ISISInterface, name='add', detail=False)

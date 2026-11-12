@@ -262,9 +262,7 @@ class ISISInterfaceImportForm(NetBoxModelImportForm):
         # across devices resolves ambiguously and the row is rejected. (The interactive
         # form scopes this via query_params={'device_id': '$device'}.)
         if data and (device := data.get('device')):
-            self.fields['interface'].queryset = Interface.objects.filter(
-                device__name=device
-            )
+            self.fields['interface'].queryset = Interface.objects.filter(device__name=device)
 
     class Meta:
         model = ISISInterface

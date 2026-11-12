@@ -28,9 +28,7 @@ __all__ = (
 
 
 class ISISSettingBulkEditForm(NetBoxModelBulkEditForm):
-    description = forms.CharField(
-        label=_('Description'), max_length=200, required=False
-    )
+    description = forms.CharField(label=_('Description'), max_length=200, required=False)
     comments = CommentField()
 
     model = ISISSetting
@@ -39,12 +37,8 @@ class ISISSettingBulkEditForm(NetBoxModelBulkEditForm):
 
 
 class ISISInstanceBulkEditForm(NetBoxModelBulkEditForm):
-    device = DynamicModelChoiceField(
-        queryset=Device.objects.all(), label=_('Device'), required=False, selector=True
-    )
-    vrf = DynamicModelChoiceField(
-        queryset=VRF.objects.all(), label=_('VRF'), required=False, selector=True
-    )
+    device = DynamicModelChoiceField(queryset=Device.objects.all(), label=_('Device'), required=False, selector=True)
+    vrf = DynamicModelChoiceField(queryset=VRF.objects.all(), label=_('VRF'), required=False, selector=True)
     process_tag = forms.CharField(label=_('Process Tag'), required=False)
     net = forms.CharField(label=_('NET'), required=False)
     is_type = forms.ChoiceField(
@@ -57,20 +51,12 @@ class ISISInstanceBulkEditForm(NetBoxModelBulkEditForm):
         choices=add_blank_choice(ISISMetricStyleChoices),
         required=False,
     )
-    lsp_lifetime = forms.IntegerField(
-        label=_('LSP Lifetime'), min_value=0, required=False
-    )
-    lsp_refresh_interval = forms.IntegerField(
-        label=_('LSP Refresh Interval'), min_value=0, required=False
-    )
+    lsp_lifetime = forms.IntegerField(label=_('LSP Lifetime'), min_value=0, required=False)
+    lsp_refresh_interval = forms.IntegerField(label=_('LSP Refresh Interval'), min_value=0, required=False)
     lsp_mtu = forms.IntegerField(label=_('LSP MTU'), min_value=0, required=False)
     distance = forms.IntegerField(label=_('Distance'), min_value=0, required=False)
-    maximum_paths = forms.IntegerField(
-        label=_('Maximum Paths'), min_value=0, required=False
-    )
-    description = forms.CharField(
-        label=_('Description'), max_length=200, required=False
-    )
+    maximum_paths = forms.IntegerField(label=_('Maximum Paths'), min_value=0, required=False)
+    description = forms.CharField(label=_('Description'), max_length=200, required=False)
     comments = CommentField()
 
     model = ISISInstance
@@ -131,28 +117,18 @@ class ISISInterfaceBulkEditForm(NetBoxModelBulkEditForm):
         required=False,
     )
     metric = forms.IntegerField(label=_('Metric'), min_value=0, required=False)
-    passive = forms.ChoiceField(
-        label=_('Passive'), choices=BOOLEAN_WITH_BLANK_CHOICES, required=False
-    )
+    passive = forms.ChoiceField(label=_('Passive'), choices=BOOLEAN_WITH_BLANK_CHOICES, required=False)
     hello_auth_type = forms.ChoiceField(
         label=_('Hello Auth Type'),
         choices=add_blank_choice(ISISAuthTypeChoices),
         required=False,
     )
     hello_auth_key = forms.CharField(label=_('Hello Auth Key'), required=False)
-    csnp_interval = forms.IntegerField(
-        label=_('CSNP Interval'), min_value=0, required=False
-    )
-    retransmit_interval = forms.IntegerField(
-        label=_('Retransmit Interval'), min_value=0, required=False
-    )
-    lsp_interval = forms.IntegerField(
-        label=_('LSP Interval'), min_value=0, required=False
-    )
+    csnp_interval = forms.IntegerField(label=_('CSNP Interval'), min_value=0, required=False)
+    retransmit_interval = forms.IntegerField(label=_('Retransmit Interval'), min_value=0, required=False)
+    lsp_interval = forms.IntegerField(label=_('LSP Interval'), min_value=0, required=False)
     mesh_group = forms.CharField(label=_('Mesh Group'), required=False)
-    description = forms.CharField(
-        label=_('Description'), max_length=200, required=False
-    )
+    description = forms.CharField(label=_('Description'), max_length=200, required=False)
     comments = CommentField()
 
     model = ISISInterface

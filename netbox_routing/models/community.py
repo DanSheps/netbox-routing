@@ -102,9 +102,7 @@ class Community(PrimaryModel):
 
 
 class CommunityListEntry(PrimaryModel):
-    community_list = models.ForeignKey(
-        to=CommunityList, on_delete=models.CASCADE, related_name='communitylistentries'
-    )
+    community_list = models.ForeignKey(to=CommunityList, on_delete=models.CASCADE, related_name='communitylistentries')
     action = models.CharField(max_length=30, choices=ActionChoices)
     community = models.ForeignKey(
         to=Community,

@@ -26,13 +26,9 @@ __all__ = (
 
 
 class EIGRPRouterBulkEditForm(NetBoxModelBulkEditForm):
-    device = DynamicModelChoiceField(
-        queryset=Device.objects.all(), label=_('Device'), required=False, selector=True
-    )
+    device = DynamicModelChoiceField(queryset=Device.objects.all(), label=_('Device'), required=False, selector=True)
 
-    description = forms.CharField(
-        label=_('Description'), max_length=200, required=False
-    )
+    description = forms.CharField(label=_('Description'), max_length=200, required=False)
     comments = CommentField()
 
     model = EIGRPRouter
@@ -46,14 +42,10 @@ class EIGRPRouterBulkEditForm(NetBoxModelBulkEditForm):
 
 
 class EIGRPAddressFamilyBulkEditForm(NetBoxModelBulkEditForm):
-    vrf = DynamicModelChoiceField(
-        queryset=VRF.objects.all(), label=_('VRF'), required=False, selector=True
-    )
+    vrf = DynamicModelChoiceField(queryset=VRF.objects.all(), label=_('VRF'), required=False, selector=True)
     family = CharField(max_length=4)
 
-    description = forms.CharField(
-        label=_('Description'), max_length=200, required=False
-    )
+    description = forms.CharField(label=_('Description'), max_length=200, required=False)
     comments = CommentField()
 
     model = EIGRPAddressFamily
@@ -75,9 +67,7 @@ class EIGRPNetworkBulkEditForm(NetBoxModelBulkEditForm):
         selector=True,
     )
 
-    description = forms.CharField(
-        label=_('Description'), max_length=200, required=False
-    )
+    description = forms.CharField(label=_('Description'), max_length=200, required=False)
     comments = CommentField()
 
     model = EIGRPNetwork
@@ -98,12 +88,8 @@ class EIGRPInterfaceBulkEditForm(NetBoxModelBulkEditForm):
         required=False,
         selector=True,
     )
-    passive = forms.ChoiceField(
-        label=_('Passive'), choices=BOOLEAN_WITH_BLANK_CHOICES, required=False
-    )
-    bfd = forms.ChoiceField(
-        label=_('BFD'), choices=BOOLEAN_WITH_BLANK_CHOICES, required=False
-    )
+    passive = forms.ChoiceField(label=_('Passive'), choices=BOOLEAN_WITH_BLANK_CHOICES, required=False)
+    bfd = forms.ChoiceField(label=_('BFD'), choices=BOOLEAN_WITH_BLANK_CHOICES, required=False)
     authentication = forms.ChoiceField(
         label=_('Authentication'),
         choices=add_blank_choice(choices.AuthenticationChoices),
@@ -111,9 +97,7 @@ class EIGRPInterfaceBulkEditForm(NetBoxModelBulkEditForm):
     )
     passphrase = forms.CharField(label=_('Passphrase'), required=False)
 
-    description = forms.CharField(
-        label=_('Description'), max_length=200, required=False
-    )
+    description = forms.CharField(label=_('Description'), max_length=200, required=False)
     comments = CommentField()
 
     model = EIGRPInterface

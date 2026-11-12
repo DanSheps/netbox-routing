@@ -14,9 +14,7 @@ __all__ = (
 
 
 class OSPFInstanceSerializer(NetBoxModelSerializer):
-    url = serializers.HyperlinkedIdentityField(
-        view_name='plugins-api:netbox_routing-api:ospfinstance-detail'
-    )
+    url = serializers.HyperlinkedIdentityField(view_name='plugins-api:netbox_routing-api:ospfinstance-detail')
     device = DeviceSerializer(nested=True)
     vrf = VRFSerializer(nested=True, required=False, allow_null=True)
 
@@ -48,9 +46,7 @@ class OSPFInstanceSerializer(NetBoxModelSerializer):
 
 
 class OSPFAreaSerializer(NetBoxModelSerializer):
-    url = serializers.HyperlinkedIdentityField(
-        view_name='plugins-api:netbox_routing-api:ospfarea-detail'
-    )
+    url = serializers.HyperlinkedIdentityField(view_name='plugins-api:netbox_routing-api:ospfarea-detail')
 
     class Meta:
         model = OSPFArea
@@ -73,9 +69,7 @@ class OSPFAreaSerializer(NetBoxModelSerializer):
 
 
 class OSPFInterfaceSerializer(NetBoxModelSerializer):
-    url = serializers.HyperlinkedIdentityField(
-        view_name='plugins-api:netbox_routing-api:ospfinterface-detail'
-    )
+    url = serializers.HyperlinkedIdentityField(view_name='plugins-api:netbox_routing-api:ospfinterface-detail')
     instance = OSPFInstanceSerializer(nested=True)
     area = OSPFAreaSerializer(nested=True)
     interface = InterfaceSerializer(nested=True)

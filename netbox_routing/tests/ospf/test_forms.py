@@ -94,9 +94,7 @@ class OSPFInterfaceTestCase(TestCase):
     @classmethod
     def setUpTestData(cls):
         device = create_test_device(name='Device 1')
-        cls.interface = Interface.objects.create(
-            name='Interface 1', device=device, type='virtual'
-        )
+        cls.interface = Interface.objects.create(name='Interface 1', device=device, type='virtual')
         cls.instance = OSPFInstance.objects.create(
             name='Instance 1', router_id='10.10.10.1', process_id=0, device_id=device.pk
         )
@@ -117,9 +115,7 @@ class OSPFInterfaceTestCase(TestCase):
 
     def test_interface_with_incorrect_device(self):
         device = create_test_device(name='Device 2')
-        interface = Interface.objects.create(
-            name='Interface 1', device=device, type='virtual'
-        )
+        interface = Interface.objects.create(name='Interface 1', device=device, type='virtual')
 
         form = OSPFInterfaceForm(
             data={

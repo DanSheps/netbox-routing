@@ -33,15 +33,11 @@ class ASPathList(StrMixin, AbsoluteURLMixin, NetBoxModel):
 
 
 class TagMixin:
-    tags = TaggableManager(
-        through='extras.TaggedItem', ordering=('weight', 'name'), related_name='+'
-    )
+    tags = TaggableManager(through='extras.TaggedItem', ordering=('weight', 'name'), related_name='+')
 
 
 class ASPathListRule(StrMixin, AbsoluteURLMixin, NetBoxModel):
-    aspath_list = models.ForeignKey(
-        to=ASPathList, on_delete=models.CASCADE, related_name='aspathlistrules'
-    )
+    aspath_list = models.ForeignKey(to=ASPathList, on_delete=models.CASCADE, related_name='aspathlistrules')
     index = models.PositiveIntegerField()
     action = models.CharField(max_length=30)
     pattern = models.CharField(
@@ -97,13 +93,9 @@ class BGPBase(AbsoluteURLMixin, NetBoxModel):
         blank=True,
         null=True,
     )
-    tenant = models.ForeignKey(
-        to='tenancy.Tenant', on_delete=models.PROTECT, blank=True, null=True
-    )
+    tenant = models.ForeignKey(to='tenancy.Tenant', on_delete=models.PROTECT, blank=True, null=True)
     status = models.CharField(max_length=50)
-    role = models.ForeignKey(
-        to='ipam.Role', on_delete=models.SET_NULL, blank=True, null=True
-    )
+    role = models.ForeignKey(to='ipam.Role', on_delete=models.SET_NULL, blank=True, null=True)
     description = models.CharField(max_length=200, blank=True)
     comments = models.TextField(blank=True)
 
@@ -141,9 +133,7 @@ class CommunityList(StrMixin, AbsoluteURLMixin, NetBoxModel):
 
 
 class CommunityListRule(StrMixin, AbsoluteURLMixin, NetBoxModel):
-    community_list = models.ForeignKey(
-        to=CommunityList, on_delete=models.CASCADE, related_name='commlistrules'
-    )
+    community_list = models.ForeignKey(to=CommunityList, on_delete=models.CASCADE, related_name='commlistrules')
     action = models.CharField(max_length=30)
     community = models.ForeignKey(
         to=Community,
@@ -180,9 +170,7 @@ class PrefixList(StrMixin, AbsoluteURLMixin, NetBoxModel):
 
 
 class PrefixListRule(StrMixin, AbsoluteURLMixin, NetBoxModel):
-    prefix_list = models.ForeignKey(
-        to=PrefixList, on_delete=models.CASCADE, related_name='prefrules'
-    )
+    prefix_list = models.ForeignKey(to=PrefixList, on_delete=models.CASCADE, related_name='prefrules')
     index = models.PositiveIntegerField()
     action = models.CharField(max_length=30)
     prefix = models.ForeignKey(
@@ -214,12 +202,8 @@ class PrefixListRule(StrMixin, AbsoluteURLMixin, NetBoxModel):
 
 class BGPSession(StrMixin, AbsoluteURLMixin, NetBoxModel):
     name = models.CharField(max_length=256, blank=True, null=True)
-    site = models.ForeignKey(
-        to='dcim.Site', on_delete=models.SET_NULL, blank=True, null=True
-    )
-    tenant = models.ForeignKey(
-        to='tenancy.Tenant', on_delete=models.PROTECT, blank=True, null=True
-    )
+    site = models.ForeignKey(to='dcim.Site', on_delete=models.SET_NULL, blank=True, null=True)
+    tenant = models.ForeignKey(to='tenancy.Tenant', on_delete=models.PROTECT, blank=True, null=True)
     device = models.ForeignKey(
         to='dcim.Device',
         on_delete=models.PROTECT,
@@ -260,9 +244,7 @@ class BGPSession(StrMixin, AbsoluteURLMixin, NetBoxModel):
     )
     status = models.CharField(max_length=50)
     description = models.CharField(max_length=200, blank=True)
-    peer_group = models.ForeignKey(
-        BGPPeerGroup, on_delete=models.SET_NULL, blank=True, null=True
-    )
+    peer_group = models.ForeignKey(BGPPeerGroup, on_delete=models.SET_NULL, blank=True, null=True)
     prefix_list_in = models.ForeignKey(
         to=PrefixList,
         blank=True,
@@ -314,9 +296,7 @@ class BGPSession(StrMixin, AbsoluteURLMixin, NetBoxModel):
 
 
 class RoutingPolicyRule(StrMixin, AbsoluteURLMixin, NetBoxModel):
-    routing_policy = models.ForeignKey(
-        to=RoutingPolicy, on_delete=models.CASCADE, related_name='rules'
-    )
+    routing_policy = models.ForeignKey(to=RoutingPolicy, on_delete=models.CASCADE, related_name='rules')
     index = models.PositiveIntegerField()
     action = models.CharField(max_length=30)
     description = models.CharField(max_length=500, blank=True)

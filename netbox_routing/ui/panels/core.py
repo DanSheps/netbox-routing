@@ -28,10 +28,7 @@ class SettingsChoicePanel(panels.ObjectPanel):
         if not hasattr(ctx['object'], self._accessor):
             return {**ctx, 'attrs': []}
 
-        settings = {
-            setting.key: setting
-            for setting in getattr(ctx['object'], self._accessor).all()
-        }
+        settings = {setting.key: setting for setting in getattr(ctx['object'], self._accessor).all()}
 
         attr_names = set(settings.keys())
         return {
@@ -39,9 +36,7 @@ class SettingsChoicePanel(panels.ObjectPanel):
             'attrs': [
                 {
                     'label': attr.label,
-                    'value': attr.render(
-                        settings.get(name), {'name': name, 'perms': ctx['perms']}
-                    ),
+                    'value': attr.render(settings.get(name), {'name': name, 'perms': ctx['perms']}),
                 }
                 for name, attr in self._attrs.items()
                 if name in attr_names

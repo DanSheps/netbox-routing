@@ -65,11 +65,7 @@ class ASPathEntryFilterSet(NetBoxModelFilterSet):
     def search(self, queryset, name, value):
         if not value.strip():
             return queryset
-        qs_filter = (
-            Q(aspath__name__icontains=value)
-            | Q(pattern__icontains=value)
-            | Q(action=value)
-        )
+        qs_filter = Q(aspath__name__icontains=value) | Q(pattern__icontains=value) | Q(action=value)
         return queryset.filter(qs_filter).distinct()
 
 

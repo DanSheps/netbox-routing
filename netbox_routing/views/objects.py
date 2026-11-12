@@ -319,27 +319,19 @@ class RouteMapEntryView(GetRelatedModelsMixin, ObjectView):
                 omit='route_map',
                 extra=(
                     (
-                        PrefixList.objects.restrict(request.user, 'view').filter(
-                            route_map_entries=instance
-                        ),
+                        PrefixList.objects.restrict(request.user, 'view').filter(route_map_entries=instance),
                         'route_map_entry_id',
                     ),
                     (
-                        CommunityList.objects.restrict(request.user, 'view').filter(
-                            route_map_entries=instance
-                        ),
+                        CommunityList.objects.restrict(request.user, 'view').filter(route_map_entries=instance),
                         'route_map_entry_id',
                     ),
                     (
-                        Community.objects.restrict(request.user, 'view').filter(
-                            route_map_entries=instance
-                        ),
+                        Community.objects.restrict(request.user, 'view').filter(route_map_entries=instance),
                         'route_map_entry_id',
                     ),
                     (
-                        ASPath.objects.restrict(request.user, 'view').filter(
-                            route_map_entries=instance
-                        ),
+                        ASPath.objects.restrict(request.user, 'view').filter(route_map_entries=instance),
                         'route_map_entry_id',
                     ),
                 ),

@@ -50,6 +50,4 @@ class BGPPeerMixin(BGPScopeMixin, AddressesMixin):
     @classmethod
     def setUpTestData(cls):
         super().setUpTestData()
-        cls.peer = BGPPeer.objects.create(
-            name='BGP Peer', scope=cls.scope, peer=cls.peer_address
-        )
+        cls.peer = BGPPeer.objects.create(name='BGP Peer', scope=cls.scope, peer=cls.peer_address)

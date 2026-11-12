@@ -25,15 +25,9 @@ class EIGRPRouter(PrimaryModel):
         blank=False,
         null=False,
     )
-    mode = models.CharField(
-        verbose_name=_('Mode'), max_length=10, choices=EIGRPRouterChoices
-    )
-    name = models.CharField(
-        verbose_name=_('Name'), max_length=100, blank=True, null=True
-    )
-    pid = models.PositiveIntegerField(
-        verbose_name=_('Process ID'), blank=True, null=True
-    )
+    mode = models.CharField(verbose_name=_('Mode'), max_length=10, choices=EIGRPRouterChoices)
+    name = models.CharField(verbose_name=_('Name'), max_length=100, blank=True, null=True)
+    pid = models.PositiveIntegerField(verbose_name=_('Process ID'), blank=True, null=True)
     rid = IPAddressField(verbose_name=_('Router ID'), blank=True, null=True)
 
     clone_fields = ('device', 'mode', 'name', 'pid', 'rid')
@@ -222,9 +216,7 @@ class EIGRPInterface(PrimaryModel):
         blank=True,
         null=True,
     )
-    passphrase = models.CharField(
-        verbose_name=_('Passphrase'), max_length=200, blank=True, null=True
-    )
+    passphrase = models.CharField(verbose_name=_('Passphrase'), max_length=200, blank=True, null=True)
 
     clone_fields = (
         'router',

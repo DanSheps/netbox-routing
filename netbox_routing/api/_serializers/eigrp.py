@@ -20,9 +20,7 @@ __all__ = (
 
 
 class EIGRPRouterSerializer(NetBoxModelSerializer):
-    url = serializers.HyperlinkedIdentityField(
-        view_name='plugins-api:netbox_routing-api:eigrprouter-detail'
-    )
+    url = serializers.HyperlinkedIdentityField(view_name='plugins-api:netbox_routing-api:eigrprouter-detail')
     device = DeviceSerializer(nested=True)
 
     class Meta:
@@ -51,9 +49,7 @@ class EIGRPRouterSerializer(NetBoxModelSerializer):
 
 
 class EIGRPAddressFamilySerializer(NetBoxModelSerializer):
-    url = serializers.HyperlinkedIdentityField(
-        view_name='plugins-api:netbox_routing-api:eigrpaddressfamily-detail'
-    )
+    url = serializers.HyperlinkedIdentityField(view_name='plugins-api:netbox_routing-api:eigrpaddressfamily-detail')
     router = EIGRPRouterSerializer(nested=True)
 
     class Meta:
@@ -77,9 +73,7 @@ class EIGRPAddressFamilySerializer(NetBoxModelSerializer):
 
 
 class EIGRPNetworkSerializer(NetBoxModelSerializer):
-    url = serializers.HyperlinkedIdentityField(
-        view_name='plugins-api:netbox_routing-api:eigrpnetwork-detail'
-    )
+    url = serializers.HyperlinkedIdentityField(view_name='plugins-api:netbox_routing-api:eigrpnetwork-detail')
     router = EIGRPRouterSerializer(nested=True)
     address_family = EIGRPAddressFamilySerializer(nested=True)
     network = PrefixSerializer(nested=True)
@@ -107,9 +101,7 @@ class EIGRPNetworkSerializer(NetBoxModelSerializer):
 
 
 class EIGRPInterfaceSerializer(NetBoxModelSerializer):
-    url = serializers.HyperlinkedIdentityField(
-        view_name='plugins-api:netbox_routing-api:eigrpinterface-detail'
-    )
+    url = serializers.HyperlinkedIdentityField(view_name='plugins-api:netbox_routing-api:eigrpinterface-detail')
     router = EIGRPRouterSerializer(nested=True)
     address_family = EIGRPAddressFamilySerializer(nested=True)
     interface = InterfaceSerializer(nested=True)

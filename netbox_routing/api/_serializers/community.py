@@ -14,9 +14,7 @@ __all__ = (
 
 
 class CommunitySerializer(NetBoxModelSerializer):
-    url = serializers.HyperlinkedIdentityField(
-        view_name='plugins-api:netbox_routing-api:community-detail'
-    )
+    url = serializers.HyperlinkedIdentityField(view_name='plugins-api:netbox_routing-api:community-detail')
     role = RoleSerializer(nested=True, required=False)
     tenant = TenantSerializer(nested=True, required=False)
 
@@ -38,9 +36,7 @@ class CommunitySerializer(NetBoxModelSerializer):
 
 
 class CommunityListSerializer(NetBoxModelSerializer):
-    url = serializers.HyperlinkedIdentityField(
-        view_name='plugins-api:netbox_routing-api:communitylist-detail'
-    )
+    url = serializers.HyperlinkedIdentityField(view_name='plugins-api:netbox_routing-api:communitylist-detail')
     tenant = TenantSerializer(nested=True, required=False)
 
     class Meta:
@@ -58,9 +54,7 @@ class CommunityListSerializer(NetBoxModelSerializer):
 
 
 class CommunityListEntrySerializer(NetBoxModelSerializer):
-    url = serializers.HyperlinkedIdentityField(
-        view_name='plugins-api:netbox_routing-api:communitylistentry-detail'
-    )
+    url = serializers.HyperlinkedIdentityField(view_name='plugins-api:netbox_routing-api:communitylistentry-detail')
 
     class Meta:
         model = CommunityListEntry

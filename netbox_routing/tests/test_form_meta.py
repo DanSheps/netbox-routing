@@ -64,8 +64,6 @@ class PrimaryModelFormFieldsTestCase(SimpleTestCase):
             msg=(
                 'Forms missing standard PrimaryModel fields in Meta.fields. '
                 'These fields will be silently dropped on UI save:\n'
-                + '\n'.join(
-                    f'  {name}: {fields}' for name, fields in sorted(missing.items())
-                )
+                + '\n'.join(f'  {name}: {fields}' for name, fields in sorted(missing.items()))
             ),
         )

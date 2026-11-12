@@ -178,8 +178,6 @@ class CommunityListEntryTestCase(TestCase):
 
     def test_community_list_entry(self):
         for community in self.communities:
-            cle = CommunityListEntry(
-                community_list=self.cl, action=ActionChoices.PERMIT, community=community
-            )
+            cle = CommunityListEntry(community_list=self.cl, action=ActionChoices.PERMIT, community=community)
             cle.full_clean()
             cle.save()

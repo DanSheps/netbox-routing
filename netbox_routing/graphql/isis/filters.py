@@ -70,10 +70,7 @@ class ISISInstanceFilter(VRFMixin, DeviceMixin, PrimaryModelFilter):
 
 @strawberry_django.filter(models.ISISInterface, lookups=True)
 class ISISInterfaceFilter(InterfaceMixin, PrimaryModelFilter):
-    instance: (
-        Annotated[
-            'ISISInstanceFilter', strawberry.lazy('netbox_routing.graphql.filters')
-        ]
-        | None
-    ) = strawberry_django.filter_field()
+    instance: Annotated['ISISInstanceFilter', strawberry.lazy('netbox_routing.graphql.filters')] | None = (
+        strawberry_django.filter_field()
+    )
     instance_id: ID | None = strawberry_django.filter_field()

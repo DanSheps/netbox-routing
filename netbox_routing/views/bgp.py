@@ -349,9 +349,7 @@ class BGPRouterSettingsView(BGPSettingViewMixin, ObjectChildrenView):
     queryset = BGPRouter.objects.all()
     tab = ViewTab(
         label='Settings',
-        badge=lambda obj: BGPRouterSettingsView.child_model.objects.filter(
-            router=obj
-        ).count(),
+        badge=lambda obj: BGPRouterSettingsView.child_model.objects.filter(router=obj).count(),
     )
 
     def get_children(self, request, parent):
@@ -526,9 +524,7 @@ class BGPAddressFamilySettingsView(BGPSettingViewMixin, ObjectChildrenView):
     queryset = BGPAddressFamily.objects.all()
     tab = ViewTab(
         label='Settings',
-        badge=lambda obj: BGPAddressFamilySettingsView.child_model.objects.filter(
-            address_family=obj
-        ).count(),
+        badge=lambda obj: BGPAddressFamilySettingsView.child_model.objects.filter(address_family=obj).count(),
     )
 
     def get_children(self, request, parent):
@@ -596,9 +592,7 @@ class BGPPeerSettingsView(BGPSettingViewMixin, ObjectChildrenView):
     queryset = BGPPeer.objects.all()
     tab = ViewTab(
         label='Settings',
-        badge=lambda obj: BGPPeerSettingsView.child_model.objects.filter(
-            peer=obj
-        ).count(),
+        badge=lambda obj: BGPPeerSettingsView.child_model.objects.filter(peer=obj).count(),
     )
 
     def get_children(self, request, parent):
@@ -615,9 +609,7 @@ class BGPPeerAddressFamiliesView(ObjectChildrenView):
     actions = ObjectChildrenView.actions
     tab = ViewTab(
         label='Address Families',
-        badge=lambda obj: BGPPeerAddressFamiliesView.child_model.objects.filter(
-            peer=obj
-        ).count(),
+        badge=lambda obj: BGPPeerAddressFamiliesView.child_model.objects.filter(peer=obj).count(),
     )
 
     def get_children(self, request, parent):

@@ -76,9 +76,7 @@ class StaticRouteTestCase(IPAddressFieldMixin, APIViewTestCases.APIViewTestCase)
 
         routes = (
             StaticRoute(name='Test Route 1', vrf=vrf, prefix='0.0.0.0/0', next_hop=nh),
-            StaticRoute(
-                name='Test Route 2', vrf=None, prefix='1.1.1.1/32', next_hop=nh
-            ),
+            StaticRoute(name='Test Route 2', vrf=None, prefix='1.1.1.1/32', next_hop=nh),
             StaticRoute(name='Test Route 3', vrf=vrf, prefix='2.2.2.2/32', next_hop=nh),
         )
         StaticRoute.objects.bulk_create(routes)

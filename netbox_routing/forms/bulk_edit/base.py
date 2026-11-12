@@ -8,9 +8,7 @@ __all__ = ('TenantBulkEditMixin',)
 
 
 class TenantBulkEditMixin(forms.Form):
-    tenant = DynamicModelChoiceField(
-        label=_('Tenant'), queryset=Tenant.objects.all(), required=False
-    )
+    tenant = DynamicModelChoiceField(label=_('Tenant'), queryset=Tenant.objects.all(), required=False)
 
 
 class EnableMixin(forms.Form):

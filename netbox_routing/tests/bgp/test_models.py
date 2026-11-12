@@ -207,9 +207,7 @@ class BGPPeerTestCase(BGPScopeMixin, AddressesMixin, TestCase):
         )
 
     def test_model(self):
-        instance = self.model(
-            name='Test Peer', scope=self.scope, peer=self.peer_address
-        )
+        instance = self.model(name='Test Peer', scope=self.scope, peer=self.peer_address)
         instance.full_clean()
         instance.save()
         self.assertIsInstance(instance, self.model)
@@ -217,15 +215,11 @@ class BGPPeerTestCase(BGPScopeMixin, AddressesMixin, TestCase):
         self.assertEqual(instance.peer, self.peer_address)
 
     def test_unique_together(self):
-        instance = self.model(
-            name='Test Peer', scope=self.scope, peer=self.peer_address
-        )
+        instance = self.model(name='Test Peer', scope=self.scope, peer=self.peer_address)
         instance.full_clean()
         instance.save()
 
-        instance = self.model(
-            name='Test Peer', scope=self.scope, peer=self.peer_address
-        )
+        instance = self.model(name='Test Peer', scope=self.scope, peer=self.peer_address)
 
         with self.assertRaises(ValidationError):
             instance.full_clean()

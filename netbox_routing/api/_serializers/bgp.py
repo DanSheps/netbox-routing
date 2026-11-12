@@ -30,9 +30,7 @@ __all__ = (
 
 
 class BGPSettingSerializer(NetBoxModelSerializer):
-    url = serializers.HyperlinkedIdentityField(
-        view_name='plugins-api:netbox_routing-api:bgpsetting-detail'
-    )
+    url = serializers.HyperlinkedIdentityField(view_name='plugins-api:netbox_routing-api:bgpsetting-detail')
 
     assigned_object = GFKSerializerField(read_only=True)
 
@@ -69,9 +67,7 @@ class BGPSettingSerializer(NetBoxModelSerializer):
 
 
 class BGPSessionTemplateSerializer(NetBoxModelSerializer):
-    url = serializers.HyperlinkedIdentityField(
-        view_name='plugins-api:netbox_routing-api:bgpsessiontemplate-detail'
-    )
+    url = serializers.HyperlinkedIdentityField(view_name='plugins-api:netbox_routing-api:bgpsessiontemplate-detail')
 
     remote_as = ASNSerializer(nested=True, required=False)
     local_as = ASNSerializer(nested=True, required=False)
@@ -105,9 +101,7 @@ class BGPSessionTemplateSerializer(NetBoxModelSerializer):
 
 
 class BGPPolicyTemplateSerializer(NetBoxModelSerializer):
-    url = serializers.HyperlinkedIdentityField(
-        view_name='plugins-api:netbox_routing-api:bgppolicytemplate-detail'
-    )
+    url = serializers.HyperlinkedIdentityField(view_name='plugins-api:netbox_routing-api:bgppolicytemplate-detail')
 
     tenant = TenantSerializer(nested=True, required=False)
 
@@ -136,9 +130,7 @@ class BGPPolicyTemplateSerializer(NetBoxModelSerializer):
 
 
 class BGPPeerTemplateSerializer(NetBoxModelSerializer):
-    url = serializers.HyperlinkedIdentityField(
-        view_name='plugins-api:netbox_routing-api:bgppeertemplate-detail'
-    )
+    url = serializers.HyperlinkedIdentityField(view_name='plugins-api:netbox_routing-api:bgppeertemplate-detail')
 
     remote_as = ASNSerializer(nested=True, required=False)
     tenant = TenantSerializer(nested=True, required=False)
@@ -166,21 +158,15 @@ class BGPPeerTemplateSerializer(NetBoxModelSerializer):
 
 
 class BGPRouterSerializer(NetBoxModelSerializer):
-    url = serializers.HyperlinkedIdentityField(
-        view_name='plugins-api:netbox_routing-api:bgprouter-detail'
-    )
+    url = serializers.HyperlinkedIdentityField(view_name='plugins-api:netbox_routing-api:bgprouter-detail')
 
     assigned_object = GFKSerializerField(read_only=True)
     asn = ASNSerializer(nested=True)
     settings = BGPSettingSerializer(many=True, required=False)
     tenant = TenantSerializer(nested=True, required=False)
     peer_templates = BGPPeerTemplateSerializer(many=True, nested=True, required=False)
-    policy_templates = BGPPolicyTemplateSerializer(
-        many=True, nested=True, required=False
-    )
-    session_templates = BGPSessionTemplateSerializer(
-        many=True, nested=True, required=False
-    )
+    policy_templates = BGPPolicyTemplateSerializer(many=True, nested=True, required=False)
+    session_templates = BGPSessionTemplateSerializer(many=True, nested=True, required=False)
 
     class Meta:
         model = BGPRouter
@@ -213,9 +199,7 @@ class BGPRouterSerializer(NetBoxModelSerializer):
 
 
 class BGPScopeSerializer(NetBoxModelSerializer):
-    url = serializers.HyperlinkedIdentityField(
-        view_name='plugins-api:netbox_routing-api:bgpscope-detail'
-    )
+    url = serializers.HyperlinkedIdentityField(view_name='plugins-api:netbox_routing-api:bgpscope-detail')
 
     router = BGPRouterSerializer(nested=True)
     vrf = VRFSerializer(nested=True, required=False, allow_null=True)
@@ -245,9 +229,7 @@ class BGPScopeSerializer(NetBoxModelSerializer):
 
 
 class BGPAddressFamilySerializer(NetBoxModelSerializer):
-    url = serializers.HyperlinkedIdentityField(
-        view_name='plugins-api:netbox_routing-api:bgpaddressfamily-detail'
-    )
+    url = serializers.HyperlinkedIdentityField(view_name='plugins-api:netbox_routing-api:bgpaddressfamily-detail')
 
     scope = BGPScopeSerializer(nested=True)
     settings = BGPSettingSerializer(many=True, required=False)
@@ -282,22 +264,16 @@ class BGPAddressFamilySerializer(NetBoxModelSerializer):
 
 
 class BGPPeerSerializer(NetBoxModelSerializer):
-    url = serializers.HyperlinkedIdentityField(
-        view_name='plugins-api:netbox_routing-api:bgppeer-detail'
-    )
+    url = serializers.HyperlinkedIdentityField(view_name='plugins-api:netbox_routing-api:bgppeer-detail')
 
     scope = BGPScopeSerializer(nested=True)
     peer = IPAddressSerializer(nested=True, required=False, allow_null=True)
     interface = InterfaceSerializer(nested=True, required=False, allow_null=True)
     source = IPAddressSerializer(nested=True, required=False)
     peer_group = BGPPeerTemplateSerializer(nested=True, required=False, allow_null=True)
-    peer_session = BGPSessionTemplateSerializer(
-        nested=True, required=False, allow_null=True
-    )
+    peer_session = BGPSessionTemplateSerializer(nested=True, required=False, allow_null=True)
     remote_as = ASNSerializer(nested=True, required=False)
-    remote_as_list = ASNSerializer(
-        nested=True, many=True, required=False, allow_null=True
-    )
+    remote_as_list = ASNSerializer(nested=True, many=True, required=False, allow_null=True)
     local_as = ASNSerializer(nested=True, required=False)
     tenant = TenantSerializer(nested=True, required=False)
 
@@ -405,9 +381,7 @@ class BGPPeerSerializer(NetBoxModelSerializer):
 
 
 class BGPPeerAddressFamilySerializer(NetBoxModelSerializer):
-    url = serializers.HyperlinkedIdentityField(
-        view_name='plugins-api:netbox_routing-api:bgppeeraddressfamily-detail'
-    )
+    url = serializers.HyperlinkedIdentityField(view_name='plugins-api:netbox_routing-api:bgppeeraddressfamily-detail')
     assigned_object_type = ContentTypeField(
         queryset=ContentType.objects.filter(BGPPEERAF_ASSIGNMENT_MODELS),
         required=False,
@@ -455,9 +429,7 @@ class BGPPeerAddressFamilySerializer(NetBoxModelSerializer):
 
 
 class BFDProfileSerializer(NetBoxModelSerializer):
-    url = serializers.HyperlinkedIdentityField(
-        view_name='plugins-api:netbox_routing-api:bfdprofile-detail'
-    )
+    url = serializers.HyperlinkedIdentityField(view_name='plugins-api:netbox_routing-api:bfdprofile-detail')
     tenant = TenantSerializer(nested=True, required=False)
 
     class Meta:

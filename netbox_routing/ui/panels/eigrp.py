@@ -41,9 +41,7 @@ class EIGRPInterfacePanel(panels.ObjectAttributesPanel):
 
 
 class EIGRPInterfaceSettingsPanel(panels.ObjectAttributesPanel):
-    passive_interface = attrs.BooleanAttr(
-        'passive_interface', label=_('Passive Interface')
-    )
+    passive_interface = attrs.BooleanAttr('passive_interface', label=_('Passive Interface'))
     bfd = attrs.BooleanAttr('bfd', label=_('BFD'))
     authentication = attrs.ChoiceAttr('authentication', label=_('Authentication'))
     passphrase = attrs.TextAttr('passphrase', label=_('Passphrase'))

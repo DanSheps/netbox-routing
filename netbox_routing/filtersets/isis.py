@@ -112,9 +112,7 @@ class ISISSRv6LocatorFilterSet(NetBoxModelFilterSet):
 
 @register_filterset
 class ISISSettingFilterSet(NetBoxModelFilterSet):
-    key = django_filters.MultipleChoiceFilter(
-        choices=ISISSettingChoices, null_value=None, label=_('Setting Name')
-    )
+    key = django_filters.MultipleChoiceFilter(choices=ISISSettingChoices, null_value=None, label=_('Setting Name'))
     assigned_object_type = django_filters.ModelChoiceFilter(
         queryset=ContentType.objects.filter(ISISSETTING_ASSIGNMENT_MODELS),
         field_name='assigned_object_type',
@@ -232,11 +230,7 @@ class ISISInstanceFilterSet(NetBoxModelFilterSet):
         value = (value or '').strip()
         if not value:
             return queryset
-        qs_filter = (
-            Q(process_tag__icontains=value)
-            | Q(device__name__icontains=value)
-            | Q(net__icontains=value)
-        )
+        qs_filter = Q(process_tag__icontains=value) | Q(device__name__icontains=value) | Q(net__icontains=value)
         return queryset.filter(qs_filter).distinct()
 
 

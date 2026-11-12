@@ -80,15 +80,9 @@ class ASPathEntryTestCase(APIViewTestCases.APIViewTestCase):
         ASPath.objects.bulk_create(cls.aspath)
 
         cls.aspath_entry = (
-            cls.model(
-                aspath=cls.aspath[0], action='permit', sequence=1, pattern='^2448$'
-            ),
-            cls.model(
-                aspath=cls.aspath[0], action='permit', sequence=2, pattern='^2448 2447$'
-            ),
-            cls.model(
-                aspath=cls.aspath[1], action='permit', sequence=1, pattern='^.*$'
-            ),
+            cls.model(aspath=cls.aspath[0], action='permit', sequence=1, pattern='^2448$'),
+            cls.model(aspath=cls.aspath[0], action='permit', sequence=2, pattern='^2448 2447$'),
+            cls.model(aspath=cls.aspath[1], action='permit', sequence=1, pattern='^.*$'),
         )
         cls.model.objects.bulk_create(cls.aspath_entry)
 

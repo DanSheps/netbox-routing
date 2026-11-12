@@ -18,9 +18,7 @@ __all__ = (
 )
 
 
-@strawberry_django.type(
-    models.OSPFInstance, fields='__all__', filters=OSPFInstanceFilter
-)
+@strawberry_django.type(models.OSPFInstance, fields='__all__', filters=OSPFInstanceFilter)
 class OSPFInstanceType(PrimaryObjectType):
     name: str
     device: Annotated["DeviceType", strawberry.lazy('dcim.graphql.types')]
@@ -35,13 +33,9 @@ class OSPFAreaType(PrimaryObjectType):
     area_type: str
 
 
-@strawberry_django.type(
-    models.OSPFInterface, fields='__all__', filters=OSPFInterfaceFilter
-)
+@strawberry_django.type(models.OSPFInterface, fields='__all__', filters=OSPFInterfaceFilter)
 class OSPFInterfaceType(PrimaryObjectType):
-    instance: Annotated[
-        "OSPFInstanceType", strawberry.lazy('netbox_routing.graphql.types')
-    ]
+    instance: Annotated["OSPFInstanceType", strawberry.lazy('netbox_routing.graphql.types')]
     area: Annotated["OSPFAreaType", strawberry.lazy('netbox_routing.graphql.types')]
     interface: Annotated["InterfaceType", strawberry.lazy('dcim.graphql.types')]
     network_type: str | None

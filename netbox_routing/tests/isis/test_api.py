@@ -128,9 +128,7 @@ class ISISInstanceAPITestCase(APIViewTestCases.APIViewTestCase):
         # must not surface them.
         self.add_permissions('netbox_routing.view_isisinstance')
         instance = ISISInstance.objects.first()
-        url = reverse(
-            'plugins-api:netbox_routing-api:isisinstance-detail', args=[instance.pk]
-        )
+        url = reverse('plugins-api:netbox_routing-api:isisinstance-detail', args=[instance.pk])
         response = self.client.get(url, **self.header)
         self.assertHttpStatus(response, status.HTTP_200_OK)
         self.assertNotIn('sr_enabled', response.json())
@@ -283,9 +281,7 @@ class ISISLevelAPITestCase(APIViewTestCases.APIViewTestCase):
             is_type='level-1-2',
         )
         ISISLevel.objects.create(instance=inst, level=1, default_metric=10)
-        ISISLevel.objects.create(
-            instance=inst, level=2, default_metric=10, wide_metrics_only=True
-        )
+        ISISLevel.objects.create(instance=inst, level=2, default_metric=10, wide_metrics_only=True)
         inst2 = ISISInstance.objects.create(device=device, process_tag='100')
         ISISLevel.objects.create(instance=inst2, level=1, default_metric=20)
         cls.create_data = [
@@ -310,18 +306,8 @@ class ISISInterfaceLevelAPITestCase(APIViewTestCases.APIViewTestCase):
     def setUpTestData(cls):
         device = create_test_device(name='Test Device')
         inst = ISISInstance.objects.create(device=device, process_tag='0')
-        ifaces = [
-            Interface.objects.create(
-                device=device, name=f'Interface {n}', type='virtual'
-            )
-            for n in range(1, 5)
-        ]
-        ri = [
-            ISISInterface.objects.create(
-                instance=inst, interface=ifaces[i], address_family='ipv4'
-            )
-            for i in range(4)
-        ]
+        ifaces = [Interface.objects.create(device=device, name=f'Interface {n}', type='virtual') for n in range(1, 5)]
+        ri = [ISISInterface.objects.create(instance=inst, interface=ifaces[i], address_family='ipv4') for i in range(4)]
         ISISInterfaceLevel.objects.create(interface=ri[0], level=1, metric=10)
         ISISInterfaceLevel.objects.create(interface=ri[1], level=2, metric=20)
         ISISInterfaceLevel.objects.create(interface=ri[2], level=1, metric=30)
@@ -341,16 +327,9 @@ class ISISSegmentRoutingAPITestCase(APIViewTestCases.APIViewTestCase):
     @classmethod
     def setUpTestData(cls):
         device = create_test_device(name='Test Device')
-        insts = [
-            ISISInstance.objects.create(device=device, process_tag=str(n))
-            for n in range(4)
-        ]
-        ISISSegmentRouting.objects.create(
-            instance=insts[0], enabled=True, prefix_sid_range='global'
-        )
-        ISISSegmentRouting.objects.create(
-            instance=insts[1], enabled=True, srgb_start=16000, srgb_range=8000
-        )
+        insts = [ISISInstance.objects.create(device=device, process_tag=str(n)) for n in range(4)]
+        ISISSegmentRouting.objects.create(instance=insts[0], enabled=True, prefix_sid_range='global')
+        ISISSegmentRouting.objects.create(instance=insts[1], enabled=True, srgb_start=16000, srgb_range=8000)
         ISISSegmentRouting.objects.create(instance=insts[2], enabled=False)
         cls.create_data = [
             {
@@ -389,9 +368,7 @@ class ISISFlexAlgoAPITestCase(APIViewTestCases.APIViewTestCase):
             admin_group_exclude='RED',
         )
         inst2 = ISISInstance.objects.create(device=device, process_tag='100')
-        ISISFlexAlgo.objects.create(
-            instance=inst2, algo_id=128, metric_type='te-metric'
-        )
+        ISISFlexAlgo.objects.create(instance=inst2, algo_id=128, metric_type='te-metric')
         cls.create_data = [
             {
                 'instance': inst2.pk,
@@ -414,21 +391,12 @@ class ISISPrefixSIDAPITestCase(APIViewTestCases.APIViewTestCase):
     def setUpTestData(cls):
         device = create_test_device(name='Test Device')
         inst = ISISInstance.objects.create(device=device, process_tag='0')
-        ifaces = [
-            Interface.objects.create(
-                device=device, name=f'Loopback {n}', type='virtual'
-            )
-            for n in range(1, 5)
-        ]
+        ifaces = [Interface.objects.create(device=device, name=f'Loopback {n}', type='virtual') for n in range(1, 5)]
         ri = [
-            ISISInterface.objects.create(
-                instance=inst, interface=ifaces[i], address_family='ipv4', passive=True
-            )
+            ISISInterface.objects.create(instance=inst, interface=ifaces[i], address_family='ipv4', passive=True)
             for i in range(4)
         ]
-        ISISPrefixSID.objects.create(
-            interface=ri[0], algorithm=0, sid_index=10, n_flag=True
-        )
+        ISISPrefixSID.objects.create(interface=ri[0], algorithm=0, sid_index=10, n_flag=True)
         ISISPrefixSID.objects.create(interface=ri[1], algorithm=128, sid_index=20)
         ISISPrefixSID.objects.create(interface=ri[2], algorithm=0, sid_label=16030)
         cls.create_data = [
@@ -447,13 +415,8 @@ class ISISSRv6LocatorAPITestCase(APIViewTestCases.APIViewTestCase):
     @classmethod
     def setUpTestData(cls):
         device = create_test_device(name='Test Device')
-        insts = [
-            ISISInstance.objects.create(device=device, process_tag=str(n))
-            for n in range(2)
-        ]
-        ISISSRv6Locator.objects.create(
-            instance=insts[0], name='LOC1', prefix='2001:db8:0:a1::/64', enabled=True
-        )
+        insts = [ISISInstance.objects.create(device=device, process_tag=str(n)) for n in range(2)]
+        ISISSRv6Locator.objects.create(instance=insts[0], name='LOC1', prefix='2001:db8:0:a1::/64', enabled=True)
         ISISSRv6Locator.objects.create(
             instance=insts[0],
             name='LOC2',
@@ -461,9 +424,7 @@ class ISISSRv6LocatorAPITestCase(APIViewTestCases.APIViewTestCase):
             is_micro_segment=True,
             flavor='psp-usd',
         )
-        ISISSRv6Locator.objects.create(
-            instance=insts[1], name='LOC1', prefix='2001:db8:0:b1::/64', algorithm=128
-        )
+        ISISSRv6Locator.objects.create(instance=insts[1], name='LOC1', prefix='2001:db8:0:b1::/64', algorithm=128)
         cls.create_data = [
             {
                 'instance': insts[1].pk,
@@ -503,9 +464,7 @@ class ISISSettingPrefetchAPITestCase(APITestCase):
     def _interface_setting(self, name, key):
         inst = ISISInstance.objects.create(device=self.device, process_tag=name)
         iface = Interface.objects.create(device=self.device, name=name, type='virtual')
-        ri = ISISInterface.objects.create(
-            instance=inst, interface=iface, address_family='ipv4'
-        )
+        ri = ISISInterface.objects.create(instance=inst, interface=iface, address_family='ipv4')
         return ISISSetting.objects.create(assigned_object=ri, key=key, value='true')
 
     @staticmethod
@@ -518,8 +477,7 @@ class ISISSettingPrefetchAPITestCase(APITestCase):
         return [
             q
             for q in ctx.captured_queries
-            if 'netbox_routing_isisinstance' in q['sql']
-            or 'netbox_routing_isisinterface' in q['sql']
+            if 'netbox_routing_isisinstance' in q['sql'] or 'netbox_routing_isisinterface' in q['sql']
         ]
 
     def test_assigned_object_prefetched_no_n_plus_1(self):
@@ -581,17 +539,13 @@ class ISISChildDisplayPrefetchAPITestCase(APITestCase):
 
     def _isis_interface(self, name):
         iface = Interface.objects.create(device=self.device, name=name, type='virtual')
-        return ISISInterface.objects.create(
-            instance=self._instance(name), interface=iface, address_family='ipv4'
-        )
+        return ISISInterface.objects.create(instance=self._instance(name), interface=iface, address_family='ipv4')
 
     def _assert_constant_target_reads(self, url_name, tables, make_rows):
         url = reverse(f'plugins-api:netbox_routing-api:{url_name}-list') + '?limit=0'
 
         def reads(ctx):
-            return [
-                q for q in ctx.captured_queries if any(t in q['sql'] for t in tables)
-            ]
+            return [q for q in ctx.captured_queries if any(t in q['sql'] for t in tables)]
 
         make_rows(0)
         make_rows(1)
@@ -614,36 +568,28 @@ class ISISChildDisplayPrefetchAPITestCase(APITestCase):
         self._assert_constant_target_reads(
             'isislevel',
             ('netbox_routing_isisinstance', 'dcim_device'),
-            lambda i: ISISLevel.objects.create(
-                instance=self._instance(f'lvl{i}'), level=1
-            ),
+            lambda i: ISISLevel.objects.create(instance=self._instance(f'lvl{i}'), level=1),
         )
 
     def test_segmentrouting_display_constant_queries(self):
         self._assert_constant_target_reads(
             'isissegmentrouting',
             ('netbox_routing_isisinstance', 'dcim_device'),
-            lambda i: ISISSegmentRouting.objects.create(
-                instance=self._instance(f'sr{i}'), enabled=True
-            ),
+            lambda i: ISISSegmentRouting.objects.create(instance=self._instance(f'sr{i}'), enabled=True),
         )
 
     def test_flexalgo_display_constant_queries(self):
         self._assert_constant_target_reads(
             'isisflexalgo',
             ('netbox_routing_isisinstance', 'dcim_device'),
-            lambda i: ISISFlexAlgo.objects.create(
-                instance=self._instance(f'fa{i}'), algo_id=128 + i
-            ),
+            lambda i: ISISFlexAlgo.objects.create(instance=self._instance(f'fa{i}'), algo_id=128 + i),
         )
 
     def test_interfacelevel_display_constant_queries(self):
         self._assert_constant_target_reads(
             'isisinterfacelevel',
             ('netbox_routing_isisinterface', 'dcim_interface'),
-            lambda i: ISISInterfaceLevel.objects.create(
-                interface=self._isis_interface(f'ifl{i}'), level=1
-            ),
+            lambda i: ISISInterfaceLevel.objects.create(interface=self._isis_interface(f'ifl{i}'), level=1),
         )
 
 

@@ -93,9 +93,7 @@ class CommunityListEntriesView(ObjectChildrenView):
     actions = ObjectChildrenView.actions
     tab = ViewTab(
         label='Entries',
-        badge=lambda obj: CommunityListEntriesView.child_model.objects.filter(
-            community_list=obj
-        ).count(),
+        badge=lambda obj: CommunityListEntriesView.child_model.objects.filter(community_list=obj).count(),
     )
 
     def get_children(self, request, parent):

@@ -7,9 +7,7 @@ from . import views  # noqa F401
 app_name = 'netbox_routing'
 
 urlpatterns = [
-    path(
-        'routes/static/', include(get_model_urls(app_name, 'staticroute', detail=False))
-    ),
+    path('routes/static/', include(get_model_urls(app_name, 'staticroute', detail=False))),
     path('routes/static/<int:pk>/', include(get_model_urls(app_name, 'staticroute'))),
     # OSPF
     path(
@@ -23,9 +21,7 @@ urlpatterns = [
         'ospf/interface/',
         include(get_model_urls(app_name, 'ospfinterface', detail=False)),
     ),
-    path(
-        'ospf/interface/<int:pk>/', include(get_model_urls(app_name, 'ospfinterface'))
-    ),
+    path('ospf/interface/<int:pk>/', include(get_model_urls(app_name, 'ospfinterface'))),
     # IS-IS
     path(
         'isis/setting/',
@@ -59,9 +55,7 @@ urlpatterns = [
         'isis/prefix-sid/',
         include(get_model_urls(app_name, 'isisprefixsid', detail=False)),
     ),
-    path(
-        'isis/prefix-sid/<int:pk>/', include(get_model_urls(app_name, 'isisprefixsid'))
-    ),
+    path('isis/prefix-sid/<int:pk>/', include(get_model_urls(app_name, 'isisprefixsid'))),
     path(
         'isis/srv6-locator/',
         include(get_model_urls(app_name, 'isissrv6locator', detail=False)),
@@ -79,13 +73,9 @@ urlpatterns = [
         'isis/interface/',
         include(get_model_urls(app_name, 'isisinterface', detail=False)),
     ),
-    path(
-        'isis/interface/<int:pk>/', include(get_model_urls(app_name, 'isisinterface'))
-    ),
+    path('isis/interface/<int:pk>/', include(get_model_urls(app_name, 'isisinterface'))),
     # EIGRP
-    path(
-        'eigrp/router/', include(get_model_urls(app_name, 'eigrprouter', detail=False))
-    ),
+    path('eigrp/router/', include(get_model_urls(app_name, 'eigrprouter', detail=False))),
     path('eigrp/router/<int:pk>/', include(get_model_urls(app_name, 'eigrprouter'))),
     path(
         'eigrp/address-family/',
@@ -104,9 +94,7 @@ urlpatterns = [
         'eigrp/interface/',
         include(get_model_urls(app_name, 'eigrpinterface', detail=False)),
     ),
-    path(
-        'eigrp/interface/<int:pk>/', include(get_model_urls(app_name, 'eigrpinterface'))
-    ),
+    path('eigrp/interface/<int:pk>/', include(get_model_urls(app_name, 'eigrpinterface'))),
     # BFD
     path('bfd/profile/', include(get_model_urls(app_name, 'bfdprofile', detail=False))),
     path('bfd/profile/<int:pk>/', include(get_model_urls(app_name, 'bfdprofile'))),
@@ -197,9 +185,7 @@ urlpatterns = [
         'objects/prefix-list/',
         include(get_model_urls(app_name, 'prefixlist', detail=False)),
     ),
-    path(
-        'objects/prefix-list/<int:pk>/', include(get_model_urls(app_name, 'prefixlist'))
-    ),
+    path('objects/prefix-list/<int:pk>/', include(get_model_urls(app_name, 'prefixlist'))),
     path(
         'objects/prefix-list-entry/',
         include(get_model_urls(app_name, 'prefixlistentry', detail=False)),

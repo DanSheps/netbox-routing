@@ -28,15 +28,11 @@ class OSPFAreaFilter(PrimaryModelFilter):
 
 @strawberry_django.filter(models.OSPFInterface, lookups=True)
 class OSPFInterfaceFilter(InterfaceMixin, VRFMixin, PrimaryModelFilter):
-    instance: (
-        Annotated[
-            'OSPFInstanceFilter', strawberry.lazy('netbox_routing.graphql.filters')
-        ]
-        | None
-    ) = strawberry_django.filter_field()
+    instance: Annotated['OSPFInstanceFilter', strawberry.lazy('netbox_routing.graphql.filters')] | None = (
+        strawberry_django.filter_field()
+    )
     instance_id: ID | None = strawberry_django.filter_field()
-    area: (
-        Annotated['OSPFAreaFilter', strawberry.lazy('netbox_routing.graphql.filters')]
-        | None
-    ) = strawberry_django.filter_field()
+    area: Annotated['OSPFAreaFilter', strawberry.lazy('netbox_routing.graphql.filters')] | None = (
+        strawberry_django.filter_field()
+    )
     area_id: ID | None = strawberry_django.filter_field()

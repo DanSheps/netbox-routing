@@ -146,9 +146,7 @@ class PrefixListEntry(PermitDenyChoiceMixin, PrimaryModel):
         blank=True,
         null=True,
     )
-    assigned_prefix_id = models.PositiveBigIntegerField(
-        verbose_name=_('Prefix ID'), blank=True, null=True
-    )
+    assigned_prefix_id = models.PositiveBigIntegerField(verbose_name=_('Prefix ID'), blank=True, null=True)
     assigned_prefix = GenericForeignKey(
         ct_field='assigned_prefix_type',
         fk_field='assigned_prefix_id',
@@ -213,14 +211,10 @@ class PrefixListEntry(PermitDenyChoiceMixin, PrimaryModel):
                 )
 
             if self.ge is not None and prefix.prefixlen >= self.ge:
-                raise ValidationError(
-                    'Prefix\'s length cannot be longer then greater or equals value'
-                )
+                raise ValidationError('Prefix\'s length cannot be longer then greater or equals value')
 
             if self.le is not None and prefix.prefixlen >= self.le:
-                raise ValidationError(
-                    'Prefix\'s length cannot be longer then greater or equals value'
-                )
+                raise ValidationError('Prefix\'s length cannot be longer then greater or equals value')
 
 
 class CustomPrefix(PrimaryModel):
@@ -292,9 +286,7 @@ class RouteMapEntry(PermitDenyChoiceMixin, PrimaryModel):
     )
     action = models.CharField(max_length=6, choices=ActionChoices)
     sequence = models.PositiveSmallIntegerField()
-    flow_control = models.PositiveSmallIntegerField(
-        verbose_name=_('Flow Control (Continue)'), null=True, blank=True
-    )
+    flow_control = models.PositiveSmallIntegerField(verbose_name=_('Flow Control (Continue)'), null=True, blank=True)
     match_community_list = models.ManyToManyField(
         to=CommunityList,
         blank=True,

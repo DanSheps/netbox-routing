@@ -65,18 +65,14 @@ class BGPSettingMixin:
             initial = None
             if hasattr(self, 'instance'):
                 setting = BGPSetting.objects.filter(
-                    assigned_object_type=ContentType.objects.get_for_model(
-                        self.Meta.model
-                    ),
+                    assigned_object_type=ContentType.objects.get_for_model(self.Meta.model),
                     assigned_object_id=self.instance.pk,
                     key=key,
                 ).first()
                 if setting:
                     initial = setting.value
             if BGPSettingChoices.FIELD_TYPES[key] == 'ipaddr':
-                self.fields[key] = fields.CharField(
-                    label=label, required=False, initial=initial, max_length=128
-                )
+                self.fields[key] = fields.CharField(label=label, required=False, initial=initial, max_length=128)
                 css = self.fields[key].widget.attrs.get('class', '')
                 self.fields[key].widget.attrs['class'] = f'{css} form-control'
             elif BGPSettingChoices.FIELD_TYPES[key] == 'integer':
@@ -240,18 +236,10 @@ class BGPSettingForm(PrimaryModelForm):
         super().clean()
 
         # Handle object assignment
-        selected_objects = [
-            field
-            for field in ('router', 'scope', 'addressfamily')
-            if self.cleaned_data[field]
-        ]
+        selected_objects = [field for field in ('router', 'scope', 'addressfamily') if self.cleaned_data[field]]
         if len(selected_objects) > 1:
             raise forms.ValidationError(
-                {
-                    selected_objects[1]: _(
-                        'A BGP Setting can only be assigned to a single object.'
-                    )
-                }
+                {selected_objects[1]: _('A BGP Setting can only be assigned to a single object.')}
             )
 
         if not selected_objects:
@@ -595,11 +583,7 @@ class BGPRouterForm(BGPSettingMixin, TenancyForm, PrimaryModelForm):
         ]
         if len(selected_objects) > 1:
             raise forms.ValidationError(
-                {
-                    selected_objects[1]: _(
-                        'A BGP Router can only be assigned to a single object.'
-                    )
-                }
+                {selected_objects[1]: _('A BGP Router can only be assigned to a single object.')}
             )
         if selected_objects:
             self.instance.assigned_object = self.cleaned_data[selected_objects[0]]
@@ -609,18 +593,8 @@ class BGPRouterForm(BGPSettingMixin, TenancyForm, PrimaryModelForm):
         if selected_objects:
             field_name = selected_objects[0]
             filter_kwargs = {field_name: self.instance.assigned_object}
-            if (
-                self.Meta.model.objects.filter(**filter_kwargs)
-                .exclude(pk=self.instance.pk)
-                .exists()
-            ):
-                raise forms.ValidationError(
-                    {
-                        selected_objects[0]: _(
-                            "A BGP Router with this object already exists."
-                        )
-                    }
-                )
+            if self.Meta.model.objects.filter(**filter_kwargs).exclude(pk=self.instance.pk).exists():
+                raise forms.ValidationError({selected_objects[0]: _("A BGP Router with this object already exists.")})
 
     def save(self, *args, **kwargs):
         return super().save(*args, **kwargs)
@@ -848,9 +822,7 @@ class BGPPeerForm(BGPSettingMixin, TenancyForm, PrimaryModelForm):
         has_interface = self.cleaned_data.get('interface') is not None
 
         if has_peer and has_interface:
-            raise forms.ValidationError(
-                'Cannot have a Peer IP and a Peer Interface on the same BGP Peer'
-            )
+            raise forms.ValidationError('Cannot have a Peer IP and a Peer Interface on the same BGP Peer')
 
         if not (has_peer or has_interface):
             raise forms.ValidationError('Either peer or interface must be set.')
@@ -859,9 +831,7 @@ class BGPPeerForm(BGPSettingMixin, TenancyForm, PrimaryModelForm):
         remote_as_list = self.cleaned_data.get('remote_as_list') or []
 
         if remote_as and remote_as_list:
-            raise forms.ValidationError(
-                'Cannot have both a Remote AS and a Remote AS List.'
-            )
+            raise forms.ValidationError('Cannot have both a Remote AS and a Remote AS List.')
 
         return self.cleaned_data
 
@@ -969,39 +939,23 @@ class BGPPeerAddressFamilyForm(BGPSettingMixin, TenancyForm, PrimaryModelForm):
         super().clean()
 
         # Handle object assignment
-        selected_objects = [
-            field for field in ('peer', 'peer_group') if self.cleaned_data[field]
-        ]
+        selected_objects = [field for field in ('peer', 'peer_group') if self.cleaned_data[field]]
         if len(selected_objects) > 1:
             raise forms.ValidationError(
-                {
-                    selected_objects[1]: _(
-                        'A BGP Peer Address Family can only be assigned to a single object.'
-                    )
-                }
+                {selected_objects[1]: _('A BGP Peer Address Family can only be assigned to a single object.')}
             )
         elif selected_objects:
             self.instance.assigned_object = self.cleaned_data[selected_objects[0]]
         else:
-            raise ValidationError(
-                _('A BGP Peer Address Family must specify an Peer or Peer Group.')
-            )
+            raise ValidationError(_('A BGP Peer Address Family must specify an Peer or Peer Group.'))
 
         filter = {
             selected_objects[0]: self.instance.assigned_object,
             'address_family': self.cleaned_data.get('address_family'),
         }
-        if (
-            self.Meta.model.objects.filter(**filter)
-            .exclude(pk=self.instance.pk)
-            .exists()
-        ):
+        if self.Meta.model.objects.filter(**filter).exclude(pk=self.instance.pk).exists():
             raise forms.ValidationError(
-                {
-                    selected_objects[0]: _(
-                        'A BGP Peer Address Family with this object already exists.'
-                    )
-                }
+                {selected_objects[0]: _('A BGP Peer Address Family with this object already exists.')}
             )
 
     def save(self, *args, **kwargs):

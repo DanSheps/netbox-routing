@@ -61,21 +61,15 @@ class ISISSettingMixin:
             ct = ContentType.objects.get_for_model(self.Meta.model)
             existing = {
                 s.key: s.value
-                for s in ISISSetting.objects.filter(
-                    assigned_object_type=ct, assigned_object_id=self.instance.pk
-                )
+                for s in ISISSetting.objects.filter(assigned_object_type=ct, assigned_object_id=self.instance.pk)
             }
         for key, label in ISISSettingChoices.CHOICES:
             initial = existing.get(key)
             field_type = ISISSettingChoices.FIELD_TYPES[key]
             if field_type == 'string':
-                self.fields[key] = fields.CharField(
-                    label=label, required=False, initial=initial, max_length=128
-                )
+                self.fields[key] = fields.CharField(label=label, required=False, initial=initial, max_length=128)
             elif field_type == 'integer':
-                self.fields[key] = fields.IntegerField(
-                    label=label, required=False, initial=initial, min_value=0
-                )
+                self.fields[key] = fields.IntegerField(label=label, required=False, initial=initial, min_value=0)
             elif field_type == 'boolean':
                 # ISISSetting.clean() accepts textual booleans (true/false/1/0/yes/no) from the
                 # API/import paths, but the NullBooleanField select only matches real
@@ -180,9 +174,7 @@ class ISISInstanceForm(ISISSettingMixin, PrimaryModelForm):
     fieldsets = (
         FieldSet('description'),
         FieldSet('device', name=_('Device')),
-        FieldSet(
-            'vrf', 'process_tag', 'net', 'is_type', 'metric_style', name=_('Instance')
-        ),
+        FieldSet('vrf', 'process_tag', 'net', 'is_type', 'metric_style', name=_('Instance')),
         FieldSet(
             'overload_bit',
             'overload_on_startup',
@@ -341,11 +333,7 @@ class ISISInterfaceForm(ISISSettingMixin, PrimaryModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        if (
-            self.instance.pk
-            and self.instance.interface
-            and self.instance.interface.device
-        ):
+        if self.instance.pk and self.instance.interface and self.instance.interface.device:
             self.initial['device'] = self.instance.interface.device.pk
 
     # The instance/interface same-device rule lives on ISISInterface.clean() (model
@@ -415,19 +403,9 @@ class ISISSettingForm(PrimaryModelForm):
 
     def clean(self):
         super().clean()
-        selected = [
-            field
-            for field in ('isisinstance', 'isisinterface')
-            if self.cleaned_data.get(field)
-        ]
+        selected = [field for field in ('isisinstance', 'isisinterface') if self.cleaned_data.get(field)]
         if len(selected) > 1:
-            raise forms.ValidationError(
-                {
-                    selected[1]: _(
-                        'An IS-IS Setting can only be assigned to a single object.'
-                    )
-                }
-            )
+            raise forms.ValidationError({selected[1]: _('An IS-IS Setting can only be assigned to a single object.')})
         elif selected:
             self.instance.assigned_object = self.cleaned_data[selected[0]]
         else:

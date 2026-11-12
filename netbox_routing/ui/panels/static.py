@@ -18,9 +18,7 @@ class StaticRouteRoutePanel(panels.ObjectAttributesPanel):
     vrf = attrs.RelatedObjectAttr('vrf', linkify=True, label=_('VRF'))
     prefix = attrs.TextAttr('prefix', label=_('Prefix'))
     next_hop = attrs.TextAttr('next_hop', label=_('Next Hop'))
-    interface_next_hop = attrs.TextAttr(
-        'interface_next_hop', label=_('Interface Next Hop')
-    )
+    interface_next_hop = attrs.TextAttr('interface_next_hop', label=_('Interface Next Hop'))
     metric = attrs.TextAttr('metric', label=_('Metric'))
     tag = attrs.TextAttr('tag', label=_('Route Tag'))
     permanent = attrs.BooleanAttr('permanent', label=_('Permanent'))

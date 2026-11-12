@@ -54,20 +54,14 @@ class PrefixListType(PrimaryObjectType):
     ],
 )
 class PrefixListEntryType(PrimaryObjectType):
-    prefix_list: Annotated[
-        "PrefixListType", strawberry.lazy('netbox_routing.graphql.types')
-    ]
+    prefix_list: Annotated["PrefixListType", strawberry.lazy('netbox_routing.graphql.types')]
     action: str
     sequence: int
-    assigned_prefix_type: (
-        Annotated["ContentTypeType", strawberry.lazy('netbox.graphql.types')] | None
-    )
+    assigned_prefix_type: Annotated["ContentTypeType", strawberry.lazy('netbox.graphql.types')] | None
     assigned_prefix: (
         Union[
             Annotated["PrefixType", strawberry.lazy('ipam.graphql.types')],
-            Annotated[
-                "CustomPrefixType", strawberry.lazy('netbox_routing.graphql.types')
-            ],
+            Annotated["CustomPrefixType", strawberry.lazy('netbox_routing.graphql.types')],
         ]
         | None
     )
@@ -89,26 +83,13 @@ class RouteMapType(PrimaryObjectType):
     ],
 )
 class RouteMapEntryType(PrimaryObjectType):
-    route_map: Annotated[
-        "RouteMapType", strawberry.lazy('netbox_routing.graphql.types')
-    ]
+    route_map: Annotated["RouteMapType", strawberry.lazy('netbox_routing.graphql.types')]
     action: str
     sequence: int
-    match_prefix_list: (
-        Annotated["PrefixListType", strawberry.lazy('netbox_routing.graphql.types')]
-        | None
-    )
-    match_community_list: (
-        Annotated["CommunityListType", strawberry.lazy('netbox_routing.graphql.types')]
-        | None
-    )
-    match_community: (
-        Annotated["CommunityType", strawberry.lazy('netbox_routing.graphql.types')]
-        | None
-    )
-    match_aspath: (
-        Annotated["ASPathType", strawberry.lazy('netbox_routing.graphql.types')] | None
-    )
+    match_prefix_list: Annotated["PrefixListType", strawberry.lazy('netbox_routing.graphql.types')] | None
+    match_community_list: Annotated["CommunityListType", strawberry.lazy('netbox_routing.graphql.types')] | None
+    match_community: Annotated["CommunityType", strawberry.lazy('netbox_routing.graphql.types')] | None
+    match_aspath: Annotated["ASPathType", strawberry.lazy('netbox_routing.graphql.types')] | None
 
 
 @strawberry_django.type(

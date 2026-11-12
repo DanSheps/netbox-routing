@@ -146,15 +146,9 @@ class OSPFAreaTestCase(TestCase):
 
         OSPFInterface.objects.bulk_create(
             (
-                OSPFInterface(
-                    interface=interfaces[0], instance=instances[0], area=data[0]
-                ),
-                OSPFInterface(
-                    interface=interfaces[1], instance=instances[0], area=data[0]
-                ),
-                OSPFInterface(
-                    interface=interfaces[2], instance=instances[1], area=data[1]
-                ),
+                OSPFInterface(interface=interfaces[0], instance=instances[0], area=data[0]),
+                OSPFInterface(interface=interfaces[1], instance=instances[0], area=data[0]),
+                OSPFInterface(interface=interfaces[2], instance=instances[1], area=data[1]),
             )
         )
 

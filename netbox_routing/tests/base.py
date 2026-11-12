@@ -53,11 +53,7 @@ class AutomatedModelCreationMixin:
                     and isinstance(getattr(cls, mapped_field), RestrictedQuerySet)
                 ):
                     kwargs[field] = getattr(cls, mapped_field)[seq - 1]
-                elif (
-                    mapped_field
-                    and hasattr(cls, mapped_field)
-                    and type(getattr(cls, mapped_field)) in [list, tuple]
-                ):
+                elif mapped_field and hasattr(cls, mapped_field) and type(getattr(cls, mapped_field)) in [list, tuple]:
                     kwargs[field] = getattr(cls, mapped_field)[seq - 1]
                 elif mapped_field and hasattr(cls, mapped_field):
                     kwargs[field] = getattr(cls, mapped_field)
@@ -98,17 +94,9 @@ class AutomatedFormDataCreationMixin:
                 and isinstance(getattr(cls, mapped_field), RestrictedQuerySet)
             ):
                 kwargs[field] = getattr(cls, mapped_field)[-1].pk
-            elif (
-                mapped_field
-                and hasattr(cls, mapped_field)
-                and type(getattr(cls, mapped_field)) in [list, tuple]
-            ):
+            elif mapped_field and hasattr(cls, mapped_field) and type(getattr(cls, mapped_field)) in [list, tuple]:
                 kwargs[field] = getattr(cls, mapped_field)[-1]
-            elif (
-                mapped_field
-                and hasattr(cls, mapped_field)
-                and isinstance(getattr(cls, mapped_field), Model)
-            ):
+            elif mapped_field and hasattr(cls, mapped_field) and isinstance(getattr(cls, mapped_field), Model):
                 kwargs[field] = getattr(cls, mapped_field).pk
             elif mapped_field and hasattr(cls, mapped_field):
                 kwargs[field] = getattr(cls, mapped_field)
@@ -174,6 +162,4 @@ class BulkEditMixin:
 
 class PluginBaseURLMixin:
     def _get_base_url(self):
-        return (
-            f'plugins:{self.model._meta.app_label}:{self.model._meta.model_name}_{{}}'
-        )
+        return f'plugins:{self.model._meta.app_label}:{self.model._meta.model_name}_{{}}'

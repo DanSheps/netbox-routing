@@ -57,12 +57,8 @@ class BGPPolicyMixin:
 
 
 class BGPSessionMixin:
-    remote_as = DynamicModelChoiceField(
-        label=_('Remote AS'), queryset=ASN.objects.all(), required=False, selector=True
-    )
-    local_as = DynamicModelChoiceField(
-        label=_('Local AS'), queryset=ASN.objects.all(), required=False, selector=True
-    )
+    remote_as = DynamicModelChoiceField(label=_('Remote AS'), queryset=ASN.objects.all(), required=False, selector=True)
+    local_as = DynamicModelChoiceField(label=_('Local AS'), queryset=ASN.objects.all(), required=False, selector=True)
 
 
 class BGPSettingBulkEditForm(TenantBulkEditMixin, PrimaryModelBulkEditForm):
@@ -76,9 +72,7 @@ class BGPSettingBulkEditForm(TenantBulkEditMixin, PrimaryModelBulkEditForm):
 
 
 class BGPRouterBulkEditForm(TenantBulkEditMixin, PrimaryModelBulkEditForm):
-    asn = DynamicModelChoiceField(
-        label=_('ASN'), queryset=ASN.objects.all(), required=False, selector=True
-    )
+    asn = DynamicModelChoiceField(label=_('ASN'), queryset=ASN.objects.all(), required=False, selector=True)
     peer_templates = DynamicModelMultipleChoiceField(
         label=_('Assigned Peer Template'),
         queryset=BGPPeerTemplate.objects.all(),
@@ -124,9 +118,7 @@ class BGPScopeBulkEditForm(TenantBulkEditMixin, PrimaryModelBulkEditForm):
         required=False,
         selector=True,
     )
-    vrf = DynamicModelChoiceField(
-        label=_('VRF'), queryset=VRF.objects.all(), required=False, selector=True
-    )
+    vrf = DynamicModelChoiceField(label=_('VRF'), queryset=VRF.objects.all(), required=False, selector=True)
     model = BGPScope
     fieldsets = (
         FieldSet(
@@ -144,12 +136,8 @@ class BGPScopeBulkEditForm(TenantBulkEditMixin, PrimaryModelBulkEditForm):
     )
 
 
-class BGPAddressFamilyBulkEditForm(
-    TenantBulkEditMixin, BGPPolicyMixin, EnableMixin, PrimaryModelBulkEditForm
-):
-    scope = DynamicModelChoiceField(
-        label=_('Scope'), queryset=BGPScope.objects.all(), required=False, selector=True
-    )
+class BGPAddressFamilyBulkEditForm(TenantBulkEditMixin, BGPPolicyMixin, EnableMixin, PrimaryModelBulkEditForm):
+    scope = DynamicModelChoiceField(label=_('Scope'), queryset=BGPScope.objects.all(), required=False, selector=True)
     address_family = forms.ChoiceField(
         label=_('Status'),
         choices=BGPAddressFamilyChoices,
@@ -201,12 +189,8 @@ class BGPAddressFamilyBulkEditForm(
     )
 
 
-class BGPPeerTemplateBulkEditForm(
-    EnableMixin, TenantBulkEditMixin, PrimaryModelBulkEditForm
-):
-    asn = DynamicModelChoiceField(
-        label=_('ASN'), queryset=ASN.objects.all(), required=False, selector=True
-    )
+class BGPPeerTemplateBulkEditForm(EnableMixin, TenantBulkEditMixin, PrimaryModelBulkEditForm):
+    asn = DynamicModelChoiceField(label=_('ASN'), queryset=ASN.objects.all(), required=False, selector=True)
 
     model = BGPPeerTemplate
     fieldsets = (
@@ -223,9 +207,7 @@ class BGPPeerTemplateBulkEditForm(
     )
 
 
-class BGPPolicyTemplateBulkEditForm(
-    EnableMixin, BGPPolicyMixin, TenantBulkEditMixin, PrimaryModelBulkEditForm
-):
+class BGPPolicyTemplateBulkEditForm(EnableMixin, BGPPolicyMixin, TenantBulkEditMixin, PrimaryModelBulkEditForm):
     parents = DynamicModelMultipleChoiceField(
         label=_('Parent Policy Templates'),
         queryset=BGPPolicyTemplate.objects.all(),
@@ -257,9 +239,7 @@ class BGPPolicyTemplateBulkEditForm(
     )
 
 
-class BGPSessionTemplateBulkEditForm(
-    EnableMixin, BGPSessionMixin, TenantBulkEditMixin, PrimaryModelBulkEditForm
-):
+class BGPSessionTemplateBulkEditForm(EnableMixin, BGPSessionMixin, TenantBulkEditMixin, PrimaryModelBulkEditForm):
     parent = DynamicModelChoiceField(
         label=_('Parent'),
         queryset=BGPSessionTemplate.objects.all(),
@@ -294,15 +274,9 @@ class BGPSessionTemplateBulkEditForm(
     )
 
 
-class BGPPeerBulkEditForm(
-    EnableMixin, BGPSessionMixin, TenantBulkEditMixin, PrimaryModelBulkEditForm
-):
-    scope = DynamicModelChoiceField(
-        label=_('Scope'), queryset=BGPScope.objects.all(), required=False, selector=True
-    )
-    peer = DynamicModelChoiceField(
-        label=_('Peer'), queryset=IPAddress.objects.all(), required=False, selector=True
-    )
+class BGPPeerBulkEditForm(EnableMixin, BGPSessionMixin, TenantBulkEditMixin, PrimaryModelBulkEditForm):
+    scope = DynamicModelChoiceField(label=_('Scope'), queryset=BGPScope.objects.all(), required=False, selector=True)
+    peer = DynamicModelChoiceField(label=_('Peer'), queryset=IPAddress.objects.all(), required=False, selector=True)
     interface = DynamicModelChoiceField(
         label=_('Interface'),
         queryset=Interface.objects.all(),
@@ -370,9 +344,7 @@ class BGPPeerBulkEditForm(
     )
 
 
-class BGPPeerAddressFamilyBulkEditForm(
-    EnableMixin, BGPPolicyMixin, TenantBulkEditMixin, PrimaryModelBulkEditForm
-):
+class BGPPeerAddressFamilyBulkEditForm(EnableMixin, BGPPolicyMixin, TenantBulkEditMixin, PrimaryModelBulkEditForm):
     peer_policy = DynamicModelChoiceField(
         label=_('Peer Policy'),
         queryset=BGPPolicyTemplate.objects.all(),

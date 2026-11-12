@@ -192,32 +192,18 @@ class EIGRPInterfaceForm(PrimaryModelForm):
     def clean(self):
         super().clean()
         if self.cleaned_data.get('router') and self.cleaned_data.get('address_family'):
-            if (
-                self.cleaned_data.get('router')
-                != self.cleaned_data.get('address_family').router
-            ):
+            if self.cleaned_data.get('router') != self.cleaned_data.get('address_family').router:
                 raise ValidationError(
                     {
-                        'router': _(
-                            'EIGRP Router and EIGRP Address Family Router must match'
-                        ),
-                        'interface': _(
-                            'EIGRP Router and EIGRP Address Family Router must match'
-                        ),
+                        'router': _('EIGRP Router and EIGRP Address Family Router must match'),
+                        'interface': _('EIGRP Router and EIGRP Address Family Router must match'),
                     }
                 )
         if self.cleaned_data.get('router') and self.cleaned_data.get('interface'):
-            if (
-                self.cleaned_data.get('router').device
-                != self.cleaned_data.get('interface').device
-            ):
+            if self.cleaned_data.get('router').device != self.cleaned_data.get('interface').device:
                 raise ValidationError(
                     {
-                        'router': _(
-                            'EIGRP Router Device and Interface Device must match'
-                        ),
-                        'interface': _(
-                            'EIGRP Interface Device and Interface Device must match'
-                        ),
+                        'router': _('EIGRP Router Device and Interface Device must match'),
+                        'interface': _('EIGRP Interface Device and Interface Device must match'),
                     }
                 )

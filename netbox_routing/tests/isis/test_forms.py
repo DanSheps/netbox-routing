@@ -35,12 +35,7 @@ class ISISBulkEditFieldsetTestCase(TestCase):
 
     @staticmethod
     def _fieldset_names(form):
-        return {
-            item
-            for fieldset in form.fieldsets
-            for item in fieldset.items
-            if isinstance(item, str)
-        }
+        return {item for fieldset in form.fieldsets for item in fieldset.items if isinstance(item, str)}
 
     def test_comments_rendered_in_bulk_edit_fieldsets(self):
         for form_cls in (
@@ -133,9 +128,7 @@ class ISISInstanceFormTestCase(TestCase):
         self.assertTrue(form.is_valid(), form.errors)
         obj = form.save()
         ct = ContentType.objects.get_for_model(obj)
-        setting = ISISSetting.objects.get(
-            assigned_object_type=ct, assigned_object_id=obj.pk, key='default_route_tag'
-        )
+        setting = ISISSetting.objects.get(assigned_object_type=ct, assigned_object_id=obj.pk, key='default_route_tag')
         self.assertEqual(setting.value, '77')
 
     def test_settings_persist_with_commit_false_via_save_m2m(self):
@@ -164,9 +157,7 @@ class ISISInstanceFormTestCase(TestCase):
         obj.save()
         form.save_m2m()
         ct = ContentType.objects.get_for_model(obj)
-        setting = ISISSetting.objects.get(
-            assigned_object_type=ct, assigned_object_id=obj.pk, key='default_route_tag'
-        )
+        setting = ISISSetting.objects.get(assigned_object_type=ct, assigned_object_id=obj.pk, key='default_route_tag')
         self.assertEqual(setting.value, '99')
 
     def test_boolean_setting_initial_normalized_from_text(self):
@@ -178,9 +169,7 @@ class ISISInstanceFormTestCase(TestCase):
 
         from netbox_routing.models import ISISInstance, ISISSetting
 
-        instance = ISISInstance.objects.create(
-            device=self.device, net='49.0001.0000.0000.0010.00', is_type='level-1-2'
-        )
+        instance = ISISInstance.objects.create(device=self.device, net='49.0001.0000.0000.0010.00', is_type='level-1-2')
         ct = ContentType.objects.get_for_model(instance)
         cases = (
             ('yes', True),
@@ -206,9 +195,7 @@ class ISISInterfaceFormTestCase(TestCase):
     @classmethod
     def setUpTestData(cls):
         cls.device = create_test_device(name='Device 1')
-        cls.interface = Interface.objects.create(
-            name='Interface 1', device=cls.device, type='virtual'
-        )
+        cls.interface = Interface.objects.create(name='Interface 1', device=cls.device, type='virtual')
         cls.instance = ISISInstance.objects.create(
             device=cls.device,
             process_tag='CORE',
@@ -234,9 +221,7 @@ class ISISInterfaceFormTestCase(TestCase):
 
     def test_interface_with_incorrect_device(self):
         device = create_test_device(name='Device 2')
-        interface = Interface.objects.create(
-            name='Interface 1', device=device, type='virtual'
-        )
+        interface = Interface.objects.create(name='Interface 1', device=device, type='virtual')
 
         form = ISISInterfaceForm(
             data={
@@ -292,12 +277,8 @@ class ISISInterfaceImportFormTestCase(TestCase):
         cls.device_a = create_test_device(name='Device A')
         cls.device_b = create_test_device(name='Device B')
         # Same interface name on two different devices.
-        cls.iface_a = Interface.objects.create(
-            device=cls.device_a, name='Ethernet1', type='virtual'
-        )
-        cls.iface_b = Interface.objects.create(
-            device=cls.device_b, name='Ethernet1', type='virtual'
-        )
+        cls.iface_a = Interface.objects.create(device=cls.device_a, name='Ethernet1', type='virtual')
+        cls.iface_b = Interface.objects.create(device=cls.device_b, name='Ethernet1', type='virtual')
         cls.instance_a = ISISInstance.objects.create(
             device=cls.device_a,
             process_tag='CORE',

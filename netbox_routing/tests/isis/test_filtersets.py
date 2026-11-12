@@ -266,15 +266,9 @@ class ISISSRv6LocatorFilterSetTestCase(TestCase):
     @classmethod
     def setUpTestData(cls):
         device = create_test_device(name='Device 1')
-        instance = ISISInstance.objects.create(
-            device=device, process_tag='CORE', net='49.0001.0000.0000.0001.00'
-        )
-        ISISSRv6Locator.objects.create(
-            instance=instance, name='LOC-A', prefix='fc00:a::/48'
-        )
-        ISISSRv6Locator.objects.create(
-            instance=instance, name='LOC-B', prefix='fc00:b::/48'
-        )
+        instance = ISISInstance.objects.create(device=device, process_tag='CORE', net='49.0001.0000.0000.0001.00')
+        ISISSRv6Locator.objects.create(instance=instance, name='LOC-A', prefix='fc00:a::/48')
+        ISISSRv6Locator.objects.create(instance=instance, name='LOC-B', prefix='fc00:b::/48')
 
     def test_q_matches_name(self):
         # search() matches on the locator name; before the fix it was a no-op that
@@ -292,9 +286,7 @@ class ISISSRv6LocatorFilterSetTestCase(TestCase):
     def test_filter_prefix_none_safe(self):
         # filter_prefix must not raise on a None value (an empty prefix filter can
         # pass None); it should return the queryset unfiltered.
-        self.assertEqual(
-            self.filterset().filter_prefix(self.queryset, 'prefix', None).count(), 2
-        )
+        self.assertEqual(self.filterset().filter_prefix(self.queryset, 'prefix', None).count(), 2)
 
 
 class ISISSettingFilterSetTestCase(TestCase):
@@ -304,12 +296,8 @@ class ISISSettingFilterSetTestCase(TestCase):
     @classmethod
     def setUpTestData(cls):
         device = create_test_device(name='Device 1')
-        cls.inst1 = ISISInstance.objects.create(
-            device=device, process_tag='CORE', net='49.0001.0000.0000.0001.00'
-        )
-        cls.inst2 = ISISInstance.objects.create(
-            device=device, process_tag='EDGE', net='49.0001.0000.0000.0002.00'
-        )
+        cls.inst1 = ISISInstance.objects.create(device=device, process_tag='CORE', net='49.0001.0000.0000.0001.00')
+        cls.inst2 = ISISInstance.objects.create(device=device, process_tag='EDGE', net='49.0001.0000.0000.0002.00')
         ct = ContentType.objects.get_for_model(ISISInstance)
         ISISSetting.objects.create(
             assigned_object_type=ct,

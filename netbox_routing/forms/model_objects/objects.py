@@ -145,19 +145,9 @@ class PrefixListEntryForm(PrimaryModelForm):
     def clean(self):
         super().clean()
         # Handle object assignment
-        selected_objects = [
-            field
-            for field in ('ipam_prefix', 'custom_prefix')
-            if self.cleaned_data[field]
-        ]
+        selected_objects = [field for field in ('ipam_prefix', 'custom_prefix') if self.cleaned_data[field]]
         if len(selected_objects) > 1:
-            raise forms.ValidationError(
-                {
-                    selected_objects[1]: _(
-                        "You can only assign a prefix or a custom prefix."
-                    )
-                }
-            )
+            raise forms.ValidationError({selected_objects[1]: _("You can only assign a prefix or a custom prefix.")})
         elif selected_objects:
             self.instance.assigned_prefix = self.cleaned_data[selected_objects[0]]
         else:
@@ -271,9 +261,7 @@ class RouteMapEntryForm(PrimaryModelForm):
         result = super().save(commit)
 
         self.instance.match_community.set(self.cleaned_data['match_community'])
-        self.instance.match_community_list.set(
-            self.cleaned_data['match_community_list']
-        )
+        self.instance.match_community_list.set(self.cleaned_data['match_community_list'])
         self.instance.match_prefix_list.set(self.cleaned_data['match_prefix_list'])
         self.instance.match_aspath.set(self.cleaned_data['match_aspath'])
 

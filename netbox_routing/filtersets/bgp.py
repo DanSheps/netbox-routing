@@ -88,9 +88,7 @@ class RemoteASFilterSetMixin(django_filters.FilterSet):
 
 
 @register_filterset
-class BGPPeerTemplateFilterSet(
-    RemoteASFilterSetMixin, TenancyFilterSet, PrimaryModelFilterSet
-):
+class BGPPeerTemplateFilterSet(RemoteASFilterSetMixin, TenancyFilterSet, PrimaryModelFilterSet):
     peer_id = django_filters.ModelMultipleChoiceFilter(
         field_name='peers',
         queryset=BGPScope.objects.all(),
@@ -122,9 +120,7 @@ class BGPPeerTemplateFilterSet(
 
 
 @register_filterset
-class BGPPolicyTemplateFilterSet(
-    PolicyFilterSetMixin, TenancyFilterSet, PrimaryModelFilterSet
-):
+class BGPPolicyTemplateFilterSet(PolicyFilterSetMixin, TenancyFilterSet, PrimaryModelFilterSet):
     name = django_filters.CharFilter()
     enabled = django_filters.BooleanFilter()
     parent_id = django_filters.ModelMultipleChoiceFilter(
@@ -161,9 +157,7 @@ class BGPPolicyTemplateFilterSet(
 
 
 @register_filterset
-class BGPSessionTemplateFilterSet(
-    RemoteASFilterSetMixin, TenancyFilterSet, PrimaryModelFilterSet
-):
+class BGPSessionTemplateFilterSet(RemoteASFilterSetMixin, TenancyFilterSet, PrimaryModelFilterSet):
 
     class Meta:
         model = BGPSessionTemplate
@@ -178,9 +172,7 @@ class BGPSessionTemplateFilterSet(
 
 @register_filterset
 class BGPSettingFilterSet(PrimaryModelFilterSet):
-    key = django_filters.MultipleChoiceFilter(
-        choices=BGPSettingChoices, null_value=None, label=_('Setting Name')
-    )
+    key = django_filters.MultipleChoiceFilter(choices=BGPSettingChoices, null_value=None, label=_('Setting Name'))
 
     class Meta:
         model = BGPSetting
@@ -225,11 +217,7 @@ class BGPRouterFilterSet(TenancyFilterSet, PrimaryModelFilterSet):
     def search(self, queryset, name, value):
         if not value.strip():
             return queryset
-        qs_filter = (
-            Q(name__icontains=value)
-            | Q(device__name__icontains=value)
-            | Q(asn__asn__icontains=value)
-        )
+        qs_filter = Q(name__icontains=value) | Q(device__name__icontains=value) | Q(asn__asn__icontains=value)
         return queryset.filter(qs_filter).distinct()
 
 

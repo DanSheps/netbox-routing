@@ -168,9 +168,7 @@ class ISISSegmentRoutingTable(NetBoxTable):
 
 class ISISSettingTable(NetBoxTable):
     assigned_object_type = columns.ContentTypeColumn(verbose_name=_('Object Type'))
-    assigned_object = tables.Column(
-        linkify=True, orderable=False, verbose_name=_('Object')
-    )
+    assigned_object = tables.Column(linkify=True, orderable=False, verbose_name=_('Object'))
 
     class Meta(NetBoxTable.Meta):
         model = ISISSetting

@@ -204,9 +204,7 @@ class BGPPeerQuery:
 @strawberry.type(name="Query")
 class BGPPeerAddressFamilyQuery:
     bgp_peer_address_family: BGPPeerAddressFamilyType = strawberry_django.field()
-    bgp_peer_address_family_list: list[BGPPeerAddressFamilyType] = (
-        strawberry_django.field()
-    )
+    bgp_peer_address_family_list: list[BGPPeerAddressFamilyType] = strawberry_django.field()
 
 
 @strawberry.type(name="Query")

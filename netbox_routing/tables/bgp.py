@@ -22,9 +22,7 @@ from tenancy.tables import TenancyColumnsMixin
 
 class BGPSettingTable(NetBoxTable):
     assigned_object_type = columns.ContentTypeColumn(verbose_name=_('Object Type'))
-    assigned_object = tables.Column(
-        linkify=True, orderable=False, verbose_name=_('Object')
-    )
+    assigned_object = tables.Column(linkify=True, orderable=False, verbose_name=_('Object'))
 
     class Meta(NetBoxTable.Meta):
         model = BGPSetting
@@ -117,9 +115,7 @@ class BGPSessionTemplateTable(TenancyColumnsMixin, NetBoxTable):
 class BGPRouterTable(TenancyColumnsMixin, NetBoxTable):
     name = tables.Column(linkify=True, verbose_name=_('Name'))
     assigned_object_type = columns.ContentTypeColumn(verbose_name=_('Object Type'))
-    assigned_object = tables.Column(
-        linkify=True, orderable=False, verbose_name=_('Object')
-    )
+    assigned_object = tables.Column(linkify=True, orderable=False, verbose_name=_('Object'))
 
     class Meta(NetBoxTable.Meta):
         model = BGPRouter
@@ -250,9 +246,7 @@ class BGPPeerTable(TenancyColumnsMixin, NetBoxTable):
 
 class BGPPeerAddressFamilyTable(TenancyColumnsMixin, NetBoxTable):
     assigned_object_type = columns.ContentTypeColumn(verbose_name=_('Object Type'))
-    assigned_object = tables.Column(
-        linkify=True, orderable=False, verbose_name=_('Object')
-    )
+    assigned_object = tables.Column(linkify=True, orderable=False, verbose_name=_('Object'))
     address_family = tables.Column(
         linkify=True,
         verbose_name=_('Address Family'),

@@ -50,12 +50,8 @@ class ISISSetting(PrimaryModel):
         blank=True,
         null=True,
     )
-    assigned_object_id = models.PositiveBigIntegerField(
-        verbose_name=_('Assigned Object ID'), blank=True, null=True
-    )
-    assigned_object = GenericForeignKey(
-        ct_field='assigned_object_type', fk_field='assigned_object_id'
-    )
+    assigned_object_id = models.PositiveBigIntegerField(verbose_name=_('Assigned Object ID'), blank=True, null=True)
+    assigned_object = GenericForeignKey(ct_field='assigned_object_type', fk_field='assigned_object_id')
     key = models.CharField(
         verbose_name=_('Setting Name'),
         max_length=64,
@@ -110,11 +106,7 @@ class ISISSetting(PrimaryModel):
             or self.assigned_object_type.model not in ISISSETTING_ASSIGNMENT_MODEL_NAMES
         ):
             raise ValidationError(
-                {
-                    'assigned_object_type': _(
-                        'IS-IS Setting must be assigned to an ISISInstance or ISISInterface.'
-                    )
-                }
+                {'assigned_object_type': _('IS-IS Setting must be assigned to an ISISInstance or ISISInterface.')}
             )
         # The value must match the type the key declares in ISISSettingChoices.FIELD_TYPES.
         # The typed Mixin enforces this for inline editing, but the standalone form / API /
@@ -126,15 +118,11 @@ class ISISSetting(PrimaryModel):
             try:
                 parsed = int(self.value)
             except (TypeError, ValueError):
-                raise ValidationError(
-                    {'value': _('This setting requires an integer value.')}
-                )
+                raise ValidationError({'value': _('This setting requires an integer value.')})
             # Every integer ISIS setting is a count/timer/metric; the form enforces min_value=0,
             # so the model backstop (API/import/direct writes) must reject negatives too.
             if parsed < 0:
-                raise ValidationError(
-                    {'value': _('This setting requires a non-negative integer value.')}
-                )
+                raise ValidationError({'value': _('This setting requires a non-negative integer value.')})
         elif field_type == 'boolean':
             if str(self.value).strip().lower() not in (
                 'true',
@@ -144,9 +132,7 @@ class ISISSetting(PrimaryModel):
                 'yes',
                 'no',
             ):
-                raise ValidationError(
-                    {'value': _('This setting requires a boolean value.')}
-                )
+                raise ValidationError({'value': _('This setting requires a boolean value.')})
 
     def __str__(self):
         return f'{self.assigned_object}: {self.key}'
@@ -177,9 +163,7 @@ class ISISInstance(PrimaryModel):
         max_length=100,
         blank=True,
         default='',
-        help_text=_(
-            "IS-IS process area-tag; empty string for the untagged 'router isis' process"
-        ),
+        help_text=_("IS-IS process area-tag; empty string for the untagged 'router isis' process"),
     )
     net = models.CharField(
         verbose_name=_('NET'),
@@ -202,9 +186,7 @@ class ISISInstance(PrimaryModel):
         choices=choices.ISISMetricStyleChoices,
         blank=True,
         default='',
-        help_text=_(
-            'Metric style: wide, narrow, or transition. Absent = IOS default (narrow).'
-        ),
+        help_text=_('Metric style: wide, narrow, or transition. Absent = IOS default (narrow).'),
     )
     overload_bit = models.BooleanField(
         verbose_name=_('Overload bit'),
@@ -218,18 +200,14 @@ class ISISInstance(PrimaryModel):
         choices=choices.ISISAuthTypeChoices,
         blank=True,
         default='',
-        help_text=_(
-            'IS-IS area password authentication type (md5, text or an HMAC-SHA variant).'
-        ),
+        help_text=_('IS-IS area password authentication type (md5, text or an HMAC-SHA variant).'),
     )
     area_auth_key = models.CharField(
         verbose_name=_('Area auth key'),
         max_length=128,
         blank=True,
         default='',
-        help_text=_(
-            'IS-IS area password authentication key (plaintext — routing-protocol auth, not config access).'
-        ),
+        help_text=_('IS-IS area password authentication key (plaintext — routing-protocol auth, not config access).'),
     )
     domain_auth_type = models.CharField(
         verbose_name=_('Domain auth type'),
@@ -237,18 +215,14 @@ class ISISInstance(PrimaryModel):
         choices=choices.ISISAuthTypeChoices,
         blank=True,
         default='',
-        help_text=_(
-            'IS-IS domain password authentication type (md5, text or an HMAC-SHA variant).'
-        ),
+        help_text=_('IS-IS domain password authentication type (md5, text or an HMAC-SHA variant).'),
     )
     domain_auth_key = models.CharField(
         verbose_name=_('Domain auth key'),
         max_length=128,
         blank=True,
         default='',
-        help_text=_(
-            'IS-IS domain password authentication key (plaintext — routing-protocol auth, not config access).'
-        ),
+        help_text=_('IS-IS domain password authentication key (plaintext — routing-protocol auth, not config access).'),
     )
     # SPF / LSP timers — initial-delay and max-wait mean the same across Cisco,
     # Nokia, Junos and IOS-XR, so they get their own columns. The backoff
@@ -257,17 +231,13 @@ class ISISInstance(PrimaryModel):
         verbose_name=_('SPF initial wait'),
         blank=True,
         null=True,
-        help_text=_(
-            'Initial SPF delay in milliseconds (Cisco initial-wait / Nokia spf-initial-wait / Junos delay).'
-        ),
+        help_text=_('Initial SPF delay in milliseconds (Cisco initial-wait / Nokia spf-initial-wait / Junos delay).'),
     )
     spf_max_wait = models.PositiveIntegerField(
         verbose_name=_('SPF max wait'),
         blank=True,
         null=True,
-        help_text=_(
-            'Maximum SPF wait in milliseconds (Cisco maximum-wait / Nokia spf-max-wait / Junos holddown).'
-        ),
+        help_text=_('Maximum SPF wait in milliseconds (Cisco maximum-wait / Nokia spf-max-wait / Junos holddown).'),
     )
     lsp_initial_wait = models.PositiveIntegerField(
         verbose_name=_('LSP-gen initial wait'),
@@ -341,17 +311,13 @@ class ISISInstance(PrimaryModel):
         choices=choices.ISISFastRerouteChoices,
         blank=True,
         default='',
-        help_text=_(
-            'Process-wide IP fast-reroute computation (LFA, Remote-LFA or TI-LFA).'
-        ),
+        help_text=_('Process-wide IP fast-reroute computation (LFA, Remote-LFA or TI-LFA).'),
     )
     microloop_avoidance = models.BooleanField(
         verbose_name=_('Micro-loop avoidance'),
         blank=True,
         null=True,
-        help_text=_(
-            'Delay post-convergence forwarding to avoid transient micro-loops.'
-        ),
+        help_text=_('Delay post-convergence forwarding to avoid transient micro-loops.'),
     )
     # Segment-routing global state (enable, SRGB/SRLB, MSD, SRv6 enable) lives on the
     # dedicated 1:1 ISISSegmentRouting child; per-prefix SIDs live on ISISPrefixSID
@@ -480,9 +446,7 @@ class ISISInterface(PrimaryModel):
         blank=True,
         default='',
     )
-    metric = models.PositiveIntegerField(
-        verbose_name=_('Metric'), blank=True, null=True
-    )
+    metric = models.PositiveIntegerField(verbose_name=_('Metric'), blank=True, null=True)
     passive = models.BooleanField(verbose_name=_('Passive'), blank=True, null=True)
     hello_auth_type = models.CharField(
         verbose_name=_('Hello auth type'),
@@ -490,9 +454,7 @@ class ISISInterface(PrimaryModel):
         choices=choices.ISISAuthTypeChoices,
         blank=True,
         default='',
-        help_text=_(
-            'IS-IS per-interface hello (IIH) authentication type (md5, text or an HMAC-SHA variant).'
-        ),
+        help_text=_('IS-IS per-interface hello (IIH) authentication type (md5, text or an HMAC-SHA variant).'),
     )
     hello_auth_key = models.CharField(
         verbose_name=_('Hello auth key'),
@@ -508,9 +470,7 @@ class ISISInterface(PrimaryModel):
         verbose_name=_('FRR enabled'),
         blank=True,
         null=True,
-        help_text=_(
-            'Fast-reroute backup computation on this interface (False = explicitly excluded).'
-        ),
+        help_text=_('Fast-reroute backup computation on this interface (False = explicitly excluded).'),
     )
     frr_protection = models.CharField(
         verbose_name=_('FRR protection'),
@@ -518,17 +478,13 @@ class ISISInterface(PrimaryModel):
         choices=choices.ISISFrrProtectionChoices,
         blank=True,
         default='',
-        help_text=_(
-            'Requested repair coverage: link protection or node (node-link) protection.'
-        ),
+        help_text=_('Requested repair coverage: link protection or node (node-link) protection.'),
     )
     bfd_enabled = models.BooleanField(
         verbose_name=_('BFD enabled'),
         blank=True,
         null=True,
-        help_text=_(
-            'BFD enabled for IS-IS on this interface (timers come from the interface BFD config).'
-        ),
+        help_text=_('BFD enabled for IS-IS on this interface (timers come from the interface BFD config).'),
     )
     csnp_interval = models.PositiveIntegerField(
         verbose_name=_('CSNP interval'),
@@ -547,8 +503,7 @@ class ISISInterface(PrimaryModel):
         blank=True,
         null=True,
         help_text=_(
-            'LSP transmission pacing interval in milliseconds '
-            '(Nokia lsp-pacing-interval / Junos lsp-interval).'
+            'LSP transmission pacing interval in milliseconds ' '(Nokia lsp-pacing-interval / Junos lsp-interval).'
         ),
     )
     mesh_group = models.CharField(
@@ -602,11 +557,7 @@ class ISISInterface(PrimaryModel):
         # The interface and the IS-IS instance must live on the same device. Enforced
         # at the model layer so the form, API and bulk-import paths all get it; both
         # fields are flagged so the UI highlights the mismatch on either selector.
-        if (
-            self.instance_id
-            and self.interface_id
-            and self.instance.device != self.interface.device
-        ):
+        if self.instance_id and self.interface_id and self.instance.device != self.interface.device:
             msg = _('IS-IS Instance Device and Interface Device must match.')
             errors['instance'] = msg
             errors['interface'] = msg
@@ -649,30 +600,20 @@ class ISISLevel(PrimaryModel):
         verbose_name=_('Level'),
         choices=choices.ISISLevelChoices,
     )
-    default_metric = models.PositiveIntegerField(
-        verbose_name=_('Default metric'), blank=True, null=True
-    )
-    wide_metrics_only = models.BooleanField(
-        verbose_name=_('Wide metrics only'), blank=True, null=True
-    )
-    preference = models.PositiveSmallIntegerField(
-        verbose_name=_('Preference'), blank=True, null=True
-    )
+    default_metric = models.PositiveIntegerField(verbose_name=_('Default metric'), blank=True, null=True)
+    wide_metrics_only = models.BooleanField(verbose_name=_('Wide metrics only'), blank=True, null=True)
+    preference = models.PositiveSmallIntegerField(verbose_name=_('Preference'), blank=True, null=True)
     labeled_preference = models.PositiveSmallIntegerField(
         verbose_name=_('Labeled preference'),
         blank=True,
         null=True,
-        help_text=_(
-            'Route preference for SR-labeled (MPLS) paths at this level (Junos labeled-preference).'
-        ),
+        help_text=_('Route preference for SR-labeled (MPLS) paths at this level (Junos labeled-preference).'),
     )
     disabled = models.BooleanField(
         verbose_name=_('Disabled'),
         blank=True,
         null=True,
-        help_text=_(
-            'Level explicitly disabled on this instance (e.g. Junos "level <n> disable").'
-        ),
+        help_text=_('Level explicitly disabled on this instance (e.g. Junos "level <n> disable").'),
     )
     auth_type = models.CharField(
         verbose_name=_('Auth type'),
@@ -680,18 +621,14 @@ class ISISLevel(PrimaryModel):
         choices=choices.ISISAuthTypeChoices,
         blank=True,
         default='',
-        help_text=_(
-            'Per-level authentication type (md5, text or an HMAC-SHA variant).'
-        ),
+        help_text=_('Per-level authentication type (md5, text or an HMAC-SHA variant).'),
     )
     auth_key = models.CharField(
         verbose_name=_('Auth key'),
         max_length=128,
         blank=True,
         default='',
-        help_text=_(
-            'Per-level authentication key (plaintext — routing-protocol auth, not config access).'
-        ),
+        help_text=_('Per-level authentication key (plaintext — routing-protocol auth, not config access).'),
     )
 
     clone_fields = (
@@ -716,9 +653,7 @@ class ISISLevel(PrimaryModel):
 
     def clean(self):
         super().clean()
-        errors = auth_pair_errors(
-            self.auth_type, self.auth_key, 'auth_type', 'auth_key'
-        )
+        errors = auth_pair_errors(self.auth_type, self.auth_key, 'auth_type', 'auth_key')
         if errors:
             raise ValidationError(errors)
 
@@ -748,18 +683,10 @@ class ISISInterfaceLevel(PrimaryModel):
         verbose_name=_('Level'),
         choices=choices.ISISLevelChoices,
     )
-    metric = models.PositiveIntegerField(
-        verbose_name=_('Metric'), blank=True, null=True
-    )
-    hello_interval = models.PositiveIntegerField(
-        verbose_name=_('Hello interval'), blank=True, null=True
-    )
-    hello_multiplier = models.PositiveIntegerField(
-        verbose_name=_('Hello multiplier'), blank=True, null=True
-    )
-    priority = models.PositiveSmallIntegerField(
-        verbose_name=_('Priority'), blank=True, null=True
-    )
+    metric = models.PositiveIntegerField(verbose_name=_('Metric'), blank=True, null=True)
+    hello_interval = models.PositiveIntegerField(verbose_name=_('Hello interval'), blank=True, null=True)
+    hello_multiplier = models.PositiveIntegerField(verbose_name=_('Hello multiplier'), blank=True, null=True)
+    priority = models.PositiveSmallIntegerField(verbose_name=_('Priority'), blank=True, null=True)
     passive = models.BooleanField(verbose_name=_('Passive'), blank=True, null=True)
 
     clone_fields = (
@@ -809,9 +736,7 @@ class ISISSegmentRouting(PrimaryModel):
         verbose_name=_('SRv6 enabled'),
         blank=True,
         null=True,
-        help_text=_(
-            'SRv6 enabled for this IS-IS instance (locators are modelled separately).'
-        ),
+        help_text=_('SRv6 enabled for this IS-IS instance (locators are modelled separately).'),
     )
     prefix_sid_range = models.CharField(
         verbose_name=_('Prefix-SID range'),
@@ -820,24 +745,16 @@ class ISISSegmentRouting(PrimaryModel):
         default='',
         help_text=_("Prefix-SID range: 'global' or a named/explicit range."),
     )
-    srgb_start = models.PositiveIntegerField(
-        verbose_name=_('SRGB start label'), blank=True, null=True
-    )
-    srgb_range = models.PositiveIntegerField(
-        verbose_name=_('SRGB range size'), blank=True, null=True
-    )
+    srgb_start = models.PositiveIntegerField(verbose_name=_('SRGB start label'), blank=True, null=True)
+    srgb_range = models.PositiveIntegerField(verbose_name=_('SRGB range size'), blank=True, null=True)
     srlb_start = models.PositiveIntegerField(
         verbose_name=_('SRLB start label'),
         blank=True,
         null=True,
         help_text=_('SR Local Block start label (local/adjacency/binding SIDs).'),
     )
-    srlb_range = models.PositiveIntegerField(
-        verbose_name=_('SRLB range size'), blank=True, null=True
-    )
-    maximum_sid_depth = models.PositiveSmallIntegerField(
-        verbose_name=_('Maximum SID depth'), blank=True, null=True
-    )
+    srlb_range = models.PositiveIntegerField(verbose_name=_('SRLB range size'), blank=True, null=True)
+    maximum_sid_depth = models.PositiveSmallIntegerField(verbose_name=_('Maximum SID depth'), blank=True, null=True)
     tunnel_table_pref = models.PositiveSmallIntegerField(
         verbose_name=_('Tunnel-table preference'), blank=True, null=True
     )
@@ -867,9 +784,7 @@ class ISISSegmentRouting(PrimaryModel):
             start, size = getattr(self, start_field), getattr(self, range_field)
             if (start is None) != (size is None):
                 missing = range_field if start is not None else start_field
-                errors[missing] = _(
-                    '%(block)s start and range must be set together.'
-                ) % {'block': label}
+                errors[missing] = _('%(block)s start and range must be set together.') % {'block': label}
         if errors:
             raise ValidationError(errors)
 
@@ -907,21 +822,15 @@ class ISISFlexAlgo(PrimaryModel):
         max_length=40,
         blank=True,
         default='',
-        help_text=_(
-            'Flex-Algo metric type (e.g. igp-metric, delay-metric, te-metric).'
-        ),
+        help_text=_('Flex-Algo metric type (e.g. igp-metric, delay-metric, te-metric).'),
     )
-    priority = models.PositiveSmallIntegerField(
-        verbose_name=_('Priority'), blank=True, null=True
-    )
+    priority = models.PositiveSmallIntegerField(verbose_name=_('Priority'), blank=True, null=True)
     admin_group_exclude = models.CharField(
         verbose_name=_('Admin-group exclude'),
         max_length=200,
         blank=True,
         default='',
-        help_text=_(
-            'Comma-separated affinity/admin-group names excluded from this algo.'
-        ),
+        help_text=_('Comma-separated affinity/admin-group names excluded from this algo.'),
     )
     admin_group_include_any = models.CharField(
         verbose_name=_('Admin-group include-any'),
@@ -988,9 +897,7 @@ class ISISPrefixSID(PrimaryModel):
         verbose_name=_('SID index'),
         blank=True,
         null=True,
-        help_text=_(
-            'Prefix-SID index into the SRGB (mutually exclusive with an absolute label).'
-        ),
+        help_text=_('Prefix-SID index into the SRGB (mutually exclusive with an absolute label).'),
     )
     sid_label = models.PositiveIntegerField(
         verbose_name=_('SID label'),
@@ -1002,9 +909,7 @@ class ISISPrefixSID(PrimaryModel):
         verbose_name=_('Node (N) flag'),
         blank=True,
         null=True,
-        help_text=_(
-            'Node-SID flag — the prefix-SID identifies a single node (a /32 or /128 loopback).'
-        ),
+        help_text=_('Node-SID flag — the prefix-SID identifies a single node (a /32 or /128 loopback).'),
     )
     no_php = models.BooleanField(
         verbose_name=_('No-PHP (P) flag'),
@@ -1022,9 +927,7 @@ class ISISPrefixSID(PrimaryModel):
         verbose_name=_('Re-advertise (R) flag'),
         blank=True,
         null=True,
-        help_text=_(
-            'Prefix-SID is re-advertised (redistributed/leaked) from another level or protocol.'
-        ),
+        help_text=_('Prefix-SID is re-advertised (redistributed/leaked) from another level or protocol.'),
     )
 
     clone_fields = ('interface', 'algorithm', 'n_flag', 'no_php', 'explicit_null')
@@ -1039,8 +942,7 @@ class ISISPrefixSID(PrimaryModel):
                 name='netbox_routing_isisprefixsid_interface_algorithm_unique',
             ),
             models.CheckConstraint(
-                condition=models.Q(algorithm=0)
-                | models.Q(algorithm__gte=128, algorithm__lte=255),
+                condition=models.Q(algorithm=0) | models.Q(algorithm__gte=128, algorithm__lte=255),
                 name='netbox_routing_isisprefixsid_algorithm_range',
             ),
         ]
@@ -1051,23 +953,11 @@ class ISISPrefixSID(PrimaryModel):
         # value above 255) is invalid. Validate here so a bad value raises a
         # ValidationError (HTTP 400) instead of tripping the CheckConstraint at
         # save() as an IntegrityError (HTTP 500). Mirrors ISISFlexAlgo.algo_id.
-        if (
-            self.algorithm is not None
-            and self.algorithm != 0
-            and not (128 <= self.algorithm <= 255)
-        ):
-            raise ValidationError(
-                {
-                    'algorithm': _(
-                        'Algorithm must be 0 (SPF) or a Flex-Algo value in 128-255.'
-                    )
-                }
-            )
+        if self.algorithm is not None and self.algorithm != 0 and not (128 <= self.algorithm <= 255):
+            raise ValidationError({'algorithm': _('Algorithm must be 0 (SPF) or a Flex-Algo value in 128-255.')})
         # A prefix-SID is expressed as an SRGB index OR an absolute label, never both.
         if self.sid_index is not None and self.sid_label is not None:
-            msg = _(
-                'A prefix-SID takes either an index or an absolute label, not both.'
-            )
+            msg = _('A prefix-SID takes either an index or an absolute label, not both.')
             raise ValidationError({'sid_index': msg, 'sid_label': msg})
 
     def __str__(self):
@@ -1104,50 +994,38 @@ class ISISSRv6Locator(PrimaryModel):
         verbose_name=_('Algorithm'),
         blank=True,
         null=True,
-        help_text=_(
-            'SR algorithm bound to the locator (0 = SPF, 128-255 = Flex-Algo).'
-        ),
+        help_text=_('SR algorithm bound to the locator (0 = SPF, 128-255 = Flex-Algo).'),
     )
     is_anycast = models.BooleanField(
         verbose_name=_('Anycast'),
         blank=True,
         null=True,
-        help_text=_(
-            'Anycast locator shared by several nodes (sets the prefix-attribute A-flag).'
-        ),
+        help_text=_('Anycast locator shared by several nodes (sets the prefix-attribute A-flag).'),
     )
     is_micro_segment = models.BooleanField(
         verbose_name=_('Micro-segment (uSID)'),
         blank=True,
         null=True,
-        help_text=_(
-            'uSID / micro-segment locator (XR micro-segment behavior, Junos micro-sid).'
-        ),
+        help_text=_('uSID / micro-segment locator (XR micro-segment behavior, Junos micro-sid).'),
     )
     flavor = models.CharField(
         verbose_name=_('Flavor'),
         max_length=64,
         blank=True,
         default='',
-        help_text=_(
-            'END-SID behaviour flavor(s) as reported, e.g. "psp usd" (Junos set) or "psp-usd" (XR).'
-        ),
+        help_text=_('END-SID behaviour flavor(s) as reported, e.g. "psp usd" (Junos set) or "psp-usd" (XR).'),
     )
     block_length = models.PositiveSmallIntegerField(
         verbose_name=_('Block length'),
         blank=True,
         null=True,
-        help_text=_(
-            'Locator-Block length in bits (RFC 8986 B); null = derive from prefix.'
-        ),
+        help_text=_('Locator-Block length in bits (RFC 8986 B); null = derive from prefix.'),
     )
     node_length = models.PositiveSmallIntegerField(
         verbose_name=_('Node length'),
         blank=True,
         null=True,
-        help_text=_(
-            'Locator-Node length in bits (RFC 8986 N); null = derive from prefix.'
-        ),
+        help_text=_('Locator-Node length in bits (RFC 8986 N); null = derive from prefix.'),
     )
     function_length = models.PositiveSmallIntegerField(
         verbose_name=_('Function length'),
@@ -1166,9 +1044,7 @@ class ISISSRv6Locator(PrimaryModel):
         choices=choices.ISISLevelChoices,
         blank=True,
         null=True,
-        help_text=_(
-            'Advertise the locator in this level only (IOS-XR); null = both levels.'
-        ),
+        help_text=_('Advertise the locator in this level only (IOS-XR); null = both levels.'),
     )
     enabled = models.BooleanField(
         verbose_name=_('Enabled'),
@@ -1180,9 +1056,7 @@ class ISISSRv6Locator(PrimaryModel):
         verbose_name=_('Vendor extensions'),
         blank=True,
         default=dict,
-        help_text=_(
-            'No-cross-vendor-analogue leaves (Junos end-sid/block sizing, XR uSID carrier format).'
-        ),
+        help_text=_('No-cross-vendor-analogue leaves (Junos end-sid/block sizing, XR uSID carrier format).'),
     )
 
     clone_fields = (
@@ -1216,18 +1090,8 @@ class ISISSRv6Locator(PrimaryModel):
         # algorithm is 0 (SPF) or a Flex-Algo in 128-255; reject the 1-127 gap (and
         # >255) at clean() so the API/UI return a 400 instead of tripping the DB
         # CheckConstraint. Mirrors ISISPrefixSID.
-        if (
-            self.algorithm is not None
-            and self.algorithm != 0
-            and not (128 <= self.algorithm <= 255)
-        ):
-            raise ValidationError(
-                {
-                    'algorithm': _(
-                        'Algorithm must be 0 (SPF) or a Flex-Algo value in 128-255.'
-                    )
-                }
-            )
+        if self.algorithm is not None and self.algorithm != 0 and not (128 <= self.algorithm <= 255):
+            raise ValidationError({'algorithm': _('Algorithm must be 0 (SPF) or a Flex-Algo value in 128-255.')})
         # RFC 8986: L + F + A <= 128 (L = block + node). Validate only when the
         # relevant lengths are pinned; otherwise the device derives them. When
         # block and node are both unpinned the locator length is the prefix length,
@@ -1251,9 +1115,7 @@ class ISISSRv6Locator(PrimaryModel):
             and total > 128
         ):
             raise ValidationError(
-                _(
-                    'SID structure exceeds 128 bits: block + node + function + argument must be <= 128.'
-                )
+                _('SID structure exceeds 128 bits: block + node + function + argument must be <= 128.')
             )
 
     def __str__(self):

@@ -37,12 +37,8 @@ class BGPSetting(SearchAttributeMixin, PrimaryModel):
         blank=True,
         null=True,
     )
-    assigned_object_id = models.PositiveBigIntegerField(
-        verbose_name=_('Assigned Object ID'), blank=True, null=True
-    )
-    assigned_object = GenericForeignKey(
-        ct_field='assigned_object_type', fk_field='assigned_object_id'
-    )
+    assigned_object_id = models.PositiveBigIntegerField(verbose_name=_('Assigned Object ID'), blank=True, null=True)
+    assigned_object = GenericForeignKey(ct_field='assigned_object_type', fk_field='assigned_object_id')
     key = models.CharField(
         verbose_name=_('Setting Name'),
         choices=BGPSettingChoices,
@@ -279,9 +275,7 @@ class BGPPeerTemplate(PrimaryModel):
 
 
 class BGPRouter(SearchAttributeMixin, PrimaryModel):
-    name = models.CharField(
-        verbose_name=_('Name'), max_length=100, blank=True, null=True
-    )
+    name = models.CharField(verbose_name=_('Name'), max_length=100, blank=True, null=True)
     assigned_object_type = models.ForeignKey(
         verbose_name=_('Assigned Object Type'),
         to=ContentType,
@@ -291,12 +285,8 @@ class BGPRouter(SearchAttributeMixin, PrimaryModel):
         blank=True,
         null=True,
     )
-    assigned_object_id = models.PositiveBigIntegerField(
-        verbose_name=_('Assigned Object ID'), blank=True, null=True
-    )
-    assigned_object = GenericForeignKey(
-        ct_field='assigned_object_type', fk_field='assigned_object_id'
-    )
+    assigned_object_id = models.PositiveBigIntegerField(verbose_name=_('Assigned Object ID'), blank=True, null=True)
+    assigned_object = GenericForeignKey(ct_field='assigned_object_type', fk_field='assigned_object_id')
     asn = models.ForeignKey(
         verbose_name=_('ASN'),
         to='ipam.ASN',
@@ -458,10 +448,7 @@ class BGPRouter(SearchAttributeMixin, PrimaryModel):
 
         # Handle pseudo-fields (device, site, region, site_group, location)
         # These represent the type of the assigned_object
-        if (
-            self.assigned_object_id is not None
-            and self.assigned_object_type_id is not None
-        ):
+        if self.assigned_object_id is not None and self.assigned_object_type_id is not None:
             # Get the assigned object's model name (already lowercase from ContentType)
             assigned_model_name = self.assigned_object_type.model
 
@@ -564,9 +551,7 @@ class BGPAddressFamily(PrimaryModel):
         on_delete=models.PROTECT,
         related_name='address_families',
     )
-    address_family = models.CharField(
-        verbose_name=_('Address Family'), max_length=50, choices=BGPAddressFamilyChoices
-    )
+    address_family = models.CharField(verbose_name=_('Address Family'), max_length=50, choices=BGPAddressFamilyChoices)
     enabled = models.BooleanField(verbose_name=_('Enabled'), blank=True, null=True)
     prefixlist_out = models.ForeignKey(
         verbose_name=_('Outbound Prefix List'),
@@ -756,9 +741,7 @@ class BGPPeer(PrimaryModel):
         null=True,
         validators=[MinValueValidator(0), MaxValueValidator(255)],
     )
-    password = models.CharField(
-        verbose_name=_('Password'), max_length=255, blank=True, null=True
-    )
+    password = models.CharField(verbose_name=_('Password'), max_length=255, blank=True, null=True)
     tenant = models.ForeignKey(
         verbose_name=_('Tenant'),
         to='tenancy.Tenant',
@@ -885,12 +868,8 @@ class BGPPeerAddressFamily(SearchAttributeMixin, PrimaryModel):
         blank=True,
         null=True,
     )
-    assigned_object_id = models.PositiveBigIntegerField(
-        verbose_name=_('Assigned Object ID'), blank=True, null=True
-    )
-    assigned_object = GenericForeignKey(
-        ct_field='assigned_object_type', fk_field='assigned_object_id'
-    )
+    assigned_object_id = models.PositiveBigIntegerField(verbose_name=_('Assigned Object ID'), blank=True, null=True)
+    assigned_object = GenericForeignKey(ct_field='assigned_object_type', fk_field='assigned_object_id')
     address_family = models.ForeignKey(
         verbose_name=_('Address Family'),
         to='netbox_routing.BGPAddressFamily',

@@ -18,9 +18,7 @@ class IPAddressField(serializers.CharField):
         try:
             return netaddr.IPAddress(data)
         except netaddr.AddrFormatError:
-            raise serializers.ValidationError(
-                _("Invalid IP address format: {data}").format(data)
-            )
+            raise serializers.ValidationError(_("Invalid IP address format: {data}").format(data))
         except (TypeError, ValueError) as e:
             raise serializers.ValidationError(e)
 

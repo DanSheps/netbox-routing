@@ -23,9 +23,7 @@ class ASPathMixin:
 class PrefixListMixin:
     @classmethod
     def setUpTestData(cls):
-        cls.prefix_list = PrefixList.objects.create(
-            name=f'{PrefixList._meta.verbose_name}'
-        )
+        cls.prefix_list = PrefixList.objects.create(name=f'{PrefixList._meta.verbose_name}')
 
 
 class RouteMapMixin:

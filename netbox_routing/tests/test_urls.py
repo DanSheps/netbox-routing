@@ -407,9 +407,7 @@ class URLTestCase(TestCase):
         if list1_diff:
             differing.append(f'First list ({first_list}) has extra items {list1_diff}')
         if list2_diff:
-            differing.append(
-                f'Second list ({second_list}) has extra items {list2_diff}'
-            )
+            differing.append(f'Second list ({second_list}) has extra items {list2_diff}')
 
         diffMsg = '\n'.join(differing)
         msg = self._formatMessage(msg, standardMsg=diffMsg)
@@ -431,6 +429,4 @@ class URLTestCase(TestCase):
         patterns = __import__('netbox_routing.urls', {}, {}, [""]).urlpatterns
         names = sorted(URLTestCase.get_names(patterns))
 
-        self.customAssertListEquals(
-            sorted(names), sorted(self.patterns), ('URLs', 'Expected URLs')
-        )
+        self.customAssertListEquals(sorted(names), sorted(self.patterns), ('URLs', 'Expected URLs'))

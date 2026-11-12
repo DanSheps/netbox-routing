@@ -180,9 +180,7 @@ class EIGRPNetworkFilterSet(NetBoxModelFilterSet):
     def search(self, queryset, name, value):
         if not value.strip():
             return queryset
-        qs_filter = Q(
-            Q(router__name__icontains=value) | Q(address_family__rid__icontains=value)
-        )
+        qs_filter = Q(Q(router__name__icontains=value) | Q(address_family__rid__icontains=value))
         qs_filter |= Q(network__prefix__contains=value.strip())
         try:
             prefix = str(netaddr.IPNetwork(value.strip()).cidr)

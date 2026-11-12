@@ -91,13 +91,7 @@ class OSPFArea(PrimaryModel):
             try:
                 str(netaddr.IPAddress(area_id))
             except netaddr.core.AddrFormatError:
-                raise ValidationError(
-                    {
-                        'area_id': [
-                            'This field must be an integer or a valid net address'
-                        ]
-                    }
-                )
+                raise ValidationError({'area_id': ['This field must be an integer or a valid net address']})
 
 
 class OSPFInterface(PrimaryModel):
@@ -132,9 +126,7 @@ class OSPFInterface(PrimaryModel):
         blank=True,
         null=True,
     )
-    authentication = models.CharField(
-        max_length=50, choices=choices.AuthenticationChoices, blank=True, null=True
-    )
+    authentication = models.CharField(max_length=50, choices=choices.AuthenticationChoices, blank=True, null=True)
     passphrase = models.CharField(max_length=200, blank=True, null=True)
 
     clone_fields = (

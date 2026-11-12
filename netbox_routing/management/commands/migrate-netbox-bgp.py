@@ -84,13 +84,9 @@ class Command(BaseCommand):
                     device__isnull=True, site__isnull=True, local_as__isnull=False
                 ).first():
                     local_as_default = sess.local_as
-                elif sess := netbox_bgp.BGPSession.objects.filter(
-                    site__isnull=True, local_as__isnull=False
-                ).first():
+                elif sess := netbox_bgp.BGPSession.objects.filter(site__isnull=True, local_as__isnull=False).first():
                     local_as_default = sess.local_as
-                elif sess := netbox_bgp.BGPSession.objects.filter(
-                    local_as__isnull=False
-                ).first():
+                elif sess := netbox_bgp.BGPSession.objects.filter(local_as__isnull=False).first():
                     local_as_default = sess.local_as
 
                 if not local_as_default:
@@ -143,13 +139,9 @@ class Command(BaseCommand):
 
                     try:
                         if item.device:
-                            router = BGPRouter.objects.get(
-                                device=assigned_object, asn=item.local_as
-                            )
+                            router = BGPRouter.objects.get(device=assigned_object, asn=item.local_as)
                         elif item.site:
-                            router = BGPRouter.objects.get(
-                                site=item.site, asn=item.local_as
-                            )
+                            router = BGPRouter.objects.get(site=item.site, asn=item.local_as)
                         else:
                             router = BGPRouter.objects.get(asn=item.local_as)
                     except BGPRouter.DoesNotExist:
@@ -173,9 +165,7 @@ class Command(BaseCommand):
                         scope.save()
 
                     try:
-                        af = BGPAddressFamily.objects.get(
-                            scope=scope, address_family='ipv4-unicast'
-                        )
+                        af = BGPAddressFamily.objects.get(scope=scope, address_family='ipv4-unicast')
                     except BGPAddressFamily.DoesNotExist:
                         af = BGPAddressFamily(
                             scope=scope,
@@ -186,9 +176,7 @@ class Command(BaseCommand):
                         af.save()
 
                     try:
-                        af = BGPAddressFamily.objects.get(
-                            scope=scope, address_family='ipv6-unicast'
-                        )
+                        af = BGPAddressFamily.objects.get(scope=scope, address_family='ipv6-unicast')
                     except BGPAddressFamily.DoesNotExist:
                         af = BGPAddressFamily(
                             scope=scope,
@@ -236,9 +224,7 @@ class Command(BaseCommand):
                     community_list = mapping['community_list'][item.community_list.pk]
 
                     try:
-                        entry = CommunityListEntry.objects.get(
-                            community_list=community_list, community=community
-                        )
+                        entry = CommunityListEntry.objects.get(community_list=community_list, community=community)
                         if not mapping['community_list_entry'].get(item.pk):
                             mapping['community_list_entry'][item.pk] = entry
                     except CommunityListEntry.MultipleObjectsReturned:
@@ -290,9 +276,7 @@ class Command(BaseCommand):
                             prefix.save()
 
                     try:
-                        entry = PrefixListEntry.objects.get(
-                            prefix_list=prefix_list, sequence=item.index
-                        )
+                        entry = PrefixListEntry.objects.get(prefix_list=prefix_list, sequence=item.index)
                         if not mapping['prefix_list_entry'].get(item.pk):
                             mapping['prefix_list_entry'][item.pk] = entry
                     except PrefixListEntry.DoesNotExist:
@@ -328,9 +312,7 @@ class Command(BaseCommand):
                 for item in netbox_bgp.ASPathListRule.objects.all():
                     aspath = mapping['aspath'][item.aspath_list.pk]
                     try:
-                        entry = ASPathEntry.objects.get(
-                            aspath=aspath, sequence=item.index
-                        )
+                        entry = ASPathEntry.objects.get(aspath=aspath, sequence=item.index)
                         if not mapping['aspath_entry'].get(item.pk):
                             mapping['aspath_entry'][item.pk] = entry
                     except ASPathEntry.DoesNotExist:
@@ -368,43 +350,30 @@ class Command(BaseCommand):
                     route_map = mapping['route_map'][item.routing_policy.pk]
                     community_list = [
                         mapping['community_list'][cl].pk
-                        for cl in item.match_community_list.values_list(
-                            'communitylist_id', flat=True
-                        )
+                        for cl in item.match_community_list.values_list('communitylist_id', flat=True)
                     ]
                     community = [
-                        mapping['community'][c].pk
-                        for c in item.match_community.values_list(
-                            'community_id', flat=True
-                        )
+                        mapping['community'][c].pk for c in item.match_community.values_list('community_id', flat=True)
                     ]
                     aspath = [
                         mapping['aspath'][asp].pk
-                        for asp in item.match_aspath_list.values_list(
-                            'aspathlist_id', flat=True
-                        )
+                        for asp in item.match_aspath_list.values_list('aspathlist_id', flat=True)
                     ]
                     prefix_list = [
                         mapping['prefix_list'][pl].pk
-                        for pl in item.match_ip_address.values_list(
-                            'prefixlist_id', flat=True
-                        )
+                        for pl in item.match_ip_address.values_list('prefixlist_id', flat=True)
                     ]
                     prefix_list.extend(
                         [
                             mapping['prefix_list'][pl].pk
-                            for pl in item.match_ipv6_address.values_list(
-                                'prefixlist_id', flat=True
-                            )
+                            for pl in item.match_ipv6_address.values_list('prefixlist_id', flat=True)
                         ]
                     )
                     match = item.match_custom
                     if not match:
                         match = {}
                     try:
-                        entry = RouteMapEntry.objects.get(
-                            route_map=route_map, sequence=item.index
-                        )
+                        entry = RouteMapEntry.objects.get(route_map=route_map, sequence=item.index)
                         if not mapping['route_map_entry'].get(item.pk):
                             mapping['route_map_entry'][item.pk] = entry
                     except RouteMapEntry.DoesNotExist:
@@ -427,10 +396,7 @@ class Command(BaseCommand):
 
                 for item in netbox_bgp.BGPPeerGroup.objects.all():
 
-                    if (
-                        item.import_policies.count() > 1
-                        or item.import_policies.count() > 1
-                    ):
+                    if item.import_policies.count() > 1 or item.import_policies.count() > 1:
                         error = (
                             f'Only 1 import or export policy is supported per Peer Template.  There are '
                             f'{item.import_policies.count()} Import Policies and {item.export_policies.count()} Export'
@@ -441,12 +407,8 @@ class Command(BaseCommand):
 
                     router = mapping['router'][None]
                     scope = router.scopes.first()
-                    ipv4_af = scope.address_families.filter(
-                        address_family='ipv4-unicast'
-                    ).first()
-                    ipv6_af = scope.address_families.filter(
-                        address_family='ipv6-unicast'
-                    ).first()
+                    ipv4_af = scope.address_families.filter(address_family='ipv4-unicast').first()
+                    ipv6_af = scope.address_families.filter(address_family='ipv6-unicast').first()
                     try:
                         entry = BGPPeerTemplate.objects.get(name=item.name)
                         if not mapping['peer_group'].get(item.pk):
@@ -462,24 +424,18 @@ class Command(BaseCommand):
                         mapping['peer_group'][item.pk] = entry
 
                     import_policies = (
-                        mapping['route_map'][
-                            item.import_policies.first().routingpolicy.pk
-                        ]
+                        mapping['route_map'][item.import_policies.first().routingpolicy.pk]
                         if item.import_policies
                         else None
                     )
                     export_policies = (
-                        mapping['route_map'][
-                            item.export_policies.first().routingpolicy.pk
-                        ]
+                        mapping['route_map'][item.export_policies.first().routingpolicy.pk]
                         if item.export_policies
                         else None
                     )
 
                     try:
-                        peer_af = BGPPeerAddressFamily.objects.get(
-                            peer_group=entry, address_family=ipv4_af
-                        )
+                        peer_af = BGPPeerAddressFamily.objects.get(peer_group=entry, address_family=ipv4_af)
                     except BGPPeerAddressFamily.DoesNotExist:
                         peer_af = BGPPeerAddressFamily(
                             assigned_object=entry,
@@ -491,9 +447,7 @@ class Command(BaseCommand):
                         peer_af.save()
 
                     try:
-                        peer_af = BGPPeerAddressFamily.objects.get(
-                            peer_group=entry, address_family=ipv6_af
-                        )
+                        peer_af = BGPPeerAddressFamily.objects.get(peer_group=entry, address_family=ipv6_af)
                     except BGPPeerAddressFamily.DoesNotExist:
                         peer_af = BGPPeerAddressFamily(
                             assigned_object=entry,
@@ -505,10 +459,7 @@ class Command(BaseCommand):
                         peer_af.save()
 
                 for item in netbox_bgp.BGPSession.objects.all():
-                    if (
-                        item.import_policies.count() > 1
-                        or item.import_policies.count() > 1
-                    ):
+                    if item.import_policies.count() > 1 or item.import_policies.count() > 1:
                         error = (
                             f'Only 1 import or export policy is supported per Peer Session.  There are '
                             f'{item.import_policies.count()} Import Policies and {item.export_policies.count()} Export'
@@ -521,17 +472,11 @@ class Command(BaseCommand):
                     scope = router.scopes.first()
 
                     if item.local_address.address.version == 4:
-                        af = scope.address_families.filter(
-                            address_family='ipv4-unicast'
-                        ).first()
+                        af = scope.address_families.filter(address_family='ipv4-unicast').first()
                     else:
-                        af = scope.address_families.filter(
-                            address_family='ipv6-unicast'
-                        ).first()
+                        af = scope.address_families.filter(address_family='ipv6-unicast').first()
                     try:
-                        peer = BGPPeer.objects.get(
-                            scope=scope, peer=item.remote_address, name=item.name
-                        )
+                        peer = BGPPeer.objects.get(scope=scope, peer=item.remote_address, name=item.name)
                     except BGPPeer.DoesNotExist:
                         peer = BGPPeer(
                             name=item.name,
@@ -540,11 +485,7 @@ class Command(BaseCommand):
                             peer=item.remote_address,
                             remote_as=item.remote_as,
                             local_as=item.local_as,
-                            peer_group=(
-                                mapping['peer_group'].get(item.peer_group.pk)
-                                if item.peer_group
-                                else None
-                            ),
+                            peer_group=(mapping['peer_group'].get(item.peer_group.pk) if item.peer_group else None),
                             enabled=True if item.status == 'active' else False,
                             tenant=item.tenant,
                             description=item.description,
@@ -557,19 +498,13 @@ class Command(BaseCommand):
                     export_policy = None
                     if item.import_policies:
                         policy = item.import_policies.first()
-                        import_policy = mapping['route_map'].get(
-                            policy.routingpolicy.pk
-                        )
+                        import_policy = mapping['route_map'].get(policy.routingpolicy.pk)
                     if item.export_policies:
                         policy = item.export_policies.first()
-                        export_policy = mapping['route_map'].get(
-                            policy.routingpolicy.pk
-                        )
+                        export_policy = mapping['route_map'].get(policy.routingpolicy.pk)
 
                     try:
-                        peeraf = BGPPeerAddressFamily.objects.get(
-                            peer=peer, address_family=af
-                        )
+                        peeraf = BGPPeerAddressFamily.objects.get(peer=peer, address_family=af)
                     except BGPPeerAddressFamily.DoesNotExist:
                         peeraf = BGPPeerAddressFamily(
                             assigned_object=peer,
@@ -577,14 +512,10 @@ class Command(BaseCommand):
                             routemap_in=import_policy,
                             routemap_out=export_policy,
                             prefixlist_in=(
-                                mapping['prefix_list'].get(item.prefix_list_in.pk)
-                                if item.prefix_list_in
-                                else None
+                                mapping['prefix_list'].get(item.prefix_list_in.pk) if item.prefix_list_in else None
                             ),
                             prefixlist_out=(
-                                mapping['prefix_list'].get(item.prefix_list_out.pk)
-                                if item.prefix_list_out
-                                else None
+                                mapping['prefix_list'].get(item.prefix_list_out.pk) if item.prefix_list_out else None
                             ),
                         )
                         peeraf.full_clean()

@@ -4,6 +4,4 @@ import strawberry
 
 
 class BGPSettingsMixin:
-    settings: list[
-        Annotated['BGPSettingsType', strawberry.lazy('netbox_routing.graphql.types')]
-    ]
+    settings: list[Annotated['BGPSettingsType', strawberry.lazy('netbox_routing.graphql.types')]]

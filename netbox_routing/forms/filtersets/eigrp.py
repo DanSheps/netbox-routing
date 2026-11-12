@@ -107,9 +107,7 @@ class EIGRPNetworkFilterForm(NetBoxModelFilterSetForm):
         label=_('Assigned VRF'),
         null_option='Global',
     )
-    present_in_vrf_id = DynamicModelChoiceField(
-        queryset=VRF.objects.all(), required=False, label=_('Present in VRF')
-    )
+    present_in_vrf_id = DynamicModelChoiceField(queryset=VRF.objects.all(), required=False, label=_('Present in VRF'))
     family = forms.ChoiceField(
         required=False,
         choices=add_blank_choice(IPAddressFamilyChoices),
@@ -125,9 +123,7 @@ class EIGRPNetworkFilterForm(NetBoxModelFilterSetForm):
         ),
         label=_('Search within'),
     )
-    mask_length = forms.MultipleChoiceField(
-        required=False, choices=PREFIX_MASK_LENGTH_CHOICES, label=_('Mask length')
-    )
+    mask_length = forms.MultipleChoiceField(required=False, choices=PREFIX_MASK_LENGTH_CHOICES, label=_('Mask length'))
     tag = TagFilterField(model)
 
 
@@ -173,7 +169,5 @@ class EIGRPInterfaceFilterForm(NetBoxModelFilterSetForm):
         label='Passive Interface',
         widget=forms.Select(choices=BOOLEAN_WITH_BLANK_CHOICES),
     )
-    authentication = forms.ChoiceField(
-        choices=add_blank_choice(AuthenticationChoices), required=False
-    )
+    authentication = forms.ChoiceField(choices=add_blank_choice(AuthenticationChoices), required=False)
     tag = TagFilterField(model)

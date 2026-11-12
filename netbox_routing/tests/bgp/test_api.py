@@ -34,9 +34,7 @@ class BGPPeerTemplateTestCase(APIViewTestCases.APIViewTestCase):
             for i in range(1, 5)
         )
         cls.model.objects.bulk_create(cls.instances)
-        cls.create_data = [
-            {'name': f'{cls.model._meta.verbose_name} {i}'} for i in range(5, 7)
-        ]
+        cls.create_data = [{'name': f'{cls.model._meta.verbose_name} {i}'} for i in range(5, 7)]
 
 
 class BGPPolicyTemplateTestCase(APIViewTestCases.APIViewTestCase):
@@ -62,9 +60,7 @@ class BGPPolicyTemplateTestCase(APIViewTestCases.APIViewTestCase):
         )
         cls.model.objects.bulk_create(cls.instances)
 
-        cls.create_data = [
-            {'name': f'{cls.model._meta.verbose_name} {i}'} for i in range(5, 7)
-        ]
+        cls.create_data = [{'name': f'{cls.model._meta.verbose_name} {i}'} for i in range(5, 7)]
 
 
 class BGPSessionTemplateTestCase(APIViewTestCases.APIViewTestCase):
@@ -91,14 +87,10 @@ class BGPSessionTemplateTestCase(APIViewTestCases.APIViewTestCase):
         )
         cls.model.objects.bulk_create(cls.instances)
 
-        cls.create_data = [
-            {'name': f'{cls.model._meta.verbose_name} {i}'} for i in range(5, 7)
-        ]
+        cls.create_data = [{'name': f'{cls.model._meta.verbose_name} {i}'} for i in range(5, 7)]
 
 
-class BGPRouterTestCase(
-    AutomatedModelCreationMixin, ASNMixin, APIViewTestCases.APIViewTestCase
-):
+class BGPRouterTestCase(AutomatedModelCreationMixin, ASNMixin, APIViewTestCases.APIViewTestCase):
     model = BGPRouter
     view_namespace = "plugins-api:netbox_routing"
     brief_fields = [
@@ -120,10 +112,7 @@ class BGPRouterTestCase(
     def setUpTestData(cls):
         super().setUpTestData()
 
-        cls.create_data = [
-            {'name': f'{cls.model._meta.verbose_name}: {i}', 'asn': cls.asns[i].pk}
-            for i in range(5, 7)
-        ]
+        cls.create_data = [{'name': f'{cls.model._meta.verbose_name}: {i}', 'asn': cls.asns[i].pk} for i in range(5, 7)]
 
 
 class BGPScopeTestCase(
@@ -152,14 +141,10 @@ class BGPScopeTestCase(
     def setUpTestData(cls):
         super().setUpTestData()
 
-        cls.create_data = [
-            {'router': cls.router.pk, 'vrf': cls.vrfs[i].pk} for i in range(5, 7)
-        ]
+        cls.create_data = [{'router': cls.router.pk, 'vrf': cls.vrfs[i].pk} for i in range(5, 7)]
 
 
-class BGPAddressFamilyTestCase(
-    AutomatedModelCreationMixin, BGPScopeMixin, APIViewTestCases.APIViewTestCase
-):
+class BGPAddressFamilyTestCase(AutomatedModelCreationMixin, BGPScopeMixin, APIViewTestCases.APIViewTestCase):
     model = BGPAddressFamily
     view_namespace = "plugins-api:netbox_routing"
     brief_fields = [
@@ -191,9 +176,7 @@ class BGPAddressFamilyTestCase(
     def setUpTestData(cls):
         super().setUpTestData()
 
-        cls.create_data = [
-            {'scope': cls.scope.pk, 'address_family': cls.afs[i]} for i in range(5, 7)
-        ]
+        cls.create_data = [{'scope': cls.scope.pk, 'address_family': cls.afs[i]} for i in range(5, 7)]
 
 
 class BGPPeerTestCase(

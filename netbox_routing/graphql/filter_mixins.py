@@ -8,34 +8,28 @@ from strawberry import ID
 
 @dataclass
 class DeviceMixin:
-    device: (
-        Annotated['DeviceFilter', strawberry.lazy('dcim.graphql.filters')] | None
-    ) = strawberry_django.filter_field()
+    device: Annotated['DeviceFilter', strawberry.lazy('dcim.graphql.filters')] | None = strawberry_django.filter_field()
     device_id: ID | None = strawberry_django.filter_field()
 
 
 @dataclass
 class InterfaceMixin(DeviceMixin):
-    device: (
-        Annotated['DeviceFilter', strawberry.lazy('dcim.graphql.filters')] | None
-    ) = strawberry_django.filter_field()
+    device: Annotated['DeviceFilter', strawberry.lazy('dcim.graphql.filters')] | None = strawberry_django.filter_field()
     device_id: ID | None = strawberry_django.filter_field()
-    interface: (
-        Annotated['InterfaceFilter', strawberry.lazy('dcim.graphql.filters')] | None
-    ) = strawberry_django.filter_field()
+    interface: Annotated['InterfaceFilter', strawberry.lazy('dcim.graphql.filters')] | None = (
+        strawberry_django.filter_field()
+    )
     interface_id: ID | None = strawberry_django.filter_field()
 
 
 @dataclass
 class VRFMixin:
-    vrf: Annotated['VRFFilter', strawberry.lazy('ipam.graphql.filters')] | None = (
-        strawberry_django.filter_field()
-    )
+    vrf: Annotated['VRFFilter', strawberry.lazy('ipam.graphql.filters')] | None = strawberry_django.filter_field()
 
 
 @dataclass
 class NetworkPrefixMixin:
-    network: (
-        Annotated['PrefixFilter', strawberry.lazy('ipam.graphql.filters')] | None
-    ) = strawberry_django.filter_field()
+    network: Annotated['PrefixFilter', strawberry.lazy('ipam.graphql.filters')] | None = (
+        strawberry_django.filter_field()
+    )
     network_id: ID | None = strawberry_django.filter_field()

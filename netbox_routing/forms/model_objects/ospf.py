@@ -167,17 +167,10 @@ class OSPFInterfaceForm(PrimaryModelForm):
     def clean(self):
         super().clean()
         if self.cleaned_data.get('instance') and self.cleaned_data.get('interface'):
-            if (
-                self.cleaned_data.get('instance').device
-                != self.cleaned_data.get('interface').device
-            ):
+            if self.cleaned_data.get('instance').device != self.cleaned_data.get('interface').device:
                 raise ValidationError(
                     {
-                        'instance': _(
-                            'OSPF Instance Device and Interface Device must match'
-                        ),
-                        'interface': _(
-                            'OSPF Instance Device and Interface Device must match'
-                        ),
+                        'instance': _('OSPF Instance Device and Interface Device must match'),
+                        'interface': _('OSPF Instance Device and Interface Device must match'),
                     }
                 )

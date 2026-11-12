@@ -29,45 +29,23 @@ class EIGRPRouterType(PrimaryObjectType):
     pid: str
 
 
-@strawberry_django.type(
-    models.EIGRPAddressFamily, fields='__all__', filters=EIGRPAddressFamilyFilter
-)
+@strawberry_django.type(models.EIGRPAddressFamily, fields='__all__', filters=EIGRPAddressFamilyFilter)
 class EIGRPAddressFamilyType(PrimaryObjectType):
-    router: Annotated[
-        "EIGRPRouterType", strawberry.lazy('netbox_routing.graphql.types')
-    ]
+    router: Annotated["EIGRPRouterType", strawberry.lazy('netbox_routing.graphql.types')]
     rid: str
 
 
-@strawberry_django.type(
-    models.EIGRPNetwork, fields='__all__', filters=EIGRPNetworkFilter
-)
+@strawberry_django.type(models.EIGRPNetwork, fields='__all__', filters=EIGRPNetworkFilter)
 class EIGRPNetworkType(PrimaryObjectType):
-    router: Annotated[
-        "EIGRPRouterType", strawberry.lazy('netbox_routing.graphql.types')
-    ]
-    address_family: (
-        Annotated[
-            "EIGRPAddressFamilyType", strawberry.lazy('netbox_routing.graphql.types')
-        ]
-        | None
-    )
+    router: Annotated["EIGRPRouterType", strawberry.lazy('netbox_routing.graphql.types')]
+    address_family: Annotated["EIGRPAddressFamilyType", strawberry.lazy('netbox_routing.graphql.types')] | None
     network: Annotated["PrefixType", strawberry.lazy('ipam.graphql.types')]
 
 
-@strawberry_django.type(
-    models.EIGRPInterface, fields='__all__', filters=EIGRPInterfaceFilter
-)
+@strawberry_django.type(models.EIGRPInterface, fields='__all__', filters=EIGRPInterfaceFilter)
 class EIGRPInterfaceType(PrimaryObjectType):
-    router: Annotated[
-        "EIGRPRouterType", strawberry.lazy('netbox_routing.graphql.types')
-    ]
-    address_family: (
-        Annotated[
-            "EIGRPAddressFamilyType", strawberry.lazy('netbox_routing.graphql.types')
-        ]
-        | None
-    )
+    router: Annotated["EIGRPRouterType", strawberry.lazy('netbox_routing.graphql.types')]
+    address_family: Annotated["EIGRPAddressFamilyType", strawberry.lazy('netbox_routing.graphql.types')] | None
     interface: Annotated["InterfaceType", strawberry.lazy('dcim.graphql.types')]
     passive: str | None
     bfd: bool | None

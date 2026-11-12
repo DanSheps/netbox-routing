@@ -20,15 +20,7 @@ def auth_pair_errors(type_value, key_value, type_field, key_field):
     """An IS-IS auth (type, key) pair is only meaningful together; return the
     field-keyed error(s) for a half-configured pair (shared by every IS-IS clean())."""
     if type_value and not key_value:
-        return {
-            key_field: _(
-                'An authentication key is required when an authentication type is set.'
-            )
-        }
+        return {key_field: _('An authentication key is required when an authentication type is set.')}
     if key_value and not type_value:
-        return {
-            type_field: _(
-                'An authentication type is required when an authentication key is set.'
-            )
-        }
+        return {type_field: _('An authentication type is required when an authentication key is set.')}
     return {}

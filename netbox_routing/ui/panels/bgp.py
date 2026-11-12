@@ -43,9 +43,7 @@ class BGPPolicyFilteringPanel(panels.ObjectAttributesPanel):
 
 
 class BGPAdditionalPolicyFilteringPanel(panels.ObjectAttributesPanel):
-    redistribute_routemap = attrs.RelatedObjectAttr(
-        'redistribute_routemap', linkify=True
-    )
+    redistribute_routemap = attrs.RelatedObjectAttr('redistribute_routemap', linkify=True)
     vrf_in = attrs.RelatedObjectAttr('vrf_in', linkify=True)
 
 
@@ -118,9 +116,7 @@ class BGPPeerPanel(panels.ObjectAttributesPanel):
     peer = attrs.RelatedObjectAttr('peer', linkify=True)
     interface = attrs.RelatedObjectAttr('interface', linkify=True)
     remote_as = attrs.RelatedObjectAttr('remote_as', label=_('Remote AS'), linkify=True)
-    remote_as_list = attrs.RelatedObjectListAttr(
-        'remote_as_list', label=_('Remote AS List'), linkify=True
-    )
+    remote_as_list = attrs.RelatedObjectListAttr('remote_as_list', label=_('Remote AS List'), linkify=True)
     local_as = attrs.RelatedObjectAttr('local_as', label=_('Local AS'), linkify=True)
     status = attrs.ChoiceAttr('status', label=_('Status'))
     description = attrs.TextAttr('description', label=_('Description'))
@@ -129,7 +125,5 @@ class BGPPeerPanel(panels.ObjectAttributesPanel):
 
 class BGPPeerAddressFamilyPanel(panels.ObjectAttributesPanel):
     assigned_object = attrs.RelatedObjectAttr('assigned_object', linkify=True)
-    address_family = attrs.RelatedObjectAttr(
-        'address_family', linkify=True, label=_('Address Family')
-    )
+    address_family = attrs.RelatedObjectAttr('address_family', linkify=True, label=_('Address Family'))
     enabled = attrs.BooleanAttr('enabled', label=_('Enabled'))

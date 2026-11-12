@@ -47,11 +47,7 @@ class ModelOrderingTestCase(SimpleTestCase):
                 continue
 
             ordering_fields = {field.lstrip('-') for field in ordering}
-            unique_field_sets = [
-                {field.name}
-                for field in model._meta.fields
-                if field.unique and not field.null
-            ]
+            unique_field_sets = [{field.name} for field in model._meta.fields if field.unique and not field.null]
             unique_field_sets.extend(
                 set(fields)
                 for fields in model._meta.unique_together
@@ -65,17 +61,12 @@ class ModelOrderingTestCase(SimpleTestCase):
                 and constraint.condition is None
                 and (
                     constraint.nulls_distinct is False
-                    or all(
-                        not model._meta.get_field(field).null
-                        for field in constraint.fields
-                    )
+                    or all(not model._meta.get_field(field).null for field in constraint.fields)
                 )
             )
 
             last_field = ordering[-1].lstrip('-')
-            if last_field not in ('pk', 'id') and not any(
-                fields <= ordering_fields for fields in unique_field_sets
-            ):
+            if last_field not in ('pk', 'id') and not any(fields <= ordering_fields for fields in unique_field_sets):
                 invalid_ordering[model._meta.label] = ordering
 
         self.assertEqual(
@@ -109,9 +100,7 @@ class AggregateModelTestExportsTestCase(SimpleTestCase):
             for cls_name in getattr(sub, '__all__', ()):
                 if cls_name not in __all__ or not hasattr(aggregate, cls_name):
                     missing.setdefault(name, []).append(cls_name)
-        self.assertEqual(
-            missing, {}, f'aggregate fails to re-export submodule exports: {missing}'
-        )
+        self.assertEqual(missing, {}, f'aggregate fails to re-export submodule exports: {missing}')
 
     def test_isis_testcases_reexported_in_all_aggregates(self):
         import importlib
@@ -142,9 +131,7 @@ class AggregateModelTestExportsTestCase(SimpleTestCase):
             for cls_name in getattr(sub, '__all__', ()):
                 if cls_name not in aggregate_all or not hasattr(aggregate, cls_name):
                     missing.setdefault(aggregate_name, []).append(cls_name)
-        self.assertEqual(
-            missing, {}, f'aggregates fail to re-export IS-IS test cases: {missing}'
-        )
+        self.assertEqual(missing, {}, f'aggregates fail to re-export IS-IS test cases: {missing}')
 
     def test_search_indexes_reexported_in_package(self):
         # search/__init__.py must re-export every SearchIndex that search/isis.py
@@ -159,9 +146,7 @@ class AggregateModelTestExportsTestCase(SimpleTestCase):
             for name in getattr(isis_search, '__all__', ())
             if name not in getattr(search, '__all__', ()) or not hasattr(search, name)
         ]
-        self.assertEqual(
-            missing, [], f'search package fails to re-export IS-IS indexes: {missing}'
-        )
+        self.assertEqual(missing, [], f'search package fails to re-export IS-IS indexes: {missing}')
 
     def test_isis_serializers_expose_tags(self):
         # Every IS-IS serializer models a PrimaryModel (tags-capable); tags must be
@@ -180,11 +165,5 @@ class AggregateModelTestExportsTestCase(SimpleTestCase):
             'ISISPrefixSIDSerializer',
             'ISISSRv6LocatorSerializer',
         )
-        missing = [
-            name
-            for name in names
-            if 'tags' not in getattr(serializers, name).Meta.fields
-        ]
-        self.assertEqual(
-            missing, [], f'IS-IS serializers missing tags in Meta.fields: {missing}'
-        )
+        missing = [name for name in names if 'tags' not in getattr(serializers, name).Meta.fields]
+        self.assertEqual(missing, [], f'IS-IS serializers missing tags in Meta.fields: {missing}')

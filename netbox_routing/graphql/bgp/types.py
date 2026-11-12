@@ -43,28 +43,16 @@ from netbox_routing.graphql.types_mixin import BGPSettingsMixin
     filters=BGPSettingFilter,
 )
 class BGPSettingType(PrimaryObjectType):
-    assigned_object_type: (
-        Annotated["ContentTypeType", strawberry.lazy('netbox.graphql.types')] | None
-    )
+    assigned_object_type: Annotated["ContentTypeType", strawberry.lazy('netbox.graphql.types')] | None
     assigned_object: Union[
-        Annotated[
-            'BGPPeerTemplateType', strawberry.lazy('netbox_routing.graphql.types')
-        ],
-        Annotated[
-            'BGPPolicyTemplateType', strawberry.lazy('netbox_routing.graphql.types')
-        ],
-        Annotated[
-            'BGPSessionTemplateType', strawberry.lazy('netbox_routing.graphql.types')
-        ],
+        Annotated['BGPPeerTemplateType', strawberry.lazy('netbox_routing.graphql.types')],
+        Annotated['BGPPolicyTemplateType', strawberry.lazy('netbox_routing.graphql.types')],
+        Annotated['BGPSessionTemplateType', strawberry.lazy('netbox_routing.graphql.types')],
         Annotated['BGPRouterType', strawberry.lazy('netbox_routing.graphql.types')],
         Annotated['BGPScopeType', strawberry.lazy('netbox_routing.graphql.types')],
-        Annotated[
-            'BGPAddressFamilyType', strawberry.lazy('netbox_routing.graphql.types')
-        ],
+        Annotated['BGPAddressFamilyType', strawberry.lazy('netbox_routing.graphql.types')],
         Annotated['BGPPeerType', strawberry.lazy('netbox_routing.graphql.types')],
-        Annotated[
-            'BGPPeerAddressFamilyType', strawberry.lazy('netbox_routing.graphql.types')
-        ],
+        Annotated['BGPPeerAddressFamilyType', strawberry.lazy('netbox_routing.graphql.types')],
     ]
     key: str
     value: Annotated["ASNType", strawberry.lazy('ipam.graphql.types')] | None
@@ -91,31 +79,12 @@ class BGPPeerTemplateType(PrimaryObjectType):
 )
 class BGPPolicyTemplateType(PrimaryObjectType):
     name: str
-    parents: (
-        list[
-            Annotated[
-                "BGPPolicyTemplateType", strawberry.lazy('netbox_routing.graphql.types')
-            ]
-        ]
-        | None
-    )
+    parents: list[Annotated["BGPPolicyTemplateType", strawberry.lazy('netbox_routing.graphql.types')]] | None
     enabled: bool | None
-    prefixlist_in: (
-        Annotated["PrefixListType", strawberry.lazy('netbox_routing.graphql.types')]
-        | None
-    )
-    prefixlist_out: (
-        Annotated["PrefixListType", strawberry.lazy('netbox_routing.graphql.types')]
-        | None
-    )
-    routemap_in: (
-        Annotated["RouteMapType", strawberry.lazy('netbox_routing.graphql.types')]
-        | None
-    )
-    routemap_out: (
-        Annotated["RouteMapType", strawberry.lazy('netbox_routing.graphql.types')]
-        | None
-    )
+    prefixlist_in: Annotated["PrefixListType", strawberry.lazy('netbox_routing.graphql.types')] | None
+    prefixlist_out: Annotated["PrefixListType", strawberry.lazy('netbox_routing.graphql.types')] | None
+    routemap_in: Annotated["RouteMapType", strawberry.lazy('netbox_routing.graphql.types')] | None
+    routemap_out: Annotated["RouteMapType", strawberry.lazy('netbox_routing.graphql.types')] | None
     tenant: Annotated["TenantType", strawberry.lazy('tenancy.graphql.types')] | None
 
 
@@ -127,19 +96,11 @@ class BGPPolicyTemplateType(PrimaryObjectType):
 )
 class BGPSessionTemplateType(BGPSettingsMixin, PrimaryObjectType):
     name: str
-    parent: (
-        Annotated[
-            "BGPSessionTemplateType", strawberry.lazy('netbox_routing.graphql.types')
-        ]
-        | None
-    )
+    parent: Annotated["BGPSessionTemplateType", strawberry.lazy('netbox_routing.graphql.types')] | None
     enabled: bool | None
     remote_as: Annotated["ASNType", strawberry.lazy('ipam.graphql.types')] | None
     local_as: Annotated["ASNType", strawberry.lazy('ipam.graphql.types')] | None
-    bfd: (
-        Annotated["BFDProfileType", strawberry.lazy('netbox_routing.graphql.types')]
-        | None
-    )
+    bfd: Annotated["BFDProfileType", strawberry.lazy('netbox_routing.graphql.types')] | None
     ttl: int | None
     password: str | None
     tenant: Annotated["TenantType", strawberry.lazy('tenancy.graphql.types')] | None
@@ -157,9 +118,7 @@ class BGPSessionTemplateType(BGPSettingsMixin, PrimaryObjectType):
 )
 class BGPRouterType(BGPSettingsMixin, PrimaryObjectType):
     name: str | None
-    assigned_object_type: (
-        Annotated["ContentTypeType", strawberry.lazy('netbox.graphql.types')] | None
-    )
+    assigned_object_type: Annotated["ContentTypeType", strawberry.lazy('netbox.graphql.types')] | None
     assigned_object: Union[
         Annotated['RegionType', strawberry.lazy('dcim.graphql.types')],
         Annotated['SiteType', strawberry.lazy('dcim.graphql.types')],
@@ -167,27 +126,11 @@ class BGPRouterType(BGPSettingsMixin, PrimaryObjectType):
         Annotated['LocationType', strawberry.lazy('dcim.graphql.types')],
         Annotated['DeviceType', strawberry.lazy('dcim.graphql.types')],
         Annotated['ClusterType', strawberry.lazy('virtualization.graphql.types')],
-        Annotated[
-            'VirtualMachineType', strawberry.lazy('virtualization.graphql.types')
-        ],
+        Annotated['VirtualMachineType', strawberry.lazy('virtualization.graphql.types')],
     ]
     asn: Annotated["ASNType", strawberry.lazy('ipam.graphql.types')]
-    peer_templates: (
-        list[
-            Annotated[
-                'BGPPeerTemplateType', strawberry.lazy('netbox_routing.graphql.types')
-            ]
-        ]
-        | None
-    )
-    policy_templates: (
-        list[
-            Annotated[
-                'BGPPolicyTemplateType', strawberry.lazy('netbox_routing.graphql.types')
-            ]
-        ]
-        | None
-    )
+    peer_templates: list[Annotated['BGPPeerTemplateType', strawberry.lazy('netbox_routing.graphql.types')]] | None
+    policy_templates: list[Annotated['BGPPolicyTemplateType', strawberry.lazy('netbox_routing.graphql.types')]] | None
     session_templates: (
         list[
             Annotated[
@@ -228,26 +171,11 @@ class BGPScopeType(BGPSettingsMixin, PrimaryObjectType):
 class BGPAddressFamilyType(BGPSettingsMixin, PrimaryObjectType):
     scope: Annotated["BGPScopeType", strawberry.lazy('netbox_routing.graphql.types')]
     enabled: bool | None
-    prefixlist_in: (
-        Annotated['PrefixListType', strawberry.lazy('netbox_routing.graphql.types')]
-        | None
-    )
-    prefixlist_out: (
-        Annotated['PrefixListType', strawberry.lazy('netbox_routing.graphql.types')]
-        | None
-    )
-    routemap_in: (
-        Annotated['RouteMapType', strawberry.lazy('netbox_routing.graphql.types')]
-        | None
-    )
-    routemap_out: (
-        Annotated['RouteMapType', strawberry.lazy('netbox_routing.graphql.types')]
-        | None
-    )
-    redistribute_routemap: (
-        Annotated['RouteMapType', strawberry.lazy('netbox_routing.graphql.types')]
-        | None
-    )
+    prefixlist_in: Annotated['PrefixListType', strawberry.lazy('netbox_routing.graphql.types')] | None
+    prefixlist_out: Annotated['PrefixListType', strawberry.lazy('netbox_routing.graphql.types')] | None
+    routemap_in: Annotated['RouteMapType', strawberry.lazy('netbox_routing.graphql.types')] | None
+    routemap_out: Annotated['RouteMapType', strawberry.lazy('netbox_routing.graphql.types')] | None
+    redistribute_routemap: Annotated['RouteMapType', strawberry.lazy('netbox_routing.graphql.types')] | None
     vrf_in: Annotated['VRFType', strawberry.lazy('ipam.graphql.types')] | None
     address_family: str | None
     tenant: Annotated["TenantType", strawberry.lazy('tenancy.graphql.types')] | None
@@ -264,34 +192,16 @@ class BGPPeerType(BGPSettingsMixin, PrimaryObjectType):
     name: str | None
     enabled: bool | None
     status: str | None
-    scope: (
-        Annotated["BGPScopeType", strawberry.lazy('netbox_routing.graphql.types')]
-        | None
-    )
-    peer_group: (
-        Annotated[
-            "BGPPeerTemplateType", strawberry.lazy('netbox_routing.graphql.types')
-        ]
-        | None
-    )
-    peer_session: (
-        Annotated[
-            "BGPSessionTemplateType", strawberry.lazy('netbox_routing.graphql.types')
-        ]
-        | None
-    )
+    scope: Annotated["BGPScopeType", strawberry.lazy('netbox_routing.graphql.types')] | None
+    peer_group: Annotated["BGPPeerTemplateType", strawberry.lazy('netbox_routing.graphql.types')] | None
+    peer_session: Annotated["BGPSessionTemplateType", strawberry.lazy('netbox_routing.graphql.types')] | None
     peer: Annotated["IPAddressType", strawberry.lazy('ipam.graphql.types')] | None
     interface: Annotated["InterfaceType", strawberry.lazy('dcim.graphql.types')] | None
     source: Annotated["IPAddressType", strawberry.lazy('ipam.graphql.types')] | None
     remote_as: Annotated["ASNType", strawberry.lazy('ipam.graphql.types')] | None
-    remote_as_list: (
-        list[Annotated["ASNType", strawberry.lazy('ipam.graphql.types')]] | None
-    )
+    remote_as_list: list[Annotated["ASNType", strawberry.lazy('ipam.graphql.types')]] | None
     local_as: Annotated["ASNType", strawberry.lazy('ipam.graphql.types')] | None
-    bfd: (
-        Annotated["BFDProfileType", strawberry.lazy('netbox_routing.graphql.types')]
-        | None
-    )
+    bfd: Annotated["BFDProfileType", strawberry.lazy('netbox_routing.graphql.types')] | None
     ttl: int | None
     password: str | None
     address_families: (
@@ -318,41 +228,20 @@ class BGPPeerType(BGPSettingsMixin, PrimaryObjectType):
     ],
 )
 class BGPPeerAddressFamilyType(BGPSettingsMixin, PrimaryObjectType):
-    assigned_object_type: (
-        Annotated["ContentTypeType", strawberry.lazy('netbox.graphql.types')] | None
-    )
+    assigned_object_type: Annotated["ContentTypeType", strawberry.lazy('netbox.graphql.types')] | None
     assigned_object: (
         Union[
             Annotated["BGPPeerType", strawberry.lazy('netbox_routing.graphql.types')],
-            Annotated[
-                "BGPPeerTemplateType", strawberry.lazy('netbox_routing.graphql.types')
-            ],
+            Annotated["BGPPeerTemplateType", strawberry.lazy('netbox_routing.graphql.types')],
         ]
         | None
     )
-    peer_policy: (
-        Annotated[
-            "BGPPolicyTemplateType", strawberry.lazy('netbox_routing.graphql.types')
-        ]
-        | None
-    )
+    peer_policy: Annotated["BGPPolicyTemplateType", strawberry.lazy('netbox_routing.graphql.types')] | None
     enabled: bool | None
-    prefixlist_in: (
-        Annotated['PrefixListType', strawberry.lazy('netbox_routing.graphql.types')]
-        | None
-    )
-    prefixlist_out: (
-        Annotated['PrefixListType', strawberry.lazy('netbox_routing.graphql.types')]
-        | None
-    )
-    routemap_in: (
-        Annotated['RouteMapType', strawberry.lazy('netbox_routing.graphql.types')]
-        | None
-    )
-    routemap_out: (
-        Annotated['RouteMapType', strawberry.lazy('netbox_routing.graphql.types')]
-        | None
-    )
+    prefixlist_in: Annotated['PrefixListType', strawberry.lazy('netbox_routing.graphql.types')] | None
+    prefixlist_out: Annotated['PrefixListType', strawberry.lazy('netbox_routing.graphql.types')] | None
+    routemap_in: Annotated['RouteMapType', strawberry.lazy('netbox_routing.graphql.types')] | None
+    routemap_out: Annotated['RouteMapType', strawberry.lazy('netbox_routing.graphql.types')] | None
     address_family: (
         Annotated[
             'BGPAddressFamilyType',

@@ -56,9 +56,7 @@ class OSPFInstanceFilterForm(NetBoxModelFilterSetForm):
 
 class OSPFAreaFilterForm(NetBoxModelFilterSetForm):
     model = OSPFArea
-    fieldsets = (
-        FieldSet('q', 'device_id', 'instance_id', 'filter_id', 'area_type', 'tag'),
-    )
+    fieldsets = (FieldSet('q', 'device_id', 'instance_id', 'filter_id', 'area_type', 'tag'),)
 
     device_id = DynamicModelMultipleChoiceField(
         queryset=Device.objects.all(),
@@ -73,9 +71,7 @@ class OSPFAreaFilterForm(NetBoxModelFilterSetForm):
         query_params={'device_id': '$device_id'},
         label=_('Instance'),
     )
-    area_type = forms.ChoiceField(
-        choices=add_blank_choice(OSPFAreaTypeChoices), label='Area Type', required=False
-    )
+    area_type = forms.ChoiceField(choices=add_blank_choice(OSPFAreaTypeChoices), label='Area Type', required=False)
     tag = TagFilterField(model)
 
 
@@ -85,9 +81,7 @@ class OSPFInterfaceFilterForm(NetBoxModelFilterSetForm):
         FieldSet('q', 'filter_id', 'tag'),
         FieldSet('instance_id', 'area_id', name=_('OSPF')),
         FieldSet('device_id', 'interface_id', 'vrf_id', name=_('Device')),
-        FieldSet(
-            'network_type', 'priority', 'bfd', 'authentication', name=_('Attributes')
-        ),
+        FieldSet('network_type', 'priority', 'bfd', 'authentication', name=_('Attributes')),
     )
     device_id = DynamicModelMultipleChoiceField(
         queryset=Device.objects.all(),
@@ -135,7 +129,5 @@ class OSPFInterfaceFilterForm(NetBoxModelFilterSetForm):
         label=_('Network Type'),
         required=False,
     )
-    authentication = forms.ChoiceField(
-        choices=add_blank_choice(AuthenticationChoices), required=False
-    )
+    authentication = forms.ChoiceField(choices=add_blank_choice(AuthenticationChoices), required=False)
     tag = TagFilterField(model)

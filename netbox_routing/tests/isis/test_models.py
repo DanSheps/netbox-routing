@@ -54,12 +54,8 @@ class ISISInstanceModelTestCase(TestCase):
         # (IOS-XR hmac-sha-256, Junos/Nokia key-chain algorithms). full_clean
         # exercises both choice membership and the column length ('hmac-sha-256'
         # is 12 chars — longer than the original max_length=10).
-        self._instance(
-            area_auth_type='hmac-sha-256', area_auth_key='secret'
-        ).full_clean()
-        self._instance(
-            domain_auth_type='hmac-sha-1', domain_auth_key='secret'
-        ).full_clean()
+        self._instance(area_auth_type='hmac-sha-256', area_auth_key='secret').full_clean()
+        self._instance(domain_auth_type='hmac-sha-1', domain_auth_key='secret').full_clean()
 
     def test_fast_reroute_and_microloop_accepted(self):
         # Process-wide IP-FRR flavour (LFA / Remote-LFA / TI-LFA — IOS-XR
@@ -137,9 +133,7 @@ class ISISInterfaceModelTestCase(TestCase):
         )
 
     def test_clean_accepts_matching_device(self):
-        interface = Interface.objects.create(
-            name='Interface 1', device=self.device, type='virtual'
-        )
+        interface = Interface.objects.create(name='Interface 1', device=self.device, type='virtual')
         isis_interface = ISISInterface(
             instance=self.instance,
             interface=interface,
@@ -148,9 +142,7 @@ class ISISInterfaceModelTestCase(TestCase):
         isis_interface.clean()  # should not raise
 
     def test_clean_rejects_device_mismatch(self):
-        interface = Interface.objects.create(
-            name='Interface 1', device=self.other_device, type='virtual'
-        )
+        interface = Interface.objects.create(name='Interface 1', device=self.other_device, type='virtual')
         isis_interface = ISISInterface(
             instance=self.instance,
             interface=interface,
@@ -161,20 +153,14 @@ class ISISInterfaceModelTestCase(TestCase):
         self.assertIn('interface', ctx.exception.error_dict)
 
     def _iface(self, **kwargs):
-        interface = Interface.objects.create(
-            name=f'Interface {kwargs.pop("n", 1)}', device=self.device, type='virtual'
-        )
-        return ISISInterface(
-            instance=self.instance, interface=interface, address_family='ipv4', **kwargs
-        )
+        interface = Interface.objects.create(name=f'Interface {kwargs.pop("n", 1)}', device=self.device, type='virtual')
+        return ISISInterface(instance=self.instance, interface=interface, address_family='ipv4', **kwargs)
 
     def test_clean_accepts_complete_hello_auth_pair(self):
         self._iface(n=10, hello_auth_type='md5', hello_auth_key='secret').clean()
 
     def test_hello_auth_hmac_sha_accepted(self):
-        self._iface(
-            n=14, hello_auth_type='hmac-sha-256', hello_auth_key='secret'
-        ).full_clean()
+        self._iface(n=14, hello_auth_type='hmac-sha-256', hello_auth_key='secret').full_clean()
 
     def test_frr_fields_accepted(self):
         # Per-interface fast-reroute: protection coverage (link/node — Junos
@@ -242,14 +228,10 @@ class ISISSettingModelTestCase(TestCase):
     @classmethod
     def setUpTestData(cls):
         device = create_test_device(name='Device 1')
-        cls.instance = ISISInstance.objects.create(
-            device=device, process_tag='CORE', net='49.0001.0000.0000.0001.00'
-        )
+        cls.instance = ISISInstance.objects.create(device=device, process_tag='CORE', net='49.0001.0000.0000.0001.00')
 
     def test_clean_accepts_assigned_setting(self):
-        ISISSetting(
-            assigned_object=self.instance, key='graceful_restart', value='true'
-        ).clean()  # should not raise
+        ISISSetting(assigned_object=self.instance, key='graceful_restart', value='true').clean()  # should not raise
 
     def test_clean_rejects_orphan_setting(self):
         with self.assertRaises(ValidationError) as ctx:
@@ -302,17 +284,13 @@ class ISISSettingModelTestCase(TestCase):
         self.assertIn('value', ctx.exception.message_dict)
 
     def test_clean_accepts_integer_value_for_integer_key(self):
-        ISISSetting(
-            assigned_object=self.instance, key='spf_second_wait', value='250'
-        ).clean()  # should not raise
+        ISISSetting(assigned_object=self.instance, key='spf_second_wait', value='250').clean()  # should not raise
 
     def test_clean_rejects_negative_integer_value_for_integer_key(self):
         # The form path enforces min_value=0; the model clean() is the backstop for the
         # API / import / direct-write paths, so it must reject negatives too.
         with self.assertRaises(ValidationError) as ctx:
-            ISISSetting(
-                assigned_object=self.instance, key='spf_second_wait', value='-1'
-            ).clean()
+            ISISSetting(assigned_object=self.instance, key='spf_second_wait', value='-1').clean()
         self.assertIn('value', ctx.exception.message_dict)
 
     def test_te_router_id_keys_accepted(self):
@@ -326,15 +304,11 @@ class ISISSettingModelTestCase(TestCase):
             ('te_ipv4_router_id', '192.0.2.1'),
             ('te_ipv6_router_id', '2001:db8::1'),
         ):
-            ISISSetting(
-                assigned_object=self.instance, key=key, value=value
-            ).full_clean()
+            ISISSetting(assigned_object=self.instance, key=key, value=value).full_clean()
 
     def test_clean_rejects_non_boolean_value_for_boolean_key(self):
         with self.assertRaises(ValidationError) as ctx:
-            ISISSetting(
-                assigned_object=self.instance, key='graceful_restart', value='maybe'
-            ).clean()
+            ISISSetting(assigned_object=self.instance, key='graceful_restart', value='maybe').clean()
         self.assertIn('value', ctx.exception.message_dict)
 
 
@@ -350,9 +324,7 @@ class ISISFlexAlgoModelTestCase(TestCase):
     @classmethod
     def setUpTestData(cls):
         device = create_test_device(name='Device 1')
-        cls.instance = ISISInstance.objects.create(
-            device=device, process_tag='CORE', net='49.0001.0000.0000.0001.00'
-        )
+        cls.instance = ISISInstance.objects.create(device=device, process_tag='CORE', net='49.0001.0000.0000.0001.00')
 
     def test_db_constraint_rejects_out_of_range_algo_id(self):
         for bad in (0, 127, 256):
@@ -378,20 +350,14 @@ class ISISPrefixSIDModelTestCase(TestCase):
     @classmethod
     def setUpTestData(cls):
         device = create_test_device(name='Device 1')
-        instance = ISISInstance.objects.create(
-            device=device, process_tag='CORE', net='49.0001.0000.0000.0001.00'
-        )
-        loopback = Interface.objects.create(
-            name='Loopback0', device=device, type='virtual'
-        )
+        instance = ISISInstance.objects.create(device=device, process_tag='CORE', net='49.0001.0000.0000.0001.00')
+        loopback = Interface.objects.create(name='Loopback0', device=device, type='virtual')
         cls.isis_interface = ISISInterface.objects.create(
             instance=instance, interface=loopback, address_family='ipv4', passive=True
         )
 
     def test_clean_rejects_index_and_label_together(self):
-        sid = ISISPrefixSID(
-            interface=self.isis_interface, algorithm=0, sid_index=10, sid_label=16010
-        )
+        sid = ISISPrefixSID(interface=self.isis_interface, algorithm=0, sid_index=10, sid_label=16010)
         with self.assertRaises(ValidationError):
             sid.clean()
 
@@ -399,9 +365,7 @@ class ISISPrefixSIDModelTestCase(TestCase):
         ISISPrefixSID(interface=self.isis_interface, algorithm=0, sid_index=10).clean()
 
     def test_clean_accepts_label_only(self):
-        ISISPrefixSID(
-            interface=self.isis_interface, algorithm=128, sid_label=16010
-        ).clean()
+        ISISPrefixSID(interface=self.isis_interface, algorithm=128, sid_label=16010).clean()
 
     def test_clean_rejects_out_of_range_algorithm(self):
         # clean() must reject the 1-127 gap (and >255) with a ValidationError
@@ -409,16 +373,12 @@ class ISISPrefixSIDModelTestCase(TestCase):
         # surface as an IntegrityError (HTTP 500).
         for bad in (1, 127, 256):
             with self.subTest(algorithm=bad), self.assertRaises(ValidationError) as ctx:
-                ISISPrefixSID(
-                    interface=self.isis_interface, algorithm=bad, sid_index=1
-                ).clean()
+                ISISPrefixSID(interface=self.isis_interface, algorithm=bad, sid_index=1).clean()
             self.assertIn('algorithm', ctx.exception.error_dict)
 
     def test_clean_accepts_valid_algorithm(self):
         for algo in (0, 128, 255):
-            ISISPrefixSID(
-                interface=self.isis_interface, algorithm=algo, sid_index=1
-            ).clean()  # should not raise
+            ISISPrefixSID(interface=self.isis_interface, algorithm=algo, sid_index=1).clean()  # should not raise
 
     def test_db_constraint_rejects_out_of_range_algorithm(self):
         for bad in (1, 127, 256):
@@ -427,26 +387,18 @@ class ISISPrefixSIDModelTestCase(TestCase):
                 self.assertRaises(IntegrityError),
                 transaction.atomic(),
             ):
-                ISISPrefixSID.objects.create(
-                    interface=self.isis_interface, algorithm=bad, sid_index=1
-                )
+                ISISPrefixSID.objects.create(interface=self.isis_interface, algorithm=bad, sid_index=1)
 
     def test_db_constraint_accepts_valid_algorithms(self):
         # 0 (SPF) and the 128/255 Flex-Algo boundaries must all round-trip.
         for algo in (0, 128, 255):
-            ISISPrefixSID.objects.create(
-                interface=self.isis_interface, algorithm=algo, sid_index=algo + 1
-            )
+            ISISPrefixSID.objects.create(interface=self.isis_interface, algorithm=algo, sid_index=algo + 1)
         self.assertEqual(self.isis_interface.prefix_sids.count(), 3)
 
     def test_unique_interface_algorithm(self):
-        ISISPrefixSID.objects.create(
-            interface=self.isis_interface, algorithm=0, sid_index=1
-        )
+        ISISPrefixSID.objects.create(interface=self.isis_interface, algorithm=0, sid_index=1)
         with self.assertRaises(IntegrityError), transaction.atomic():
-            ISISPrefixSID.objects.create(
-                interface=self.isis_interface, algorithm=0, sid_index=2
-            )
+            ISISPrefixSID.objects.create(interface=self.isis_interface, algorithm=0, sid_index=2)
 
 
 class ISISSegmentRoutingCleanTestCase(TestCase):
@@ -455,9 +407,7 @@ class ISISSegmentRoutingCleanTestCase(TestCase):
     @classmethod
     def setUpTestData(cls):
         device = create_test_device(name='Device 1')
-        cls.instance = ISISInstance.objects.create(
-            device=device, process_tag='CORE', net='49.0001.0000.0000.0001.00'
-        )
+        cls.instance = ISISInstance.objects.create(device=device, process_tag='CORE', net='49.0001.0000.0000.0001.00')
 
     def _sr(self, **kwargs):
         return ISISSegmentRouting(instance=self.instance, **kwargs)
@@ -475,9 +425,7 @@ class ISISSegmentRoutingCleanTestCase(TestCase):
             self._sr(srlb_start=15000).clean()
 
     def test_clean_accepts_complete_blocks(self):
-        self._sr(
-            srgb_start=16000, srgb_range=8000, srlb_start=15000, srlb_range=1000
-        ).clean()
+        self._sr(srgb_start=16000, srgb_range=8000, srlb_start=15000, srlb_range=1000).clean()
 
     def test_clean_accepts_no_blocks(self):
         self._sr(enabled=True, srv6_enabled=True).clean()
@@ -490,9 +438,7 @@ class ISISSRv6LocatorModelTestCase(TestCase):
     @classmethod
     def setUpTestData(cls):
         device = create_test_device(name='Device 1')
-        cls.instance = ISISInstance.objects.create(
-            device=device, process_tag='CORE', net='49.0001.0000.0000.0001.00'
-        )
+        cls.instance = ISISInstance.objects.create(device=device, process_tag='CORE', net='49.0001.0000.0000.0001.00')
 
     def test_clean_rejects_oversized_sid_structure(self):
         # 40 + 24 + 48 + 32 = 144 > 128
@@ -521,23 +467,15 @@ class ISISSRv6LocatorModelTestCase(TestCase):
 
     def test_clean_accepts_derived_lengths(self):
         # All lengths null → the device derives them; only the prefix is required.
-        ISISSRv6Locator(
-            instance=self.instance, name='LOC1', prefix='2001:db8:0:a2::/64'
-        ).clean()
+        ISISSRv6Locator(instance=self.instance, name='LOC1', prefix='2001:db8:0:a2::/64').clean()
 
     def test_unique_instance_name(self):
-        ISISSRv6Locator.objects.create(
-            instance=self.instance, name='LOC1', prefix='2001:db8:0:a2::/64'
-        )
+        ISISSRv6Locator.objects.create(instance=self.instance, name='LOC1', prefix='2001:db8:0:a2::/64')
         with self.assertRaises(IntegrityError), transaction.atomic():
-            ISISSRv6Locator.objects.create(
-                instance=self.instance, name='LOC1', prefix='2001:db8:0:a3::/64'
-            )
+            ISISSRv6Locator.objects.create(instance=self.instance, name='LOC1', prefix='2001:db8:0:a3::/64')
 
     def test_prefix_roundtrips(self):
-        loc = ISISSRv6Locator.objects.create(
-            instance=self.instance, name='LOC2', prefix='2001:db8:0:a2::/64'
-        )
+        loc = ISISSRv6Locator.objects.create(instance=self.instance, name='LOC2', prefix='2001:db8:0:a2::/64')
         loc.refresh_from_db()
         self.assertEqual(str(loc.prefix), '2001:db8:0:a2::/64')
 
@@ -617,11 +555,5 @@ class ISISMigrationStateTestCase(TestCase):
         from netbox.models.deletion import DeleteMixin
 
         state = MigrationLoader(connection).project_state()
-        dropped = [
-            name
-            for name in self.ISIS_MODELS
-            if DeleteMixin not in state.models['netbox_routing', name].bases
-        ]
-        self.assertEqual(
-            dropped, [], f'CreateModel bases dropped DeleteMixin for: {dropped}'
-        )
+        dropped = [name for name in self.ISIS_MODELS if DeleteMixin not in state.models['netbox_routing', name].bases]
+        self.assertEqual(dropped, [], f'CreateModel bases dropped DeleteMixin for: {dropped}')

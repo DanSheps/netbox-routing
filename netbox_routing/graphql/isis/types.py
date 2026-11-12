@@ -32,33 +32,21 @@ __all__ = (
 )
 
 
-@strawberry_django.type(
-    models.ISISFlexAlgo, fields='__all__', filters=ISISFlexAlgoFilter
-)
+@strawberry_django.type(models.ISISFlexAlgo, fields='__all__', filters=ISISFlexAlgoFilter)
 class ISISFlexAlgoType(PrimaryObjectType):
-    instance: Annotated[
-        'ISISInstanceType', strawberry.lazy('netbox_routing.graphql.types')
-    ]
+    instance: Annotated['ISISInstanceType', strawberry.lazy('netbox_routing.graphql.types')]
     algo_id: int
 
 
-@strawberry_django.type(
-    models.ISISPrefixSID, fields='__all__', filters=ISISPrefixSIDFilter
-)
+@strawberry_django.type(models.ISISPrefixSID, fields='__all__', filters=ISISPrefixSIDFilter)
 class ISISPrefixSIDType(PrimaryObjectType):
-    interface: Annotated[
-        'ISISInterfaceType', strawberry.lazy('netbox_routing.graphql.types')
-    ]
+    interface: Annotated['ISISInterfaceType', strawberry.lazy('netbox_routing.graphql.types')]
     algorithm: int
 
 
-@strawberry_django.type(
-    models.ISISSRv6Locator, fields='__all__', filters=ISISSRv6LocatorFilter
-)
+@strawberry_django.type(models.ISISSRv6Locator, fields='__all__', filters=ISISSRv6LocatorFilter)
 class ISISSRv6LocatorType(PrimaryObjectType):
-    instance: Annotated[
-        'ISISInstanceType', strawberry.lazy('netbox_routing.graphql.types')
-    ]
+    instance: Annotated['ISISInstanceType', strawberry.lazy('netbox_routing.graphql.types')]
     name: str
     # prefix is an IPNetworkField; expose it as a string (mirrors StaticRouteType.prefix).
     # vendor_ext (JSONField) is auto-mapped to the JSON scalar by fields='__all__'.
@@ -66,9 +54,7 @@ class ISISSRv6LocatorType(PrimaryObjectType):
 
 
 class ISISSettingsMixin:
-    settings: list[
-        Annotated['ISISSettingType', strawberry.lazy('netbox_routing.graphql.types')]
-    ]
+    settings: list[Annotated['ISISSettingType', strawberry.lazy('netbox_routing.graphql.types')]]
 
 
 @strawberry_django.type(
@@ -79,29 +65,19 @@ class ISISSettingsMixin:
     filters=ISISLevelFilter,
 )
 class ISISLevelType(PrimaryObjectType):
-    instance: Annotated[
-        'ISISInstanceType', strawberry.lazy('netbox_routing.graphql.types')
-    ]
+    instance: Annotated['ISISInstanceType', strawberry.lazy('netbox_routing.graphql.types')]
     level: int
 
 
-@strawberry_django.type(
-    models.ISISInterfaceLevel, fields='__all__', filters=ISISInterfaceLevelFilter
-)
+@strawberry_django.type(models.ISISInterfaceLevel, fields='__all__', filters=ISISInterfaceLevelFilter)
 class ISISInterfaceLevelType(PrimaryObjectType):
-    interface: Annotated[
-        'ISISInterfaceType', strawberry.lazy('netbox_routing.graphql.types')
-    ]
+    interface: Annotated['ISISInterfaceType', strawberry.lazy('netbox_routing.graphql.types')]
     level: int
 
 
-@strawberry_django.type(
-    models.ISISSegmentRouting, fields='__all__', filters=ISISSegmentRoutingFilter
-)
+@strawberry_django.type(models.ISISSegmentRouting, fields='__all__', filters=ISISSegmentRoutingFilter)
 class ISISSegmentRoutingType(PrimaryObjectType):
-    instance: Annotated[
-        'ISISInstanceType', strawberry.lazy('netbox_routing.graphql.types')
-    ]
+    instance: Annotated['ISISInstanceType', strawberry.lazy('netbox_routing.graphql.types')]
 
 
 @strawberry_django.type(
@@ -117,9 +93,7 @@ class ISISSegmentRoutingType(PrimaryObjectType):
 )
 class ISISSettingType(PrimaryObjectType):
 
-    assigned_object_type: (
-        Annotated["ContentTypeType", strawberry.lazy('netbox.graphql.types')] | None
-    )
+    assigned_object_type: Annotated["ContentTypeType", strawberry.lazy('netbox.graphql.types')] | None
     assigned_object: Union[
         Annotated['ISISInstanceType', strawberry.lazy('netbox_routing.graphql.types')],
         Annotated['ISISInterfaceType', strawberry.lazy('netbox_routing.graphql.types')],
@@ -154,9 +128,7 @@ class ISISInstanceType(ISISSettingsMixin, PrimaryObjectType):
 )
 class ISISInterfaceType(ISISSettingsMixin, PrimaryObjectType):
 
-    instance: Annotated[
-        "ISISInstanceType", strawberry.lazy('netbox_routing.graphql.types')
-    ]
+    instance: Annotated["ISISInstanceType", strawberry.lazy('netbox_routing.graphql.types')]
     interface: Annotated["InterfaceType", strawberry.lazy('dcim.graphql.types')]
     address_family: str
     circuit_type: str | None

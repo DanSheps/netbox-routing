@@ -69,9 +69,7 @@ class StaticRouteForm(PrimaryModelForm):
         super().__init__(*args, data=data, instance=instance, **kwargs)
 
         if self.instance and self.instance.pk is not None:
-            self.fields['devices'].initial = self.instance.devices.all().values_list(
-                'id', flat=True
-            )
+            self.fields['devices'].initial = self.instance.devices.all().values_list('id', flat=True)
 
     def save(self, *args, **kwargs):
         instance = super().save(*args, **kwargs)

@@ -37,9 +37,7 @@ __all__ = (
 
 
 class ISISFlexAlgoSerializer(NetBoxModelSerializer):
-    url = serializers.HyperlinkedIdentityField(
-        view_name='plugins-api:netbox_routing-api:isisflexalgo-detail'
-    )
+    url = serializers.HyperlinkedIdentityField(view_name='plugins-api:netbox_routing-api:isisflexalgo-detail')
 
     class Meta:
         model = ISISFlexAlgo
@@ -63,9 +61,7 @@ class ISISFlexAlgoSerializer(NetBoxModelSerializer):
 
 
 class ISISPrefixSIDSerializer(NetBoxModelSerializer):
-    url = serializers.HyperlinkedIdentityField(
-        view_name='plugins-api:netbox_routing-api:isisprefixsid-detail'
-    )
+    url = serializers.HyperlinkedIdentityField(view_name='plugins-api:netbox_routing-api:isisprefixsid-detail')
 
     class Meta:
         model = ISISPrefixSID
@@ -90,9 +86,7 @@ class ISISPrefixSIDSerializer(NetBoxModelSerializer):
 
 
 class ISISSRv6LocatorSerializer(NetBoxModelSerializer):
-    url = serializers.HyperlinkedIdentityField(
-        view_name='plugins-api:netbox_routing-api:isissrv6locator-detail'
-    )
+    url = serializers.HyperlinkedIdentityField(view_name='plugins-api:netbox_routing-api:isissrv6locator-detail')
 
     class Meta:
         model = ISISSRv6Locator
@@ -126,9 +120,7 @@ class ISISSRv6LocatorSerializer(NetBoxModelSerializer):
 
 
 class ISISLevelSerializer(NetBoxModelSerializer):
-    url = serializers.HyperlinkedIdentityField(
-        view_name='plugins-api:netbox_routing-api:isislevel-detail'
-    )
+    url = serializers.HyperlinkedIdentityField(view_name='plugins-api:netbox_routing-api:isislevel-detail')
 
     class Meta:
         model = ISISLevel
@@ -154,9 +146,7 @@ class ISISLevelSerializer(NetBoxModelSerializer):
 
 
 class ISISInterfaceLevelSerializer(NetBoxModelSerializer):
-    url = serializers.HyperlinkedIdentityField(
-        view_name='plugins-api:netbox_routing-api:isisinterfacelevel-detail'
-    )
+    url = serializers.HyperlinkedIdentityField(view_name='plugins-api:netbox_routing-api:isisinterfacelevel-detail')
 
     class Meta:
         model = ISISInterfaceLevel
@@ -180,9 +170,7 @@ class ISISInterfaceLevelSerializer(NetBoxModelSerializer):
 
 
 class ISISSegmentRoutingSerializer(NetBoxModelSerializer):
-    url = serializers.HyperlinkedIdentityField(
-        view_name='plugins-api:netbox_routing-api:isissegmentrouting-detail'
-    )
+    url = serializers.HyperlinkedIdentityField(view_name='plugins-api:netbox_routing-api:isissegmentrouting-detail')
 
     class Meta:
         model = ISISSegmentRouting
@@ -209,9 +197,7 @@ class ISISSegmentRoutingSerializer(NetBoxModelSerializer):
 
 
 class ISISSettingSerializer(NetBoxModelSerializer):
-    url = serializers.HyperlinkedIdentityField(
-        view_name='plugins-api:netbox_routing-api:isissetting-detail'
-    )
+    url = serializers.HyperlinkedIdentityField(view_name='plugins-api:netbox_routing-api:isissetting-detail')
 
     assigned_object_type = ContentTypeField(
         queryset=ContentType.objects.filter(ISISSETTING_ASSIGNMENT_MODELS),
@@ -246,9 +232,7 @@ class ISISSettingSerializer(NetBoxModelSerializer):
 
 
 class ISISInstanceSerializer(NetBoxModelSerializer):
-    url = serializers.HyperlinkedIdentityField(
-        view_name='plugins-api:netbox_routing-api:isisinstance-detail'
-    )
+    url = serializers.HyperlinkedIdentityField(view_name='plugins-api:netbox_routing-api:isisinstance-detail')
     device = DeviceSerializer(nested=True)
     vrf = VRFSerializer(nested=True, required=False, allow_null=True)
 
@@ -304,9 +288,7 @@ class ISISInstanceSerializer(NetBoxModelSerializer):
 
 
 class ISISInterfaceSerializer(NetBoxModelSerializer):
-    url = serializers.HyperlinkedIdentityField(
-        view_name='plugins-api:netbox_routing-api:isisinterface-detail'
-    )
+    url = serializers.HyperlinkedIdentityField(view_name='plugins-api:netbox_routing-api:isisinterface-detail')
     instance = ISISInstanceSerializer(nested=True)
     interface = InterfaceSerializer(nested=True)
 

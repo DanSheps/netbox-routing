@@ -21,16 +21,10 @@ from utilities.forms.rendering import FieldSet
 
 
 class OSPFInstanceBulkEditForm(NetBoxModelBulkEditForm):
-    device = DynamicModelChoiceField(
-        queryset=Device.objects.all(), label=_('Device'), required=False, selector=True
-    )
-    vrf = DynamicModelChoiceField(
-        queryset=VRF.objects.all(), label=_('VRF'), required=False, selector=True
-    )
+    device = DynamicModelChoiceField(queryset=Device.objects.all(), label=_('Device'), required=False, selector=True)
+    vrf = DynamicModelChoiceField(queryset=VRF.objects.all(), label=_('VRF'), required=False, selector=True)
 
-    description = forms.CharField(
-        label=_('Description'), max_length=200, required=False
-    )
+    description = forms.CharField(label=_('Description'), max_length=200, required=False)
     comments = CommentField()
 
     model = OSPFInstance
@@ -47,12 +41,8 @@ class OSPFInstanceBulkEditForm(NetBoxModelBulkEditForm):
 
 
 class OSPFAreaBulkEditForm(NetBoxModelBulkEditForm):
-    area_type = forms.ChoiceField(
-        label=_('Area Type'), choices=OSPFAreaTypeChoices, required=False
-    )
-    description = forms.CharField(
-        label=_('Description'), max_length=200, required=False
-    )
+    area_type = forms.ChoiceField(label=_('Area Type'), choices=OSPFAreaTypeChoices, required=False)
+    description = forms.CharField(label=_('Description'), max_length=200, required=False)
     comments = CommentField()
 
     model = OSPFArea
@@ -73,13 +63,9 @@ class OSPFInterfaceBulkEditForm(NetBoxModelBulkEditForm):
         required=False,
         selector=True,
     )
-    passive = forms.ChoiceField(
-        label=_('Passive'), choices=BOOLEAN_WITH_BLANK_CHOICES, required=False
-    )
+    passive = forms.ChoiceField(label=_('Passive'), choices=BOOLEAN_WITH_BLANK_CHOICES, required=False)
     priority = forms.IntegerField(label=_('Priority'), required=False)
-    bfd = forms.ChoiceField(
-        label=_('BFD'), choices=BOOLEAN_WITH_BLANK_CHOICES, required=False
-    )
+    bfd = forms.ChoiceField(label=_('BFD'), choices=BOOLEAN_WITH_BLANK_CHOICES, required=False)
     network_type = forms.ChoiceField(
         label=_('Network Type'),
         choices=add_blank_choice(OSPFNetworkTypeChoices),
@@ -92,9 +78,7 @@ class OSPFInterfaceBulkEditForm(NetBoxModelBulkEditForm):
     )
     passphrase = forms.CharField(label=_('Passphrase'), required=False)
 
-    description = forms.CharField(
-        label=_('Description'), max_length=200, required=False
-    )
+    description = forms.CharField(label=_('Description'), max_length=200, required=False)
     comments = CommentField()
 
     model = OSPFInterface

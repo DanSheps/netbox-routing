@@ -53,9 +53,7 @@ class NBRObjectEntryMixin:
         parent = None
         for parent_field in cls.model._meta.fields:
             if isinstance(parent_field, ForeignKey) and parent_field.name != 'owner':
-                parent = parent_field.related_model(
-                    name=parent_field.related_model._meta.verbose_name
-                )
+                parent = parent_field.related_model(name=parent_field.related_model._meta.verbose_name)
                 parent.full_clean()
                 parent.save()
                 break

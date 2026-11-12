@@ -60,11 +60,7 @@ class OSPFInstanceFilterSet(NetBoxModelFilterSet):
     def search(self, queryset, name, value):
         if not value.strip():
             return queryset
-        qs_filter = (
-            Q(name__icontains=value)
-            | Q(device__name__icontains=value)
-            | Q(router_id__icontains=value)
-        )
+        qs_filter = Q(name__icontains=value) | Q(device__name__icontains=value) | Q(router_id__icontains=value)
         return queryset.filter(qs_filter).distinct()
 
     def filter_rid(self, queryset, name, value):

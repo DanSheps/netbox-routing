@@ -31,13 +31,9 @@ class StaticRouteBulkEditForm(NetBoxModelBulkEditForm):
         selector=True,
     )
     metric = forms.IntegerField(label=_('Metric'), required=False)
-    permanent = forms.ChoiceField(
-        label=_('Permanent'), choices=BOOLEAN_WITH_BLANK_CHOICES, required=False
-    )
+    permanent = forms.ChoiceField(label=_('Permanent'), choices=BOOLEAN_WITH_BLANK_CHOICES, required=False)
 
-    description = forms.CharField(
-        label=_('Description'), max_length=200, required=False
-    )
+    description = forms.CharField(label=_('Description'), max_length=200, required=False)
     comments = CommentField()
 
     model = StaticRoute

@@ -86,9 +86,7 @@ class BGPPeerTemplateFilterForm(TenancyFilterForm, PrimaryModelFilterSetForm):
     tag = TagFilterField(model)
 
 
-class BGPPolicyTemplateFilterForm(
-    BGPPolicyFilterFormMixin, TenancyFilterForm, PrimaryModelFilterSetForm
-):
+class BGPPolicyTemplateFilterForm(BGPPolicyFilterFormMixin, TenancyFilterForm, PrimaryModelFilterSetForm):
     model = BGPPolicyTemplate
     fieldsets = (
         FieldSet('q', 'filter_id', 'tag'),
@@ -106,9 +104,7 @@ class BGPPolicyTemplateFilterForm(
     tag = TagFilterField(model)
 
 
-class BGPSessionTemplateFilterForm(
-    SessionFilterFormMixin, TenancyFilterForm, PrimaryModelFilterSetForm
-):
+class BGPSessionTemplateFilterForm(SessionFilterFormMixin, TenancyFilterForm, PrimaryModelFilterSetForm):
     model = BGPSessionTemplate
     fieldsets = (
         FieldSet('q', 'filter_id', 'tag'),
@@ -164,9 +160,7 @@ class BGPScopeFilterForm(
     tag = TagFilterField(model)
 
 
-class BGPAddressFamilyFilterForm(
-    TenancyFilterForm, BGPPolicyFilterFormMixin, NetBoxModelFilterSetForm
-):
+class BGPAddressFamilyFilterForm(TenancyFilterForm, BGPPolicyFilterFormMixin, NetBoxModelFilterSetForm):
     scope_id = DynamicModelMultipleChoiceField(
         queryset=BGPScope.objects.all(),
         required=False,

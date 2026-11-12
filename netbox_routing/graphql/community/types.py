@@ -27,21 +27,13 @@ class CommunityType(PrimaryObjectType):
     tenant: Annotated["TenantType", strawberry.lazy('tenancy.graphql.types')] | None
 
 
-@strawberry_django.type(
-    models.CommunityList, fields='__all__', filters=CommunityListFilter
-)
+@strawberry_django.type(models.CommunityList, fields='__all__', filters=CommunityListFilter)
 class CommunityListType(PrimaryObjectType):
     name: str
     tenant: Annotated["TenantType", strawberry.lazy('tenancy.graphql.types')] | None
 
 
-@strawberry_django.type(
-    models.CommunityListEntry, fields='__all__', filters=CommunityListEntryFilter
-)
+@strawberry_django.type(models.CommunityListEntry, fields='__all__', filters=CommunityListEntryFilter)
 class CommunityListEntryType(PrimaryObjectType):
-    community_list: Annotated[
-        "CommunityListType", strawberry.lazy('netbox_routing.graphql.types')
-    ]
-    community: Annotated[
-        "CommunityType", strawberry.lazy('netbox_routing.graphql.types')
-    ]
+    community_list: Annotated["CommunityListType", strawberry.lazy('netbox_routing.graphql.types')]
+    community: Annotated["CommunityType", strawberry.lazy('netbox_routing.graphql.types')]

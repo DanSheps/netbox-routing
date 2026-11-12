@@ -66,21 +66,15 @@ class BGPPeerTemplatesAPITestCase(APITestCase):
         self.assertEqual(response.data['peer_group']['name'], 'core')
         self.assertEqual(response.data['peer_session']['name'], 'session')
         peer = BGPPeer.objects.get(pk=response.data['id'])
-        self.assertEqual(
-            (peer.peer_group, peer.peer_session), (self.group, self.session)
-        )
+        self.assertEqual((peer.peer_group, peer.peer_session), (self.group, self.session))
 
     def test_patch_sets_and_clears_the_peer_group(self):
         peer = BGPPeer.objects.create(scope=self.scope, peer=self.peer_ip)
-        response = self.client.patch(
-            self.url(peer), {'peer_group': self.group.pk}, format='json', **self.header
-        )
+        response = self.client.patch(self.url(peer), {'peer_group': self.group.pk}, format='json', **self.header)
         self.assertEqual(response.status_code, 200, response.content)
         peer.refresh_from_db()
         self.assertEqual(peer.peer_group, self.group)
-        response = self.client.patch(
-            self.url(peer), {'peer_group': None}, format='json', **self.header
-        )
+        response = self.client.patch(self.url(peer), {'peer_group': None}, format='json', **self.header)
         self.assertEqual(response.status_code, 200, response.content)
         peer.refresh_from_db()
         self.assertIsNone(peer.peer_group)
